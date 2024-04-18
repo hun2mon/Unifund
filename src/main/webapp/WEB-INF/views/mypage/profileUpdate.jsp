@@ -79,8 +79,8 @@
    }
    
    .out{
-      margin-left: 2%;
-    margin-right: 153px;
+     margin-left: 2%;
+    margin-right: 105px;
    }
    
    input[readonly] {
@@ -98,100 +98,103 @@
          <img class="img" src="resources/img/카리나.jpg">
       </div>
       <div>
+         <form action="profileUpdate.do" method="post" enctype="multipart/form-data">
          <table>
-            <tr>
+              <tr>
                   <th>프로필사진</th>
                   <td>
-                  <input type="file" name="photos" style="margin-right: -75">
+                  <input type="file" name="photo" style="margin-right: -75">
                   </td>
               </tr>
                 <tr>
                   <th>아이디</th>
                   <td>
-                  <input type="text" readonly="readonly" value="${info.mem_id}">
+                  <input type="text" name="id" readonly="readonly" value="${info.mem_id}">
                   </td>
               </tr>
               <tr>
                   <th>비밀번호</th>
                   <td>
-                  <input type="text" readonly="readonly" value="${info.mem_pw}">
+                  <input type="text" name="pw" readonly="readonly" value="${info.mem_pw}">
                   </td>
               </tr>
               <tr>
                   <th>이름</th>
                   <td>
-                  <input type="text" readonly="readonly" value="${info.mem_name}">
+                  <input type="text" name="name" readonly="readonly" value="${info.mem_name}">
                   </td>
               </tr>
               <tr>
                   <th>생년월일</th>
                   <td>
-                  <input type="text" readonly="readonly" value="${info.mem_birth}">
+                  <input type="text" name="birth" readonly="readonly" value="${info.mem_birth}">
                   </td>
               </tr>
               <tr>
                   <th>연락처</th>
                   <td>
-                  <input type="text" value="${info.mem_number}">
+                  <input type="text" name="number" value="${info.mem_number}">
                   </td>
               </tr>
               <tr>
                   <th>성별</th>
                   <td>
-                  <input type="text" value="${info.mem_gender}">
+                  <input type="text" name="gender" value="${info.mem_gender}">
                   </td>
               </tr>
               <tr>
                   <th>우편번호</th>
                   <td>
-                  <input type="text" value="${info.mem_post}">
+                  <input type="text" name="post" value="${info.mem_post}">
                   </td>
               </tr>
               <tr>
                   <th>주소</th>
                   <td>
-                  <input type="text" value="${info.mem_addr}">
+                  <input type="text" name="addr" value="${info.mem_addr}">
                   </td>
               </tr>
               <tr>
                   <th>상세주소</th>
                   <td>
-                  <input type="text" value="${info.mem_detail}">
+                  <input type="text" name="detail" value="${info.mem_detail}">
                   </td>
               </tr>
               <tr>
                   <th>대학교</th>
                   <td>
-                  <input type="text" readonly="readonly" value="${info.mem_uni}">
+                  <input type="text" name="uni" readonly="readonly" value="${info.mem_uni}">
                   </td>
               </tr>
               <tr>
                   <th>이메일</th>
                   <td>
-                  <input type="text" value="${info.mem_email}">
+                  <input type="text" name="email" value="${info.mem_email}">
                   </td>
               </tr>
               <tr>
                   <th>은행명</th>
                   <td>
-                  <input type="text" value="${info.mem_bankName}">
+                  <input type="text" name="bankName" value="${info.mem_bankName}">
                   </td>
               </tr>
               <tr>
                   <th>계좌번호</th>
                   <td>
-                  <input type="text" value="${info.mem_bank}">
+                  <input type="text" name="bank" value="${info.mem_bank}">
                   </td>
               </tr>
+              
           </table>
+          <button type="button" class="out">회원탈퇴</button>
+          <button class="proChn" onclick="proChn()">프로필수정</button>
+         </form>
       </div>
-      <button class="out">회원탈퇴</button>
-      <button class="proChn" onclick="proChn()">프로필수정</button>
+      
+      
    </div>   
 </body>
 <script>
-function proChn() {
-   location.href = 'profile.go';
-}
+
 </script>
 </html>

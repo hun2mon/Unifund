@@ -186,7 +186,12 @@
    <br>
    <div id="box">
       <div id="profile">
-         <img class="img" src="resources/img/카리나.jpg">
+          <c:if test="${not empty proPhoto}">
+            <img class="img" src="C:/upload/${proPhoto}">
+         </c:if>
+         <c:if test="${empty proPhoto}">
+        <img class="img" src="resources/profile_img/no_image.jpg">
+    </c:if>
       </div>
       
       <div class ="mincmb">캐시</div>
