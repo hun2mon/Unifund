@@ -4,5 +4,15 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.crew.dao.CrewDAO">
-
+	<select id="crewOverlay" resultType="int">
+		SELECT COUNT(crew_name) FROM crew WHERE crew_name = #{param1}
+	</select>
+	
+	<insert id="crewCreateDo" parameterType="map">
+		INSERT INTO crew (crew_idx,mem_idx,crew_name,crew_exp,crew_con,crew_num,crew_logo,crew_link,crew_local,crew_status)
+		VALUES(#{crew_idx},#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_logo},#{crew_link},#{crew_local},#{crew_status});
+	</insert>
+	
+	
+	
 </mapper>
