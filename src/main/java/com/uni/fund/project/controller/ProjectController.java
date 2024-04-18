@@ -1,6 +1,7 @@
 package com.uni.fund.project.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -63,9 +65,21 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/fund.do", method = RequestMethod.POST)
-	public String fundDo(@RequestParam Map<String,String> map) {
+	@ResponseBody
+	public Map<String, Object> fundDo(@RequestParam Map<String,String> map) {
 		logger.info("mem_idx : {}" , map);
-		return "project/detail";
+		Map<String, Object> mapMap = new HashMap<String, Object>();
+		projectService.funding(map);
+		return mapMap;
+	}
+	
+	@RequestMapping(value = "/fund_cancle.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> fundCancle(@RequestParam Map<String,String> map) {
+		logger.info("mem_idx : {}" , map);
+		Map<String, Object> mapMap = new HashMap<String, Object>();
+		projectService.fundingCancle(map);
+		return mapMap;
 	}
 
 }
