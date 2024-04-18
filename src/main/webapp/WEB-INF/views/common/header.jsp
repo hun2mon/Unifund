@@ -27,5 +27,6 @@
     
      <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
    	 <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-bell"></i></a>
+   	 <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
   </div>
 </div>
