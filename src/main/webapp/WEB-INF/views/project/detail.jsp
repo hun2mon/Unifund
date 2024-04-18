@@ -11,21 +11,15 @@
         padding: 0;
         box-sizing: border-box;
     }
-    div{
-    }   
     div.div_main{
         display: flex;   
     }
     div.div_right{
         width: 500px;
         height: 700px;
-        display: flex;
     }
     div.div_left{
         width: 1000px;
-        height: 700px;
-        background-color: yellow;
-        display: flex;
     }
     .top{
         font-size: 12;
@@ -64,14 +58,14 @@
     .date{
         font-size: 15px;
     }
-    button{
+    .report,.buy_but,.delete{
         width: 73;
         font-size: 9;
         margin-left: 5;
         border: 1px solid white;
         background-color: whitesmoke;
     }
-    button:hover{
+    .report:hover{
         background-color: red;
     }
     hr{
@@ -145,152 +139,188 @@
         width: 140;
         font-size: 20;
     }
+    .detail_img{
+    	width: 900;
+    	margin-left: 30;
+    	margin-top: 10;
+    }
+    .pro_content{
+    	display: block;
+    	text-align: center;
+    	margin-top: 20;
+    	width: 900;
+    	margin-left: 60;
+    }
+    
 </style>
 </head>
 <body>
-    <div class="div_main">
-        <div class="div_left">
-            <div>
-
-            </div>
-        </div>
-        <div class="div_right">
-            <div>
-                <div class="top">
-                    <div class="category" style="width: 210;">
-                        카테고리 > 공
-                    </div>
-                    <div class="project_report" style="width: 100;">
-                        <button>프로젝트 신고</button>
-                    </div>
-                    <div class="userID">
-                        ddddddddddddddd
-                    </div>
-                    <div class="lisk_cnt" style="width: 30px;">
-                        3333
-                    </div>
-                </div>
-                <div><hr></div>
-                <div class="top_middle">
-                    <div class="middle_top">
-                        <div class="project_title">
-                            ${project.pro_title}
-                        </div>
-                        <div class="project_delete">
-                            <button>프로젝트 삭제</button>
-                        </div>
-                        <div class="buy_list">
-                            <button>구매자 리스트</button>
-                        </div>
-                        <div class="project_bookmark">
-                            ⭐
-                        </div>
-                        <div class="project_good">
-                            ❤
-                        </div>
-                    </div>
-                    <div class="middle_middle">
-                        <div class="project_progress">
-                            진행률
-                        </div>
-                    </div>
-                    <div class="progress_bar">
-                        <progress value="20"></progress>
-                    </div>
-                    <div class="date" id="end_date">
-                        마감기한 : 2024/05/30
-                    </div>
-                    <div class="date">
-                        공연 시작일 : 2023/05/12
-                    </div>
-                    <div class="money">
-                        <div class="now_money">
-                            현재 펀딩 모집금액
-                        </div>
-                        <div class="target_money" style="font-size: 12;">
-                            /목표 금액
-                        </div>
-                    </div>
-                </div>
-                <div><hr></div>
-                <div class="bottom_top">
-                    <div class="reword_name">
-                        리워드 이름
-                    </div>
-                    <div class="ori_price">
-                        원래가격
-                    </div>
-                    <div class="buy_reword">
-                        <div class="reword_price">
-                           >> 10000원
-                        </div>
-                        <div class="quantity">
-                            <input type="number" value="1">
-                        </div>
-                    </div>
-                </div>
-                <div><hr></div>
-                <div class="bottom">
-                    <div class="total_price">
-                        <div>
-                            총 리워드 금액
-                        </div>
-                        <div class="final_price">
-                            1,020,000원
-                        </div>
-                    </div>
-                    <div>
-                        마일리지
-                    </div>
-                    <div class="mileage_form">
-                        <div class="mileage">
-                            <div>
-                                보유
-                            </div>
-                            <div class="mileage_value">
-                                445 마일리지
-                            </div>
-                        </div>
-                        <div class="mileage">
-                            <div>
-                                사용
-                            </div>
-                            <div class="use_mileage">
-                                <input type="text" class="use_mileage_value">
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        우편번호
-                    </div>
-                    <div>
-                        <input type="text" class="path">
-                    </div>
-                    <div>
-                        주소
-                    </div>
-                    <div>
-                        <input type="text" class="path">
-                    </div>
-                    <div>
-                        상세주소
-                    </div>
-                    <div>
-                        <input type="text" class="path">
-                    </div>
-                    <div>
-                        <input type="button" value="펀딩 신청하기" class="funding_button" id="fund_apply">
-                    </div>
-                    <div>
-                        <input type="button" value="펀딩 수정하기" class="funding_button" id="fund_update">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    ss
+	<%@ include file = "/WEB-INF/views/common/header.jsp" %>
+	    <div class="div_main">
+	        <div class="div_left">
+	        	<div class="pro_content">
+	        	​	${project.pro_content }
+	        	</div>
+	            <div class="detail_img">
+	            	<img src="/photo/${project.pro_img_name}" class="detail_img">
+	            </div>
+	        </div>
+	        <div class="div_right">
+	            <div>
+	                <div class="top">
+	                    <div class="category" style="width: 210;">
+	                        카테고리 >  ${project.category}
+	                    </div>
+	                    <div class="project_report" style="width: 100;">
+	                    	<input type="button" class="report" value="프로젝트 신고" onclick="location.href='pro_update.go?pro_idx=${project.pro_idx }'">
+	                    </div>
+	                    <div class="userID">
+	                           ${project.userId}
+	                    </div>
+	                    <div class="lisk_cnt" style="width: 30px;">
+	                           ${project.like_cnt}
+	                    </div>
+	                </div>
+	                <div><hr></div>
+	                <div class="top_middle">
+	                    <div class="middle_top">
+	                        <div class="project_title">
+	                            ${project.pro_title}
+	                        </div>
+	                        <div class="project_delete">
+	                            <button class="delete">프로젝트 삭제</button>
+	                        </div>
+	                        <div class="buy_list">
+	                            <button class="buy_but">구매자 리스트</button>
+	                        </div>
+	                        <div class="project_bookmark">
+	                            ⭐
+	                        </div>
+	                        <div class="project_good">
+	                            ❤
+	                        </div>
+	                    </div>
+	                    <div class="middle_middle">
+	                        <div class="project_progress">
+	                            ${project.progress}% 진행
+	                        </div>
+	                    </div>
+	                    <div class="progress_bar">
+	                        <progress value="${project.progress}" max="100"></progress>
+	                    </div>
+	                    <div class="date" id="end_date">
+	                        마감기한 : ${project.pro_deadline}
+	                    </div>
+	                    <div class="date">
+	                        공연 시작일 : ${project.pro_startdate}
+	                    </div>
+	                    <div class="money">
+	                        <div class="now_money">
+	                            ${project.now_price}
+	                        </div>
+	                        <div class="target_money" style="font-size: 12;">
+	                            /  ${project.target_price}
+	                        </div>
+	                    </div>
+	                </div>
+	                <div><hr></div>
+	                <div class="bottom_top">
+	                    <div class="reword_name">
+	                        ${project.rew_name}
+	                    </div>
+	                    <div class="ori_price">
+	                        ${project.ori_price}
+	                    </div>
+	                    <div class="buy_reword">
+	                        <div class="reword_price">
+	                           >> ${project.rew_price}
+	                        </div>
+	                        <div class="quantity">
+	                            <input type="number" value="1" class = "quan" onclick="click_price()" onkeyup="click_price()" min="1">
+	                        </div>
+	                    </div>
+	                </div>
+	                <div><hr></div>
+	                <div class="bottom">
+	                    <div class="total_price">
+	                        <div>
+	                            총 리워드 금액
+	                        </div>
+	                        <div class="final_price">
+	                     	   ${project.rew_price}
+	                        </div>
+	                    </div>
+	                    <div>
+	                        마일리지
+	                    </div>
+	                    <div class="mileage_form">
+	                        <div class="mileage">
+	                            <div>
+	                                보유
+	                            </div>
+	                            <div class="mileage_value">
+	                                 ${project.mileage} 마일리지
+	                            </div>
+	                        </div>
+	                        <div class="mileage">
+	                            <div>
+	                                사용
+	                            </div>
+	                            <div class="use_mileage" >
+	                                <input type="text" name="mileage" class="use_mileage_value">
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div>
+	                        우편번호
+	                    </div>
+	                    <div>
+	                        <input type="text" class="path" value=" ${project.mem_post}">
+	                    </div>
+	                    <div>
+	                        주소
+	                    </div>
+	                    <div>
+	                        <input type="text" class="path" value="${project.mem_addr}">
+	                    </div>
+	                    <div>
+	                        상세주소
+	                    </div>
+	                    <div>
+	                        <input type="text" class="path" value="${project.mem_detail}">
+	                    </div>
+	                    <div>
+	                        <input type="button" value="펀딩 신청하기" class="funding_button" id="fund_apply" onclick="apply()">
+	                    </div>
+	                    <div>
+	                        <input type="button" value="펀딩 수정하기" class="funding_button" id="fund_update" onclick="location.href='pro_update.go?pro_idx=${project.pro_idx }'">
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 	</body>
 <script>
+	function click_price(){
+		var quantitys = $('.quan').val();
+		var price = '${project.rew_price}' *quantitys;
+		$('.final_price').html(price);
+	}
+	
+	function apply() {
+		var quantitys = $('.quan').val();
+		var cash = '${project.cash}' + $('.use_mileage_value').val();
+		var price = '${project.rew_price}' *quantitys;
+		if ($('.use_mileage_value').val() < 500) {
+			alert('마일리지는 500이상부터 사용 가능합니다.');
+		}
+		if (cash < price) {
+			alert('캐시+마일리지가 구매가격보다 낮습니다.');
+		}else {
+			
+		}
+		
+	}
 
 </script>
 </html>
