@@ -18,7 +18,7 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 	
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/detail")
 	public String detail(Model model) {
 		ProjectDTO project = projectService.detail();
 		model.addAttribute("project", project);
