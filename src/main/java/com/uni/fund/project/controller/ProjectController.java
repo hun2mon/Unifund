@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.uni.fund.project.dto.ProjectDTO;
 import com.uni.fund.project.service.ProjectService;
 
@@ -29,7 +30,7 @@ public class ProjectController {
 		return "project/detail";
 	}
 	
-	@RequestMapping(value="/create")
+	@RequestMapping(value="/createForm")
 	public String projectCreateForm() {
 		logger.info(":: projectCreateForm IN ::");
 		return "project/create";
@@ -55,5 +56,16 @@ public class ProjectController {
 		return page;
 	}
 	
+	@RequestMapping(value = "/pro_update.go")
+	public String updateGo(String pro_idx) {
+		logger.info("pro_idx {}",pro_idx);
+		return "project/update";
+	}
 	
+	@RequestMapping(value = "/fund.do", method = RequestMethod.POST)
+	public String fundDo(@RequestParam Map<String,String> map) {
+		logger.info("mem_idx : {}" , map);
+		return "project/detail";
+	}
+
 }
