@@ -15,6 +15,7 @@
 			,(select SUM(total_price) from project_apply where pro_idx = 7 group by pro_idx) as now_price
 			,(select (rew_price * rew_max) from project p where pro_idx = 7) as target_price
 			,(select mem_mileage from member where mem_idx = 1) as mileage
+			,(select mem_cash from member where mem_idx = 1) as cash
 			,(select mem_post from member where mem_idx =1) as mem_post 
 			,(select mem_addr from member where mem_idx =1) as mem_addr 
 			,(select mem_detail from member where mem_idx =1) as mem_detail

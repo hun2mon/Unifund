@@ -26,6 +26,7 @@ public class ProjectDTO {
 	private int now_price;
 	private int target_price;
 	private int mileage;
+	private int cash;
 	private String mem_post;
 	private String mem_addr;
 	private String mem_detail;
@@ -186,5 +187,11 @@ public class ProjectDTO {
 	}
 	public void setPro_img_name(String pro_img_name) {
 		this.pro_img_name = pro_img_name;
+	}
+	public int getCash() {
+		return cash;
+	}
+	public void setCash(int cash) {
+		this.cash = cash;
 	}
 }
