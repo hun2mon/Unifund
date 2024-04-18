@@ -54,6 +54,8 @@
 	<!-- 마이바티스를 자동으로 연결해 주는 설정 -->
 	<mybatis-spring:scan base-package="com.uni.fund.**.dao"/>
 	
+	   <!-- connection pool 설정 -->
+   <beans:import resource="classpath:config/pool-config.xml"/>   
 	
 	
 </beans:beans>
