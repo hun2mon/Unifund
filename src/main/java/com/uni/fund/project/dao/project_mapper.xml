@@ -5,7 +5,22 @@
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.project.dao.ProjectDAO">
 	<select id="detail" resultType="com.uni.fund.project.dto.ProjectDTO">
-		SELECT * FROM project WHERE pro_idx = 6
+		select
+			* 	
+			,(select cate_name from category 
+				where 
+					cate_idx = (select cate_idx from project where pro_idx = 7)) as category
+			,(select mem_id from member where mem_idx = (select mem_idx from project where pro_idx = 7)) as userId
+			,(select COUNT(pro_idx) from project_like where pro_idx = 7 group by pro_idx) as like_cnt
+			,(select SUM(total_price) from project_apply where pro_idx = 7 group by pro_idx) as now_price
+			,(select (rew_price * rew_max) from project p where pro_idx = 7) as target_price
+			,(select mem_mileage from member where mem_idx = 1) as mileage
+			,(select mem_post from member where mem_idx =1) as mem_post 
+			,(select mem_addr from member where mem_idx =1) as mem_addr 
+			,(select mem_detail from member where mem_idx =1) as mem_detail
+			,(select round((now_price/target_price) * 100)) as progress 
+			,(select pho_name from photo where ref_idx = 7 and pho_division = '프로젝트') as pro_img_name
+		from project where pro_idx = 7;
 	</select>
 
 </mapper>

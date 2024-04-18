@@ -25,4 +25,9 @@ public class ProjectController {
 		return "project/detail";
 	}
 	
+	@RequestMapping(value = "/pro_update.go")
+	public String updateGo() {
+		return "project/update";
+	}
+	
 }
