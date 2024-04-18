@@ -5,4 +5,14 @@
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.admin.dao.AnnouncementDAO">
 
+	<select id="annList"
+		resultType="com.uni.fund.admin.dto.AnnouncementDTO">
+		SELECT noti_idx,noti_title,noti_date,noti_top FROM
+		announcement ORDER by noti_top desc , noti_idx desc LIMIT 20
+	</select>
+
+<select id="allCount" resultType="Integer">
+        SELECT CEIL(COUNT(noti_idx)/#{param1}) AS pages FROM announcement
+    </select>
+
 </mapper>
