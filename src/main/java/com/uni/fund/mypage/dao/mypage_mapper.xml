@@ -4,5 +4,18 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.mypage.dao.MypageDAO">
-
+   <select id="profile" resultType="com.uni.fund.mypage.dto.MypageDTO">
+      SELECT mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
+            mem_email,mem_bankName,mem_bank,mem_cor,mem_uni,mem_joindate,
+            mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
+            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
+      FROM member WHERE mem_idx = #{userId}
+   </select>
+   <select id="profileUp" resultType="com.uni.fund.mypage.dto.MypageDTO">
+      SELECT mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
+            mem_email,mem_bankName,mem_bank,mem_cor,mem_uni,mem_joindate,
+            mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
+            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
+      FROM member WHERE mem_idx = #{userId}
+   </select>
 </mapper>
