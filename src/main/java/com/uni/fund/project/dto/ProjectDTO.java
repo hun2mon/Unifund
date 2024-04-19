@@ -32,6 +32,9 @@ public class ProjectDTO {
 	private String mem_detail;
 	private String pro_img_name;
 	private String fund_state;
+	private String rev_content;
+	private int rev_grade;
+	private int rev_idx;
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -200,5 +203,23 @@ public class ProjectDTO {
 	}
 	public void setFund_state(String fund_state) {
 		this.fund_state = fund_state;
+	}
+	public String getRev_content() {
+		return rev_content;
+	}
+	public void setRev_content(String rev_content) {
+		this.rev_content = rev_content;
+	}
+	public int getRev_grade() {
+		return rev_grade;
+	}
+	public void setRev_grade(int rev_grade) {
+		this.rev_grade = rev_grade;
+	}
+	public int getRev_idx() {
+		return rev_idx;
+	}
+	public void setRev_idx(int rev_idx) {
+		this.rev_idx = rev_idx;
 	}
 }

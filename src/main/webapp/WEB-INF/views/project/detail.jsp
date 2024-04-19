@@ -360,7 +360,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<select name="revNum">
 							<option value="5" >5점</option>
 							<option value="4" >4점</option>
-							<option value="3" >3점</optiolln>
+							<option value="3" >3점</option>
 							<option value="2" >2점</option>
 							<option value="1" >1점</option>
 						</select>
@@ -380,7 +380,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 			<hr>
 			<div class="div_flex">
 				<div>
-					<p>프로필 사진</p>
+					<img src="/photo/pngwing.com.png" class="profile_img">
 				</div>
 				<div>
 					<div class="pro_grade">평점</div>

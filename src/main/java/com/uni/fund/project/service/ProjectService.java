@@ -19,17 +19,18 @@ import com.uni.fund.project.dto.ProjectDTO;
 
 @Service
 public class ProjectService {
-	
+
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
-	@Autowired ProjectDAO projectDAO;
-	
-	public String file_root = "/Users/hsg/upload/Unifund/";
-	
+
+	@Autowired
+	ProjectDAO projectDAO;
+
+	public String file_root = "/Users/jeounghun/upload/";
+
 	public ProjectDTO detail() {
 		return projectDAO.detail();
 	}
-	
+
 	public int projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo, Map<String, String> param,
 			int mem_idx) {
 		int row = -1;
@@ -120,7 +121,7 @@ public class ProjectService {
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
-		logger.info("성공여부 : {}",cnt);
+		logger.info("성공여부 : {}", cnt);
 	}
 
 	public void fundingCancle(Map<String, String> map) {
@@ -129,5 +130,43 @@ public class ProjectService {
 		logger.info("성공여부 : {}", cnt);
 	}
 
-	
+	public int reviewDo(MultipartFile photo, Map<String, String> param, int mem_idx) {
+		ProjectDTO proDTO = new ProjectDTO();
+		proDTO.setPro_idx(Integer.parseInt(param.get("pro_idx")));
+		proDTO.setMem_idx(mem_idx);
+		proDTO.setRev_content(param.get("revContent"));
+		proDTO.setRev_grade(Integer.parseInt(param.get("revNum")));
+		int row = projectDAO.reviewDo(proDTO);
+		int rev_idx = proDTO.getRev_idx();
+		logger.info("rev_idx = " + rev_idx);
+
+		if (row > 0) {
+			revFileSave(photo, rev_idx);
+		}
+
+		return row;
+	}
+
+	public void revFileSave(MultipartFile photo, int idx) {
+		// 1. 엎로드할 파일명이 있는가?
+		String fileName = photo.getOriginalFilename();
+		logger.info("upload file name : " + fileName);
+		if (!fileName.equals("")) {
+			String ext = fileName.substring(fileName.lastIndexOf("."));
+
+			String newFileName = System.currentTimeMillis() + ext;
+			logger.info(fileName + " -> " + newFileName);
+
+			try {
+				byte[] bytes = photo.getBytes(); 
+				Path path = Paths.get(file_root + newFileName); 
+				Files.write(path, bytes); // 저장
+				projectDAO.revFileWrite(idx,newFileName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 }

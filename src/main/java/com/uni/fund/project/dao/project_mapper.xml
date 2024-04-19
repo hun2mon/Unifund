@@ -71,4 +71,14 @@
 		WHERE mem_idx = #{mem_idx};
 	</update>
 	
+	<insert id="reviewDo" useGeneratedKeys="true" keyColumn="rev_idx" keyProperty="rev_idx" parameterType="com.uni.fund.project.dto.ProjectDTO">
+		INSERT INTO project_review (pro_idx,mem_idx,rev_content,rev_grade,rev_state)
+			VALUES (#{pro_idx},#{mem_idx},#{rev_content},#{rev_grade},'show')
+	</insert>
+	
+	<insert id="revFileWrite">
+		INSERT INTO photo (pho_name,ref_idx,pho_division)
+			VALUES(#{param2},#{param1},'리뷰')
+	</insert>
+	
 </mapper>

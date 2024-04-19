@@ -83,12 +83,18 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/review.do", method = RequestMethod.POST)
-	public String reviewWrite(MultipartFile photo, String revNum, String revContent, String pro_idx) {
+	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model) {
 		logger.info("photo : {}", photo);
-		logger.info("revNum : {}", revNum);
-		logger.info("revContent : {}", revContent);
-		logger.info("pro_idx : {}", pro_idx);
+		logger.info("param : {}", param);
 		int mem_idx = 1;
+		int row = projectService.reviewDo(photo,param,mem_idx);
+		logger.info("row : {}",row);
+		if (row >=1) {
+			model.addAttribute("msg", "리뷰가 정상적으로 등록되었습니다.");
+		} else {
+			model.addAttribute("msg", "리뷰 등록에 패하였습니다.");
+		}
+		
 		return "/";
 	}
 

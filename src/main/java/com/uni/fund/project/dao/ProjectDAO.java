@@ -22,4 +22,10 @@ public interface ProjectDAO {
 
 	void moneyRefund(Map<String, String> map);
 
+	int reviewDo(ProjectDTO proDTO);
+
+	void fileWrite(int idx, String newFileName);
+
+	void revFileWrite(int idx, String newFileName);
+
 }
