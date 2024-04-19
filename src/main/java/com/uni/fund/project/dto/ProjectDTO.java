@@ -31,6 +31,7 @@ public class ProjectDTO {
 	private String mem_addr;
 	private String mem_detail;
 	private String pro_img_name;
+	private String pro_main_name;
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -193,5 +194,11 @@ public class ProjectDTO {
 	}
 	public void setCash(int cash) {
 		this.cash = cash;
+	}
+	public String getPro_main_name() {
+		return pro_main_name;
+	}
+	public void setPro_main_name(String pro_main_name) {
+		this.pro_main_name = pro_main_name;
 	}
 }

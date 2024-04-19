@@ -8,8 +8,10 @@ public interface ProjectDAO {
 
 	int projectCreate(ProjectDTO projectDTO);
 
-	void createMainPhoto(int pro_idx, String newProjectMainFileName, int projectMainPhotoDiv);
+	void createMainPhoto(int pro_idx, String newProjectMainFileName, String projectMainPhotoDiv);
 
-	void createPhoto(int pro_idx, String newProjectFileName, int projectPhotoDiv);
+	void createPhoto(int pro_idx, String newProjectFileName, String projectPhotoDiv);
+
+	ProjectDTO updateForm(String pro_idx);
 
 }

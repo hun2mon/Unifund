@@ -6,12 +6,14 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.project.dao.ProjectDAO;
@@ -64,8 +66,8 @@ public class ProjectService {
 
 		if (row > 0) {
 			int pro_idx = projectDTO.getPro_idx();
-			int projectMainPhotoDiv = 4;
-			int projectPhotoDiv = 3;
+			String projectMainPhotoDiv = "프로젝트대표사진";
+			String projectPhotoDiv = "프로젝트설명";
 			projectMainFileSave(pro_idx, pro_main_photo, projectMainPhotoDiv);
 			projectFileSave(pro_idx, pro_photo, projectPhotoDiv);
 		}
@@ -73,7 +75,7 @@ public class ProjectService {
 		return row;
 	}
 
-	private void projectMainFileSave(int pro_idx, MultipartFile pro_main_photo, int projectMainPhotoDiv) {
+	private void projectMainFileSave(int pro_idx, MultipartFile pro_main_photo, String projectMainPhotoDiv) {
 		if (pro_main_photo != null) {
 			String oriName = pro_main_photo.getOriginalFilename();
 			String projectMainPhoto = oriName.substring(oriName.lastIndexOf("."));
@@ -95,7 +97,7 @@ public class ProjectService {
 
 	}
 
-	private void projectFileSave(int pro_idx, MultipartFile pro_photo, int projectPhotoDiv) {
+	private void projectFileSave(int pro_idx, MultipartFile pro_photo, String projectPhotoDiv) {
 		if (pro_photo != null) {
 			String oriName = pro_photo.getOriginalFilename();
 			String projectPhoto = oriName.substring(oriName.lastIndexOf("."));
@@ -117,5 +119,10 @@ public class ProjectService {
 
 	}
 
-	
+	public void updateForm(String pro_idx, Model model) {
+		ProjectDTO projectdto = projectDAO.updateForm(pro_idx);
+		model.addAttribute("project",projectdto);
+		
+	}
+
 }

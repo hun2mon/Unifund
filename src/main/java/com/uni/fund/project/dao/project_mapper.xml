@@ -42,5 +42,27 @@
 		INSERT INTO photo(ref_idx, pho_name, pho_division) 
 		VALUES(#{param1},#{param2},#{param3})
 	</insert>
+	
+	<select id="updateForm" resultType="com.uni.fund.project.dto.ProjectDTO">
+	SELECT 
+    	j.mem_idx,
+    	j.pro_title,
+    	(SELECT p.pho_name FROM photo p WHERE p.pho_division = '프로젝트대표사진' AND pro_idx = j.pro_idx) as pro_main_name, 
+    	j.pro_content, 
+    	(SELECT p.pho_name FROM photo p WHERE p.pho_division = '프로젝트설명' AND pro_idx = j.pro_idx) as pro_img_name,
+    	j.cate_idx, 
+    	j.pro_phone,
+    	j.rew_name,
+    	j.ori_price,
+    	j.rew_max,
+    	j.rew_price,
+    	j.pro_deadline,
+    	j.pro_startdate,
+    	j.pro_tos
+	FROM 
+    	project j
+	WHERE 
+    j.pro_idx = #{param1};
+	</select>
 
 </mapper>

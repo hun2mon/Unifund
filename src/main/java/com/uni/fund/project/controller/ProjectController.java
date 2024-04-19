@@ -57,8 +57,9 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/pro_update.go")
-	public String updateGo(String pro_idx) {
+	public String updateGo(String pro_idx,Model model) {
 		logger.info("pro_idx {}",pro_idx);
+		projectService.updateForm(pro_idx,model);
 		return "project/update";
 	}
 	
