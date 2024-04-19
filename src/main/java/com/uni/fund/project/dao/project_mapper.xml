@@ -98,4 +98,8 @@
 		UPDATE project_review SET rev_state = 'blind' WHERE rev_idx = #{param1} 
 	</update>
 	
+	<update id="mileageSaveUp">
+		update member set mem_mileage = (select mem_mileage from member where mem_idx = #{param1}) + 5 where mem_idx = #{pram1}
+	</update>
+	
 </mapper>

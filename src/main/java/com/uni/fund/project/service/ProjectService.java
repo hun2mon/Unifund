@@ -133,6 +133,7 @@ public class ProjectService {
 	}
 
 	public int reviewDo(MultipartFile photo, Map<String, String> param, int mem_idx) {
+		projectDAO.mileageSaveUp(mem_idx);
 		ProjectDTO proDTO = new ProjectDTO();
 		proDTO.setPro_idx(Integer.parseInt(param.get("pro_idx")));
 		proDTO.setMem_idx(mem_idx);

@@ -28,9 +28,14 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 	
+	@RequestMapping(value = "/project/appList.go")
+	public String appListGo() {
+		return "project/appList";
+	}
+	
 	@RequestMapping(value = "/")
 	public String detail(Model model, HttpSession session, String row) {
-		session.setAttribute("loginId", "admin");
+		session.setAttribute("loginId", "ㅁㄴㅇ");
 		session.setAttribute("memIdx", "1");
 		String memIdx = (String) session.getAttribute("memIdx");
 		ProjectDTO project = projectService.detail(memIdx);

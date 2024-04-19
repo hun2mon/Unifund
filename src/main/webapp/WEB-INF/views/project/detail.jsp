@@ -289,7 +289,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 								onclick="location.href='pro_delete.do?pro_idx=${project.pro_idx }'">
 						</div>
 						<div class="buy_list">
-							<button class="buy_but">구매자 리스트</button>
+							<button class="buy_but" onclick="location.href='project/appList.go'">구매자 리스트</button>
 						</div>
 						<div class="project_bookmark">⭐</div>
 						<div class="project_good">❤</div>
@@ -434,6 +434,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 			alert('사진을 첨부 해주세요');
 			$revPhoto.focus();
 		} else {
+			alert('5마일리지 적립되었습니다.');
 			$('form').submit();
 		}
 		
@@ -505,6 +506,10 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
+	} else {
+		$('input[name="revContent"]').val('프로젝트 펀딩 후에 입력이 가능합니다.');
+		$('input[name="revContent"]').attr('readonly',true);
+		$('.sub_review').attr('type','hidden');
 	}
 	
 	function click_price(){

@@ -33,4 +33,6 @@ public interface ProjectDAO {
 	List<ReviewDTO> revList(String pro_idx, int limit);
 	
 	int revDel(String rev_idx);
+
+	void mileageSaveUp(int mem_idx);
 }
