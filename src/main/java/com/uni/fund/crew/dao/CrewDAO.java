@@ -16,4 +16,6 @@ public interface CrewDAO {
 
 	void createCrewRecruPhoto(int crew_idx, String newCrewRecruPhoto, String crewRecru);
 
+	CrewDTO crewUpdateForm(int crew_idx);
+
 }

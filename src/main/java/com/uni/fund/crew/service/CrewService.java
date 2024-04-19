@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.crew.dao.CrewDAO;
@@ -53,7 +54,7 @@ public class CrewService {
 		}
 		
 		
-		return 0;
+		return row;
 	}
 
 	private void crewLogoPhotoFileSave(int crew_idx, MultipartFile crew_logo_photo, String crewLogo) {
@@ -93,9 +94,16 @@ public class CrewService {
 			} catch (Exception e) {
 				logger.info("file exception");
 				e.printStackTrace();
-			}
-			
-		}
+			}			
+		}		
+	}
+	
+	public void crewUpdateForm(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo ,int crew_idx, String newCrewLogoPhoto, String crewLogo, Model model) {
+		logger.info("crewUpdateForm 들어왔ㄷ다");
+		CrewDTO crewDTO = crewDAO.crewUpdateForm(crew_idx);
+		int idx=crewDTO.getCrew_idx();
+		String update_logo_photo = crew;
+		String update_recru_photo = crew_recru_photo;
 		
 	}
 
