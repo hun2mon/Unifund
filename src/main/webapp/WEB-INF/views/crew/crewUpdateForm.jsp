@@ -14,6 +14,16 @@
 	border:1px solid black;
 	border-collapse: collapse;
 }
+label {
+    display: inline-block;
+    margin-bottom: 5px; /* 체크박스와 문구 사이 간격 조절 */
+}
+
+label span {
+    font-size: 0.8em; /* 문구 사이즈 조절 */
+    margin-left: 5px; /* 문구와 체크박스 사이 간격 조절 */
+    color: #888; /* 문구 색상 지정 */
+}
 
 th,td{
 	padding: 5px 10px;
@@ -39,16 +49,20 @@ img.icon{
 </style>
 </head>
 <body>
-	<h3>크루 등록</h3>
+	<h3>크루 수정</h3>
 	<hr/>
 	<form action="crewCreate.do" method = "post" enctype="multipart/form-data">
 		<table>
 			<tr>
-				<th>크루명</th>
-				<td>
-					<input type="text"  placeholder="크루명을 입력해주세요(최대 8자)"  name="crew_name" value="${crew.crew_name}"/>
-					<input type="button" value="중복체크" onclick= "overlay()"/>
-				</td>
+    			<th>크루명</th>
+    			<td>
+        			<label>
+            			<input type="button" value="중복체크" onclick="overlay()" />
+            			<span>크루명을 바꾸고 싶다면, 체크박스를 클릭해주세요</span>
+        			</label>
+        			<input type="checkbox" id="nameCheckbox" onclick="toggleNameInput()" />
+        			<input type="text" placeholder="크루명을 입력해주세요(최대 8자)" name="crew_name" id="crewNameInput" value="${crew.crew_name}" disabled />
+    			</td>
 			</tr>
 					
 			<tr>
@@ -59,13 +73,13 @@ img.icon{
 			</tr>
 			
 			<tr>
-				<th>크루설명 및 모집정보</th>
-				<td><textarea name = "crew_con" placeholder="내용 입력해주세요(최대1500자)" name="crew_con"value="${crew.crew_con}"></textarea></td>
+    			<th>크루설명 및 모집정보</th>
+    			<td><textarea name="crew_con" placeholder="내용 입력해주세요(최대1500자)">${crew.crew_con}</textarea></td>
 			</tr>
 			
 			<tr>
 				<th>크루설명 및 모집정보 이미지</th>				
-				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/><img src="/main/${crewPhoto[1].crew_recru_photo}"></td>
+				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/><input type= "text" value="${crewPhoto1}"></td>
 			</tr>
 			
 			<tr>
@@ -84,7 +98,7 @@ img.icon{
 			
 			<tr>
 				<th>로고사진</th>				
-				<td><input type="file" id="crew_logo_photo" name="crew_logo_photo"/><img src="/main/${crewPhoto[0].crew_logo_photo}"></td>
+				<td><input type="file" id="crew_logo_photo" name="crew_logo_photo"/><input type= "text" value="${crewPhoto}"></td>
 			</tr>
 			<tr>
 				<th>소통링크</th>
@@ -99,7 +113,7 @@ img.icon{
 				</td>
 			</tr>
 			<tr>
-				<th colspan="2"><button type="button" onclick="join()">등록</button>
+				<th colspan="2"><button type="button" onclick="join()">수정</button>
 				<button type="button" onclick="location.href='./'">취소</button></th>
 				
 			</tr>
@@ -168,6 +182,11 @@ function join(){
 	}
 }
 
+function toggleNameInput() {
+    var checkBox = document.getElementById("nameCheckbox");
+    var inputField = document.getElementById("crewNameInput");
+    inputField.disabled = !checkBox.checked;
+}
 
 
 var msg = '${msg}'; 

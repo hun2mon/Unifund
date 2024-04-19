@@ -15,6 +15,7 @@ public class CrewDTO {
 	private String crew_histroy;
 	private String crew_status;
 	private Date crew_date;
+	private String pho_name;
 
 	
 	public int getCrew_idx() {
@@ -88,6 +89,12 @@ public class CrewDTO {
 	}
 	public void setCrew_date(Date crew_date) {
 		this.crew_date = crew_date;
+	}
+	public String getPho_name() {
+		return pho_name;
+	}
+	public void setPho_name(String pho_name) {
+		this.pho_name = pho_name;
 	}
 
 }

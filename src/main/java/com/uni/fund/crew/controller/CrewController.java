@@ -60,11 +60,23 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crewUpdateForm.go")
-	public String crewUpdateFormGo(int crew_idx, Model model) {
+	public String crewUpdateFormGo(Model model) {
 		String page="redirect:/crewDetail";
+		int crew_idx = 1;
 		logger.info("update form idx = "+crew_idx);
 		crewService.crewUpdateForm(crew_idx,model);
-		page="crew/crewUpdateForm";	
+		page="crew/crewUpdateForm";
+		
+		return page;
+	}
+	
+	@RequestMapping(value="/crewUpdate.do")
+	public String crewUpdateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String,String> param){
+		logger.info("param: {}",param);
+		String page="redirect:/crewDetail";
+		int crew_idx=1;
+		crewService.crewUpdate(crew_logo_photo,crew_recru_photo,param);
+		page="redirect:/detail?crew_idx="+param.get("crew_idx");
 		
 		return page;
 	}

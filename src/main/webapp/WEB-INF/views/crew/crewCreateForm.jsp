@@ -67,7 +67,6 @@ img.icon{
 				<th>크루설명 및 모집정보 이미지</th>				
 				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/></td>
 			</tr>
-			
 			<tr>
 				<th>모집인원 수</th>
 				<td>
@@ -80,8 +79,7 @@ img.icon{
    						<option value="30">30명</option>
   				    </select>
   				</td>
-			</tr>
-			
+			</tr>			
 			<tr>
 				<th>로고사진</th>				
 				<td><input type="file" id="crew_logo_photo" name="crew_logo_photo"/></td>

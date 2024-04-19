@@ -101,12 +101,13 @@ public class CrewService {
 	public void crewUpdateForm(int crew_idx, Model model) {
 		logger.info("crewUpdateForm 들어왔다");
 		CrewDTO crewDTO = crewDAO.crewUpdateForm(crew_idx);
-		int idx=crewDTO.getCrew_idx();
 		model.addAttribute("crew",crewDTO);
 		
-		List<CrewDTO> list= crewDAO.crewPhoto(idx); // 첫번째가 로고사진, 두번째가 모집정보사진
+		List<CrewDTO> list= crewDAO.crewPhoto(crew_idx); // 첫번째가 로고사진, 두번째가 모집정보사진
+		//list.get(0).getPho_name();
+		model.addAttribute("crewPhoto1",list.get(1).getPho_name());
+		model.addAttribute("crewPhoto",list.get(0).getPho_name());
 		logger.info("list : {} ",list);
-		model.addAttribute("crewPhoto",list);
 		
 	}
 

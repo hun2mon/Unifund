@@ -28,8 +28,8 @@
 	</insert>
 	
 	<select id="crewUpdateForm" resultType="com.uni.fund.crew.dto.CrewDTO">
-		SELECT (crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local)
-			FROM crew
+		SELECT crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local
+			FROM crew WHERE crew_idx = ${param1}
 	</select>
 	
 	<select id="crewPhoto" resultType="com.uni.fund.crew.dto.CrewDTO">
