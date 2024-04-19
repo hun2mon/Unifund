@@ -81,4 +81,10 @@
 			VALUES(#{param2},#{param1},'리뷰')
 	</insert>
 	
+	<select id="revList" resultType="com.uni.fund.project.dto.ReviewDTO">
+		select * from project_review pr 
+			join photo p on pr.rev_idx = p.ref_idx 
+		where pr.pro_idx = 7 and p.pho_division = '리뷰' order by rev_idx desc
+	</select>
+	
 </mapper>

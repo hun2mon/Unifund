@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.project.dao.ProjectDAO;
 import com.uni.fund.project.dto.ProjectDTO;
+import com.uni.fund.project.dto.ReviewDTO;
 
 @Service
 public class ProjectService {
@@ -167,6 +169,10 @@ public class ProjectService {
 			}
 		}
 
+	}
+
+	public List<ReviewDTO> revList(String pro_idx) {
+		return projectDAO.revList(pro_idx);
 	}
 
 }

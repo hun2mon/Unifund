@@ -1,8 +1,10 @@
 package com.uni.fund.project.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.uni.fund.project.dto.ProjectDTO;
+import com.uni.fund.project.dto.ReviewDTO;
 
 public interface ProjectDAO {
 
@@ -27,5 +29,7 @@ public interface ProjectDAO {
 	void fileWrite(int idx, String newFileName);
 
 	void revFileWrite(int idx, String newFileName);
+
+	List<ReviewDTO> revList(String pro_idx);
 
 }

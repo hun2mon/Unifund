@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.uni.fund.project.dto.ProjectDTO;
+import com.uni.fund.project.dto.ReviewDTO;
 import com.uni.fund.project.service.ProjectService;
 
 @Controller
@@ -94,8 +95,44 @@ public class ProjectController {
 		} else {
 			model.addAttribute("msg", "리뷰 등록에 패하였습니다.");
 		}
-		
-		return "/";
+		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "review.ajax")
+	@ResponseBody
+	public Map<String, Object> reviewAjax(String pro_idx){
+		logger.info("pro_idx : {}" , pro_idx);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReviewDTO> list = projectService.revList(pro_idx);
+		map.put("list", list);
+		logger.info("list : {}",list);
+		return map;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

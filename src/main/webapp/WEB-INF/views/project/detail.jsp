@@ -198,14 +198,15 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 }
 
 .div_review, .div_review * {
-	padding: 5;
+	padding-bottom: 5;
+	padding-top: 5;
 }
 
 .div_flex {
 	display: flex;
 }
 
-.reviewFrom {
+.reviewFrom, .review_content {
 	width: 1000;
 	height: 100;
 }
@@ -221,11 +222,15 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .review_content {
 	border: 1px solid black;
-	height: 100;
 }
-.profile_img{
+
+.profile_img {
 	width: 80;
 	height: 80;
+}
+.spanMargin{
+	margin-left: 10;
+	border: 1px solid red;
 }
 </style>
 </head>
@@ -358,47 +363,70 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					</div>
 					<div>
 						<select name="revNum">
-							<option value="5" >5점</option>
-							<option value="4" >4점</option>
-							<option value="3" >3점</option>
-							<option value="2" >2점</option>
-							<option value="1" >1점</option>
+							<option value="5">5점</option>
+							<option value="4">4점</option>
+							<option value="3">3점</option>
+							<option value="2">2점</option>
+							<option value="1">1점</option>
 						</select>
 					</div>
 				</div>
 				<div>
 					<div>
-						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }">
-						<input type="text" class="reviewFrom" name="revContent">
+						<input type="hidden" class="reviewFrom" name="pro_idx"
+							value="${project.pro_idx }"> <input type="text"
+							class="reviewFrom" name="revContent">
 					</div>
 					<div>
-						<input type="file" class="file_select" name="photo"> 
-						<input type="submit" class="sub_review" value="등록하기">
+						<input type="file" class="file_select" name="photo"> <input
+							type="submit" class="sub_review" value="등록하기">
 					</div>
 				</div>
 			</form>
-			<hr>
-			<div class="div_flex">
-				<div>
-					<img src="/photo/pngwing.com.png" class="profile_img">
-				</div>
-				<div>
-					<div class="pro_grade">평점</div>
-					<div>작성자 날짜</div>
-					<div>
-						<input type="button" value="리뷰삭제">
-					</div>
-				</div>
-				<div>리뷰 사진</div>
-			</div>
-		</div>
-		<div class="review_content">리뷰글 보기</div>
-		<div class="more_review">
-			<input type="button" value="더보기">
+			<hr id="list">
 		</div>
 	</div>
 </body>
 <script>
+		listCall();		
+	
+	function listCall(){
+		$.ajax({
+			type:'get'
+			,url:'./review.ajax'
+			,data:{pro_idx:${project.pro_idx}}
+			,dataType:'json'
+			,success:function(data){
+				console.log(data.list);	
+				drawList(data.list);
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+	
+	function drawList(list){
+		var content = '';
+		for (item of list) {
+			content += '<div>';
+			content += '<div>';
+			content += '<span><img src="/photo/pngwing.com.png" class="profile_img"></span>';
+			content += '<span class="spanMargin">' + item.rev_grade + '<span>';
+			content += '<span>' + item.rev_date + '<span>';
+			content += '<span><img src="/photo/' +item.pho_name+ '" class="profile_img"></span>';
+			content += '</div>';
+			content += '<div class="review_content">' + item.rev_content + '</div>';
+			content += '<div>';
+			content += '<input type="button" value="리뷰삭제">';
+			content += '</div>';
+			content += '<hr>';
+		}
+		$('#list').html(content);
+	};
+	
+	
+	
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
 	}
