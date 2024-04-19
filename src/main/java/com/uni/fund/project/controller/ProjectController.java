@@ -1,7 +1,5 @@
 package com.uni.fund.project.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import com.uni.fund.project.dto.ProjectDTO;
 import com.uni.fund.project.service.ProjectService;
