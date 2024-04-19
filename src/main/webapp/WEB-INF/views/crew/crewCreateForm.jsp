@@ -47,7 +47,7 @@ img.icon{
 				<th>크루명</th>
 				<td>
 					<input type="text"  placeholder="크루명을 입력해주세요(최대 8자)"  name="crew_name"/>
-					<input type="button" value="중복체크" maxlength="8" onclick= "overlay()"/>
+					<input type="button" value="중복체크" onclick= "overlay()"/>
 				</td>
 			</tr>
 					
@@ -60,18 +60,18 @@ img.icon{
 			
 			<tr>
 				<th>크루설명 및 모집정보</th>
-				<td><textarea name = "crew_con" placeholder="내용 입력해주세요(최대1500자)" name="crew_con" ></textarea></td>
+				<td><textarea name = "crew_con" placeholder="내용 입력해주세요(최대1500자)" name="crew_con"></textarea></td>
 			</tr>
 			
 			<tr>
 				<th>크루설명 및 모집정보 이미지</th>				
-				<td><input type="file" name="photos" multiple="multiple" name=""/></td>
+				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/></td>
 			</tr>
 			
 			<tr>
 				<th>모집인원 수</th>
 				<td>
-					<select>
+					<select name="crew_num" id="crew_num">
    						<option value="5">5명</option>
   		 				<option value="10">10명</option>
    						<option value="15">15명</option>
@@ -84,7 +84,7 @@ img.icon{
 			
 			<tr>
 				<th>로고사진</th>				
-				<td><input type="file" name="photos" multiple="multiple"name="crew_logo"/></td>
+				<td><input type="file" id="crew_logo_photo" name="crew_logo_photo"/></td>
 			</tr>
 			<tr>
 				<th>소통링크</th>
@@ -100,7 +100,7 @@ img.icon{
 			</tr>
 			<tr>
 				<th colspan="2"><button type="button" onclick="join()">등록</button>
-				<button type="button" onclick="join()">취소</button></th>
+				<button type="button" onclick="location.href='./'">취소</button></th>
 				
 			</tr>
 			
@@ -116,11 +116,13 @@ function join(){
 	
 	var $crew_name = $('input[name="crew_name"]');
 	var $crew_exp = $('input[name="crew_exp"]');	
-	var $crew_con = $('input[name="crew_con"]');
-	var $age = $('input[name="age"]');
-	
+	var $crew_con = $('textarea[name="crew_con"]');	
+	var crew_con_value = $crew_con.val();
+	var $crew_recru_photo=$('input[name="crew_recru_photo"]');
+	var $crew_logo_photo=$('input[name="crew_logo_photo"]');
 	var $crew_link = $('input[name="crew_link"]');
 	var $crew_local = $('input[name="crew_local"]');
+	
 			
 	if(overChk == false){
 		alert('중복 체크를 해 주세요!');
@@ -140,36 +142,47 @@ function join(){
 	}else if($crew_con.val()==''){
 		alert('크루설명 및 모집정보를 입력 해 주세요!');			
 		$crew_con.focus();
-	}else if($crew_con.val()==''){
-		alert('사진을 선택해주세요!');			
+	}else if(crew_con_value.length>=1500){
+		alert('크루설명 및 모집정보 1500자 이내로 적어주세요.');			
 		$crew_con.focus();
-	}else if($crew_con.val()==''){
-		alert('크루설명 및 모집정보는 1500자 이하로 적어주세요.');			
-		$crew_con.focus();
+	}else if($crew_recru_photo.get(0).files.length <1){
+		alert('크루 모집정보 사진을 선택해주세요!');			
+		$crew_recru_photo.focus();
+	}else if($crew_recru_photo.get(0).files.length >1){
+		alert('사진은 한 장만 넣어주세요.');			
+		$crew_recru_photo.focus();
+	}else if($crew_logo_photo.get(0).files.length<1){
+		alert('크루 로고사진을 선택해주세요!');			
+		$crew_logo_photo.focus();
+	}else if($crew_logo_photo.get(0).files.length>1){
+		alert('사진은 한 장만 넣어주세요.');			
+		$crew_logo_photo.focus();
 	}else if($crew_link.val()==''){
 		alert('소통링크를 입력 해 주세요!');			
 		$crew_link.focus();
 	}else if($crew_local.val()==''){
 		alert('활동지 입력 해 주세요!');	
 		$crew_local.focus();
+	}else{
+		$('form').submit();
 	}
 }
 
-var msg = '${msg}'; // 쿼터 빠지면 넣은 문구가 변수로 인식됨.
+
+
+var msg = '${msg}'; 
 if(msg != ''){
 	alert(msg);
 }
 function overlay() {
 	console.log('click');
 	var id = $('input[name="crew_name"]').val();
-	//ajax를 이용한 비동기 통신 (자바스크렙트를 사용해 보안성이 좋지 못함 취약함)
+	
 	$.ajax({
-		type:'post', // method 방식
-		url:'crewOverlay.do', // 요청한 주소
-		data:{'crew_name':id}, // 파라메터
-		success:function(data){ // 통신 성공했을경우
-		//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
-		//여기에 뿌려준다
+		type:'post', 
+		url:'crewOverlay.do', 
+		data:{'crew_name':id}, 
+		success:function(data){ 
 			console.log(data);
 			if(data.use > 0){
 				alert('중복된 크루명입니다.');
@@ -179,7 +192,7 @@ function overlay() {
 				overChk = true;
 			}
 		}, 
-		error:function(error){ // 통신 실패 시
+		error:function(error){ 
 			console.log(error);
 		} 
 	});

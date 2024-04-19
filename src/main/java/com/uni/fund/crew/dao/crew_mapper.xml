@@ -8,9 +8,23 @@
 		SELECT COUNT(crew_name) FROM crew WHERE crew_name = #{param1}
 	</select>
 	
-	<insert id="crewCreateDo" parameterType="map">
-		INSERT INTO crew (crew_idx,mem_idx,crew_name,crew_exp,crew_con,crew_num,crew_logo,crew_link,crew_local,crew_status)
-		VALUES(#{crew_idx},#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_logo},#{crew_link},#{crew_local},#{crew_status});
+	<insert id="crewCreateDo"
+	useGeneratedKeys="true" 
+	keyColumn="crew_idx" 
+	keyProperty="crew_idx"
+	 parameterType="com.uni.fund.crew.dto.CrewDTO">
+		INSERT INTO crew (mem_idx,crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local)
+		VALUES(#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_link},#{crew_local})
+	</insert>
+	
+	<insert id="createCrewLogoPhoto">
+		INSERT INTO photo(pho_name,ref_idx,pho_division)
+		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="createCrewRecruPhoto">
+		INSERT INTO photo(pho_name,ref_idx,pho_division)
+		VALUES(#{param1},#{param2},#{param3})
 	</insert>
 	
 	

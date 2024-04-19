@@ -32,14 +32,20 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crewCreate.do", method = RequestMethod.POST)
-	public String crewCreateDo(MultipartFile[] photos ,HttpSession session, @RequestParam Map<String, String>param) {
+	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param, Integer mem_idx, Model model) {
 		logger.info("create 들어왔다.");
+		logger.info("Create param:{}",param);
 		
-		String page="redirect:/crewList";
-		int row = crewService.crewCreateDo(photos,param);
-		if(row < 1) {
-			page ="crew/crewCreateForm";
+		String page="redirect:/";
+		String msg="크루 등록에 실패했습니다.";
+		mem_idx=2;
+		
+		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,mem_idx,param);
+		if(row == 1) {
+			page ="redirect:/";
+			msg="크루등록이 완료되었습니다!";
 		}
+		model.addAttribute("msg",msg);
 		
 		return page;
 	}
