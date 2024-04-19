@@ -11,6 +11,8 @@ public class ReviewDTO {
 	private Date rev_date;
 	private String rev_state;
 	private String pho_name;
+	private String mem_id;
+	private String profile;
 	
 	public int getRev_idx() {
 		return rev_idx;
@@ -59,6 +61,18 @@ public class ReviewDTO {
 	}
 	public void setPho_name(String pho_name) {
 		this.pho_name = pho_name;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 
 }

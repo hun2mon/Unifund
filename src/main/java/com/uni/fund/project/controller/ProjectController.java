@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,17 @@ public class ProjectController {
 	@Autowired ProjectService projectService;
 	
 	@RequestMapping(value = "/")
-	public String detail(Model model) {
-		ProjectDTO project = projectService.detail();
+	public String detail(Model model, HttpSession session, String row) {
+		session.setAttribute("loginId", "admin");
+		session.setAttribute("memIdx", "1");
+		String memIdx = (String) session.getAttribute("memIdx");
+		ProjectDTO project = projectService.detail(memIdx);
 		model.addAttribute("project", project);
+		logger.info("memIdx : " + memIdx);
+		logger.info("row = " + row);
+		if (row != null) {
+			model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+		}
 		return "project/detail";
 	}
 	
@@ -83,30 +93,39 @@ public class ProjectController {
 		return mapMap;
 	}
 	
-	@RequestMapping(value = "/review.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/review/write.do", method = RequestMethod.POST)
 	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model) {
+		String page = "redirect:/";
 		logger.info("photo : {}", photo);
 		logger.info("param : {}", param);
 		int mem_idx = 1;
 		int row = projectService.reviewDo(photo,param,mem_idx);
 		logger.info("row : {}",row);
-		if (row >=1) {
-			model.addAttribute("msg", "리뷰가 정상적으로 등록되었습니다.");
-		} else {
-			model.addAttribute("msg", "리뷰 등록에 패하였습니다.");
-		}
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value = "review.ajax")
+	@RequestMapping(value = "review/list.ajax")
 	@ResponseBody
-	public Map<String, Object> reviewAjax(String pro_idx){
+	public Map<String, Object> reviewAjax(String pro_idx,int limit){
 		logger.info("pro_idx : {}" , pro_idx);
+		logger.info("limit : {}" , limit);
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ReviewDTO> list = projectService.revList(pro_idx);
+		List<ReviewDTO> list = projectService.revList(pro_idx,limit);
 		map.put("list", list);
 		logger.info("list : {}",list);
 		return map;
+	}
+	
+	@RequestMapping(value = "/review/delete.do")
+	public String revDel(String rev_idx) {
+		logger.info("rev_idx :{}", rev_idx);
+		String page = "redirect:/";
+		int row = 0;
+		row = projectService.revDel(rev_idx);
+		if (row >0) {
+			page = "redirect:/?row=" + row;
+		}
+		return page;
 	}
 	
 	

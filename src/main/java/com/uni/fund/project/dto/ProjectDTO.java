@@ -35,6 +35,7 @@ public class ProjectDTO {
 	private String rev_content;
 	private int rev_grade;
 	private int rev_idx;
+	private String profile;
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -221,5 +222,11 @@ public class ProjectDTO {
 	}
 	public void setRev_idx(int rev_idx) {
 		this.rev_idx = rev_idx;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 }

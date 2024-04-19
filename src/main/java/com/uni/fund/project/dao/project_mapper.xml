@@ -15,14 +15,15 @@
 			,(select SUM(a.total) from 
 				(select total_price as total from project_apply where pro_idx = 7 order by mem_idx,fund_idx desc limit 1) a) as now_price
 			,(select (rew_price * rew_max) from project p where pro_idx = 7) as target_price
-			,(select mem_mileage from member where mem_idx = 1) as mileage
-			,(select mem_cash from member where mem_idx = 1) as cash
-			,(select mem_post from member where mem_idx =1) as mem_post 
-			,(select mem_addr from member where mem_idx =1) as mem_addr 
-			,(select mem_detail from member where mem_idx =1) as mem_detail
+			,(select mem_mileage from member where mem_idx = #{param1}) as mileage
+			,(select mem_cash from member where mem_idx = #{param1}) as cash
+			,(select mem_post from member where mem_idx =#{param1}) as mem_post 
+			,(select mem_addr from member where mem_idx =#{param1}) as mem_addr 
+			,(select mem_detail from member where mem_idx =#{param1}) as mem_detail
 			,(select round((now_price/target_price) * 100)) as progress 
 			,(select pho_name from photo where ref_idx = 7 and pho_division = '프로젝트') as pro_img_name
-			,(select fund_state from project_apply where mem_idx = 1 and pro_idx = 7 order by fund_idx desc limit 1) as fund_state
+			,(select fund_state from project_apply where mem_idx = #{param1} and pro_idx = 7 order by fund_idx desc limit 1) as fund_state
+			,(select pho_name from photo where ref_idx = #{param1} and pho_division = '프로필') as profile
 		from project where pro_idx = 7;
 	</select>
 	
@@ -82,9 +83,19 @@
 	</insert>
 	
 	<select id="revList" resultType="com.uni.fund.project.dto.ReviewDTO">
-		select * from project_review pr 
-			join photo p on pr.rev_idx = p.ref_idx 
-		where pr.pro_idx = 7 and p.pho_division = '리뷰' order by rev_idx desc
+		select
+			mem_idx as id, rev_idx, pro_idx, rev_content, rev_grade, rev_date, rev_state,pho_name,
+			(select mem_id from `member` m where mem_idx = pr.mem_idx) as mem_id,
+			(select pho_name from photo p2 where pho_division = '프로필' and ref_idx = id) as profile
+		from 
+			project_review pr 
+		right join 
+			photo p on pr.rev_idx = p.ref_idx 
+		where pr.pro_idx = #{param1} and p.pho_division = '리뷰' and pr.rev_state = 'show' order by rev_date desc limit #{param2};
 	</select>
+	
+	<update id="revDel">
+		UPDATE project_review SET rev_state = 'blind' WHERE rev_idx = #{param1} 
+	</update>
 	
 </mapper>

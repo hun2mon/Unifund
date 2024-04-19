@@ -29,8 +29,8 @@ public class ProjectService {
 
 	public String file_root = "/Users/jeounghun/upload/";
 
-	public ProjectDTO detail() {
-		return projectDAO.detail();
+	public ProjectDTO detail(String memIdx) {
+		return projectDAO.detail(memIdx);
 	}
 
 	public int projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo, Map<String, String> param,
@@ -171,8 +171,12 @@ public class ProjectService {
 
 	}
 
-	public List<ReviewDTO> revList(String pro_idx) {
-		return projectDAO.revList(pro_idx);
+	public List<ReviewDTO> revList(String pro_idx,int limit) {
+		return projectDAO.revList(pro_idx,limit);
+	}
+
+	public int revDel(String rev_idx) {
+		return	projectDAO.revDel(rev_idx);
 	}
 
 }

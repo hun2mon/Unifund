@@ -8,7 +8,7 @@ import com.uni.fund.project.dto.ReviewDTO;
 
 public interface ProjectDAO {
 
-	ProjectDTO detail();
+	ProjectDTO detail(String memIdx);
 
 	int projectCreate(ProjectDTO projectDTO);
 
@@ -30,6 +30,7 @@ public interface ProjectDAO {
 
 	void revFileWrite(int idx, String newFileName);
 
-	List<ReviewDTO> revList(String pro_idx);
-
+	List<ReviewDTO> revList(String pro_idx, int limit);
+	
+	int revDel(String rev_idx);
 }

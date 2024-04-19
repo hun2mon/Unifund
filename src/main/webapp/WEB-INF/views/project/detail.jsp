@@ -17,9 +17,11 @@ div.div_main {
 	display: flex;
 }
 
-div.div_right {
-	width: 500px;
-	height: 700px;
+.div_right {
+	width: 510px;
+	height: 900px;
+	background-color: FFFFCC;
+	margin-top: 10;
 }
 
 div.div_left {
@@ -118,7 +120,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .mileage_form {
 	background-color: beige;
-	padding: 10;
+	padding: 0;
 }
 
 .mileage_form>div {
@@ -195,6 +197,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	width: 1060;
 	margin-left: 300;
 	margin-top: 30;
+	z-index: 1;
 }
 
 .div_review, .div_review * {
@@ -216,21 +219,40 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 }
 
 .file_select {
-	border: 1px solid red;
 	width: 260;
 }
 
 .review_content {
-	border: 1px solid black;
+	border-radius: 5px 5px;
+	background-color: FFFFCC;
 }
 
 .profile_img {
-	width: 80;
-	height: 80;
+	width: 50;
+	height: auto;
 }
-.spanMargin{
+
+.spanMargin {
 	margin-left: 10;
-	border: 1px solid red;
+	border-radius: 5px 5px;
+	background-color: FFFFCC;
+}
+.rev_img {
+	width: 100;
+	height: auto;
+	margin-left: 10;
+}
+.more{
+	width: 100;
+	margin-left:450;
+	border:0px;
+	border-radius: 5px 5px;
+	background-color: FFFFCC;
+}
+.selectNum{
+	margin-left:10;
+	margin-top: 20; 
+	width: 100;
 }
 </style>
 </head>
@@ -276,6 +298,9 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<div class="project_progress">
 							<c:if test="${project.now_price == ''}">0%진행중</c:if>
 							<c:if test="${project.now_price != ''}">${project.progress}%진행중</c:if>
+							<c:if test="${loginId == 'sdsd'}">
+
+							</c:if>
 						</div>
 					</div>
 					<div class="progress_bar">
@@ -295,7 +320,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 				</div>
 				<div class="bottom_top">
 					<div class="reword_name">${project.rew_name}</div>
-					<div class="ori_price">${project.ori_price}</div>
+					<div class="ori_price" style="text-decoration:line-through">${project.ori_price}</div>
 					<div class="buy_reword">
 						<div class="reword_price">>> ${project.rew_price}</div>
 						<div class="quantity">
@@ -356,13 +381,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	</div>
 	<div class="div_review">
 		<div class="div_review_top">
-			<form action="review.do" method="post" enctype="multipart/form-data">
+			<form action="review/write.do" method="post"
+				enctype="multipart/form-data">
 				<div class="div_flex">
 					<div>
-						<img src="/photo/pngwing.com.png" class="profile_img">
+						<img src="/photo/${project.profile}" class="profile_img">
 					</div>
 					<div>
-						<select name="revNum">
+						<select name="revNum" class="selectNum">
 							<option value="5">5점</option>
 							<option value="4">4점</option>
 							<option value="3">3점</option>
@@ -379,25 +405,71 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					</div>
 					<div>
 						<input type="file" class="file_select" name="photo"> <input
-							type="submit" class="sub_review" value="등록하기">
+							type="button" class="sub_review" value="등록하기" onclick="revWrite()">
 					</div>
 				</div>
 			</form>
-			<hr id="list">
+			<hr>
+			<div id="list"></div>
+		</div>
+		<div>
+			<button onclick="moreRev()" class="more">더보기</button>
 		</div>
 	</div>
 </body>
 <script>
-		listCall();		
+	$(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
+		listCall();
+	});
 	
+	function revWrite(){
+		
+		var $revContent = $('input[name="revContent"]');
+		var $revPhoto = $('input[name="photo"]');
+		
+		if ($revContent.val()=='') {
+			alert('리뷰 내용을 입력 해주세요');
+			$revContent.focus();
+		} else if ($revPhoto.val() == '') {
+			alert('사진을 첨부 해주세요');
+			$revPhoto.focus();
+		} else {
+			$('form').submit();
+		}
+		
+	}
+
+	var limit = 5;
+	
+	function moreRev(){
+		limit += 5;
+		$.ajax({
+			type:'get'
+			,url:'./review/list.ajax'
+			,data:{
+				pro_idx:${project.pro_idx},
+				limit:limit
+			}
+			,dataType:'json'
+			,success:function(data){
+				drawList(data.list);
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+		
 	function listCall(){
 		$.ajax({
 			type:'get'
-			,url:'./review.ajax'
-			,data:{pro_idx:${project.pro_idx}}
+			,url:'./review/list.ajax'
+			,data:{
+				pro_idx:${project.pro_idx},
+				limit:limit
+			}
 			,dataType:'json'
 			,success:function(data){
-				console.log(data.list);	
 				drawList(data.list);
 			}
 			,error:function(error){
@@ -406,26 +478,30 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		});
 	}
 	
+	var rev_idx = 0;
+	
 	function drawList(list){
 		var content = '';
 		for (item of list) {
-			content += '<div>';
-			content += '<div>';
-			content += '<span><img src="/photo/pngwing.com.png" class="profile_img"></span>';
-			content += '<span class="spanMargin">' + item.rev_grade + '<span>';
-			content += '<span>' + item.rev_date + '<span>';
-			content += '<span><img src="/photo/' +item.pho_name+ '" class="profile_img"></span>';
-			content += '</div>';
+			content += '<div id = "rev_css">';
+			content += '<span><img src="/photo/' +item.profile + '" class="profile_img"></span>';
+			content += '<span class="spanMargin">평점 ' + item.rev_grade + '/5점</span>';
+			content += '<span class="spanMargin">작성자 : ' + item.mem_id + '</span>';
+			content += '<span class="spanMargin">' + item.rev_date + '</span>';
+			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
 			content += '<div class="review_content">' + item.rev_content + '</div>';
 			content += '<div>';
-			content += '<input type="button" value="리뷰삭제">';
+			if (item.mem_id == '${loginId}') {
+				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '">리뷰 삭제</a>';	
+				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
+				$('input[name="revContent"]').attr('readonly',true);
+				$('.sub_review').attr('type','hidden');
+			}
 			content += '</div>';
 			content += '<hr>';
 		}
 		$('#list').html(content);
 	};
-	
-	
 	
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
@@ -435,6 +511,18 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		var quantitys = $('.quan').val();
 		var price = ${project.rew_price} * quantitys;
 		$('.final_price').html(price);
+	}
+	
+	var cnt = 0;
+	function clickImg(img){
+		cnt += 1;
+		if (cnt%2 != 0) {
+			$(img).css("width","500");
+			$(img).css("height","auto");
+		}else {
+			$(img).css("width","100");
+			$(img).css("height","auto");
+		}
 	}
 	
 	function apply() {
@@ -536,6 +624,11 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	
 	function createForm() {
 		location.href='./';
+	}
+	
+	var msg = '${msg}';
+	if (msg != '') {
+		alert(msg);
 	}
 
 </script>
