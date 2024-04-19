@@ -10,12 +10,20 @@ public interface MypageDAO {
 
    MypageDTO profileUp(int userId);
 
-void fileUpdate(String newFileName, String idx);
+   void fileCreate(String newFileName, String idx);
+   
+   int proUpdo(Map<String, String> param);
+   
+   String getIdx(Map<String, String> param);
+   
+   String proPhoto(int userId);
+   
+   String proPhotoUp(int userId);
+   
+   String isEmpty(int userId);
 
-int proUpdo(Map<String, String> param);
+   void fileUpdate(String newFileName, String idx);
 
-String getIdx(Map<String, String> param);
-
-String proPhoto(int userId);
+   MypageDTO introduction(int userId);
 
 }

@@ -18,9 +18,12 @@
             (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
       FROM member WHERE mem_idx = #{userId}
    </select>
-   <insert id="fileUpdate" parameterType="String">
-         INSERT INTO photo(pho_name,ref_idx,pho_division) VALUES(#{param1},#{param2},1)
+   <insert id="fileCreate" parameterType="String">
+         INSERT INTO photo(pho_name,ref_idx,pho_division) VALUES(#{param1},#{param2},'프로필')
    </insert>
+   <update id="fileUpdate">
+          UPDATE photo SET pho_name = #{param1} WHERE ref_idx = #{param2}  And pho_division ='프로필'
+   </update>
    <update id="proUpdo">
          UPDATE member SET mem_number = #{number},mem_post = #{post},mem_addr = #{addr},
             mem_detail=#{detail}, mem_email=#{email}, mem_bankName = #{bankName}, mem_bank= #{bank}
@@ -30,6 +33,21 @@
          SELECT mem_idx FROM member WHERE member.mem_id = #{id}
    </select>
    <select id="proPhoto" resultType="String">
-         SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = #{userId}
+         SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
    </select>
+   <select id="proPhotoUp" resultType="String">
+          SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
+   </select>
+   <select id="isEmpty" resultType="String">
+          SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
+   </select>
+   <select id="introduction" resultType="com.uni.fund.mypage.dto.MypageDTO">
+          SELECT self_exp,self_introduce FROM introduction WHERE mem_idx = #{userId}
+   </select>
+   
+   
+   
+   
+   
+   
 </mapper>

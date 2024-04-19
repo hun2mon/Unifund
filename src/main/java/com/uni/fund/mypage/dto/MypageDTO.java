@@ -24,6 +24,8 @@ public class MypageDTO {
    private int mem_cash;
    private int mem_mileage;
    private String crew_name;
+   private String self_introduce;
+   private String self_exp;
    
    public int getMem_idx() {
       return mem_idx;
@@ -144,6 +146,18 @@ public class MypageDTO {
    }
    public void setCrew_name(String crew_name) {
       this.crew_name = crew_name;
+   }
+   public String getSelf_introduce() {
+      return self_introduce;
+   }
+   public void setSelf_introduce(String self_introduce) {
+      this.self_introduce = self_introduce;
+   }
+   public String getSelf_exp() {
+      return self_exp;
+   }
+   public void setSelf_exp(String self_exp) {
+      this.self_exp = self_exp;
    }
    
    

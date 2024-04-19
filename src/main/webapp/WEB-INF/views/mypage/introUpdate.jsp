@@ -30,7 +30,7 @@
    
    #box{
       width: 800px;
-      height : 1500px;
+      height : 1000px;
       margin: auto;
       margin-bottom : 150px;
       border: solid 1px white;
@@ -63,45 +63,6 @@
       box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
    }
    
-   .cmb{
-      width: 300px;
-       height: 30px;
-       border: solid 1px black;
-       margin-left: 55%
-   }
-   
-   .mincmb{
-      display: inline-block;
-      width: 100px;
-      height: 10px;
-      
-      margin-left: 40%
-   }
-   
-   .mincmb1{
-   display: inline-block;
-      width: 100px;
-      height: 10px;
-      margin-left: 32%;
-       text-align: right;
-       margin-right: 6;
-   }
-   
-   .mincmb2{
-      display: inline-block;
-      width: 100px;
-      height: 10px;
-      
-   }
-   .mincmb3{
-      display: inline-block;
-      width: 100px;
-      height: 10px;
-      
-   }
-   
-   
-   
    #profile{
       
       width: 150px;
@@ -127,15 +88,23 @@
    }
    
    table,td,th {
-      border: white;
+       border: white;
        margin: auto;
        margin-top: 10px;
        height: 50px;
-       
+
+   }
+   th,td{
+      padding: 5px 10px;
+      text-align: center;
    }
    
-   .intro{
-      display: inline-block;
+   .out{
+     margin-left: 2%;
+    margin-right: 105px;
+   }
+    .intro{
+     
        width: 70px;
        height: 30px;
        border: black;
@@ -156,7 +125,7 @@
    }
    
    #selfInt{
-      width: 80%;
+      width: 400px;
        height: 200px;
        background-color :white;
        margin: auto;
@@ -173,80 +142,51 @@
    }
    
    #proBtn{
-      margin-left: 64.8%;
-          margin-top: 87px;
+         margin-left: 64.8%;
+   		 margin-top: 30px;
    }
+   
+   input[name="reg_exp"]{
+   		width: 50%;
+   		text-align: center;
+   		
+   }
+   
+   textarea {
+	overflow: auto;
+    width: 80%;
+    height: 30%;
+    resize: none;
+	}
+	
+	input[name="photo"] {
+		margin-left: -3%;
+   		 margin-top: 24px;
+	}
 </style>
 </head>
 <body>
-<%@ include file = "/WEB-INF/views/common/header.jsp" %>
+	<%@ include file = "/WEB-INF/views/common/header.jsp" %>
    <hr class="hr-13">
    <br>
    <div id="box">
-      <div id="profile">
-          <c:if test="${not empty proPhoto}">
-            <img class="img" src="/photo/${proPhoto}">
-         </c:if>
-         <c:if test="${empty proPhoto}">
-              <img class="img" src="resources/profile_img/no_image.jpg">
-          </c:if>
-      </div>
-      
-      <div class ="mincmb">캐시</div>
-      <div class ="mincmb2">${info.mem_cash}</div>
-      <button>내역보기</button>
-      <button>충전</button>
-   
-      <div class ="mincmb1">마일리지</div>
-      <div class ="mincmb3">${info.mem_mileage}</div>
-      <button>내역보기</button>
-      <div>
-         <table>
-                <tr>
-                  <th>아이디</th>
-                  <td>${info.mem_id}</td>
-              </tr>
-              <tr>
-                  <th>생년월일</th>
-                  <td>${info.mem_birth}</td>
-              </tr>
-              <tr>
-                  <th>성별</th>
-                  <td>${info.mem_gender}</td>
-              </tr>
-              <tr>
-                  <th>대학교</th>
-                  <td>${info.mem_uni}</td>
-              </tr>
-              <tr>
-                  <th>크루</th>
-                  <td>${info.crew_name}</td>
-              </tr>
-          </table>
-      </div>
-      <button>신청자목록</button>
-      <button onclick="proUp()">프로필수정</button>
       <div id="minibox">
+      	<form action="introUpdate.do" method="post" enctype="multipart/form-data">
          <h1>자기소개서</h1>
          <div class="intro">주분야</div>
-         <div id="selfExp">${introDto.self_exp}</div>
+         	<input type="text" name="reg_exp" value="${introDto.self_exp}">
          <div class="intro">자기소개</div>
-         <div id="selfInt">${introDto.self_introduce}</div>
+         	<textarea name="reg_introduction">${introDto.self_introduce}</textarea>
          <div id="play">
             <img class="img" src="resources/img/no_image.png">
          </div>
+         <input type="file" name="photo">
          <button onclick="introBtn()" id="proBtn">자소서 수정</button>
+      	</form>
       </div>
-   </div>
+   </div>   
 </body>
 <script>
-   function proUp() {
-      location.href = 'profileUpdate.go';
-   }
-   console.log( ${info.crew_name});
-   
-   function introBtn() {
-      location.href = 'introUpdate.go';
-   }
+
 </script>
 </html>

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.uni.fund.mypage.service.MypageService;
 public class MypageController {
    Logger logger = LoggerFactory.getLogger(getClass());
    @Autowired MypageService mypageService;
+   int userId = 1;
    
    @RequestMapping(value = "profile.go")
    public String profile(Model model) {
@@ -29,9 +31,15 @@ public class MypageController {
      
       String proPhoto = mypageService.proPhoto(userId);
       logger.info("proPhoName :" +proPhoto);
+      
+      MypageDTO introDto = mypageService.introduction(userId);
+      logger.info("introductionInfo : {}", introDto);
+      
+      
    
       model.addAttribute("info",dto);
       model.addAttribute("proPhoto",proPhoto);
+      model.addAttribute("introDto",introDto);
       return "mypage/profile";
    }
    
@@ -42,8 +50,12 @@ public class MypageController {
       
       MypageDTO dto = mypageService.profileUp(userId);
       logger.info("UserInfo :{}",dto.toString());
-      model.addAttribute("info",dto);
       
+      String proPhoto = mypageService.proPhotoUp(userId);
+      logger.info("proPhoName :" +proPhoto);
+      
+      model.addAttribute("info",dto);
+      model.addAttribute("proPhoto", proPhoto);
       return "mypage/profileUpdate";
    }
    
@@ -52,9 +64,9 @@ public class MypageController {
       logger.info("profileUpdate.do 요청");
       logger.info("photo : {}",photo.toString());
       logger.info("param : {}",param);
-      int userId = 1;
       
-      int row = mypageService.proUpDo(photo,param);
+
+      int row = mypageService.proUpDo(photo,param,userId);
       if (row >0) {
          model.addAttribute("msg","수정이 완료되었습니다.");
       }else {
@@ -63,5 +75,21 @@ public class MypageController {
       return "redirect:/profile.go";
    }
    
+   @RequestMapping(value = "introUpdate.go")
+   public String introUpdate(Model model) {
+      logger.info("introUpdate.go 요청");
+      
+      MypageDTO introDto = mypageService.introduction(userId);
+      model.addAttribute("introDto",introDto);
+      
+ 
+      return "mypage/introUpdate";
+   }
+   
+   @RequestMapping(value = "introUpdate.do")
+   public String introUpdateDo(MultipartFile[] photos, @RequestParam Map<String, String> param) {
+      
+      return "redirect:/profile.go";
+   }
    
 }

@@ -88,14 +88,17 @@
 </style>
 </head>
 <body>
-<div id="title">
-      <h1>UNIFUND</h1>
-   </div>
+   <%@ include file = "/WEB-INF/views/common/header.jsp" %>
    <hr class="hr-13">
    <br>
    <div id="box">
       <div id="profile">
-         <img class="img" src="resources/img/카리나.jpg">
+        <c:if test="${not empty proPhoto}">
+            <img class="img" src="/photo/${proPhoto}">
+         </c:if>
+         <c:if test="${empty proPhoto}">
+              <img class="img" src="resources/profile_img/no_image.jpg">
+          </c:if>
       </div>
       <div>
          <form action="profileUpdate.do" method="post" enctype="multipart/form-data">

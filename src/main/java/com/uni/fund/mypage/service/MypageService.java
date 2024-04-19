@@ -34,9 +34,11 @@ public class MypageService {
       return mypageDAO.profileUp(userId);
    }
 
-   public int proUpDo(MultipartFile photo, Map<String, String> param) {
+   public int proUpDo(MultipartFile photo, Map<String, String> param, int userId) {
       
       String idx = mypageDAO.getIdx(param);
+      String isEmpty = mypageDAO.isEmpty(userId);
+      logger.info("isEmpty : " + isEmpty);
       
       String fileName = photo.getOriginalFilename();
       if (!fileName.equals("")) {
@@ -49,8 +51,14 @@ public class MypageService {
             byte[] bytes = photo.getBytes();
             Path path = Paths.get(file_root+newFileName);
             Files.write(path, bytes);
+            if (!isEmpty.equals("")) {
             mypageDAO.fileUpdate(newFileName,idx);
+            Thread.sleep(1);   
+         }else {
+            mypageDAO.fileCreate(newFileName,idx);
             Thread.sleep(1);
+            
+         }
          } catch (Exception e) {
             
             e.printStackTrace();
@@ -67,4 +75,19 @@ public class MypageService {
       logger.info("userId : " + userId);
       return mypageDAO.proPhoto(userId);
    }
+
+public String proPhotoUp(int userId) {
+   logger.info("userId : " + userId);
+   return mypageDAO.proPhotoUp(userId);
+}
+
+public String isEmpty(int userId) {
+   
+   return mypageDAO.isEmpty(userId);
+}
+
+public MypageDTO introduction(int userId) {
+   
+   return mypageDAO.introduction(userId);
+}
 }
