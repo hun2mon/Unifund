@@ -11,24 +11,28 @@
 </head>
 <body>
 	<h2>★UNIFUND LOGIN★</h2>
-	<from action="login.do" method="post">
 	<table>
+	<form action="login.do" method="post">
 		<tr>
 			<th>ID</th>
-			<td><input type="text" name="id"></td>
+			<td><input type="text" name="id" placeholder="아이디"></td>
 		</tr>
 		<tr>
 			<th>PW</th>
-			<td><input type="password" name="pw"></td>
+			<td><input type="password" name="pw" placeholder="패스워드"><br></td>
 		</tr>
 		<tr>
 			<th colspan="2">
-				<input type="submit" value="로그인"> 
-				<input type="button" value="회원가입">
+				<input type="submit" value="LOGIN">
+	</form>
+				<br><p></p>
+				<input type="button" value="회원가입하러가기!"><br>
+				<input type="checkbox" id="idSaveCheck">아이디 저장하기</p> 
+				<input type="link" value="아이디찾기"><br>
+				<input type="link" value="비밀번호변경"><br>
 			</th>
 		</tr>
 	</table>
-	</from>
 	${msg}
 </body>
 <script>

@@ -44,7 +44,7 @@ public class MemberController {
 		String msg = "회원가입에 실패 했습니다.";
 		logger.info("param :"+param);
 		
-		int row = MemberService.join(param);
+		int row = memberService.join(param);
 		logger.info("insert count : "+row);
 		
 		if(row==1) {
@@ -56,17 +56,17 @@ public class MemberController {
 		return page;
 	}
 	
-	@RequestMapping(value="/login")
+	@RequestMapping(value="/login.do")
 	public String login(Model model, HttpSession session, String id, String pw) {
-		String page = "login";
+		String page = "redirect:/login";
 		logger.info("id : {} / pw : {}", id, pw);
 		
-		MemberDTO info = MemberService.login(id, pw);
-		logger.info("login :" + info);
+		String loginId = memberService.login(id, pw);
+		logger.info("login :" + loginId);
 		
-		if(info != null) {
-			page = "redirect:/list";
-			session.setAttribute("loginInfo", info);
+		if(loginId != null) {
+			page = "joinform";
+			session.setAttribute("loginID", loginId);
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
@@ -79,7 +79,7 @@ public class MemberController {
 	public Map<String, Object> overlay(String id) {
 		logger.info("id="+id);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("use", MemberService.overlay(id));
+		map.put("use", memberService.overlay(id));
 		
 		return map;
 	}
@@ -90,7 +90,7 @@ public class MemberController {
 		logger.info("글 작성 요청");
 		String page = "redirect:/list";
 		if(session.getAttribute("loginId")!=null) {
-			int row = service.write(photos,param);
+			int row = memberService.write(photos,param);
 			if(row<1) {
 				page = "writeForm";
 			}

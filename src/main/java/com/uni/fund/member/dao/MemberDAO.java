@@ -10,8 +10,12 @@ public interface MemberDAO {
 
 	void setPermission(String string, String perm);
 
-	MemberDTO login(String id, String pw);
+	String login(String id, String pw);
 
 	int overlay(String id);
+
+	
+
+	int write(MemberDTO dto);
 
 }
