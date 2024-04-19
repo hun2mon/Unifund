@@ -12,7 +12,8 @@
 					cate_idx = (select cate_idx from project where pro_idx = 7)) as category
 			,(select mem_id from member where mem_idx = (select mem_idx from project where pro_idx = 7)) as userId
 			,(select COUNT(pro_idx) from project_like where pro_idx = 7 group by pro_idx) as like_cnt
-			,(select SUM(total_price) from project_apply where pro_idx = 7 group by pro_idx) as now_price
+			,(select SUM(a.total) from 
+				(select total_price as total from project_apply where pro_idx = 7 order by mem_idx,fund_idx desc limit 1) a) as now_price
 			,(select (rew_price * rew_max) from project p where pro_idx = 7) as target_price
 			,(select mem_mileage from member where mem_idx = 1) as mileage
 			,(select mem_cash from member where mem_idx = 1) as cash
@@ -21,16 +22,17 @@
 			,(select mem_detail from member where mem_idx =1) as mem_detail
 			,(select round((now_price/target_price) * 100)) as progress 
 			,(select pho_name from photo where ref_idx = 7 and pho_division = '프로젝트') as pro_img_name
+			,(select fund_state from project_apply where mem_idx = 1 and pro_idx = 7 order by fund_idx desc limit 1) as fund_state
 		from project where pro_idx = 7;
 	</select>
 	
 	<insert id="projectCreate"
-	useGeneratedKeys="true" 
-	keyColumn="pro_idx" 
-	keyProperty="pro_idx"
-	parameterType= "com.uni.fund.project.dto.ProjectDTO">
-	INSERT INTO project(mem_idx,cate_idx,pro_title,pro_content,pro_deadline,pro_startdate,rew_name,ori_price,rew_price,rew_max,pro_phone,pro_tos)
-	VALUES (#{mem_idx},#{cate_idx},#{pro_title},#{pro_content},#{pro_deadline},#{pro_startdate},#{rew_name},#{ori_price},#{rew_price},#{rew_max},#{pro_phone},#{pro_tos})
+		useGeneratedKeys="true" 
+		keyColumn="pro_idx" 
+		keyProperty="pro_idx"
+		parameterType= "com.uni.fund.project.dto.ProjectDTO">
+		INSERT INTO project(mem_idx,cate_idx,pro_title,pro_content,pro_deadline,pro_startdate,rew_name,ori_price,rew_price,rew_max,pro_phone,pro_tos)
+		VALUES (#{mem_idx},#{cate_idx},#{pro_title},#{pro_content},#{pro_deadline},#{pro_startdate},#{rew_name},#{ori_price},#{rew_price},#{rew_max},#{pro_phone},#{pro_tos})
 	</insert>
 	
 	<insert id="createMainPhoto">
@@ -65,4 +67,30 @@
     j.pro_idx = #{param1};
 	</select>
 
+	<insert id="funding" parameterType="map">
+		insert into project_apply (pro_idx,mem_idx,rew_cnt,mile_use,total_price)
+			values(#{pro_idx},#{mem_idx},#{rew_quantity},#{mileage},#{total_price})	
+	</insert>
+	
+	<update id="moneyMng" parameterType="map">
+		UPDATE `member` SET 
+			mem_cash = (select mem_cash from member where mem_idx = #{mem_idx})-(#{total_price}-#{mileage}),
+			mem_mileage = (select mem_mileage from member where mem_idx = #{mem_idx})-#{mileage}
+		WHERE mem_idx = #{mem_idx}
+	</update>
+	
+	<insert id="fundingCancle" parameterType="map">
+		insert into project_apply (pro_idx,mem_idx,fund_state)
+			values(#{pro_idx},#{mem_idx},'B')	
+	</insert>
+	
+	<update id="moneyRefund" parameterType="map">
+		UPDATE `member` SET 
+			mem_cash = (select mem_cash from member where mem_idx = #{mem_idx})
+									+(select total_price-mile_use from project_apply where mem_idx = #{mem_idx} and pro_idx = #{pro_idx} order by fund_idx desc limit 1),
+			mem_mileage = (select mem_mileage from member where mem_idx = #{mem_idx})
+										+(select mile_use from project_apply where mem_idx = #{mem_idx} and pro_idx = #{pro_idx} order by fund_idx desc limit 1)
+		WHERE mem_idx = #{mem_idx};
+	</update>
+	
 </mapper>

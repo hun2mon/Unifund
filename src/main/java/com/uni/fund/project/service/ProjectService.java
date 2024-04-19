@@ -118,11 +118,20 @@ public class ProjectService {
 		}
 
 	}
-
 	public void updateForm(String pro_idx, Model model) {
 		ProjectDTO projectdto = projectDAO.updateForm(pro_idx);
 		model.addAttribute("project",projectdto);
 		
 	}
+	public void funding(Map<String, String> map) {
+		int cnt = projectDAO.funding(map);
+		projectDAO.moneyMng(map);
+		logger.info("성공여부 : {}",cnt);
+	}
 
+	public void fundingCancle(Map<String, String> map) {
+		projectDAO.moneyRefund(map);
+		int cnt = projectDAO.fundingCancle(map);
+		logger.info("성공여부 : {}", cnt);
+	}
 }
