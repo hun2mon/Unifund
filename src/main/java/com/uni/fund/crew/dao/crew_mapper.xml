@@ -18,12 +18,12 @@
 	</insert>
 	
 	<insert id="createCrewLogoPhoto">
-		INSERT INTO photo(pho_name,ref_idx,pho_division)
+		INSERT INTO photo(ref_idx, pho_name, pho_division)
 		VALUES(#{param1},#{param2},#{param3})
 	</insert>
 	
 	<insert id="createCrewRecruPhoto">
-		INSERT INTO photo(pho_name,ref_idx,pho_division)
+		INSERT INTO photo(ref_idx, pho_name, pho_division)
 		VALUES(#{param1},#{param2},#{param3})
 	</insert>
 	

@@ -31,7 +31,7 @@ public class CrewService {
 
 	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, Integer mem_idx, Map<String, String> param) {
 		int row=-1;
-		
+		logger.info("crew create do 들어왔다");
 		CrewDTO crewDTO = new CrewDTO();
 		crewDTO.setMem_idx(mem_idx);
 		crewDTO.setCrew_name(param.get("crew_name"));
@@ -41,11 +41,11 @@ public class CrewService {
 		//crewDTO.setCrew_logo(param.get("crew_logo"));
 		crewDTO.setCrew_link(param.get("crew_link"));
 		crewDTO.setCrew_local(param.get("crew_local"));
-		crewDTO.setCrew_status(param.get("crew_status"));
+		//crewDTO.setCrew_status(param.get("crew_status"));
 		row= crewDAO.crewCreateDo(crewDTO);
 		int crew_idx= crewDTO.getCrew_idx();
 		String crewLogo="크루로고";
-		String crewRecru="크루모집설명";
+		String crewRecru="모집설명";
 		
 		if(row>0) {
 			crewLogoPhotoFileSave(crew_idx,crew_logo_photo,crewLogo);
@@ -72,9 +72,7 @@ public class CrewService {
 				logger.info("file exception");
 				e.printStackTrace();
 			}			
-			
-		}
-		
+		}		
 	}
 	
 
@@ -84,8 +82,9 @@ public class CrewService {
 			String crewRecruPhoto = fileName.substring(fileName.lastIndexOf("."));
 			String newCrewRecruPhoto = System.currentTimeMillis()+crewRecruPhoto;
 			
-			byte[] crewRecruPhotoBytes;
+			
 			try {
+				byte[] crewRecruPhotoBytes= crew_recru_photo.getBytes();
 				crewRecruPhotoBytes = crew_recru_photo.getBytes();
 				Path crewRecruPath = Paths.get(file_root +newCrewRecruPhoto);
 				Files.write(crewRecruPath, crewRecruPhotoBytes);
