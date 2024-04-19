@@ -17,9 +17,7 @@ public class AnnouncementService {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired AnnouncementDAO annDAO;
-	public List<AnnouncementDTO> annList() {
-		return annDAO.annList();
-	}
+
 	public Map<String, Object> annList(int currPage, int pagePerCnt) {
 		int start = (currPage-1) * pagePerCnt;
 		
@@ -28,8 +26,10 @@ public class AnnouncementService {
 		result.put("annList", annList);
 		result.put("currPage", currPage);
 		result.put("totalPages", annDAO.allCount(pagePerCnt));
+		logger.info("result:{}",result);
 		
 		return result;
 	}
+
 	
 }

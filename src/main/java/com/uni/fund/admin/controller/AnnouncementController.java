@@ -1,6 +1,5 @@
 package com.uni.fund.admin.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.uni.fund.admin.dto.AnnouncementDTO;
 import com.uni.fund.admin.service.AnnouncementService;
 
 @Controller
@@ -24,8 +22,6 @@ public class AnnouncementController {
 	@RequestMapping("/annList")
 	public String annList(Model model) {
 		logger.info("annList요청");
-		List<AnnouncementDTO> annList = annService.annList();
-		model.addAttribute("annList",annList);
 		return "announcement/annList";
 	}
 	

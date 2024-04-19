@@ -44,20 +44,8 @@ th {
 				<th>등록일</th>
 			</tr>
 		</thead>
-		<tbody>
-			<c:forEach items="${annList}" var="announcement">
-				<tr>
-					<td>
-						${announcement.noti_idx}
-					</td>
-					<td <c:if test="${announcement.noti_top eq 'B'}">class="red-text"</c:if>>
-						${announcement.noti_title}
-					</td>
-					<td	>
-						${announcement.noti_date}
-					</td>
-				</tr>
-			</c:forEach>
+		<tbody id="list">
+	
 		</tbody>
 		<tr>
 			<td colspan="6" id="paging">
@@ -90,6 +78,8 @@ function listCall(page){
 		},
 		dataType:'json',
 		success : function(data) {
+			console.log('asdfasdf' + data.annList);
+			drawList(data.annList);
 			console.log(data);
 			//플러그인 추가
 			
@@ -112,6 +102,24 @@ function listCall(page){
          }
       });
 }
+function drawList(list){
+	   var content = '';
+	   for(var item of list){
+	      console.log(item);
+	      content += '<tr>';
+	      content += '<td>' + item.noti_idx + '</td>';
+	      content += '<td';
+	      if(item.noti_top === 'B') {
+	         content += ' class="red-text"';
+	      }
+	      content += '>' + item.noti_title + '</td>';
+	      content += '<td>' + item.noti_date + '</td>';
+	      content += '</tr>';
+	   }
+	   
+	   $('tbody').html(content);
+	}
+
 	
 
 	
