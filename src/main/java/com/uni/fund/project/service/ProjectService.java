@@ -34,8 +34,9 @@ public class ProjectService {
 	
 	public int projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo, Map<String, String> param,
 			int mem_idx) {
+		logger.info(":::projectCreate Service IN:::");
 		int row = -1;
-
+		
 		SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd");
 		ProjectDTO projectDTO = new ProjectDTO();
 		projectDTO.setMem_idx(mem_idx);
@@ -67,7 +68,7 @@ public class ProjectService {
 		if (row > 0) {
 			int pro_idx = projectDTO.getPro_idx();
 			String projectMainPhotoDiv = "프로젝트대표사진";
-			String projectPhotoDiv = "프로젝트설명";
+			String projectPhotoDiv = "프로젝트";
 			projectMainFileSave(pro_idx, pro_main_photo, projectMainPhotoDiv);
 			projectFileSave(pro_idx, pro_photo, projectPhotoDiv);
 		}
@@ -118,11 +119,31 @@ public class ProjectService {
 		}
 
 	}
+	
 	public void updateForm(String pro_idx, Model model) {
 		ProjectDTO projectdto = projectDAO.updateForm(pro_idx);
 		model.addAttribute("project",projectdto);
-		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String proDeadline = dateFormat.format(projectdto.getPro_deadline());
+		String proStartDate = dateFormat.format(projectdto.getPro_startdate());
+		model.addAttribute("proDeadline",proDeadline);
+		model.addAttribute("proStartDate",proStartDate);
 	}
+	
+	public int projectUpdate(MultipartFile pro_main_photo, MultipartFile pro_photo, Map<String, String> param) {
+		int row = -1;
+
+		row = projectDAO.projectUpdate(param);
+		
+		if(row > 0) {
+			int pro_idx = Integer.parseInt(param.get("pro_idx"));
+			projectMainFileSave(pro_idx,pro_main_photo,"프로젝트대표사진");
+			projectFileSave(pro_idx,pro_photo,"프로젝트");
+		}
+		
+		return row;
+	}
+	
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
@@ -134,4 +155,5 @@ public class ProjectService {
 		int cnt = projectDAO.fundingCancle(map);
 		logger.info("성공여부 : {}", cnt);
 	}
+
 }

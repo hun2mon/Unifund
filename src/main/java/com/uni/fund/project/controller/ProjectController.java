@@ -1,8 +1,6 @@
 package com.uni.fund.project.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import com.uni.fund.project.dto.ProjectDTO;
 import com.uni.fund.project.service.ProjectService;
@@ -60,9 +57,25 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/pro_update.go")
 	public String updateGo(String pro_idx,Model model) {
+		logger.info(":: updateGo CONTROLLER IN ::");
 		logger.info("pro_idx {}",pro_idx);
 		projectService.updateForm(pro_idx,model);
 		return "project/update";
+	}
+	
+	@RequestMapping(value = "/projectUpdate.do", method = RequestMethod.POST)
+	public String updateProject(MultipartFile pro_main_photo, MultipartFile pro_photo, @RequestParam Map<String, String> param) {
+		logger.info(":: updateProject CONTROLLER IN ::");
+		logger.info("pro_idx:{}",param.get("pro_idx"));
+		logger.info("pro_title:{}",param.get("pro_title"));
+		String page = "redirect:/pro_update.go";
+		
+		int row = projectService.projectUpdate(pro_main_photo,pro_photo,param);
+		if(row == 1 ) {
+			page = "redirect:/";
+			//page = "redirect:/detail?idx=" + param.get("idx");
+		}
+		return page;
 	}
 	
 	@RequestMapping(value = "/fund.do", method = RequestMethod.POST)

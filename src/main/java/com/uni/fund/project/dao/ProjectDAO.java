@@ -15,6 +15,8 @@ public interface ProjectDAO {
 	void createPhoto(int pro_idx, String newProjectFileName, String projectPhotoDiv);
 
 	ProjectDTO updateForm(String pro_idx);
+	
+	int projectUpdate(Map<String, String> param);
 
 	int funding(Map<String, String> map);
 

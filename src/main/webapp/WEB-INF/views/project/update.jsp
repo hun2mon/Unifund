@@ -188,7 +188,8 @@ textarea {
 <%@ include file = "/WEB-INF/views/common/header.jsp" %>
 <div class="container">
 <div class="form-container">
-<form action="update" method="post" enctype="multipart/form-data">
+<form action="projectUpdate.do" method="post" enctype="multipart/form-data">
+<input name="pro_idx" type="hidden" value="${project.pro_idx }"/>
 	<table>
 		<tr>
 			<th>프로젝트 제목(최대 20자)</th>
@@ -221,11 +222,11 @@ textarea {
 		<tr>
 			<td>
 			<select id="cate_idx" name="cate_idx">
-				<option value="1">전시회</option>
-				<option value="2">공연</option>
-				<option value="3">축제</option>
-				<option value="4">창작물</option>
-				<option value="5">기타</option>
+				<option value="1" <c:if test="${project.cate_idx == 1 }">selected</c:if>>전시회</option>
+				<option value="2" <c:if test="${project.cate_idx == 2 }">selected</c:if>>공연</option>
+				<option value="3" <c:if test="${project.cate_idx == 3 }">selected</c:if>>축제</option>
+				<option value="4" <c:if test="${project.cate_idx == 4 }">selected</c:if>>창작물</option>
+				<option value="5" <c:if test="${project.cate_idx == 5 }">selected</c:if>>기타</option>
 			</select>
 			</td>
 			<td><input type="text" name="pro_phone" class="pro_phone" value="${project.pro_phone }"/></td>
@@ -251,17 +252,17 @@ textarea {
 			<th>전시/공연/출품 날짜</th>
 		</tr>
 		<tr>
-			<td><input type="date" name="pro_deadline" class="pro_deadline"/></td>
-			<td><input type="date" name="pro_startdate" class="pro_startdate"/></td>
+			<td><input type="date" name="pro_deadline" class="pro_deadline" value="${proDeadline}"/></td>
+			<td><input type="date" name="pro_startdate" class="pro_startdate" value="${proStartDate}"/></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input type="checkbox" name="pro_tos" class="pro_tos" disabled><a class="agreement">&nbsp(필수)개인정보 처리 관련 이용약관 동의</a></td>
+			<td colspan="2"><input type="checkbox" name="pro_tos" class="pro_tos" checked="true" disabled><a class="agreement">&nbsp(필수)개인정보 처리 관련 이용약관 동의</a></td>
 			<input name="pro_tos" type="hidden" value="Y"/>
 		</tr>
 		<tr>
 			<td class="btn_td" colspan="2">
 			<input type="button" onclick="location.href='./'" value="취소" class="btn_cancel">
-			<input type="button" onclick="update()" value="수정" class="btn_submit">
+			<button class="btn_submit">수정</button>
 			</td>
 		</tr>
 	</table>
@@ -270,15 +271,14 @@ textarea {
 </div>
 </body>
 <script>
-var deadlineDate = new Date('${project.pro_deadline}');
-var dateDead = deadlineDate.toLocaleDateString("ko-KR");
-var date = document.querySelector('.pro_deadline');
+$('input[id="pro_main_photo"]').on('change',function(){
+	var fileName = $('input[id="pro_main_photo"]').val();
+	$('.file1').val(fileName);
+});
 
-
-//$('.pro_deadline').val(dateDead);
-$('input[name="pro_deadline"]').prop('value',deadlineDate);
-//$('input[type="date"]').attr('value',dateDead);
-console.log(dateDead);
-
+$('input[id="pro_photo"]').on('change',function(){
+	var fileName = $('input[id="pro_photo"]').val();
+	$('.file2').val(fileName);
+});
 </script>
 </html>
