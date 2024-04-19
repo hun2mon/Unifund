@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -81,8 +82,7 @@ public class CrewService {
 		String fileName=crew_recru_photo.getOriginalFilename();
 		if(!fileName.equals("")) {
 			String crewRecruPhoto = fileName.substring(fileName.lastIndexOf("."));
-			String newCrewRecruPhoto = System.currentTimeMillis()+crewRecruPhoto;
-			
+			String newCrewRecruPhoto = System.currentTimeMillis()+crewRecruPhoto;			
 			
 			try {
 				byte[] crewRecruPhotoBytes= crew_recru_photo.getBytes();
@@ -98,12 +98,15 @@ public class CrewService {
 		}		
 	}
 	
-	public void crewUpdateForm(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo ,int crew_idx, String newCrewLogoPhoto, String crewLogo, Model model) {
-		logger.info("crewUpdateForm 들어왔ㄷ다");
+	public void crewUpdateForm(int crew_idx, Model model) {
+		logger.info("crewUpdateForm 들어왔다");
 		CrewDTO crewDTO = crewDAO.crewUpdateForm(crew_idx);
 		int idx=crewDTO.getCrew_idx();
-		String update_logo_photo = crew;
-		String update_recru_photo = crew_recru_photo;
+		model.addAttribute("crew",crewDTO);
+		
+		List<CrewDTO> list= crewDAO.crewPhoto(idx); // 첫번째가 로고사진, 두번째가 모집정보사진
+		logger.info("list : {} ",list);
+		model.addAttribute("crewPhoto",list);
 		
 	}
 

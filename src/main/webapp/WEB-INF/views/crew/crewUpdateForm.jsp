@@ -46,7 +46,7 @@ img.icon{
 			<tr>
 				<th>크루명</th>
 				<td>
-					<input type="text"  placeholder="크루명을 입력해주세요(최대 8자)"  name="crew_name"/>
+					<input type="text"  placeholder="크루명을 입력해주세요(최대 8자)"  name="crew_name" value="${crew.crew_name}"/>
 					<input type="button" value="중복체크" onclick= "overlay()"/>
 				</td>
 			</tr>
@@ -54,18 +54,18 @@ img.icon{
 			<tr>
 				<th>주분야</th>
 				<td>
-					<input type="text"  placeholder="주분야를 입력해주세요(최대 10자)"  name= "crew_exp"/>
+					<input type="text"  placeholder="주분야를 입력해주세요(최대 10자)"  name= "crew_exp" value="${crew.crew_exp}"/>
 				</td>
 			</tr>
 			
 			<tr>
 				<th>크루설명 및 모집정보</th>
-				<td><textarea name = "crew_con" placeholder="내용 입력해주세요(최대1500자)" name="crew_con"></textarea></td>
+				<td><textarea name = "crew_con" placeholder="내용 입력해주세요(최대1500자)" name="crew_con"value="${crew.crew_con}"></textarea></td>
 			</tr>
 			
 			<tr>
 				<th>크루설명 및 모집정보 이미지</th>				
-				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/></td>
+				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/><img src="/main/${crewPhoto[1].crew_recru_photo}"></td>
 			</tr>
 			
 			<tr>
@@ -84,18 +84,18 @@ img.icon{
 			
 			<tr>
 				<th>로고사진</th>				
-				<td><input type="file" id="crew_logo_photo" name="crew_logo_photo"/></td>
+				<td><input type="file" id="crew_logo_photo" name="crew_logo_photo"/><img src="/main/${crewPhoto[0].crew_logo_photo}"></td>
 			</tr>
 			<tr>
 				<th>소통링크</th>
 				<td>
-					<input type="text"  placeholder="소통링크를 입력해주세요"  name= "crew_link"/>
+					<input type="text"  placeholder="소통링크를 입력해주세요"  name= "crew_link"value="${crew.crew_link}"/>
 				</td>
 			</tr>
 			<tr>
 				<th>활동지</th>
 				<td>
-					<input type="text"  placeholder="활동지를 입력해주세요"  name= "crew_local"/>
+					<input type="text"  placeholder="활동지를 입력해주세요"  name= "crew_local" value="${crew.crew_local}"/>
 				</td>
 			</tr>
 			<tr>

@@ -9,12 +9,12 @@
 	</select>
 	
 	<insert id="crewCreateDo"
-	useGeneratedKeys="true" 
-	keyColumn="crew_idx" 
-	keyProperty="crew_idx"
-	 parameterType="com.uni.fund.crew.dto.CrewDTO">
+		useGeneratedKeys="true" 
+		keyColumn="crew_idx" 
+		keyProperty="crew_idx"
+		 parameterType="com.uni.fund.crew.dto.CrewDTO">
 		INSERT INTO crew (mem_idx,crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local)
-		VALUES(#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_link},#{crew_local})
+			VALUES(#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_link},#{crew_local})
 	</insert>
 	
 	<insert id="createCrewLogoPhoto">
@@ -26,6 +26,21 @@
 		INSERT INTO photo(ref_idx, pho_name, pho_division)
 		VALUES(#{param1},#{param2},#{param3})
 	</insert>
+	
+	<select id="crewUpdateForm" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT (crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local)
+			FROM crew
+	</select>
+	
+	<select id="crewPhoto" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT pho_name
+		FROM crew c 
+		JOIN (
+  		  SELECT * 
+    		FROM photo 
+    		WHERE pho_division = '크루로고' OR pho_division='모집설명'
+		) p ON c.crew_idx = p.ref_idx			
+	</select>
 	
 	
 	

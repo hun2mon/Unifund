@@ -60,7 +60,7 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crewUpdateForm.go")
-	public String crewUpdateFormGo(String crew_idx, Model model) {
+	public String crewUpdateFormGo(int crew_idx, Model model) {
 		String page="redirect:/crewDetail";
 		logger.info("update form idx = "+crew_idx);
 		crewService.crewUpdateForm(crew_idx,model);
