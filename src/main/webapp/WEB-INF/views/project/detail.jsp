@@ -74,7 +74,7 @@ div.div_left {
 	font-size: 15px;
 }
 
-.report, .buy_but, .delete {
+.pro_button, .buy_but, .delete {
 	width: 73;
 	font-size: 9;
 	margin-left: 5;
@@ -186,6 +186,47 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	width: 900;
 	margin-left: 60;
 }
+
+.more_review {
+	text-align: center;
+}
+
+.div_review {
+	width: 1060;
+	margin-left: 300;
+	margin-top: 30;
+}
+
+.div_review, .div_review * {
+	padding: 5;
+}
+
+.div_flex {
+	display: flex;
+}
+
+.reviewFrom {
+	width: 1000;
+	height: 100;
+}
+
+.sub_review {
+	margin-left: 670;
+}
+
+.file_select {
+	border: 1px solid red;
+	width: 260;
+}
+
+.review_content {
+	border: 1px solid black;
+	height: 100;
+}
+.profile_img{
+	width: 80;
+	height: 80;
+}
 </style>
 </head>
 <body>
@@ -203,8 +244,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					<div class="category" style="width: 210;">카테고리 >
 						${project.category}</div>
 					<div class="project_report" style="width: 100;">
-						<input type="button" class="report" value="프로젝트 신고"
-							onclick="location.href='pro_update.go?pro_idx=${project.pro_idx }'">
+						<input type="button" class="pro_button" value="프로젝트 신고"
+							onclick="location.href='pro_report.go?pro_idx=${project.pro_idx }'">
 					</div>
 					<div class="userID">${project.userId}</div>
 					<div class="lisk_cnt" style="width: 30px;">
@@ -217,7 +258,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					<div class="middle_top">
 						<div class="project_title">${project.pro_title}</div>
 						<div class="project_delete">
-							<button class="delete">프로젝트 삭제</button>
+							<input type="button" class="pro_button" value="프로젝트 삭제"
+								onclick="location.href='pro_delete.do?pro_idx=${project.pro_idx }'">
 						</div>
 						<div class="buy_list">
 							<button class="buy_but">구매자 리스트</button>
@@ -226,7 +268,10 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<div class="project_good">❤</div>
 					</div>
 					<div class="middle_middle">
-						<div class="project_progress">${project.progress}%진행</div>
+						<div class="project_progress">
+							<c:if test="${project.now_price == ''}">0%진행중</c:if>
+							<c:if test="${project.now_price != ''}">${project.progress}%진행중</c:if>
+						</div>
 					</div>
 					<div class="progress_bar">
 						<progress value="${project.progress}" max="100"></progress>
@@ -263,7 +308,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<div class="final_price">${project.rew_price}</div>
 					</div>
 					<div>
-						마일리지 사용 <input type="checkbox" class="mileageCheck">
+						마일리지 사용 <input type="checkbox" class="mileageCheck"
+							onclick="readMng()">
 					</div>
 					<div class="mileage_form">
 						<div class="mileage">
@@ -274,7 +320,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 							<div>사용</div>
 							<div class="use_mileage">
 								<input type="number" name="mileage" class="use_mileage_value"
-									value="0" min="0">
+									value="0" min="0" readonly="readonly">
 							</div>
 						</div>
 					</div>
@@ -303,10 +349,58 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 			</div>
 		</div>
 	</div>
+	<div class="div_review">
+		<div class="div_review_top">
+			<form action="review.do" method="post" enctype="multipart/form-data">
+				<div class="div_flex">
+					<div>
+						<img src="/photo/pngwing.com.png" class="profile_img">
+					</div>
+					<div>
+						<select name="revNum">
+							<option value="5" >5점</option>
+							<option value="4" >4점</option>
+							<option value="3" >3점</optiolln>
+							<option value="2" >2점</option>
+							<option value="1" >1점</option>
+						</select>
+					</div>
+				</div>
+				<div>
+					<div>
+						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }">
+						<input type="text" class="reviewFrom" name="revContent">
+					</div>
+					<div>
+						<input type="file" class="file_select" name="photo"> 
+						<input type="submit" class="sub_review" value="등록하기">
+					</div>
+				</div>
+			</form>
+			<hr>
+			<div class="div_flex">
+				<div>
+					<p>프로필 사진</p>
+				</div>
+				<div>
+					<div class="pro_grade">평점</div>
+					<div>작성자 날짜</div>
+					<div>
+						<input type="button" value="리뷰삭제">
+					</div>
+				</div>
+				<div>리뷰 사진</div>
+			</div>
+		</div>
+		<div class="review_content">리뷰글 보기</div>
+		<div class="more_review">
+			<input type="button" value="더보기">
+		</div>
+	</div>
 </body>
 <script>
 	if ('${project.fund_state}' == 'A') {
-		$('.funding_button').val('펀딩 취소하기');
+		$('#fund_apply').val('펀딩 취소하기');
 	}
 	
 	function click_price(){
@@ -314,12 +408,17 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		var price = ${project.rew_price} * quantitys;
 		$('.final_price').html(price);
 	}
+	
 	function apply() {
 		if ($('.funding_button').val() == '펀딩 신청하기') {
 			var quantitys = $('.quan').val();
 			var cash = '${project.cash}' + $('.use_mileage_value').val();
 			var price = ${project.rew_price} *quantitys;
-			if ($('.mileageCheck').prop('checked') == true) {
+			if (price > ${project.target_price}-${project.now_price}) {
+				alert('최대 구매 가능 개수를 초과했습니다.');
+				$('.quan').val(0);
+				$('.quan').focus();
+			} else if ($('.mileageCheck').prop('checked') == true) {
 				if ($('.use_mileage_value').val() < 500) {
 					alert('마일리지는 500이상부터 사용 가능합니다.');
 					$('.use_mileage_value').focus();
@@ -395,6 +494,15 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					console.log(error);
 				}
 			});
+		}
+	}
+	
+	function readMng(){
+		if ($('.mileageCheck').prop('checked') == true) {
+			$('.use_mileage_value').attr('readonly',false);
+		} else {
+			$('.use_mileage_value').attr('readonly',true);
+			$('.use_mileage_value').val(0);
 		}
 	}
 	

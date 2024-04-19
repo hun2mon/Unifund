@@ -81,5 +81,15 @@ public class ProjectController {
 		projectService.fundingCancle(map);
 		return mapMap;
 	}
+	
+	@RequestMapping(value = "/review.do", method = RequestMethod.POST)
+	public String reviewWrite(MultipartFile photo, String revNum, String revContent, String pro_idx) {
+		logger.info("photo : {}", photo);
+		logger.info("revNum : {}", revNum);
+		logger.info("revContent : {}", revContent);
+		logger.info("pro_idx : {}", pro_idx);
+		int mem_idx = 1;
+		return "/";
+	}
 
 }

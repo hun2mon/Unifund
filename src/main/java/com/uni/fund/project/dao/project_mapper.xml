@@ -12,7 +12,8 @@
 					cate_idx = (select cate_idx from project where pro_idx = 7)) as category
 			,(select mem_id from member where mem_idx = (select mem_idx from project where pro_idx = 7)) as userId
 			,(select COUNT(pro_idx) from project_like where pro_idx = 7 group by pro_idx) as like_cnt
-			,(select SUM(total_price) from project_apply where pro_idx = 7 group by pro_idx) as now_price
+			,(select SUM(a.total) from 
+				(select total_price as total from project_apply where pro_idx = 7 order by mem_idx,fund_idx desc limit 1) a) as now_price
 			,(select (rew_price * rew_max) from project p where pro_idx = 7) as target_price
 			,(select mem_mileage from member where mem_idx = 1) as mileage
 			,(select mem_cash from member where mem_idx = 1) as cash
@@ -57,8 +58,8 @@
 	</update>
 	
 	<insert id="fundingCancle" parameterType="map">
-		insert into project_apply (pro_idx,mem_idx,rew_cnt,mile_use,total_price,fund_state)
-			values(#{pro_idx},#{mem_idx},#{rew_quantity},#{mileage},#{total_price},'B')	
+		insert into project_apply (pro_idx,mem_idx,fund_state)
+			values(#{pro_idx},#{mem_idx},'B')	
 	</insert>
 	
 	<update id="moneyRefund" parameterType="map">
