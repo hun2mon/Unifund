@@ -28,7 +28,7 @@
 	</insert>
 	
 	<select id="crewUpdateForm" resultType="com.uni.fund.crew.dto.CrewDTO">
-		SELECT crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local
+		SELECT crew_idx,crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local
 			FROM crew WHERE crew_idx = ${param1}
 	</select>
 	
@@ -49,7 +49,7 @@
 			crew_num=#{crew_num},
 			crew_link=#{crew_link},
 			crew_local=#{crew_local}
-		WHERE crew_idx=1		
+		WHERE crew_idx=	#{crew_idx}
 	</update>
 	
 	

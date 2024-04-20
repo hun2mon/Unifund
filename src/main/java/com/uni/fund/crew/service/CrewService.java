@@ -111,7 +111,7 @@ public class CrewService {
 	}
 
 
-	public void crewUpdate(Map<String, String> param, MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, int crew_idx) {
+	public void crewUpdate(Map<String, String> param, MultipartFile crew_logo_photo, MultipartFile crew_recru_photo) {
 		int row=crewDAO.crewUpdate(param);
 		logger.info("update count : "+ row);
 		String crewLogo="크루로고";
