@@ -21,4 +21,9 @@ public interface CrewDAO {
 
 	List<CrewDTO> crewPhoto(int crew_idx);
 
+	int crewUpdate(Map<String, String> param);
+
+
+
+
 }

@@ -51,20 +51,16 @@ img.icon{
 <body>
 	<h3>크루 수정</h3>
 	<hr/>
-	<form action="crewCreate.do" method = "post" enctype="multipart/form-data">
+	<form action="crewUpdate.do" method = "post" enctype="multipart/form-data">
 		<table>
-			<tr>
-    			<th>크루명</th>
-    			<td>
-        			<label>
-            			<input type="button" value="중복체크" onclick="overlay()" />
-            			<span>크루명을 바꾸고 싶다면, 체크박스를 클릭해주세요</span>
-        			</label>
-        			<input type="checkbox" id="nameCheckbox" onclick="toggleNameInput()" />
-        			<input type="text" placeholder="크루명을 입력해주세요(최대 8자)" name="crew_name" id="crewNameInput" value="${crew.crew_name}" disabled />
-    			</td>
-			</tr>
-					
+		 	<tr>
+            	<th>크루 번호</th>
+            	<td>${crew.crew_idx}<input type="hidden" name="crew_idx" value="${crew.crew_idx}"></td>
+         	</tr>
+         	<tr>
+            	<th>크루명</th>
+            	<td>${crew.crew_name}<input type="hidden" name="crew_name" value="${crew.crew_name}"></td>
+         	</tr>
 			<tr>
 				<th>주분야</th>
 				<td>
@@ -79,7 +75,7 @@ img.icon{
 			
 			<tr>
 				<th>크루설명 및 모집정보 이미지</th>				
-				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo"/><input type= "text" value="${crewPhoto1}"></td>
+				<td><input type="file" id="crew_recru_photo" name="crew_recru_photo" value="${crewPhoto1}"/><input type= "text" value="${crewPhoto1}"></td>
 			</tr>
 			
 			<tr>
@@ -114,8 +110,7 @@ img.icon{
 			</tr>
 			<tr>
 				<th colspan="2"><button type="button" onclick="join()">수정</button>
-				<button type="button" onclick="location.href='./'">취소</button></th>
-				
+				<button type="button" onclick="location.href='./'">취소</button></th>				
 			</tr>
 			
 		</table>
@@ -126,66 +121,48 @@ img.icon{
 var overChk = false;
 
 
-function join(){
-	
-	var $crew_name = $('input[name="crew_name"]');
-	var $crew_exp = $('input[name="crew_exp"]');	
-	var $crew_con = $('textarea[name="crew_con"]');	
-	var crew_con_value = $crew_con.val();
-	var $crew_recru_photo=$('input[name="crew_recru_photo"]');
-	var $crew_logo_photo=$('input[name="crew_logo_photo"]');
-	var $crew_link = $('input[name="crew_link"]');
-	var $crew_local = $('input[name="crew_local"]');
-	
-			
-	if(overChk == false){
-		alert('중복 체크를 해 주세요!');
-		$crew_name.focus();
-	}else if($crew_name.val()==''){
-		alert('크루명을 입력 해 주세요!');			
-		$crew_exp.focus();
-	}else if($crew_name.val().length >=8){
-		alert('크루명은 8자 이하로 적어주세요.');			
-		$crew_exp.focus();
-	}else if($crew_exp.val()==''){
-		alert('주분야를 입력 해 주세요!');			
-		$crew_exp.focus();
-	}else if($crew_exp.val().length>=10){
-		alert('주분야는 10자 이하로 적어주세요.');			
-		$crew_exp.focus();
-	}else if($crew_con.val()==''){
-		alert('크루설명 및 모집정보를 입력 해 주세요!');			
-		$crew_con.focus();
-	}else if(crew_con_value.length>=1500){
-		alert('크루설명 및 모집정보 1500자 이내로 적어주세요.');			
-		$crew_con.focus();
-	}else if($crew_recru_photo.get(0).files.length <1){
-		alert('크루 모집정보 사진을 선택해주세요!');			
-		$crew_recru_photo.focus();
-	}else if($crew_recru_photo.get(0).files.length >1){
-		alert('사진은 한 장만 넣어주세요.');			
-		$crew_recru_photo.focus();
-	}else if($crew_logo_photo.get(0).files.length<1){
-		alert('크루 로고사진을 선택해주세요!');			
-		$crew_logo_photo.focus();
-	}else if($crew_logo_photo.get(0).files.length>1){
-		alert('사진은 한 장만 넣어주세요.');			
-		$crew_logo_photo.focus();
-	}else if($crew_link.val()==''){
-		alert('소통링크를 입력 해 주세요!');			
-		$crew_link.focus();
-	}else if($crew_local.val()==''){
-		alert('활동지 입력 해 주세요!');	
-		$crew_local.focus();
-	}else{
-		$('form').submit();
-	}
-}
+function join() {
+    var $crew_exp = $('input[name="crew_exp"]');
+    var $crew_con = $('textarea[name="crew_con"]');
+    var crew_con_value = $crew_con.val();
+    var $crew_recru_photo = $('input[name="crew_recru_photo"]');
+    var $crew_logo_photo = $('input[name="crew_logo_photo"]');
+    var $crew_link = $('input[name="crew_link"]');
+    var $crew_local = $('input[name="crew_local"]');
 
-function toggleNameInput() {
-    var checkBox = document.getElementById("nameCheckbox");
-    var inputField = document.getElementById("crewNameInput");
-    inputField.disabled = !checkBox.checked;
+    if ($crew_exp.val() == '') {
+        alert('주분야를 입력 해 주세요!');
+        $crew_exp.focus();
+    } else if ($crew_exp.val().length >= 10) {
+        alert('주분야는 10자 이하로 적어주세요.');
+        $crew_exp.focus();
+    } else if ($crew_con.val() == '') {
+        alert('크루설명 및 모집정보를 입력 해 주세요!');
+        $crew_con.focus();
+    } else if (crew_con_value.length >= 1500) {
+        alert('크루설명 및 모집정보 1500자 이내로 적어주세요.');
+        $crew_con.focus();
+    } else if ($crew_recru_photo.get(0).files.length < 1) {
+        alert('크루 모집정보 사진을 선택해주세요!');
+        $crew_recru_photo.focus();
+    } else if ($crew_recru_photo.get(0).files.length > 1) {
+        alert('사진은 한 장만 넣어주세요.');
+        $crew_recru_photo.focus();
+    } else if ($crew_logo_photo.get(0).files.length < 1) {
+        alert('크루 로고사진을 선택해주세요!');
+        $crew_logo_photo.focus();
+    } else if ($crew_logo_photo.get(0).files.length > 1) {
+        alert('사진은 한 장만 넣어주세요.');
+        $crew_logo_photo.focus();
+    } else if ($crew_link.val() == '') {
+        alert('소통링크를 입력 해 주세요!');
+        $crew_link.focus();
+    } else if ($crew_local.val() == '') {
+        alert('활동지 입력 해 주세요!');
+        $crew_local.focus();
+    } else {
+        $('form').submit();
+    }
 }
 
 

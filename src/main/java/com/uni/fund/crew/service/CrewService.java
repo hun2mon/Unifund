@@ -52,11 +52,11 @@ public class CrewService {
 		if(row>0) {
 			crewLogoPhotoFileSave(crew_idx,crew_logo_photo,crewLogo);
 			crewRecruPhotoFileSave(crew_idx,crew_recru_photo,crewRecru);
-		}
-		
-		
+		}		
 		return row;
 	}
+	
+	
 
 	private void crewLogoPhotoFileSave(int crew_idx, MultipartFile crew_logo_photo, String crewLogo) {
 		String fileName = crew_logo_photo.getOriginalFilename();
@@ -82,7 +82,7 @@ public class CrewService {
 		String fileName=crew_recru_photo.getOriginalFilename();
 		if(!fileName.equals("")) {
 			String crewRecruPhoto = fileName.substring(fileName.lastIndexOf("."));
-			String newCrewRecruPhoto = System.currentTimeMillis()+crewRecruPhoto;			
+			String newCrewRecruPhoto = System.currentTimeMillis()+crewRecruPhoto;
 			
 			try {
 				byte[] crewRecruPhotoBytes= crew_recru_photo.getBytes();
@@ -107,9 +107,28 @@ public class CrewService {
 		//list.get(0).getPho_name();
 		model.addAttribute("crewPhoto1",list.get(1).getPho_name());
 		model.addAttribute("crewPhoto",list.get(0).getPho_name());
-		logger.info("list : {} ",list);
+		logger.info("list : {} ",list);		
+	}
+
+
+	public void crewUpdate(Map<String, String> param, MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, int crew_idx) {
+		int row=crewDAO.crewUpdate(param);
+		logger.info("update count : "+ row);
+		String crewLogo="크루로고";
+		String crewRecru="모집설명";
+		
+		if(row>0) {
+			crewLogoPhotoFileSave(Integer.parseInt(param.get("crew_idx")),crew_logo_photo,crewLogo);
+			crewRecruPhotoFileSave(Integer.parseInt(param.get("crew_idx")),crew_recru_photo,crewRecru);
+		}
 		
 	}
+
+
+
+
+
+	
 
 
 	

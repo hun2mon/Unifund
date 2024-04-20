@@ -70,13 +70,15 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crewUpdate.do")
-	public String crewUpdateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String,String> param){
-		logger.info("param: {}",param);
-		String page="redirect:/crewDetail";
+	@RequestMapping(value="/crewUpdate.do",method = RequestMethod.POST)
+	public String crewUpdateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param){
+		logger.info("param : {}",param);
 		int crew_idx=1;
-		crewService.crewUpdate(crew_logo_photo,crew_recru_photo,param);
-		page="redirect:/detail?crew_idx="+param.get("crew_idx");
+		String page="redirect:/crewDetail";
+		
+		crewService.crewUpdate(param,crew_logo_photo,crew_recru_photo,crew_idx);
+		page="redirect:/detail?crew_idx="+crew_idx;
+		logger.info("page : "+page);
 		
 		return page;
 	}
