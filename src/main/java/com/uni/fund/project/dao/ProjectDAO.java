@@ -35,4 +35,8 @@ public interface ProjectDAO {
 	int revDel(String rev_idx);
 
 	void mileageSaveUp(int mem_idx);
+
+	List<ProjectDTO> appListCall(int start, int pagePerCnt);
+
+	Object allCount(int pagePerCnt);
 }

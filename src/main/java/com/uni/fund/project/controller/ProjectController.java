@@ -33,9 +33,24 @@ public class ProjectController {
 		return "project/appList";
 	}
 	
+	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> appListCall(String page, String cnt){
+		logger.info("appListCall요청 들어옴");
+		logger.info("listCall 요청");
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = projectService.list(currPage,pagePerCnt);
+		return map;
+	}
+	
 	@RequestMapping(value = "/")
 	public String detail(Model model, HttpSession session, String row) {
-		session.setAttribute("loginId", "ㅁㄴㅇ");
+		session.setAttribute("loginId", "dds");
 		session.setAttribute("memIdx", "1");
 		String memIdx = (String) session.getAttribute("memIdx");
 		ProjectDTO project = projectService.detail(memIdx);
@@ -109,7 +124,7 @@ public class ProjectController {
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value = "review/list.ajax")
+	@RequestMapping(value = "/review/list.ajax")
 	@ResponseBody
 	public Map<String, Object> reviewAjax(String pro_idx,int limit){
 		logger.info("pro_idx : {}" , pro_idx);

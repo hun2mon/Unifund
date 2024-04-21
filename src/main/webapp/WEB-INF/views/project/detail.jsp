@@ -289,18 +289,15 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 								onclick="location.href='pro_delete.do?pro_idx=${project.pro_idx }'">
 						</div>
 						<div class="buy_list">
-							<button class="buy_but" onclick="location.href='project/appList.go'">구매자 리스트</button>
+							<button class="buy_but" onclick="appListCall()">구매자 리스트</button>
 						</div>
 						<div class="project_bookmark">⭐</div>
 						<div class="project_good">❤</div>
 					</div>
 					<div class="middle_middle">
 						<div class="project_progress">
-							<c:if test="${project.now_price == ''}">0%진행중</c:if>
-							<c:if test="${project.now_price != ''}">${project.progress}%진행중</c:if>
-							<c:if test="${loginId == 'sdsd'}">
-
-							</c:if>
+							<c:if test="${project.now_price != project.target_price}">${project.progress}%진행중</c:if>
+							<c:if test="${project.now_price == project.target_price}">펀딩마감</c:if>
 						</div>
 					</div>
 					<div class="progress_bar">
@@ -309,6 +306,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					<div class="date" id="end_date">마감기한 :
 						${project.pro_deadline}</div>
 					<div class="date">공연 시작일 : ${project.pro_startdate}</div>
+					<div class="date">문의 : ${project.pro_phone}</div>
 					<div class="money">
 						<div class="now_money">${project.now_price}</div>
 						<div class="target_money" style="font-size: 12;">/
@@ -368,7 +366,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					</div>
 					<div>
 						<input type="button" value="펀딩 신청하기" class="funding_button"
-							id="fund_apply" onclick="apply()">
+						id="fund_apply" onclick="apply()">
 					</div>
 					<div>
 						<input type="button" value="펀딩 수정하기" class="funding_button"
@@ -421,6 +419,13 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	$(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
 		listCall();
 	});
+	
+	function appListCall() {
+		var url = "project/appList.go";
+        var name = "appList";
+        var option = "width = 600, height = 700, top = 100, left = 200, location = no"
+        window.open(url, name, option);
+	}
 	
 	function revWrite(){
 		
@@ -531,6 +536,9 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	}
 	
 	function apply() {
+		if (${project.now_price} == ${project.target_price} && $('.funding_button').val() == '펀딩 신청하기') {
+			alert('모집금액이 충족되어 신청이 마감되었습니다.');
+		}else
 		if ($('.funding_button').val() == '펀딩 신청하기') {
 			var quantitys = $('.quan').val();
 			var cash = '${project.cash}' + $('.use_mileage_value').val();
@@ -595,7 +603,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					}
 				});
 			}
-		} else {
+		} 
+		if ($('.funding_button').val() == '펀딩 취소하기'){
 			$.ajax({
 				type:'post'
 				,url:'./fund_cancle.do'

@@ -36,6 +36,8 @@ public class ProjectDTO {
 	private int rev_grade;
 	private int rev_idx;
 	private String profile;
+	private String mem_number;
+	private String mem_id;
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -229,4 +231,17 @@ public class ProjectDTO {
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}
+	public String getMem_number() {
+		return mem_number;
+	}
+	public void setMem_number(String mem_number) {
+		this.mem_number = mem_number;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
+	}
+	
 }

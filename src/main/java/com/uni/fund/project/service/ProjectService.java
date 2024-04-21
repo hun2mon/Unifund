@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -151,7 +152,6 @@ public class ProjectService {
 	}
 
 	public void revFileSave(MultipartFile photo, int idx) {
-		// 1. 엎로드할 파일명이 있는가?
 		String fileName = photo.getOriginalFilename();
 		logger.info("upload file name : " + fileName);
 		if (!fileName.equals("")) {
@@ -163,7 +163,7 @@ public class ProjectService {
 			try {
 				byte[] bytes = photo.getBytes(); 
 				Path path = Paths.get(file_root + newFileName); 
-				Files.write(path, bytes); // 저장
+				Files.write(path, bytes);
 				projectDAO.revFileWrite(idx,newFileName);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -178,6 +178,17 @@ public class ProjectService {
 
 	public int revDel(String rev_idx) {
 		return	projectDAO.revDel(rev_idx);
+	}
+
+	public Map<String, Object> list(int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt);
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", projectDAO.allCount(pagePerCnt));
+		return result;
 	}
 
 }
