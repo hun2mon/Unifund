@@ -82,7 +82,6 @@ public class ProjectController {
 		if(row == 1) {
 			page = "redirect:/";
 			msg = "등록완료되었습니다. 심사가 완료될때까지 기다려주세요.";
-
 		}
 		
 		model.addAttribute("msg",msg);
