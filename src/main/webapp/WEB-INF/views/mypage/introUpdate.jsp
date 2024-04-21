@@ -109,7 +109,7 @@
        height: 30px;
        border: black;
        margin: auto;
-       text-align: left;
+       text-align: center;
        font-weight: bold;
        font-size: 17px;
    }
@@ -143,46 +143,48 @@
    
    #proBtn{
          margin-left: 64.8%;
-   		 margin-top: 30px;
+          margin-top: 30px;
    }
    
-   input[name="reg_exp"]{
-   		width: 50%;
-   		text-align: center;
-   		
+   input[name="selfExp"]{
+         width: 50%;
+         text-align: center;
+         
    }
    
    textarea {
-	overflow: auto;
+   overflow: auto;
     width: 80%;
     height: 30%;
     resize: none;
-	}
-	
-	input[name="photo"] {
-		margin-left: -3%;
-   		 margin-top: 24px;
-	}
+   }
+   
+   input[name="photos"] {
+      margin-left: -3%;
+          margin-top: 24px;
+   }
+   
+
 </style>
 </head>
 <body>
-	<%@ include file = "/WEB-INF/views/common/header.jsp" %>
+   <%@ include file = "/WEB-INF/views/common/header.jsp" %>
    <hr class="hr-13">
    <br>
    <div id="box">
       <div id="minibox">
-      	<form action="introUpdate.do" method="post" enctype="multipart/form-data">
+         <form action="introUpdate.do" method="post" enctype="multipart/form-data">
          <h1>자기소개서</h1>
-         <div class="intro">주분야</div>
-         	<input type="text" name="reg_exp" value="${introDto.self_exp}">
-         <div class="intro">자기소개</div>
-         	<textarea name="reg_introduction">${introDto.self_introduce}</textarea>
-         <div id="play">
-            <img class="img" src="resources/img/no_image.png">
-         </div>
-         <input type="file" name="photo">
+               <div class="intro">주분야</div>
+                  <input type="text" name="selfExp" placeholder="주분야를 입력해주세요."  value="${introDto.self_exp}">
+               <div class="intro">자기소개</div>
+                  <textarea name="selfInt" placeholder="자기소개를 입력해주세요." >${introDto.self_introduce}</textarea>
+               <div id="play">
+                  <img class="img" src="resources/img/no_image.png">
+               </div>
+            <input type="file" name="photos" multiple="multiple">
          <button onclick="introBtn()" id="proBtn">자소서 수정</button>
-      	</form>
+         </form>
       </div>
    </div>   
 </body>

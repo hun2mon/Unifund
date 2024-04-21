@@ -44,10 +44,74 @@
    <select id="introduction" resultType="com.uni.fund.mypage.dto.MypageDTO">
           SELECT self_exp,self_introduce FROM introduction WHERE mem_idx = #{userId}
    </select>
-   
-   
-   
-   
-   
+   <insert id="introCreDo">
+         INSERT INTO introduction(mem_idx,self_introduce,self_exp) VALUES(#{param3},#{param2},#{param1})
+   </insert>
+   <update id="introUpDo">
+         UPDATE introduction SET self_introduce = #{param2}, self_exp = #{param1}  WHERE mem_idx = #{param3}
+   </update>
+   <select id="isSelfEmpty" resultType="String">
+         SELECT self_exp FROM introduction WHERE mem_idx = #{userId} 
+   </select>
+   <insert id="introFileCreate">
+               INSERT INTO photo(pho_name,ref_idx,pho_division) VALUES(#{param1},#{param2},'자기소개')
+   </insert>
+   <select id="list" resultType="com.uni.fund.mypage.dto.MypageDTO">
+   			SELECT p.pro_title, p.pro_startdate, p.pro_deadline, pa.fund_state 
+			FROM project p 
+			JOIN project_apply pa ON p.pro_idx = pa.pro_idx 
+			WHERE pa.mem_idx = #{param3} AND (pa.fund_state ='A' OR pa.fund_state ='C')
+			ORDER BY CASE pa.fund_state
+			        WHEN 'A' THEN 0
+			        WHEN 'C' THEN 1
+			     END ASC,
+	   			 p.pro_deadline DESC 
+			LIMIT #{param1} OFFSET #{param2}
+   </select>
+   <select id="allCount" resultType="Integer">
+   		SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+			FROM (
+			    SELECT p.pro_title, p.pro_startdate, p.pro_deadline, pa.fund_state 
+			    FROM project p 
+			    JOIN project_apply pa ON p.pro_idx = pa.pro_idx 
+			    WHERE pa.mem_idx = #{param2} AND (pa.fund_state = 'A' OR pa.fund_state = 'C')
+			) AS subquery
+   </select>
+   <select id="createList" resultType="com.uni.fund.mypage.dto.MypageDTO">
+   			SELECT pro_title, pro_state, pro_startdate ,pro_deadline 
+			from project 
+			WHERE mem_idx = #{param3} And pro_state  NOT IN ('D')
+			ORDER BY 
+			    CASE 
+			        WHEN pro_state = 'B' THEN 1
+			        ELSE 0
+			    END ASC,
+			    CASE 
+			        WHEN pro_state = 'B' THEN pro_deadline
+			        ELSE NULL
+			    END DESC,
+			    FIELD(pro_state, 'F', 'A', 'C', 'E') ASC
+			LIMIT #{param1} OFFSET #{param2}
+   </select>
+   <select id="allCountCre" resultType="Integer">
+   		SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+		FROM (
+		   SELECT pro_title, pro_state, pro_startdate, pro_deadline 
+		   FROM project 
+		   WHERE mem_idx = #{param2} AND pro_state NOT IN ('D')
+		   ) AS subquery
+   </select>
+   <select id="repList" resultType="com.uni.fund.mypage.dto.MypageDTO">
+   			SELECT rep_division, rns_state ,rep_content ,rep_date  
+   			FROM report 
+   			WHERE mem_idx = #{param3}
+   			ORDER BY rep_date DESC limit #{param1} offset #{param2}
+   </select>
+   <select id="allCountRep" resultType="Integer">
+   		SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+		FROM (
+		    SELECT rep_division, rns_state ,rep_content ,rep_date  FROM report WHERE mem_idx = #{param2})
+		 	AS subquery
+   </select>
    
 </mapper>
