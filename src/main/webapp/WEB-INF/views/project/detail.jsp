@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
 * {
 	margin: 0;
@@ -76,9 +77,9 @@ div.div_left {
 	font-size: 15px;
 }
 
-.pro_button, .buy_but, .delete {
-	width: 73;
-	font-size: 9;
+.pro_button, .buy_but, .delete,.like,.favorites {
+	width: 100;
+	font-size: 14;
 	margin-left: 5;
 	border: 1px solid white;
 	background-color: whitesmoke;
@@ -286,13 +287,16 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<div class="project_title">${project.pro_title}</div>
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
-								onclick="location.href='pro_delete.do?pro_idx=${project.pro_idx }'">
+								onclick="delFrom()">
 						</div>
 						<div class="buy_list">
 							<button class="buy_but" onclick="appListCall()">구매자 리스트</button>
 						</div>
-						<div class="project_bookmark">⭐</div>
-						<div class="project_good">❤</div>
+						<div class="project_bookmark">
+							<button onclick="proFavorite()" class="favorites">즐겨찾기</button>
+							<button onclick="proLike(this)"class="like">좋아요</button>
+						</div>
+						
 					</div>
 					<div class="middle_middle">
 						<div class="project_progress">
@@ -427,6 +431,13 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
         window.open(url, name, option);
 	}
 	
+	function delFrom() {
+		var url = "project/delForm.go";
+        var name = "delForm";
+        var option = "width = 700, height = 500, top = 100, left = 200, location = no"
+        window.open(url, name, option);
+	}
+	
 	function revWrite(){
 		
 		var $revContent = $('input[name="revContent"]');
@@ -508,6 +519,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		}
 		$('#list').html(content);
 	};
+	
+	if ('${project.like_mem_idx}' == ${memIdx}) {
+		$('.like').html('좋아요 취소');
+	}
+	
+	if ('${project.favorite_mem_idx}' == ${memIdx}) {
+		$('.favorites').html('즐겨찾기 취소');
+	}
 	
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
@@ -636,6 +655,79 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		}
 	}
 	
+	function proFavorite(){
+		if ($('.favorites').html() == '즐겨찾기') {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'즐겨찾기'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		} else {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'즐겨찾기 취소'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		}
+	}
+	
+	
+	
+	function proLike(like){
+		if ($('.like').html() == '좋아요') {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'좋아요'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		} else {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'좋아요 취소'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		}
+	}
 	function createForm() {
 		location.href='./';
 	}

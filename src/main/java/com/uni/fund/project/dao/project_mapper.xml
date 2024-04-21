@@ -24,6 +24,8 @@
 			,(select pho_name from photo where ref_idx = 7 and pho_division = '프로젝트') as pro_img_name
 			,(select fund_state from project_apply where mem_idx = #{param1} and pro_idx = 7 order by fund_idx desc limit 1) as fund_state
 			,(select pho_name from photo where ref_idx = #{param1} and pho_division = '프로필') as profile
+			,(select mem_idx from project_like where pro_idx = 7 and mem_idx = #{param1}) as like_mem_idx
+			,(select mem_idx from bookmark where pro_idx = 7 and mem_idx = #{param1}) as favorite_mem_idx
 		from project where pro_idx = 7;
 	</select>
 	
@@ -110,5 +112,21 @@
 	<select id="allCount" resultType="int">
 		SELECT CEIL(COUNT(mem_id)/#{param1}) AS pages FROM `member` m join project_apply pa on m.mem_idx = pa.mem_idx where pro_idx = 9 and fund_state = 'C'
 	</select>
+	
+	<insert id="likeDo" parameterType="String">
+		insert into project_like(pro_idx,mem_idx)values(#{param1},#{param2})
+	</insert>
+	
+	<delete id="likeCancle" parameterType="String">
+		delete from project_like where pro_idx = #{param1} and mem_idx = #{param2}
+	</delete>
+	
+	<insert id="favorite" parameterType="String">
+		insert into bookmark(pro_idx,mem_idx)values(#{param1},#{param2})
+	</insert>
+	
+	<delete id="favoriteCancle" parameterType="String">
+		delete from bookmark where pro_idx = #{param1} and mem_idx = #{param2}
+	</delete>
 	
 </mapper>

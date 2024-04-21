@@ -39,4 +39,12 @@ public interface ProjectDAO {
 	List<ProjectDTO> appListCall(int start, int pagePerCnt);
 
 	Object allCount(int pagePerCnt);
+
+	void likeDo(String pro_idx, String mem_idx);
+
+	void likeCancle(String pro_idx, String mem_idx);
+
+	void favorite(String pro_idx, String mem_idx);
+
+	void favoriteCancle(String pro_idx, String mem_idx);
 }

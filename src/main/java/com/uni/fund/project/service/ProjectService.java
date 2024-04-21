@@ -191,4 +191,20 @@ public class ProjectService {
 		return result;
 	}
 
+	public void likeDo(String pro_idx, String msg, String mem_idx) {
+		if (msg.equals("좋아요")) {
+			projectDAO.likeDo(pro_idx,mem_idx);
+		}
+		if(msg.equals("좋아요 취소")){
+			projectDAO.likeCancle(pro_idx,mem_idx);
+		}
+		if(msg.equals("즐겨찾기")){
+			projectDAO.favorite(pro_idx,mem_idx);
+		}
+		if(msg.equals("즐겨찾기 취소")){
+			projectDAO.favoriteCancle(pro_idx,mem_idx);
+		}
+		
+	}
+
 }

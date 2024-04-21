@@ -38,6 +38,8 @@ public class ProjectDTO {
 	private String profile;
 	private String mem_number;
 	private String mem_id;
+	private String like_mem_idx;
+	private String favorite_mem_idx;
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -242,6 +244,18 @@ public class ProjectDTO {
 	}
 	public void setMem_id(String mem_id) {
 		this.mem_id = mem_id;
+	}
+	public String getLike_mem_idx() {
+		return like_mem_idx;
+	}
+	public void setLike_mem_idx(String like_mem_idx) {
+		this.like_mem_idx = like_mem_idx;
+	}
+	public String getFavorite_mem_idx() {
+		return favorite_mem_idx;
+	}
+	public void setFavorite_mem_idx(String favorite_mem_idx) {
+		this.favorite_mem_idx = favorite_mem_idx;
 	}
 	
 }

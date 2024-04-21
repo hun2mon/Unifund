@@ -52,6 +52,7 @@ public class ProjectController {
 	public String detail(Model model, HttpSession session, String row) {
 		session.setAttribute("loginId", "dds");
 		session.setAttribute("memIdx", "1");
+		model.addAttribute("mem_idx",1);
 		String memIdx = (String) session.getAttribute("memIdx");
 		ProjectDTO project = projectService.detail(memIdx);
 		model.addAttribute("project", project);
@@ -146,6 +147,30 @@ public class ProjectController {
 			page = "redirect:/?row=" + row;
 		}
 		return page;
+	}
+	
+	@RequestMapping(value = "/project/like.do")
+	@ResponseBody
+	public Map<String, Object> likeDo(HttpSession session, String pro_idx, String msg){
+		Map<String, Object> map = new HashMap<String, Object>();
+		logger.info("msg : {}", msg);
+		logger.info("pro_idx : {}", pro_idx);
+		logger.info("session : {}", session.getAttribute("memIdx"));
+		String mem_idx = (String) session.getAttribute("memIdx");
+		projectService.likeDo(pro_idx,msg,mem_idx);
+		logger.info("session : {}", session.getAttribute("memIdx"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/project/delForm.go")
+	public String delFormGo() {
+		return "project/delForm";
+	}
+	
+	@RequestMapping(value = "/project/delete.do", method = RequestMethod.POST)
+	public String proDel() {
+		logger.info("del요청 들어옴");
+		return "redirect:/";
 	}
 	
 	
