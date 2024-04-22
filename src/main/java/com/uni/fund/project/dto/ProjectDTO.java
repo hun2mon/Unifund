@@ -34,6 +34,14 @@ public class ProjectDTO {
 	private String pro_img_name;
 	private String pro_main_name;
 	private String fund_state;
+	private String rev_content;
+	private int rev_grade;
+	private int rev_idx;
+	private String profile;
+	private String mem_number;
+	private String mem_id;
+	private String like_mem_idx;
+	private String favorite_mem_idx;
 	
 	
 	public int getPro_idx() {
@@ -216,4 +224,53 @@ public class ProjectDTO {
 	public void setFund_state(String fund_state) {
 		this.fund_state = fund_state;
 	}
+	public String getRev_content() {
+		return rev_content;
+	}
+	public void setRev_content(String rev_content) {
+		this.rev_content = rev_content;
+	}
+	public int getRev_grade() {
+		return rev_grade;
+	}
+	public void setRev_grade(int rev_grade) {
+		this.rev_grade = rev_grade;
+	}
+	public int getRev_idx() {
+		return rev_idx;
+	}
+	public void setRev_idx(int rev_idx) {
+		this.rev_idx = rev_idx;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+	public String getMem_number() {
+		return mem_number;
+	}
+	public void setMem_number(String mem_number) {
+		this.mem_number = mem_number;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
+	}
+	public String getLike_mem_idx() {
+		return like_mem_idx;
+	}
+	public void setLike_mem_idx(String like_mem_idx) {
+		this.like_mem_idx = like_mem_idx;
+	}
+	public String getFavorite_mem_idx() {
+		return favorite_mem_idx;
+	}
+	public void setFavorite_mem_idx(String favorite_mem_idx) {
+		this.favorite_mem_idx = favorite_mem_idx;
+	}
+	
 }

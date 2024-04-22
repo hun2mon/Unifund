@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,18 +19,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.project.dao.ProjectDAO;
 import com.uni.fund.project.dto.ProjectDTO;
+import com.uni.fund.project.dto.ReviewDTO;
 
 @Service
 public class ProjectService {
-	
+
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
-	@Autowired ProjectDAO projectDAO;
-	
-	public String file_root = "/Users/hsg/upload/Unifund/";
-	
-	public ProjectDTO detail() {
-		return projectDAO.detail();
+
+	@Autowired
+	ProjectDAO projectDAO;
+
+	public String file_root = "/Users/jeounghun/upload/";
+
+	public ProjectDTO detail(String memIdx) {
+		return projectDAO.detail(memIdx);
 	}
 	
 	/* *
@@ -221,13 +224,91 @@ public class ProjectService {
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
-		logger.info("성공여부 : {}",cnt);
+		logger.info("성공여부 : {}", cnt);
 	}
 
 	public void fundingCancle(Map<String, String> map) {
 		projectDAO.moneyRefund(map);
 		int cnt = projectDAO.fundingCancle(map);
 		logger.info("성공여부 : {}", cnt);
+	}
+
+	public int reviewDo(MultipartFile photo, Map<String, String> param, int mem_idx) {
+		projectDAO.mileageSaveUp(mem_idx);
+		ProjectDTO proDTO = new ProjectDTO();
+		proDTO.setPro_idx(Integer.parseInt(param.get("pro_idx")));
+		proDTO.setMem_idx(mem_idx);
+		proDTO.setRev_content(param.get("revContent"));
+		proDTO.setRev_grade(Integer.parseInt(param.get("revNum")));
+		int row = projectDAO.reviewDo(proDTO);
+		int rev_idx = proDTO.getRev_idx();
+		logger.info("rev_idx = " + rev_idx);
+
+		if (row > 0) {
+			revFileSave(photo, rev_idx);
+		}
+
+		return row;
+	}
+
+	public void revFileSave(MultipartFile photo, int idx) {
+		String fileName = photo.getOriginalFilename();
+		logger.info("upload file name : " + fileName);
+		if (!fileName.equals("")) {
+			String ext = fileName.substring(fileName.lastIndexOf("."));
+
+			String newFileName = System.currentTimeMillis() + ext;
+			logger.info(fileName + " -> " + newFileName);
+
+			try {
+				byte[] bytes = photo.getBytes(); 
+				Path path = Paths.get(file_root + newFileName); 
+				Files.write(path, bytes);
+				projectDAO.revFileWrite(idx,newFileName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public List<ReviewDTO> revList(String pro_idx,int limit) {
+		return projectDAO.revList(pro_idx,limit);
+	}
+
+	public int revDel(String rev_idx) {
+		return	projectDAO.revDel(rev_idx);
+	}
+
+	public Map<String, Object> list(int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt);
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", projectDAO.allCount(pagePerCnt));
+		return result;
+	}
+
+	public void likeDo(String pro_idx, String msg, String mem_idx) {
+		if (msg.equals("좋아요")) {
+			projectDAO.likeDo(pro_idx,mem_idx);
+		}
+		if(msg.equals("좋아요 취소")){
+			projectDAO.likeCancle(pro_idx,mem_idx);
+		}
+		if(msg.equals("즐겨찾기")){
+			projectDAO.favorite(pro_idx,mem_idx);
+		}
+		if(msg.equals("즐겨찾기 취소")){
+			projectDAO.favoriteCancle(pro_idx,mem_idx);
+		}
+		
+	}
+
+	public List<ProjectDTO> adminList() {
+		return projectDAO.adminList();
 	}
 
 }

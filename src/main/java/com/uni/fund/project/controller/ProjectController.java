@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.project.dto.ProjectDTO;
+import com.uni.fund.project.dto.ReviewDTO;
 import com.uni.fund.project.service.ProjectService;
 
 @Controller
@@ -25,11 +28,55 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 	
-	@RequestMapping(value = "/")
-	public String detail(Model model) {
-		ProjectDTO project = projectService.detail();
+	@RequestMapping(value = "/project/detail.go")
+	public String detail(Model model, HttpSession session, String row) {
+		session.setAttribute("loginId", "dds");
+		session.setAttribute("memIdx", "1");
+		model.addAttribute("mem_idx",1);
+		String memIdx = (String) session.getAttribute("memIdx");
+		ProjectDTO project = projectService.detail(memIdx);
 		model.addAttribute("project", project);
+		logger.info("memIdx : " + memIdx);
+		logger.info("row = " + row);
+		if (row != null) {
+			model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+		}
 		return "project/detail";
+	}
+	
+	@RequestMapping(value = "/project/adminList.ajax")
+	@ResponseBody
+	public Map<String, Object> adminList(){
+		List<ProjectDTO> list = projectService.adminList();
+		Map<String, Object> map = new HashMap<String,Object>();
+		logger.info("list : {}", list.get(0));
+		map.put("list", list); // 관리자 페이지에 뿌리기
+		return map;
+	}
+	
+	@RequestMapping(value = "/project/appList.go")
+	public String appListGo() {
+		return "project/appList";
+	}
+	
+	@RequestMapping(value = "/project/adminList.go")
+	public String adminListGo() {
+		return "project/adminList";
+	}
+	
+	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> appListCall(String page, String cnt){
+		logger.info("appListCall요청 들어옴");
+		logger.info("listCall 요청");
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = projectService.list(currPage,pagePerCnt);
+		return map;
 	}
 	
 	/* *
@@ -186,14 +233,89 @@ public class ProjectController {
 		return mapMap;
 	}
 	
-	@RequestMapping(value = "/review.do", method = RequestMethod.POST)
-	public String reviewWrite(MultipartFile photo, String revNum, String revContent, String pro_idx) {
+	@RequestMapping(value = "/review/write.do", method = RequestMethod.POST)
+	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model) {
+		String page = "redirect:/";
 		logger.info("photo : {}", photo);
-		logger.info("revNum : {}", revNum);
-		logger.info("revContent : {}", revContent);
-		logger.info("pro_idx : {}", pro_idx);
+		logger.info("param : {}", param);
 		int mem_idx = 1;
-		return "/";
+		int row = projectService.reviewDo(photo,param,mem_idx);
+		logger.info("row : {}",row);
+		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "/review/list.ajax")
+	@ResponseBody
+	public Map<String, Object> reviewAjax(String pro_idx,int limit){
+		logger.info("pro_idx : {}" , pro_idx);
+		logger.info("limit : {}" , limit);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReviewDTO> list = projectService.revList(pro_idx,limit);
+		map.put("list", list);
+		logger.info("list : {}",list);
+		return map;
+	}
+	
+	@RequestMapping(value = "/review/delete.do")
+	public String revDel(String rev_idx) {
+		logger.info("rev_idx :{}", rev_idx);
+		String page = "redirect:/";
+		int row = 0;
+		row = projectService.revDel(rev_idx);
+		if (row >0) {
+			page = "redirect:/?row=" + row;
+		}
+		return page;
+	}
+	
+	@RequestMapping(value = "/project/like.do")
+	@ResponseBody
+	public Map<String, Object> likeDo(HttpSession session, String pro_idx, String msg){
+		Map<String, Object> map = new HashMap<String, Object>();
+		logger.info("msg : {}", msg);
+		logger.info("pro_idx : {}", pro_idx);
+		logger.info("session : {}", session.getAttribute("memIdx"));
+		String mem_idx = (String) session.getAttribute("memIdx");
+		projectService.likeDo(pro_idx,msg,mem_idx);
+		logger.info("session : {}", session.getAttribute("memIdx"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/project/delForm.go")
+	public String delFormGo() {
+		return "project/delForm";
+	}
+	
+	@RequestMapping(value = "/project/delete.do", method = RequestMethod.POST)
+	public String proDel() {
+		logger.info("del요청 들어옴");
+		return "redirect:/";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
