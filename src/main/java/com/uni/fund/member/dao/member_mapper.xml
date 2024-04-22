@@ -5,18 +5,20 @@
 <mapper namespace="com.uni.fund.member.dao.MemberDAO">
 
 <insert id ="join" useGeneratedKeys="true" keyColumn="mem_idx" keyProperty="mem_idx" parameterType="map">
-		INSERT INTO member(mem_idx, mem_id, mem_pw, mem_name, mem_birth, mem_number, mem_gender, mem_email,
-		mem_bankName, mem_bank, mem_cor, mem_uni, mem_joindate, mem_status, mem_post, mem_addr, mem_detail, mem_cash, mem_mileage)
-		VALUES(#{id},#{pw},#{name},#{age},#{gender},#{email})
+		INSERT INTO member(mem_id, mem_pw, mem_name, mem_birth, mem_number, mem_gender, mem_email,
+		mem_bankName, mem_bank, mem_cor, mem_uni, mem_post, mem_addr, mem_detail)
+		VALUES(#{mem_id},#{mem_pw},#{mem_name},#{mem_birth},#{mem_number},#{mem_gender},#{mem_email},#{mem_bankName},
+		#{mem_bank},#{mem_cor},#{mem_uni},#{mem_postCode},#{mem_address},#{mem_addressDetail})
 	</insert>
 	
-	<select id="login" resultType="String">
-		select mem_id from member
+	<select id="login" resultType="com.uni.fund.member.dto.MemberDTO">
+		select * from member
 	WHERE mem_id = #{param1} AND mem_pw = #{param2}
 	</select>
 	
 	<select id="memberList" resultType="com.uni.fund.member.dto.MemberDTO">
-		Select id,name,gender,email FROM member
+		Select mem_idx, mem_id, mem_pw, mem_name, mem_birth, mem_number, mem_gender, mem_email,
+		mem_bankName, mem_bank, mem_cor, mem_uni, mem_joindate, mem_status, mem_post, mem_addr, mem_detail, mem_cash, mem_mileage FROM member
 	</select>
 	
    <insert id="setPermission">
@@ -25,7 +27,7 @@
    </insert>
    
    <select id="overlay" resultType="int">
-		select count(id) from member where id = #{param1}
+		select count(mem_id) from member where mem_id = #{param1}
    </select>
 	
 </mapper>

@@ -10,12 +10,14 @@ public interface MemberDAO {
 
 	void setPermission(String string, String perm);
 
-	String login(String id, String pw);
+	MemberDTO login(String id, String pw);
 
 	int overlay(String id);
 
 	
 
 	int write(MemberDTO dto);
+
+	void fileWrite(String fileName, String newFileName, int idx);
 
 }

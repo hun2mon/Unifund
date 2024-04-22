@@ -1,5 +1,8 @@
 package com.uni.fund.member.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Map;
 
@@ -18,8 +21,9 @@ public class MemberService {
 		@Autowired MemberDAO memberDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public int join(Map<String, String> param) {
+	public int join(Map<String, String> param, MultipartFile mem_cor) {
 		logger.info("회원 가입 param 값");
+		param.put("mem_cor", mem_cor.getOriginalFilename());
 		int row = memberDAO.join(param);
 		String perm = param.get("auth");
 		if(perm !=null) {
@@ -29,8 +33,27 @@ public class MemberService {
 		return row;
 	}
 	
-	public String login(String id, String pw) {
-		logger.info("Id,Pw 확인");
+	public MemberDTO login(String id, String pw) {
+		MemberDTO memberInfo = memberDAO.login(id,pw);
+		logger.info(memberInfo.getMem_idx() + "로그인 서비스에서받은 값");
+		logger.info(memberInfo.getMem_id() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_name() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_birth() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_number() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_gender() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_bankName() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_bank() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_cor() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_uni() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_joindate() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_status() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_post() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_addr() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_detail() + "로그인 서비스에서 받은 값");
+		logger.info(memberInfo.getMem_cash() + "로그인 서비스에서 받은 값");
+		
+		
+		
 		return memberDAO.login(id,pw);
 	}
 	
@@ -72,13 +95,32 @@ public class MemberService {
 		
 		int idx = dto.getMem_idx();
 		logger.info("idx=" + idx);
-		/*if (row > 0) {
-			fileSave(idx, photos); 
-		}*/
+//		if (row > 0) {
+//			fileSave(idx,photos); 
+//		}
 
 		return row;
 
-	
+//		public void fileSave(int idx) {
+//
+//				String fileName = mem_cor.getOriginalFilename();
+//				logger.info("upload file name : " + fileName);
+//				if (!fileName.equals("")) {
+//					String ext = fileName.substring(fileName.lastIndexOf("."));
+//					String newFileName = System.currentTimeMillis() + ext;
+//					logger.info(fileName + " -> " + newFileName);
+//					try {
+//						byte[] bytes = mem_cor.getBytes(); // MultipartFile 로 부터 바이너리 추출
+//						Path path = Paths.get(fileName + newFileName);// 저장경로지정
+//						Files.write(path, bytes);// 저장
+//						memberDAO.fileWrite(fileName, newFileName, idx);
+//						Thread.sleep(1);// 파일명을 위해 강제 휴식 부여
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			
+//		}
 	
 	
 	
