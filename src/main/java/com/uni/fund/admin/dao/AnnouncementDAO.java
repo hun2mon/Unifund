@@ -10,6 +10,10 @@ public interface AnnouncementDAO {
 
 	Object allCount(int pagePerCnt);
 
+	int adminAnnForm(AnnouncementDTO announcementDTO);
+
+	void createNotiPhoto(int noti_idx, String newAnnFileName, String noti_photoDiv);
+
 
 
 }

@@ -17,5 +17,26 @@
         SELECT CEIL(COUNT(*) / #{pagePerCnt}) AS pages
         FROM announcement
     </select>
+    
+    <insert id="adminAnnForm"
+    useGeneratedKeys="true"
+    keyColumn="noti_idx"
+    keyProperty="noti_idx"
+    parameterType="com.uni.fund.admin.dto.AnnouncementDTO">
+    INSERT INTO announcement(mng_idx,noti_title,noti_content,noti_top)
+    VALUES (#{mng_idx},#{noti_title},#{noti_content},#{noti_top})
+    </insert>
+    
+    <insert id="createNotiPhoto">
+    	INSERT INTO photo(ref_idx, pho_name, pho_division)
+    	VALUES(#{param1},#{param2},#{param3})
+    </insert>
+    
+    
+    
+    
+    
+    
+    
 
 </mapper>

@@ -10,6 +10,8 @@ public class AnnouncementDTO {
 	private String noti_title;
 	private Date noti_date;
 	private String noti_top;
+	private String noti_content;
+	private int mng_idx;
 	
 	public int getNoti_idx() {
 		return noti_idx;
@@ -34,6 +36,18 @@ public class AnnouncementDTO {
 	}
 	public void setNoti_top(String noti_top) {
 		this.noti_top = noti_top;
+	}
+	public int getMem_idx() {
+		return mng_idx;
+	}
+	public void setMem_idx(int mem_idx) {
+		this.mng_idx = mem_idx;
+	}
+	public String getNoti_content() {
+		return noti_content;
+	}
+	public void setNoti_content(String noti_content) {
+		this.noti_content = noti_content;
 	}
 
 }

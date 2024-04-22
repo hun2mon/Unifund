@@ -64,7 +64,7 @@ public class ProjectService {
 
 		if (row > 0) {
 			int pro_idx = projectDTO.getPro_idx();
-			int projectMainPhotoDiv = 4;
+			int projectMainPhotoDiv = 4;	
 			int projectPhotoDiv = 3;
 			projectMainFileSave(pro_idx, pro_main_photo, projectMainPhotoDiv);
 			projectFileSave(pro_idx, pro_photo, projectPhotoDiv);
