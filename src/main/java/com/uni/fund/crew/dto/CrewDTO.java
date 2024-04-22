@@ -17,6 +17,11 @@ public class CrewDTO {
 	private Date crew_date;
 	private String pho_name;
 	private int pho_cnt;
+	
+	private int crew_mem_idx;
+	private String crew_mem_status;
+	private Date crew_mem_date;
+	private String crew_mem_rsn;
 
 	
 	public int getCrew_idx() {
@@ -102,6 +107,30 @@ public class CrewDTO {
 	}
 	public void setPho_cnt(int pho_cnt) {
 		this.pho_cnt = pho_cnt;
+	}
+	public int getCrew_mem_idx() {
+		return crew_mem_idx;
+	}
+	public void setCrew_mem_idx(int crew_mem_idx) {
+		this.crew_mem_idx = crew_mem_idx;
+	}
+	public String getCrew_mem_status() {
+		return crew_mem_status;
+	}
+	public void setCrew_mem_status(String crew_mem_status) {
+		this.crew_mem_status = crew_mem_status;
+	}
+	public Date getCrew_mem_date() {
+		return crew_mem_date;
+	}
+	public void setCrew_mem_date(Date crew_mem_date) {
+		this.crew_mem_date = crew_mem_date;
+	}
+	public String getCrew_mem_rsn() {
+		return crew_mem_rsn;
+	}
+	public void setCrew_mem_rsn(String crew_mem_rsn) {
+		this.crew_mem_rsn = crew_mem_rsn;
 	}
 
 }

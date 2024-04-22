@@ -54,9 +54,7 @@ public class CrewService {
 			crewRecruPhotoFileSave(crew_idx,crew_recru_photo,crewRecru);
 		}		
 		return row;
-	}
-	
-	
+	}	
 
 	private void crewLogoPhotoFileSave(int crew_idx, MultipartFile crew_logo_photo, String crewLogo) {
 		String fileName = crew_logo_photo.getOriginalFilename();
@@ -107,7 +105,6 @@ public class CrewService {
 		logger.info("list : {} ",list);		
 	}
 
-
 	public void crewUpdate(Map<String, String> param, MultipartFile crew_logo_photo, MultipartFile crew_recru_photo) {
 		int row=crewDAO.crewUpdate(param);
 		logger.info("update count : "+ row);
@@ -133,10 +130,44 @@ public class CrewService {
 		
 		result.put("crewList",crewList);
 		result.put("currentPage", currentPage);
-		result.put("totalPages",crewDAO.allCountPage(pagePerCnt));		
+		result.put("totalPages",crewDAO.allCountPage(pagePerCnt));
 		
 		return result;
 	}
+
+
+	public void crewApply(int mem_idx, int crew_idx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String applyCrew(int mem_idx, int crew_idx) {
+		
+		// 신청 중인크루 확인
+		int applyingCount = crewDAO.isApplying(mem_idx);
+		if(applyingCount>0) {
+			return "isApplying"; // 이미 크루 신청중이라면
+		}
+		
+		// 가입된 크루가 있는지 확인
+		int memberCount = crewDAO.isMember(mem_idx);
+		if(memberCount >0) {
+			return "memberCount";
+		}
+		
+		// 크루 신청 등록
+		Map<String, Object> param= new HashMap<String, Object>();
+		param.put("mem_idx",mem_idx);
+		param.put("crew_idx", crew_idx);
+		param.put("crew_mem_status","A");
+		crewDAO.applyCrew(param);
+		
+		return "success";
+	}
+
+
+
+	
 
 
 

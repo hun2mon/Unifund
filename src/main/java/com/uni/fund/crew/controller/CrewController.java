@@ -25,13 +25,13 @@ public class CrewController {
 	@Autowired CrewService crewService;
 	
 	
-	@RequestMapping(value="/crewCreate.go")
+	@RequestMapping(value="/crew/crewCreate.go")
 	public String crewCreateGo() {
 		logger.info("crewCreate 들어왔다.");
 		return "crew/crewCreateForm";
 	}
 	
-	@RequestMapping(value="/crewCreate.do", method = RequestMethod.POST)
+	@RequestMapping(value="/crew/crewCreate.do", method = RequestMethod.POST)
 	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param, Integer mem_idx, Model model) {
 		logger.info("create 들어왔다.");
 		logger.info("Create param:{}",param);
@@ -50,7 +50,34 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crewOverlay.do")
+	// @RequestMapping(value="/crew/apply")
+	
+	
+	
+	@RequestMapping(value="/crew/apply.ajax")
+	@ResponseBody
+	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx) {
+	    logger.info("memidx : {}", mem_idx); // 로그 출력 시 {}로 값을 대체합니다.
+	    String page="redirect:/crewList.go";
+	    
+	    Map<String, Object> response = new HashMap<String, Object>();
+	    
+	    String result = crewService.applyCrew(mem_idx, crew_idx);
+	    
+	    if(result.equals("success")) {
+	        response.put("success", "신청이 완료되었습니다.");
+	    } else if(result.equals("isApplying")) {
+	        response.put("error", "이미 신청 중 크루가 있습니다.");
+	    } else {
+	        response.put("error", "현재 가입된 크루가 있습니다.");
+	    }        
+	    
+	    return response;        
+	}
+	
+	
+	
+	@RequestMapping(value="/crew/crewOverlay.do")
 	@ResponseBody
 	public Map<String, Object> crewOverlay(String crew_name){
 		logger.info("crew_name =  "+crew_name);
@@ -59,7 +86,7 @@ public class CrewController {
 		return map;
 	}
 	
-	@RequestMapping(value="/crewUpdateForm.go")
+	@RequestMapping(value="/crew/crewUpdateForm.go")
 	public String crewUpdateFormGo(Model model) {
 		String page="redirect:/crewDetail";
 		int crew_idx = 1;
@@ -70,7 +97,7 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crewUpdate.do",method = RequestMethod.POST)
+	@RequestMapping(value="/crew/crewUpdate.do",method = RequestMethod.POST)
 	public String crewUpdateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param){
 		logger.info("param : {}",param);
 		//int crew_idx=1;
@@ -83,14 +110,14 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="crewList.go", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/crewList.go", method = RequestMethod.GET)
 	public String crewListGo() {
-		logger.info("crewList 진");
+		logger.info("crewList 진입");
 		String page= "crew/crewList";
 		return page;
 	}
 	
-	@RequestMapping(value="/crewList.ajax", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> crewListCall
 	(@RequestParam (value = "page", defaultValue = "1") String page,
@@ -104,6 +131,9 @@ public class CrewController {
 		
 		return map;
 	}
+	
+	
+	
 	
 	
 	

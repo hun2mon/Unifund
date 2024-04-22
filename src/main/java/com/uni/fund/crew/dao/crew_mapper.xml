@@ -67,13 +67,31 @@
 			c.crew_num
 		FROM crew c 
 		ORDER BY crew_idx DESC 
-		limit 10 offset #{param2}
-			
+		limit 10 offset #{param2}			
 	</select>
 	
 	<select id="allCountPage" resultType="Integer">
 		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
 	</select>
+	
+	<select id="isApplying" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*) FROM crewMember_history WHERE mem_idx =#{mem_idx} AND crew_mem_status ='A'
+	</select>
+	
+	<select id="isMember" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM crewMember_history 
+		WHERE mem_idx= 1 AND 
+			(crew_mem_status='B' 
+			OR crew_mem_status='C' 
+			OR crew_mem_status='D' 
+			OR crew_mem_status='E' 
+			OR crew_mem_status='K')
+	</select>
+	
+	<insert id="applyCrew" parameterType="map">
+		INSERT INTO crewMember_history (mem_idx, crew_idx, crew_mem_status) VALUES (#{mem_idx}, #{crew_idx}, 'A')
+	</insert>
 	
 	
 	

@@ -16,6 +16,7 @@ public interface CrewDAO {
 	void createCrewLogoPhoto(int crew_idx, String newCrewLogoPhoto, String crewLogo);
 
 	void createCrewRecruPhoto(int crew_idx, String newCrewRecruPhoto, String crewRecru);
+	
 
 	CrewDTO crewUpdateForm(int crew_idx);
 
@@ -26,6 +27,14 @@ public interface CrewDAO {
 	List<CrewDTO> crewList(int pagePerCnt, int start);
 
 	int allCountPage(int pagePerCnt);
+	
+
+	int isApplying(int mem_idx);
+
+	int isMember(int mem_idx);
+
+	void applyCrew(Map<String, Object> param);
+
 
 
 
