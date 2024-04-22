@@ -47,4 +47,6 @@ public interface ProjectDAO {
 	void favorite(String pro_idx, String mem_idx);
 
 	void favoriteCancle(String pro_idx, String mem_idx);
+
+	List<ProjectDTO> adminList();
 }

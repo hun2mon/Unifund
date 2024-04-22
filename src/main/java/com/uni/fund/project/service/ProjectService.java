@@ -207,4 +207,8 @@ public class ProjectService {
 		
 	}
 
+	public List<ProjectDTO> adminList() {
+		return projectDAO.adminList();
+	}
+
 }

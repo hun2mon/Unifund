@@ -28,9 +28,40 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 	
+	@RequestMapping(value = "/")
+	public String detail(Model model, HttpSession session, String row) {
+		session.setAttribute("loginId", "dds");
+		session.setAttribute("memIdx", "1");
+		model.addAttribute("mem_idx",1);
+		String memIdx = (String) session.getAttribute("memIdx");
+		ProjectDTO project = projectService.detail(memIdx);
+		model.addAttribute("project", project);
+		logger.info("memIdx : " + memIdx);
+		logger.info("row = " + row);
+		if (row != null) {
+			model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+		}
+		return "project/detail";
+	}
+	
+	@RequestMapping(value = "/project/adminList.ajax")
+	@ResponseBody
+	public Map<String, Object> adminList(){
+		List<ProjectDTO> list = projectService.adminList();
+		Map<String, Object> map = new HashMap<String,Object>();
+		logger.info("list : {}", list.get(0));
+		map.put("list", list); // 관리자 페이지에 뿌리기
+		return map;
+	}
+	
 	@RequestMapping(value = "/project/appList.go")
 	public String appListGo() {
 		return "project/appList";
+	}
+	
+	@RequestMapping(value = "/project/adminList.go")
+	public String adminListGo() {
+		return "project/adminList";
 	}
 	
 	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.GET)
@@ -46,22 +77,6 @@ public class ProjectController {
 		
 		Map<String, Object> map = projectService.list(currPage,pagePerCnt);
 		return map;
-	}
-	
-	@RequestMapping(value = "/")
-	public String detail(Model model, HttpSession session, String row) {
-		session.setAttribute("loginId", "dds");
-		session.setAttribute("memIdx", "1");
-		model.addAttribute("mem_idx",1);
-		String memIdx = (String) session.getAttribute("memIdx");
-		ProjectDTO project = projectService.detail(memIdx);
-		model.addAttribute("project", project);
-		logger.info("memIdx : " + memIdx);
-		logger.info("row = " + row);
-		if (row != null) {
-			model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
-		}
-		return "project/detail";
 	}
 	
 	@RequestMapping(value="/createForm")

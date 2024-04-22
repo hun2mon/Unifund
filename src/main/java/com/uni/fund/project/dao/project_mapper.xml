@@ -60,10 +60,10 @@
 		WHERE mem_idx = #{mem_idx}
 	</update>
 	
-	<insert id="fundingCancle" parameterType="map">
-		insert into project_apply (pro_idx,mem_idx,fund_state)
-			values(#{pro_idx},#{mem_idx},'B')	
-	</insert>
+	<update id="fundingCancle" parameterType="map">
+		update project_apply set
+			fund_state = 'B' where pro_idx = #{pro_idx} and mem_idx = #{mem_idx};
+	</update>
 	
 	<update id="moneyRefund" parameterType="map">
 		UPDATE `member` SET 
@@ -128,5 +128,13 @@
 	<delete id="favoriteCancle" parameterType="String">
 		delete from bookmark where pro_idx = #{param1} and mem_idx = #{param2}
 	</delete>
+	
+	<select id="adminList" resultType="com.uni.fund.project.dto.ProjectDTO">
+		select 
+		 	*,
+		 	rew_price * rew_max  as target_price,
+		 	(select round((pa.now_price/target_price) * 100)) as progress 
+		from project p join (select pro_idx ,SUM(total_price)as now_price from project_apply  where fund_state = 'A' group by pro_idx) pa on p.pro_idx = pa.pro_idx;
+	</select>
 	
 </mapper>
