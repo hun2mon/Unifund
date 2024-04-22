@@ -21,6 +21,7 @@ public class ProjectDTO {
 	private String pro_tos;
 	private String progress;
 	private String category;
+	private String cateName;
 	private String userId;
 	private int like_cnt;
 	private int now_price;
@@ -33,6 +34,7 @@ public class ProjectDTO {
 	private String pro_img_name;
 	private String pro_main_name;
 	private String fund_state;
+	
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -135,6 +137,12 @@ public class ProjectDTO {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public String getCateName() {
+		return cateName;
+	}
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
 	}
 	public String getUserId() {
 		return userId;

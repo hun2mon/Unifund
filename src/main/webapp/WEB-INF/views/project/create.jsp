@@ -17,10 +17,11 @@ input[type="text"], textarea, input[type="date"], select, option{
 width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 15px;
   box-sizing: border-box;
   margin-bottom: 10px;
   font-size: 16px;
+ 
 }
 
  .container {
@@ -45,6 +46,7 @@ table {
 
 th, td {
 	padding: 10px;
+	color: #858686;
 }
 
 .file_input {
@@ -172,7 +174,7 @@ textarea {
 }
 
 .close-button:hover {
-	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; /* 호버 시 그림자 효과 변경 */
+	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
 }
 
 .show-modal {
@@ -188,7 +190,7 @@ textarea {
 <%@ include file = "/WEB-INF/views/common/header.jsp" %>
 <div class="container">
 <div class="form-container">
-<form action="create" method="post" enctype="multipart/form-data">
+<form action="projectCreate" method="post" enctype="multipart/form-data">
 	<table>
 		<tr>
 			<th>프로젝트 제목(최대 20자)</th>
@@ -261,7 +263,7 @@ textarea {
 		<tr>
 			<td class="btn_td" colspan="2">
 			<input type="button" onclick="location.href='./'" value="취소" class="btn_cancel">
-			<input type="button" onclick="create()" value="등록" class="btn_submit">
+			<input type="button" onclick="project_create()" value="등록" class="btn_submit">
 			</td>
 		</tr>
 	</table>
@@ -300,7 +302,7 @@ textarea {
 </body>
 <script>
 
-function create(){
+function project_create(){
 	var $pro_title = $('.pro_title');
 	var $pro_main_photo = $('#pro_main_photo');
 	var $pro_content = $('.pro_content');

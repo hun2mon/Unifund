@@ -172,7 +172,7 @@ textarea {
 }
 
 .close-button:hover {
-	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; /* 호버 시 그림자 효과 변경 */
+	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .show-modal {
