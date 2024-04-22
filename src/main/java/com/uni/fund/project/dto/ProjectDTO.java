@@ -21,6 +21,7 @@ public class ProjectDTO {
 	private String pro_tos;
 	private String progress;
 	private String category;
+	private String cateName;
 	private String userId;
 	private int like_cnt;
 	private int now_price;
@@ -31,6 +32,7 @@ public class ProjectDTO {
 	private String mem_addr;
 	private String mem_detail;
 	private String pro_img_name;
+	private String pro_main_name;
 	private String fund_state;
 	private String rev_content;
 	private int rev_grade;
@@ -40,6 +42,7 @@ public class ProjectDTO {
 	private String mem_id;
 	private String like_mem_idx;
 	private String favorite_mem_idx;
+	
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -143,6 +146,12 @@ public class ProjectDTO {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	public String getCateName() {
+		return cateName;
+	}
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -202,6 +211,12 @@ public class ProjectDTO {
 	}
 	public void setCash(int cash) {
 		this.cash = cash;
+	}
+	public String getPro_main_name() {
+		return pro_main_name;
+	}
+	public void setPro_main_name(String pro_main_name) {
+		this.pro_main_name = pro_main_name;
 	}
 	public String getFund_state() {
 		return fund_state;

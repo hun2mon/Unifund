@@ -12,9 +12,13 @@ public interface ProjectDAO {
 
 	int projectCreate(ProjectDTO projectDTO);
 
-	void createMainPhoto(int pro_idx, String newProjectMainFileName, int projectMainPhotoDiv);
+	void createMainPhoto(int pro_idx, String newProjectMainFileName, String projectMainPhotoDiv);
 
-	void createPhoto(int pro_idx, String newProjectFileName, int projectPhotoDiv);
+	void createPhoto(int pro_idx, String newProjectFileName, String projectPhotoDiv);
+
+	ProjectDTO updateForm(String pro_idx);
+	
+	int projectUpdate(Map<String, String> param);
 
 	int funding(Map<String, String> map);
 
@@ -49,4 +53,19 @@ public interface ProjectDAO {
 	void favoriteCancle(String pro_idx, String mem_idx);
 
 	List<ProjectDTO> adminList();
+	
+	int projectTotalCnt(Map<String, Object> param);
+
+	List<ProjectDTO> projectList(Map<String, Object> param);
+
+	int checkProject(Integer mem_idx);
+
+	int projectReadLike(int pro_idx, int mem_idx);
+
+	int projectCheckLike(int pro_idx, int mem_idx);
+
+	void projectAddLike(Integer pro_idx, Integer mem_idx);
+
+	void projectDisLike(Integer pro_idx, Integer mem_idx);
+
 }

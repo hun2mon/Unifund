@@ -6,35 +6,69 @@
 <title>:: 프로젝트 등록 ::</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+ }
+ 
+input[type="text"], textarea, input[type="date"], select, option{
+width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  font-size: 16px;
+ 
+}
+
+ .container {
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+ }
+
+ .form-container {
+    background: #fefefe;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 40px;
+ }
 table {
-	border: 1px solid black;
 	text-align: left;
-	width: 600px;
 	padding: 50px;
 }
 
 th, td {
 	padding: 10px;
+	color: #858686;
 }
 
 .file_input {
-	display: inline-block;
-	height: 30px;
-	padding: 0 10px;
-	vertical-align: middle;
-	border: 1px solid black;
-	width: 50%;
-	color: #999999;
+	width: 100%;
+	position: relative;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .pro_photo, .pro_main_photo {
-	display: inline-block;
-	padding: 5px 10px 5px 10px;
-	color: #fff;
-	vertical-align: middle;
-	background-color: #999999;
-	cursor: pointer;
-	height: 20px;
+	width: 85px;
+	position: absolute;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 input[type="file"] {
@@ -53,22 +87,48 @@ textarea {
 	resize: none;
 }
 
-#submit, #cancel {
-	width: 127px;
-	height: 48px;
-	text-align: center;
-	border: none;
-	margin-top: 20px;
-	cursor: pointer;
+.btn_td{
+	text-align:center;
 }
 
-#submit:hover {
-	color: #fff;
-	background-color: #216282;
-	opacity: 0.9;
+.btn_submit, .btn_cancel{
+	margin-top: 30px;
+ 	background-color: #fdfdfd; 
+    border: none; 
+    width:200px;
+    margin-right:30px;
+    padding: 15px 30px; 
+    font-size: 16px; 
+    border-radius: 20px; 
+    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff; 
+    transition: all 0.3s ease; 
+}
+
+.btn_submit:hover, .btn_cancel:hover{
+ box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
+}
+
+
+#submit, #cancel {
+	background-color: #f0f0f0; 
+    border: none; 
+    padding: 15px 30px; 
+    font-size: 16px; 
+    width:100px;
+    margin-top:20px;
+    width:210px;
+    margin-right:10px;
+    border-radius: 20px; 
+    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff; 
+    transition: all 0.3s ease; 
+}
+
+#submit:hover, #cancel:hover{
+ box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
 }
 
 .modal {
+	text-align:center;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -82,15 +142,24 @@ textarea {
 		0.25s;
 }
 
+.box {
+  width:450px;
+  height:280px;
+  overflow:auto;  
+  border:1px solid gray;
+  padding: 0 0.5em;
+  background-color: #fcfcfc;
+}
+
 .modal-content {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: white;
+	background-color: #e6e6e6;
 	padding: 1rem 1.5rem;
 	width: 500px;
-	height: 350px;
+	height: 450px;
 	border-radius: 0.5rem;
 }
 
@@ -105,7 +174,7 @@ textarea {
 }
 
 .close-button:hover {
-	background-color: darkgray;
+	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
 }
 
 .show-modal {
@@ -118,7 +187,10 @@ textarea {
 </style>
 </head>
 <body>
-<form action="create" method="post" enctype="multipart/form-data">
+<%@ include file = "/WEB-INF/views/common/header.jsp" %>
+<div class="container">
+<div class="form-container">
+<form action="projectCreate" method="post" enctype="multipart/form-data">
 	<table>
 		<tr>
 			<th>프로젝트 제목(최대 20자)</th>
@@ -185,29 +257,52 @@ textarea {
 			<td><input type="date" name="pro_startdate" class="pro_startdate"/></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input type="checkbox" name="pro_tos" class="pro_tos" disabled><a class="agreement">(필수)개인정보 처리 관련 이용약관 동의</a></td>
+			<td colspan="2"><input type="checkbox" name="pro_tos" class="pro_tos" disabled><a class="agreement">&nbsp(필수)개인정보 처리 관련 이용약관 동의</a></td>
 			<input name="pro_tos" type="hidden" value="Y"/>
 		</tr>
 		<tr>
-			<td><input type="button" onclick="location.href='./'" value="취소"><input type="button" onclick="create()" value="등록"></td>
+			<td class="btn_td" colspan="2">
+			<input type="button" onclick="location.href='./'" value="취소" class="btn_cancel">
+			<input type="button" onclick="project_create()" value="등록" class="btn_submit">
+			</td>
 		</tr>
 	</table>
 </form>
+</div>
+</div>
 
 <div class="modal"> 
 	<div class="modal-content"> 
 	<span class="close-button"><h2>X</h2></span> 
-		<h1 class="title">개인정보처리 동의</h1> 
-		<p>귀하의 개인정보를 수집 및 처리하기 위해 동의가 필요합니다.</p>
+		<h3 class="title">개인정보 수집에 관한 이용약관 동의서</h3> 
+		<div class="box">
+		<p>제1조 (목적)</br></br>
+		본 이용약관은 개인정보 보호 및 이용에 관한 사항을 명확히 하고, 이를 준수함으로써 이용자의 권익을 보호하는 것을 목적으로 합니다.</br></br>
+		제2조 (수집하는 개인정보의 항목 및 이용 목적)</br>
+		수집하는 개인정보의 항목: 성명, 생년월일, 주소, 전화번호, 이메일 주소 등
+		이용 목적: 서비스 제공, 고객 문의 응대, 이벤트 참여 및 당첨 안내, 서비스 개선 및 제공, 고객 서비스 관리 등</br></br>
+		제3조 (개인정보의 보유 및 이용기간)
+		개인정보의 보유 기간은 이용자가 서비스를 이용하는 동안 유지되며, 이용목적 달성 시에는 지체 없이 파기됩니다.
+		법령에 따라 보존할 필요가 있는 경우 관련 법령의 규정에 따라 보존됩니다.</br></br>
+		제4조 (개인정보의 제공)
+		개인정보는 이용자의 동의 없이 타인에게 제공되지 않으며, 법령에 의해 요구되는 경우에 한하여 제외됩니다.
+		외부 업체에 개인정보를 제공할 필요가 있는 경우, 이용자에게 사전 동의를 얻은 후에 제공됩니다.</br></br>
+		제5조 (이용자의 권리)
+		이용자는 본인의 개인정보에 대해 열람, 정정, 삭제를 요청할 수 있습니다.
+		개인정보의 정정 및 삭제를 요청하는 경우, 이에 따른 처리는 신속히 이루어집니다.</br></br>
+		제6조 (개인정보의 안전성 확보 조치)
+		개인정보의 안전성 확보를 위해 필요한 기술적, 관리적 조치를 취합니다.
+		개인정보 관련 취급 직원에 대한 교육을 실시하고 있으며, 개인정보보호를 위한 정기적인 감사를 실시합니다.
+		위의 내용에 동의합니다.</p>
+		</div>
 		<input type="button" id="cancel" value="취소"> 
 		<input type="button" id="submit" value="동의"> 
 	</div> 
 </div>
-
 </body>
 <script>
 
-function create(){
+function project_create(){
 	var $pro_title = $('.pro_title');
 	var $pro_main_photo = $('#pro_main_photo');
 	var $pro_content = $('.pro_content');
