@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.uni.fund.project.dto.ProjectDTO;
+import com.uni.fund.project.dto.ReviewDTO;
 
 public interface ProjectDAO {
 
-	ProjectDTO detail();
+	ProjectDTO detail(String memIdx);
 
 	int projectCreate(ProjectDTO projectDTO);
 
@@ -27,6 +28,32 @@ public interface ProjectDAO {
 
 	void moneyRefund(Map<String, String> map);
 
+	int reviewDo(ProjectDTO proDTO);
+
+	void fileWrite(int idx, String newFileName);
+
+	void revFileWrite(int idx, String newFileName);
+
+	List<ReviewDTO> revList(String pro_idx, int limit);
+	
+	int revDel(String rev_idx);
+
+	void mileageSaveUp(int mem_idx);
+
+	List<ProjectDTO> appListCall(int start, int pagePerCnt);
+
+	Object allCount(int pagePerCnt);
+
+	void likeDo(String pro_idx, String mem_idx);
+
+	void likeCancle(String pro_idx, String mem_idx);
+
+	void favorite(String pro_idx, String mem_idx);
+
+	void favoriteCancle(String pro_idx, String mem_idx);
+
+	List<ProjectDTO> adminList();
+	
 	int projectTotalCnt(Map<String, Object> param);
 
 	List<ProjectDTO> projectList(Map<String, Object> param);

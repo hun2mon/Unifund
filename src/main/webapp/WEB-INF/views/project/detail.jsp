@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
 * {
 	margin: 0;
@@ -17,9 +18,11 @@ div.div_main {
 	display: flex;
 }
 
-div.div_right {
-	width: 500px;
-	height: 700px;
+.div_right {
+	width: 510px;
+	height: 900px;
+	background-color: FFFFCC;
+	margin-top: 10;
 }
 
 div.div_left {
@@ -74,9 +77,9 @@ div.div_left {
 	font-size: 15px;
 }
 
-.pro_button, .buy_but, .delete {
-	width: 73;
-	font-size: 9;
+.pro_button, .buy_but, .delete,.like,.favorites {
+	width: 100;
+	font-size: 14;
 	margin-left: 5;
 	border: 1px solid white;
 	background-color: whitesmoke;
@@ -118,7 +121,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .mileage_form {
 	background-color: beige;
-	padding: 10;
+	padding: 0;
 }
 
 .mileage_form>div {
@@ -195,17 +198,19 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	width: 1060;
 	margin-left: 300;
 	margin-top: 30;
+	z-index: 1;
 }
 
 .div_review, .div_review * {
-	padding: 5;
+	padding-bottom: 5;
+	padding-top: 5;
 }
 
 .div_flex {
 	display: flex;
 }
 
-.reviewFrom {
+.reviewFrom, .review_content {
 	width: 1000;
 	height: 100;
 }
@@ -215,17 +220,40 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 }
 
 .file_select {
-	border: 1px solid red;
 	width: 260;
 }
 
 .review_content {
-	border: 1px solid black;
-	height: 100;
+	border-radius: 5px 5px;
+	background-color: FFFFCC;
 }
-.profile_img{
-	width: 80;
-	height: 80;
+
+.profile_img {
+	width: 50;
+	height: auto;
+}
+
+.spanMargin {
+	margin-left: 10;
+	border-radius: 5px 5px;
+	background-color: FFFFCC;
+}
+.rev_img {
+	width: 100;
+	height: auto;
+	margin-left: 10;
+}
+.more{
+	width: 100;
+	margin-left:450;
+	border:0px;
+	border-radius: 5px 5px;
+	background-color: FFFFCC;
+}
+.selectNum{
+	margin-left:10;
+	margin-top: 20; 
+	width: 100;
 }
 </style>
 </head>
@@ -259,18 +287,21 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<div class="project_title">${project.pro_title}</div>
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
-								onclick="location.href='pro_delete.do?pro_idx=${project.pro_idx }'">
+								onclick="delFrom()">
 						</div>
 						<div class="buy_list">
-							<button class="buy_but">구매자 리스트</button>
+							<button class="buy_but" onclick="appListCall()">구매자 리스트</button>
 						</div>
-						<div class="project_bookmark">⭐</div>
-						<div class="project_good">❤</div>
+						<div class="project_bookmark">
+							<button onclick="proFavorite()" class="favorites">즐겨찾기</button>
+							<button onclick="proLike(this)"class="like">좋아요</button>
+						</div>
+						
 					</div>
 					<div class="middle_middle">
 						<div class="project_progress">
-							<c:if test="${project.now_price == ''}">0%진행중</c:if>
-							<c:if test="${project.now_price != ''}">${project.progress}%진행중</c:if>
+							<c:if test="${project.now_price != project.target_price}">${project.progress}%진행중</c:if>
+							<c:if test="${project.now_price == project.target_price}">펀딩마감</c:if>
 						</div>
 					</div>
 					<div class="progress_bar">
@@ -279,6 +310,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					<div class="date" id="end_date">마감기한 :
 						${project.pro_deadline}</div>
 					<div class="date">공연 시작일 : ${project.pro_startdate}</div>
+					<div class="date">문의 : ${project.pro_phone}</div>
 					<div class="money">
 						<div class="now_money">${project.now_price}</div>
 						<div class="target_money" style="font-size: 12;">/
@@ -290,7 +322,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 				</div>
 				<div class="bottom_top">
 					<div class="reword_name">${project.rew_name}</div>
-					<div class="ori_price">${project.ori_price}</div>
+					<div class="ori_price" style="text-decoration:line-through">${project.ori_price}</div>
 					<div class="buy_reword">
 						<div class="reword_price">>> ${project.rew_price}</div>
 						<div class="quantity">
@@ -338,7 +370,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					</div>
 					<div>
 						<input type="button" value="펀딩 신청하기" class="funding_button"
-							id="fund_apply" onclick="apply()">
+						id="fund_apply" onclick="apply()">
 					</div>
 					<div>
 						<input type="button" value="펀딩 수정하기" class="funding_button"
@@ -351,56 +383,157 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	</div>
 	<div class="div_review">
 		<div class="div_review_top">
-			<form action="review.do" method="post" enctype="multipart/form-data">
+			<form action="review/write.do" method="post"
+				enctype="multipart/form-data">
 				<div class="div_flex">
 					<div>
-						<img src="/photo/pngwing.com.png" class="profile_img">
+						<img src="/photo/${project.profile}" class="profile_img">
 					</div>
 					<div>
-						<select name="revNum">
-							<option value="5" >5점</option>
-							<option value="4" >4점</option>
-							<option value="3" >3점</optiolln>
-							<option value="2" >2점</option>
-							<option value="1" >1점</option>
+						<select name="revNum" class="selectNum">
+							<option value="5">5점</option>
+							<option value="4">4점</option>
+							<option value="3">3점</option>
+							<option value="2">2점</option>
+							<option value="1">1점</option>
 						</select>
 					</div>
 				</div>
 				<div>
 					<div>
-						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }">
-						<input type="text" class="reviewFrom" name="revContent">
+						<input type="hidden" class="reviewFrom" name="pro_idx"
+							value="${project.pro_idx }"> <input type="text"
+							class="reviewFrom" name="revContent">
 					</div>
 					<div>
-						<input type="file" class="file_select" name="photo"> 
-						<input type="submit" class="sub_review" value="등록하기">
+						<input type="file" class="file_select" name="photo"> <input
+							type="button" class="sub_review" value="등록하기" onclick="revWrite()">
 					</div>
 				</div>
 			</form>
 			<hr>
-			<div class="div_flex">
-				<div>
-					<p>프로필 사진</p>
-				</div>
-				<div>
-					<div class="pro_grade">평점</div>
-					<div>작성자 날짜</div>
-					<div>
-						<input type="button" value="리뷰삭제">
-					</div>
-				</div>
-				<div>리뷰 사진</div>
-			</div>
+			<div id="list"></div>
 		</div>
-		<div class="review_content">리뷰글 보기</div>
-		<div class="more_review">
-			<input type="button" value="더보기">
+		<div>
+			<button onclick="moreRev()" class="more">더보기</button>
 		</div>
 	</div>
 </body>
 <script>
+	$(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
+		listCall();
+	});
+	
+	function appListCall() {
+		var url = "project/appList.go";
+        var name = "appList";
+        var option = "width = 600, height = 700, top = 100, left = 200, location = no"
+        window.open(url, name, option);
+	}
+	
+	function delFrom() {
+		var url = "project/delForm.go";
+        var name = "delForm";
+        var option = "width = 700, height = 500, top = 100, left = 200, location = no"
+        window.open(url, name, option);
+	}
+	
+	function revWrite(){
+		
+		var $revContent = $('input[name="revContent"]');
+		var $revPhoto = $('input[name="photo"]');
+		
+		if ($revContent.val()=='') {
+			alert('리뷰 내용을 입력 해주세요');
+			$revContent.focus();
+		} else if ($revPhoto.val() == '') {
+			alert('사진을 첨부 해주세요');
+			$revPhoto.focus();
+		} else {
+			alert('5마일리지 적립되었습니다.');
+			$('form').submit();
+		}
+		
+	}
+
+	var limit = 5;
+	
+	function moreRev(){
+		limit += 5;
+		$.ajax({
+			type:'get'
+			,url:'./review/list.ajax'
+			,data:{
+				pro_idx:${project.pro_idx},
+				limit:limit
+			}
+			,dataType:'json'
+			,success:function(data){
+				drawList(data.list);
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+		
+	function listCall(){
+		$.ajax({
+			type:'get'
+			,url:'./review/list.ajax'
+			,data:{
+				pro_idx:${project.pro_idx},
+				limit:limit
+			}
+			,dataType:'json'
+			,success:function(data){
+				drawList(data.list);
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+	
+	var rev_idx = 0;
+	
+	function drawList(list){
+		var content = '';
+		for (item of list) {
+			content += '<div id = "rev_css">';
+			content += '<span><img src="/photo/' +item.profile + '" class="profile_img"></span>';
+			content += '<span class="spanMargin">평점 ' + item.rev_grade + '/5점</span>';
+			content += '<span class="spanMargin">작성자 : ' + item.mem_id + '</span>';
+			content += '<span class="spanMargin">' + item.rev_date + '</span>';
+			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
+			content += '<div class="review_content">' + item.rev_content + '</div>';
+			content += '<div>';
+			if (item.mem_id == '${loginId}') {
+				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '">리뷰 삭제</a>';	
+				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
+				$('input[name="revContent"]').attr('readonly',true);
+				$('.sub_review').attr('type','hidden');
+			}
+			content += '</div>';
+			content += '<hr>';
+		}
+		$('#list').html(content);
+	};
+	
+	if ('${project.like_mem_idx}' == ${memIdx}) {
+		$('.like').html('좋아요 취소');
+	}
+	
+	if ('${project.favorite_mem_idx}' == ${memIdx}) {
+		$('.favorites').html('즐겨찾기 취소');
+	}
+	
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
+	} else {
+		$('input[name="revContent"]').val('프로젝트 펀딩 후에 입력이 가능합니다.');
+		$('input[name="revContent"]').attr('readonly',true);
+		$('.sub_review').attr('type','hidden');
 	}
 	
 	function click_price(){
@@ -409,7 +542,22 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		$('.final_price').html(price);
 	}
 	
+	var cnt = 0;
+	function clickImg(img){
+		cnt += 1;
+		if (cnt%2 != 0) {
+			$(img).css("width","500");
+			$(img).css("height","auto");
+		}else {
+			$(img).css("width","100");
+			$(img).css("height","auto");
+		}
+	}
+	
 	function apply() {
+		if (${project.now_price} == ${project.target_price} && $('.funding_button').val() == '펀딩 신청하기') {
+			alert('모집금액이 충족되어 신청이 마감되었습니다.');
+		}else
 		if ($('.funding_button').val() == '펀딩 신청하기') {
 			var quantitys = $('.quan').val();
 			var cash = '${project.cash}' + $('.use_mileage_value').val();
@@ -474,7 +622,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					}
 				});
 			}
-		} else {
+		} 
+		if ($('.funding_button').val() == '펀딩 취소하기'){
 			$.ajax({
 				type:'post'
 				,url:'./fund_cancle.do'
@@ -506,8 +655,86 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		}
 	}
 	
+	function proFavorite(){
+		if ($('.favorites').html() == '즐겨찾기') {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'즐겨찾기'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		} else {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'즐겨찾기 취소'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		}
+	}
+	
+	
+	
+	function proLike(like){
+		if ($('.like').html() == '좋아요') {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'좋아요'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		} else {
+			$.ajax({
+				type:'get'
+				,url:'./project/like.do'
+				,data:{
+					pro_idx:'${project.pro_idx}',
+					msg:'좋아요 취소'
+				}
+				,dataType:'json'
+				,success:function(data){
+					location.href='./';
+				}
+				,error:function(error){
+					console.log(error);
+				}
+			});
+		}
+	}
 	function createForm() {
 		location.href='./';
+	}
+	
+	var msg = '${msg}';
+	if (msg != '') {
+		alert(msg);
 	}
 
 </script>
