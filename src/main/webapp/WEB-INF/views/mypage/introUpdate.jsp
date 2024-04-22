@@ -4,8 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="resources/common.css" type="text/css">
+<link rel="stylesheet" href="resources/css/common.css" type="text/css">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
    body {
      background: #e2e1e0;
@@ -30,7 +33,7 @@
    
    #box{
       width: 800px;
-      height : 1000px;
+      height : 1100px;
       margin: auto;
       margin-bottom : 150px;
       border: solid 1px white;
@@ -46,7 +49,7 @@
    #minibox{
       
       width: 700px;
-       height: 880px;
+       height: 980px;
        margin: auto;
        margin-top: 20px;
        border: solid 1px white;
@@ -160,11 +163,18 @@
    }
    
    input[name="photos"] {
-          margin-left: -20.65%;
-          margin-top: 24px;
+            margin-left: 61.35%;
+		    margin-top: -89px;
+		    margin-bottom: 54px;
    }
    
-
+   .imgList{
+   		margin-left: -41%;
+   }
+   
+   #navCss{
+   		margin-left: -41%
+   }
 </style>
 </head>
 <body>
@@ -179,16 +189,111 @@
                   <input type="text" name="selfExp" placeholder="주분야를 입력해주세요."  value="${introDto.self_exp}">
                <div class="intro">자기소개</div>
                   <textarea name="selfInt" placeholder="자기소개를 입력해주세요." >${introDto.self_introduce}</textarea>
-               <div id="play">
-                  <img class="img" src="resources/img/no_image.png">
-               </div>
+               <h2>활동사진</h2>
+		        <hr class="hr-13">
+		        <table>    
+		          <tbody id="photoList"></tbody>   
+		            <tr>
+		               <td colspan="1">
+		                  <div class="container">
+		                   <nav id="navCss" aria-label="Page navigation">
+		                       <ul class="pagination" id="pagination_pho"></ul>
+		                   </nav>
+		               </div>
+		               </td>
+		            </tr>
+		        </table> 
             <input type="file" name="photos" multiple="multiple">
-         <button onclick="introBtn()" id="proBtn">자소서 수정</button>
+         <button type="submit" id="proBtn">자소서 수정</button>
          </form>
       </div>
    </div>   
 </body>
 <script>
-
+	var showPage = 1;
+	
+	$(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라 
+	   photoList(showPage);
+	});
+	
+	function photoList(page) {
+	    $.ajax({
+	       type:'get',
+	       url:'./photoList.ajax',
+	       data:{
+	          'page':page,
+	          'cnt':1
+	       },
+	       dataType:'json',
+	       success:function(data){
+	               console.log(data);
+	               drawPhoList(data.list);
+	               
+	               var startPage = data.currPage  > data.totalPages ? data.totalPages : data.currPage;
+	               
+	               $('#pagination_pho').twbsPagination({
+	                   startPage:startPage, // 시작페이지
+	                   totalPages:data.totalPages, // 총 페이지 갯수
+	                   visiblePages:5, // 보여줄 페이지 수[1][2][3][4][5]
+	                   onPageClick:function(evt, pg){
+	                      console.log(evt);//이벤트 객체
+	                      console.log(pg);//클릭한 페이지 번호
+	                      showPage = pg;
+	                      photoList(pg);
+	                   }               
+	                });           
+	          },
+	          error:function(error){
+	              console.log(error);
+	           } 
+	    });
+	 }
+	 
+	 function drawPhoList(list) {
+	    var content = '';
+	    if (list.length === 0) {
+	        content += '<tr>';
+	        content += '<td><img class ="imgList" src="/photo/no_image.jpg"  style="width: 300px; height: 300px;"></td>';
+	        content += '</tr>';  
+	    } else {
+	        for (item of list) {
+	            content += '<tr>';
+	            content += '<td style="width: 300px;"><img class="imgList" src="/photo/' + item.pho_name + '" style="width: 300px; height: 300px;"></td>';	            
+	            content += '<tr>';
+	            content += '<tr>';
+	            content += "<td><a href='#' class='deleteButton' data-pho-name='" + item.pho_name + "'>삭제</a></td>";
+	            content += '<tr>';
+	        }   
+	    } 
+	    $('#photoList').html(content);
+	 }      
+	 
+	 $(document).on('click', '.deleteButton', function(e) {
+		    e.preventDefault(); // 링크의 기본 동작인 이동을 막음
+		    
+		    var phoName = $(this).data('pho-name');
+		    
+		    del(phoName); // del() 함수 호출
+		});
+	 
+	 
+	 function del(phoName) {
+		    $.ajax({
+		        url: './introPhoDel.ajax',
+		        type: 'get', 
+		        data: { 
+		            'phoName': phoName
+		        }, 
+		        success: function(data) {
+		            console.log(data);
+		            $('#pagination_pho').twbsPagination('destroy');
+		            photoList(showPage);
+		        },
+		        error: function(error) {
+		            console.log(error);
+		        }
+		    });
+		}
+	 
 </script>
 </html>

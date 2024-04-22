@@ -79,7 +79,7 @@
    }
    
    .out{
-     margin-left: 2%;
+     margin-left: -48%;
     margin-right: 105px;
    }
    
@@ -142,7 +142,7 @@
               <tr>
                   <th>성별</th>
                   <td>
-                  <input type="text" name="gender" value="${info.mem_gender}">
+                  <input type="text" name="gender" readonly="readonly" value="${info.mem_gender}">
                   </td>
               </tr>
               <tr>
@@ -189,15 +189,49 @@
               </tr>
               
           </table>
-          <button type="button" class="out">회원탈퇴</button>
-          <button class="proChn" onclick="proChn()">프로필수정</button>
+          <button type="button" class="proChn" onclick="proUpdate()">프로필수정</button>
          </form>
+          <button type="button" class="out">회원탈퇴</button>
       </div>
       
       
    </div>   
 </body>
 <script>
-
+	function proUpdate(){
+		var $number = $('input[name="number"]');
+		var $post = $('input[name="post"]');
+		var $addr = $('input[name="addr"]');
+		var $detail = $('input[name="detail"]');
+		var $email = $('input[name="email"]');
+		var $bankName = $('input[name="bankName"]');
+		var $bank = $('input[name="bank"]');
+		
+		if ($number.val() == '') {
+			alert('연락처를 입력 해 주세요!');
+			$number.focus();
+		}else if ($post.val() == '') {
+			alert('우편번호 입력 해 주세요!');
+			$post.focus();
+		}else if ($addr.val() == '') {
+			alert('주소를 입력 해 주세요!');
+			$addr.focus();
+		}else if ($detail.val() == '') {
+			alert('상세주소를 입력 해 주세요!');
+			$detail.focus();
+		}else if ($email.val() == '') {
+			alert('이메일 입력 해 주세요!');
+			$email.focus();	
+		}else if ($bankName.val() == null) {
+			alert('은행명 체크 해 주세요!');	
+			$bankName.focus();
+		}else if ($bank.val() == null) {
+			alert('계좌번호 체크 해 주세요!');	
+			$bank.focus();
+		}else{
+			$('form').submit();
+		}
+		
+	}
 </script>
 </html>

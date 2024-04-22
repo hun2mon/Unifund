@@ -127,5 +127,7 @@
          where ref_idx = #{param2} AND pho_division ='자기소개')
           AS subquery
    </select>
-   
+   <delete id="introPhoDel">
+   		DELETE FROM photo WHERE pho_name = #{param1} AND ref_idx = #{param2} 
+   </delete>
 </mapper>

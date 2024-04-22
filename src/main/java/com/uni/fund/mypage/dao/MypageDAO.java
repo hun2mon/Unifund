@@ -51,4 +51,6 @@ public interface MypageDAO {
 
    int allCountPho(int pagePerCnt, int userId);
 
+void introPhoDel(String phoName, int userId);
+
 }

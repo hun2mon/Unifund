@@ -325,7 +325,7 @@ th, td {
         </table> 
          <button onclick="introBtn()" id="proBtn">자소서 수정</button>
       </div>
-         <h2> 내가 펀딩한 목록</h2>
+         <h2>신청한 펀딩 목록</h2>
         <hr class="hr-13">
         <table>
            <thead>
@@ -347,7 +347,7 @@ th, td {
             </td>
          </tr>
         </table> 
-        <h2>내가 등록한 펀딩</h2>
+        <h2>등록한 펀딩 목록</h2>
         <hr class="hr-13">
         <table>
            <thead>
@@ -369,7 +369,7 @@ th, td {
             </td>
          </tr>
         </table> 
-        <h2>내가 신고한 목록</h2>
+        <h2>신고한 목록</h2>
         <hr class="hr-13">
         <table>
            <thead>

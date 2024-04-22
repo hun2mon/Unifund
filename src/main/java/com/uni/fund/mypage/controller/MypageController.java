@@ -22,7 +22,7 @@ import com.uni.fund.mypage.service.MypageService;
 public class MypageController {
    Logger logger = LoggerFactory.getLogger(getClass());
    @Autowired MypageService mypageService;
-   int userId =    1;
+   int userId =1;
    
    @RequestMapping(value = "/mypage/profile.go")
    public String profile(Model model) {
@@ -159,4 +159,13 @@ public class MypageController {
       
       return map;
    }
+   
+  @RequestMapping(value = "/mypage/introPhoDel.ajax")
+  @ResponseBody
+  public Map<String, Object> introPhoDel(String phoName){
+	  logger.info("introPhoDel 요청");
+	  logger.info("[del]phoName : "+ phoName);
+	  mypageService.introPhoDel(phoName,userId);
+	  return null;
+  }
 }
