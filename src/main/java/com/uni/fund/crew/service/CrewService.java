@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,16 +21,15 @@ import com.uni.fund.crew.dto.CrewDTO;
 @Service
 public class CrewService {
 	
-	Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired CrewDAO crewDAO;
+	private static final String file_root="/Users/ku-ilseung/Desktop/C/upload/";
 	
-	public String file_root="/Users/ku-ilseung/Desktop/C/upload/";
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	@Autowired CrewDAO crewDAO;	
 
 	public Object crewOverlay(String crew_name) {
 		
 		return crewDAO.crewOverlay(crew_name);
 	}
-
 
 	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, Integer mem_idx, Map<String, String> param) {
 		int row=-1;
@@ -69,14 +69,12 @@ public class CrewService {
 				Path crewLogoPath = Paths.get(file_root+newCrewLogoPhoto);
 				Files.write(crewLogoPath, crewLogoPhotoBytes);
 				crewDAO.createCrewLogoPhoto(crew_idx,newCrewLogoPhoto,crewLogo);
-				Thread.sleep(1);				
 			} catch (Exception e) {
 				logger.info("file exception");
 				e.printStackTrace();
-			}			
+			}	
 		}		
-	}
-	
+	}	
 
 	private void crewRecruPhotoFileSave(int crew_idx, MultipartFile crew_recru_photo, String crewRecru) {
 		String fileName=crew_recru_photo.getOriginalFilename();
@@ -90,12 +88,11 @@ public class CrewService {
 				Path crewRecruPath = Paths.get(file_root +newCrewRecruPhoto);
 				Files.write(crewRecruPath, crewRecruPhotoBytes);
 				crewDAO.createCrewRecruPhoto(crew_idx,newCrewRecruPhoto,crewRecru);
-				Thread.sleep(1);
 			} catch (Exception e) {
 				logger.info("file exception");
 				e.printStackTrace();
 			}			
-		}		
+		}	
 	}
 	
 	public void crewUpdateForm(int crew_idx, Model model) {
@@ -122,6 +119,23 @@ public class CrewService {
 			crewRecruPhotoFileSave(Integer.parseInt(param.get("crew_idx")),crew_recru_photo,crewRecru);
 		}
 		
+	}
+
+	
+
+	public Map<String, Object> crewList(int currentPage, int pagePerCnt) {
+		
+		int start = (currentPage-1) * pagePerCnt;
+		Map<String, Object>result =  new HashMap<String, Object>();
+		List<CrewDTO> crewList= crewDAO.crewList(pagePerCnt,start);
+		
+		logger.info("crewList size : "+crewList.size());
+		
+		result.put("crewList",crewList);
+		result.put("currentPage", currentPage);
+		result.put("totalPages",crewDAO.allCountPage(pagePerCnt));		
+		
+		return result;
 	}
 
 

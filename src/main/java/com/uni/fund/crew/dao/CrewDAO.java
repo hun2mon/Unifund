@@ -23,6 +23,10 @@ public interface CrewDAO {
 
 	int crewUpdate(Map<String, String> param);
 
+	List<CrewDTO> crewList(int pagePerCnt, int start);
+
+	int allCountPage(int pagePerCnt);
+
 
 
 

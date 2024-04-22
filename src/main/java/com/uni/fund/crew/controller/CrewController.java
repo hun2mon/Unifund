@@ -83,11 +83,26 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="crewList.go", method = RequestMethod.POST)
+	@RequestMapping(value="crewList.go", method = RequestMethod.GET)
 	public String crewListGo() {
-		logger.info("");
-		String page= "redirect:/main";
+		logger.info("crewList 진");
+		String page= "crew/crewList";
 		return page;
+	}
+	
+	@RequestMapping(value="/crewList.ajax", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> crewListCall
+	(@RequestParam (value = "page", defaultValue = "1") String page,
+	@RequestParam (value = "cnt", defaultValue = "10")	String cnt){
+		logger.info("crewList.ajax");
+		
+		int currentPage = Integer.parseInt(page);	//현재 보여지는 페이지
+		int pagePerCnt =Integer.parseInt(cnt);		//페이당 보여줄 개
+		
+		Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt);
+		
+		return map;
 	}
 	
 	

@@ -41,6 +41,7 @@
     		WHERE pho_division = '크루로고' OR pho_division='모집설명'
 		) p ON c.crew_idx = p.ref_idx			
 	</select>
+	
 	<update id="crewUpdate" parameterType="map">
 		UPDATE crew SET
 			<!-- crew_name=#{crew_name}, -->
@@ -51,6 +52,28 @@
 			crew_local=#{crew_local}
 		WHERE crew_idx=	#{crew_idx}
 	</update>
+	
+	<select id="crewList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+			(SELECT COUNT(crew_logo) FROM crew c
+			JOIN( 
+				SELECT * FROM photo
+				WHERE pho_division='크루로고'
+			) p ON c.crew_idx= p.ref_idx
+			)AS pho_cnt,
+			c.crew_idx,
+			c.crew_name,
+			c.crew_exp,
+			c.crew_num
+		FROM crew c 
+		ORDER BY crew_idx DESC 
+		limit 10 offset #{param2}
+			
+	</select>
+	
+	<select id="allCountPage" resultType="Integer">
+		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
+	</select>
 	
 	
 	
