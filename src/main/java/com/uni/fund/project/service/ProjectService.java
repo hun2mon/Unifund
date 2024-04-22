@@ -6,12 +6,14 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.project.dao.ProjectDAO;
@@ -30,10 +32,15 @@ public class ProjectService {
 		return projectDAO.detail();
 	}
 	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 등록하기
+	 * */
 	public int projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo, Map<String, String> param,
 			int mem_idx) {
+		logger.info(":::projectCreate Service IN:::");
 		int row = -1;
-
+		
 		SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd");
 		ProjectDTO projectDTO = new ProjectDTO();
 		projectDTO.setMem_idx(mem_idx);
@@ -64,8 +71,8 @@ public class ProjectService {
 
 		if (row > 0) {
 			int pro_idx = projectDTO.getPro_idx();
-			int projectMainPhotoDiv = 4;
-			int projectPhotoDiv = 3;
+			String projectMainPhotoDiv = "프로젝트대표사진";
+			String projectPhotoDiv = "프로젝트";
 			projectMainFileSave(pro_idx, pro_main_photo, projectMainPhotoDiv);
 			projectFileSave(pro_idx, pro_photo, projectPhotoDiv);
 		}
@@ -73,8 +80,13 @@ public class ProjectService {
 		return row;
 	}
 
-	private void projectMainFileSave(int pro_idx, MultipartFile pro_main_photo, int projectMainPhotoDiv) {
-		if (pro_main_photo != null) {
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 대표사진 저장
+	 * */
+	private void projectMainFileSave(int pro_idx, MultipartFile pro_main_photo, String projectMainPhotoDiv) {
+		
+		if (pro_main_photo != null && pro_main_photo.getSize() > 0) {
 			String oriName = pro_main_photo.getOriginalFilename();
 			String projectMainPhoto = oriName.substring(oriName.lastIndexOf("."));
 			String newProjectMainFileName = System.currentTimeMillis() + projectMainPhoto;
@@ -95,8 +107,12 @@ public class ProjectService {
 
 	}
 
-	private void projectFileSave(int pro_idx, MultipartFile pro_photo, int projectPhotoDiv) {
-		if (pro_photo != null) {
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 내용사진 저장
+	 * */
+	private void projectFileSave(int pro_idx, MultipartFile pro_photo, String projectPhotoDiv) {
+		if (pro_photo != null && pro_photo.getSize() > 0) {
 			String oriName = pro_photo.getOriginalFilename();
 			String projectPhoto = oriName.substring(oriName.lastIndexOf("."));
 			String newProjectFileName = System.currentTimeMillis() + projectPhoto;
@@ -116,7 +132,90 @@ public class ProjectService {
 		}
 
 	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 수정전 내용 불러오기
+	 * */
+	public void updateForm(String pro_idx, Model model) {
+		ProjectDTO projectdto = projectDAO.updateForm(pro_idx);
+		model.addAttribute("project",projectdto);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String proDeadline = dateFormat.format(projectdto.getPro_deadline());
+		String proStartDate = dateFormat.format(projectdto.getPro_startdate());
+		model.addAttribute("proDeadline",proDeadline);
+		model.addAttribute("proStartDate",proStartDate);
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 수정하기
+	 * */
+	public int projectUpdate(MultipartFile pro_main_photo, MultipartFile pro_photo, Map<String, String> param) {
+		int row = -1;
 
+		row = projectDAO.projectUpdate(param);
+		
+		if(row > 0) {
+			int pro_idx = Integer.parseInt(param.get("pro_idx"));
+			projectMainFileSave(pro_idx,pro_main_photo,"프로젝트대표사진");
+			projectFileSave(pro_idx,pro_photo,"프로젝트");
+		}
+		
+		return row;
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 각 회원별 프로젝트 등록 개수 세기
+	 * */
+	public int checkProject(Integer mem_idx) {
+		return projectDAO.checkProject(mem_idx);
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 리스트 내용 불러오기
+	 * */
+	public List<ProjectDTO> projectList(Map<String, Object> param) {
+		List<ProjectDTO> projectList = projectDAO.projectList(param);
+		return projectList;
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 개수세기
+	 * */
+	public int projectTotalCnt(Map<String, Object> param) {
+		return projectDAO.projectTotalCnt(param);
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 각 회원별 프로젝트 좋아요 불러오기
+	 * */
+	public int projectReadLike(int pro_idx, int mem_idx) {
+		return projectDAO.projectReadLike(pro_idx,mem_idx);
+	}
+
+	/* *
+	 * 작성자 : 허승경
+	 * 각 회원별 프로젝트 좋아요 확인 / 취소 / 추가
+	 * */
+	public int projectCheckLike(Integer pro_idx, Integer mem_idx) {
+		int projectCheckLikeRow = projectDAO.projectCheckLike(pro_idx,mem_idx);
+		logger.info("projectCheckLikeRow : {}",projectCheckLikeRow);
+		if(projectCheckLikeRow == 1) {
+			projectDAO.projectDisLike(pro_idx,mem_idx);
+			projectCheckLikeRow = 0;
+		}else {
+			projectDAO.projectAddLike(pro_idx,mem_idx);
+			projectCheckLikeRow = 1;
+		}
+		return projectCheckLikeRow;
+	}
+	
+	
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
@@ -129,5 +228,4 @@ public class ProjectService {
 		logger.info("성공여부 : {}", cnt);
 	}
 
-	
 }
