@@ -7,6 +7,7 @@
 <title></title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+
 <style>
 .header {
   display: flex;
@@ -14,6 +15,10 @@
   align-items: center;
   padding: 20px;
   background-color: #f0f0f0;
+}
+.listLogo_img {
+  width: 100%; 
+  height: auto; 
 }
 
 .btn {
@@ -72,7 +77,7 @@ input[type="text"] {
   background-color: #218838;
 }
 
-/* 최신순과 인기도순 버튼 왼쪽으로 정렬 */
+
 .btn-group {
   display: flex;
   align-items: center;
@@ -81,7 +86,6 @@ input[type="text"] {
 </head>
 
 <body>
-
 
 <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="1" > <!--value값 바꿔줘야함 {crew.mem_idx} -->
 <div class="header">
@@ -100,7 +104,7 @@ input[type="text"] {
 <div class="paging" id="pagination">
 </div>
 
-<button class="register-btn" style="float: right; margin: 20px;" onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button> 
+<button class="register-btn" style="float: right; margin: 20px;" onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button>
 
 </body>
 
@@ -153,7 +157,8 @@ var content = '';
 
 for(item of list){
    content += '<div class="crew-item">';
-   content += '<img src="/Users/ku-ilseung/Desktop/C/upload/crew_logo" path="/photo">';
+   // content += '<img src="/Users/ku-ilseung/Desktop/C/upload/crew_logo" path="/photo">';
+   content += '<img src="/photo/'+item.crew_logo+'"class="listLogo_img">';
    content += '<h2>' + item.crew_name + '</h2>';
    content += '<input type="hidden" value="${crew.crew_idx}" name="crew_idx" class="crew_idx">';
    content += '<p>' + item.crew_exp + '</p>';
@@ -165,6 +170,7 @@ for(item of list){
 
 $('#list').html(content);
 }
+
 $(document).on('click', '.btn-apply', function() {
     var mem_idx = $('input[type="hidden"].mem_idx').val();
     var crew_idx = $(this).data('crew_idx');
