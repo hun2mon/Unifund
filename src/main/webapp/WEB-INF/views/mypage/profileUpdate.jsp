@@ -97,7 +97,7 @@
             <img class="img" src="/photo/${proPhoto}">
          </c:if>
          <c:if test="${empty proPhoto}">
-              <img class="img" src="resources/profile_img/no_image.jpg">
+              <img class="img" src="/photo/no_image.jpg">
           </c:if>
       </div>
       <div>

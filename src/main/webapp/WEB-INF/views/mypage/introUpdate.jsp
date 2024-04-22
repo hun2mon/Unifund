@@ -142,7 +142,7 @@
    }
    
    #proBtn{
-         margin-left: 64.8%;
+         margin-left: 71.8%;
           margin-top: 30px;
    }
    
@@ -160,7 +160,7 @@
    }
    
    input[name="photos"] {
-      margin-left: -3%;
+          margin-left: -20.65%;
           margin-top: 24px;
    }
    

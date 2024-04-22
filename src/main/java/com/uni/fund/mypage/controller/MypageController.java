@@ -22,9 +22,9 @@ import com.uni.fund.mypage.service.MypageService;
 public class MypageController {
    Logger logger = LoggerFactory.getLogger(getClass());
    @Autowired MypageService mypageService;
-   int userId = 1;
+   int userId =    1;
    
-   @RequestMapping(value = "/profile.go")
+   @RequestMapping(value = "/mypage/profile.go")
    public String profile(Model model) {
       logger.info("profile요청");
       
@@ -46,7 +46,7 @@ public class MypageController {
       return "mypage/profile";
    }
    
-   @RequestMapping(value = "/profileUpdate.go")
+   @RequestMapping(value = "/mypage/profileUpdate.go")
    public String profileUpdate(Model model) {
       logger.info("profileUpdate.go 요청");
       
@@ -62,7 +62,7 @@ public class MypageController {
       return "mypage/profileUpdate";
    }
    
-   @RequestMapping(value = "/profileUpdate.do", method = RequestMethod.POST)
+   @RequestMapping(value = "/mypage/profileUpdate.do", method = RequestMethod.POST)
    public String profileUpdateDo(MultipartFile photo, @RequestParam Map<String,String> param, Model model){
       logger.info("profileUpdate.do 요청");
       logger.info("photo : {}",photo.toString());
@@ -71,10 +71,10 @@ public class MypageController {
 
       int row = mypageService.proUpDo(photo,param,userId);
       
-      return "redirect:/profile.go";
+      return "redirect:/mypage/profile.go";
    }
    
-   @RequestMapping(value = "/introUpdate.go")
+   @RequestMapping(value = "/mypage/introUpdate.go")
    public String introUpdate(Model model) {
       logger.info("introUpdate.go 요청");
       
@@ -85,7 +85,7 @@ public class MypageController {
       return "mypage/introUpdate";
    }
    
-   @RequestMapping(value = "/introUpdate.do", method = RequestMethod.POST)
+   @RequestMapping(value = "/mypage/introUpdate.do", method = RequestMethod.POST)
    public String introUpdateDo(MultipartFile[] photos, String selfExp, String selfInt ) {
       logger.info("photos : {}",Arrays.toString(photos));
       logger.info("selfExp : "+selfExp+" / selfInt : " + selfInt);
@@ -93,54 +93,70 @@ public class MypageController {
       int row = mypageService.introCreDo(photos,selfExp,selfInt,userId);
       
       
-      return "redirect:/profile.go";
+      return "redirect:/mypage/profile.go";
    }
    
-   @RequestMapping(value = "/appList.ajax")
+   @RequestMapping(value = "/mypage/appList.ajax")
    @ResponseBody
    public Map<String, Object> listCall(String page, String cnt){
-	   logger.info("listCall 요청");
-	   logger.info("페이지당 보여줄 개수 : " +cnt);
-	   logger.info("요청 페이지" + page);
-	   
-	   int currPage = Integer.parseInt(page);
-	   int pagePerCnt = Integer.parseInt(cnt);
-	   
-	   Map<String, Object> map = mypageService.list(currPage,pagePerCnt,userId);
-	   logger.info("map: " + map);
-	   
-	   return map;
+      logger.info("listCall 요청");
+      logger.info("페이지당 보여줄 개수 : " +cnt);
+      logger.info("요청 페이지" + page);
+      
+      int currPage = Integer.parseInt(page);
+      int pagePerCnt = Integer.parseInt(cnt);
+      
+      Map<String, Object> map = mypageService.list(currPage,pagePerCnt,userId);
+      logger.info("map: " + map);
+      
+      return map;
    }
    
-   @RequestMapping(value = "/createList.ajax")
+   @RequestMapping(value = "/mypage/createList.ajax")
    @ResponseBody
    public Map<String, Object> createList(String page, String cnt){
-	   logger.info("createList 요청");
-	   logger.info("페이지당 보여줄 개수 : " +cnt);
-	   logger.info("요청 페이지" + page);
-	   
-	   int currPage = Integer.parseInt(page);
-	   int pagePerCnt = Integer.parseInt(cnt);
-	   
-	   Map<String, Object> map = mypageService.createList(currPage,pagePerCnt,userId);
-	   logger.info("map: " + map);
+      logger.info("createList 요청");
+      logger.info("페이지당 보여줄 개수 : " +cnt);
+      logger.info("요청 페이지" + page);
+      
+      int currPage = Integer.parseInt(page);
+      int pagePerCnt = Integer.parseInt(cnt);
+      
+      Map<String, Object> map = mypageService.createList(currPage,pagePerCnt,userId);
+      logger.info("map: " + map);
   
-	   return map;
+      return map;
    }
    
-   @RequestMapping(value = "/repList.ajax")
+   @RequestMapping(value = "/mypage/repList.ajax")
    @ResponseBody
    public Map<String, Object> repList(String page, String cnt){
-	   logger.info("repList 요청");
-	   logger.info("[rep]페이지당 보여줄 개수 : " +cnt);
-	   logger.info("[rep]요청 페이지" + page);
-	   
-	   int currPage = Integer.parseInt(page);
-	   int pagePerCnt = Integer.parseInt(cnt);
-	   
-	   Map<String, Object> map = mypageService.repList(currPage,pagePerCnt,userId);
-	   logger.info("[rep]map: " + map);
+      logger.info("repList 요청");
+      logger.info("[rep]페이지당 보여줄 개수 : " +cnt);
+      logger.info("[rep]요청 페이지" + page);
+      
+      int currPage = Integer.parseInt(page);
+      int pagePerCnt = Integer.parseInt(cnt);
+      
+      Map<String, Object> map = mypageService.repList(currPage,pagePerCnt,userId);
+      logger.info("[rep]map: " + map);
   
-	   return map;
+      return map;
+   }
+   
+   @RequestMapping(value= "/mypage/photoList.ajax")
+   @ResponseBody
+   public Map<String, Object> photoList(String page, String cnt){
+      logger.info("photoList 요청");
+      logger.info("[photo]페이지당 보여줄 개수 : " +cnt);
+      logger.info("[photo]요청 페이지" + page);
+      
+      int currPage = Integer.parseInt(page);
+      int pagePerCnt = Integer.parseInt(cnt);
+      
+      Map<String, Object> map = mypageService.photoList(currPage,pagePerCnt,userId);
+      logger.info("[photo]map: " + map);
+      
+      return map;
    }
 }

@@ -35,62 +35,63 @@ public class MypageDTO {
    private String rns_state;
    private String rep_content;
    private Date rep_date;
+   private String pho_name;
    
     public String getRep_division() {
-	   return rep_division;
-	}
-	public void setRep_division(String rep_division) {
-		this.rep_division = rep_division;
-	}
-	public String getRns_state() {
-		return rns_state;
-	}
-	public void setRns_state(String rns_state) {
-		this.rns_state = rns_state;
-	}
-	public String getRep_content() {
-		return rep_content;
-	}
-	public void setRep_content(String rep_content) {
-		this.rep_content = rep_content;
-	}
-	public Date getRep_date() {
-		return rep_date;
-	}
-	public void setRep_date(Date rep_date) {
-		this.rep_date = rep_date;
-	}
-	public String getFund_state() {
-		return fund_state;
-	}
-	public void setFund_state(String fund_state) {
-		this.fund_state = fund_state;
-	}
-	public String getPro_title() {
-	return pro_title;
-	}
-	public void setPro_title(String pro_title) {
-		this.pro_title = pro_title;
-	}
-	public String getPro_state() {
-		return pro_state;
-	}
-	public void setPro_state(String pro_state) {
-		this.pro_state = pro_state;
-	}
-	public Date getPro_startdate() {
-		return pro_startdate;
-	}
-	public void setPro_startdate(Date pro_startdate) {
-		this.pro_startdate = pro_startdate;
-	}
-	public Date getPro_deadline() {
-		return pro_deadline;
-	}
-	public void setPro_deadline(Date pro_deadline) {
-		this.pro_deadline = pro_deadline;
-	}
-	public int getMem_idx() {
+      return rep_division;
+   }
+   public void setRep_division(String rep_division) {
+      this.rep_division = rep_division;
+   }
+   public String getRns_state() {
+      return rns_state;
+   }
+   public void setRns_state(String rns_state) {
+      this.rns_state = rns_state;
+   }
+   public String getRep_content() {
+      return rep_content;
+   }
+   public void setRep_content(String rep_content) {
+      this.rep_content = rep_content;
+   }
+   public Date getRep_date() {
+      return rep_date;
+   }
+   public void setRep_date(Date rep_date) {
+      this.rep_date = rep_date;
+   }
+   public String getFund_state() {
+      return fund_state;
+   }
+   public void setFund_state(String fund_state) {
+      this.fund_state = fund_state;
+   }
+   public String getPro_title() {
+   return pro_title;
+   }
+   public void setPro_title(String pro_title) {
+      this.pro_title = pro_title;
+   }
+   public String getPro_state() {
+      return pro_state;
+   }
+   public void setPro_state(String pro_state) {
+      this.pro_state = pro_state;
+   }
+   public Date getPro_startdate() {
+      return pro_startdate;
+   }
+   public void setPro_startdate(Date pro_startdate) {
+      this.pro_startdate = pro_startdate;
+   }
+   public Date getPro_deadline() {
+      return pro_deadline;
+   }
+   public void setPro_deadline(Date pro_deadline) {
+      this.pro_deadline = pro_deadline;
+   }
+   public int getMem_idx() {
       return mem_idx;
    }
    public void setMem_idx(int mem_idx) {
@@ -222,6 +223,12 @@ public class MypageDTO {
    public void setSelf_exp(String self_exp) {
       this.self_exp = self_exp;
    }
+public String getPho_name() {
+   return pho_name;
+}
+public void setPho_name(String pho_name) {
+   this.pho_name = pho_name;
+}
    
    
 }

@@ -8,7 +8,7 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
    body {
      background: #e2e1e0;
@@ -26,25 +26,26 @@
    }
    
    h2{
-        text-align: left;
+        text-align: center;
    }
    
    hr{
-      height: 10px;
+      height: 5px;
        border: 0;
        box-shadow: 0 10px 10px -10px #8c8c8c inset;
    }
    
    #box{
       width: 1200px;
-      height : 3000px;
+      height : auto;
       margin: auto;
       margin-bottom : 50px;
       border: solid 1px white;
       background-color: white;
       box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-        border-radius: 14%;   
+      transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+      border-radius: 14%;  
+      padding-bottom: 8%; 
    }
    #box:hover{
       box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -62,8 +63,6 @@
        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
        border-top-right-radius: 20%;
        border-top-left-radius: 20%;
-       border-bottom-right-radius: 20%;
-       border-bottom-left-radius: 20%
    }
    
    #minibox:hover{
@@ -130,7 +129,6 @@
     height: 100%;
     object-fit: cover;
     margin: auto;
-    margin-top: 15px;
    }
    
 table {
@@ -138,7 +136,7 @@ table {
    border-collapse: collapse; /* 셀 사이의 간격을 없앱니다. */
    margin: auto;
    margin-top: 10px;
-   width: 100%; /* 테이블의 가로 너비를 100%로 설정합니다. */
+   width: 80%; /* 테이블의 가로 너비를 100%로 설정합니다. */
 }
 
 th, td {
@@ -233,19 +231,31 @@ th, td {
    
    #proBtn{
       margin-left: 64.8%;
-          margin-top: 87px;
+          margin-top: -30px;
    }
    
    textarea {
    resize: none;
    width: 500px;
    height: 150px;
+   }
+   .container {
+    width: 100%;
+    text-align: center; /* 컨테이너 안의 내용을 가운데 정렬합니다. */
+   
 }
+   
+   #mile{
+      margin-left: 3;
+   }
 </style>
 </head>
 <body>
 <%@ include file = "/WEB-INF/views/common/header.jsp" %>
    <hr class="hr-13">
+   
+   
+   
    <br>
    <div id="box">
       <div id="profile">
@@ -253,18 +263,18 @@ th, td {
              <img class="img" src="/photo/${proPhoto}">
          </c:if>
          <c:if test="${empty proPhoto}">
-             <img class="img" src="resources/profile_img/no_image.jpg">
+             <img class="img" src="/photo/no_image.jpg">
          </c:if>
       </div>
       
-      <div class ="mincmb">캐시</div>
+      <div class ="mincmb"><b>캐시</b></div>
       <div class ="mincmb2">${info.mem_cash}</div>
-      <button>내역보기</button>
-      <button>충전</button>
+      <button onclick="cashList()">내역보기</button>
+      <button onclick="cashCharge()">충전</button>
    
-      <div class ="mincmb1">마일리지</div>
+      <div class ="mincmb1"><b>마일리지</b></div>
       <div class ="mincmb3">${info.mem_mileage}</div>
-      <button>내역보기</button>
+      <button id="mile" onclick="mileageList()">내역보기</button>
       <div>
        <table class="custom-table">
              <tr>
@@ -299,9 +309,20 @@ th, td {
          <div id="selfExp">${introDto.self_exp}</div>
          <div class="intro">자기소개</div>
          <div id="selfInt">${introDto.self_introduce}</div>
-         <div id="play">
-            <img class="img" src="resources/img/no_image.png">
-         </div>
+        <h2>활동사진</h2>
+        <hr class="hr-13">
+        <table>    
+          <tbody id="photoList"></tbody>   
+            <tr>
+               <td colspan="1">
+                  <div class="container">
+                   <nav aria-label="Page navigation">
+                       <ul class="pagination" id="pagination_pho"></ul>
+                   </nav>
+               </div>
+               </td>
+            </tr>
+        </table> 
          <button onclick="introBtn()" id="proBtn">자소서 수정</button>
       </div>
          <h2> 내가 펀딩한 목록</h2>
@@ -319,7 +340,7 @@ th, td {
          <tr>
             <td colspan="4">
                <div class="container">
-                   <nav aria-label="Page navigation" style="text-align:center">
+                   <nav aria-label="Page navigation">
                           <ul class="pagination" id="pagination_app"></ul>
                        </nav>               
                </div>
@@ -341,7 +362,7 @@ th, td {
          <tr>
             <td colspan="4">
                <div class="container">
-                   <nav aria-label="Page navigation" style="text-align:center">
+                   <nav aria-label="Page navigation">
                           <ul class="pagination" id="pagination_cre"></ul>
                        </nav>               
                </div>
@@ -363,13 +384,14 @@ th, td {
          <tr>
             <td colspan="4">
                <div class="container">
-                   <nav aria-label="Page navigation" style="text-align:center">
+                   <nav aria-label="Page navigation">
                           <ul class="pagination" id="pagination_rep"></ul>
                        </nav>               
                </div>
             </td>
          </tr>
         </table> 
+        
    </div>
 </body>
 <script>
@@ -380,6 +402,7 @@ th, td {
       listCall(showPage);
       createList(showPage);
       repList(showPage); 
+      photoList(showPage);
    });
    
    function proUp() {
@@ -389,6 +412,18 @@ th, td {
    
    function introBtn() {
       location.href = 'introUpdate.go';
+   }
+   
+   function cashCharge() {
+      location.href = 'cashCharge.go';
+   }
+   
+   function cashList() {
+      location.href = 'cashList.go';
+   }
+   
+   function mileageList() {
+      location.href = 'mileageList.go';
    }
    
    function listCall(page) {
@@ -426,23 +461,29 @@ th, td {
    
    function drawList(list) {
       var content = '';
-      for(item of list){
-         content += '<tr>';
-          content += '<td>' + item.pro_title + '</td>';
-          if (item.fund_state == 'A') {
-              content += '<td style="color: green;font-weight: bolder;"><b>'+'신청중'+'</b></td>';
-          } else if (item.fund_state == 'C') {
-              content += '<td style="color: gray;font-weight: bolder;" ><b>'+'펀딩완료'+'</b></td>';
-          }
-          var startdate = new Date(item.pro_startdate);
-          var startdateStr = startdate.toLocaleDateString("ko-KR");
-          var pro_deadline = new Date(item.pro_deadline);
-          var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
-          
-          content += '<td>' + startdateStr + '</td>';
-          content += '<td>' + pro_deadlineStr + '</td>';
-          content += '</tr>';
-         
+      if (list.length === 0) {
+          content += '<tr>';
+          content += '<td colspan="4">신청한 펀딩이 없습니다.</td>';
+          content += '</tr>';  
+      } else {
+         for(item of list){
+            content += '<tr>';
+             content += '<td>' + item.pro_title + '</td>';
+             if (item.fund_state == 'A') {
+                 content += '<td style="color: green;font-weight: bolder;"><b>'+'신청중'+'</b></td>';
+             } else if (item.fund_state == 'C') {
+                 content += '<td style="color: gray;font-weight: bolder;" ><b>'+'펀딩완료'+'</b></td>';
+             }
+             var startdate = new Date(item.pro_startdate);
+             var startdateStr = startdate.toLocaleDateString("ko-KR");
+             var pro_deadline = new Date(item.pro_deadline);
+             var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
+             
+             content += '<td>' + startdateStr + '</td>';
+             content += '<td>' + pro_deadlineStr + '</td>';
+             content += '</tr>';
+            
+         }
       }
       $('#appList').html(content);
    }
@@ -483,30 +524,36 @@ th, td {
    
    function drawCreateList(list) {
       var content = '';
-      for(item of list){
-         content += '<tr>';
-          content += '<td>' + item.pro_title + '</td>';
-          if (item.pro_state == 'A') {
-              content += '<td><b>신청중</b></td>';
-          } else if (item.pro_state == 'B') {
-              content += '<td style="color: gray;"><b>펀딩완료</b></td>';
-          } else if (item.pro_state == 'C') {
-              content += '<td style="color: green;"><b>펀딩중</b></td>';
-          } else if (item.pro_state == 'E') {
-              content += '<td><b>펀딩실패</b></td>';
-          } else if (item.pro_state == 'F') {
-              content += '<td style="color: red;"><b>거절</b></td>';
-          }
-          var startdate = new Date(item.pro_startdate);
-          var startdateStr = startdate.toLocaleDateString("ko-KR");
-          var pro_deadline = new Date(item.pro_deadline);
-          var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
-          
-          content += '<td>' + startdateStr + '</td>';
-          content += '<td>' + pro_deadlineStr + '</td>';
-          content += '</tr>';
-         
-      }   
+      if (list.length === 0) {
+          content += '<tr>';
+          content += '<td colspan="4">등록한 펀딩이 없습니다.</td>';
+          content += '</tr>';  
+      } else {
+         for(item of list){
+            content += '<tr>';
+             content += '<td>' + item.pro_title + '</td>';
+             if (item.pro_state == 'A') {
+                 content += '<td><b>신청중</b></td>';
+             } else if (item.pro_state == 'B') {
+                 content += '<td style="color: gray;"><b>펀딩완료</b></td>';
+             } else if (item.pro_state == 'C') {
+                 content += '<td style="color: green;"><b>펀딩중</b></td>';
+             } else if (item.pro_state == 'E') {
+                 content += '<td><b>펀딩실패</b></td>';
+             } else if (item.pro_state == 'F') {
+                 content += '<td style="color: red;"><b>거절</b></td>';
+             }
+             var startdate = new Date(item.pro_startdate);
+             var startdateStr = startdate.toLocaleDateString("ko-KR");
+             var pro_deadline = new Date(item.pro_deadline);
+             var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
+             
+             content += '<td>' + startdateStr + '</td>';
+             content += '<td>' + pro_deadlineStr + '</td>';
+             content += '</tr>';
+            
+         } 
+      }
       $('#createList').html(content);
    }
    
@@ -545,25 +592,81 @@ th, td {
    
    function drawRepList(list) {
       var content = '';
-      for(item of list){
-         content += '<tr>';
-           content += '<td>' + item.rep_division + '</td>';
-           if (item.rns_state === '처리') {
-               content += '<td style="color: green;"><b>' + '처리완료' + '</b></td>';
-           } else {
-               content += '<td style="color: red;"><b>' + '처리중' + '</b></td>';
-           }
-           content += '<td>' + item.rep_content + '</td>';
-
-          
-          var repDate = new Date(item.rep_date);
-          var repDateStr = repDate.toLocaleDateString("ko-KR");
-          
-          content += '<td>' + repDateStr + '</td>';
-          content += '</tr>';
-         
-      }   
+      if (list.length === 0) {
+          content += '<tr>';
+          content += '<td colspan="4">신고내역이 없습니다.</td>';
+          content += '</tr>';  
+      } else {
+         for(item of list){
+            content += '<tr>';
+              content += '<td>' + item.rep_division + '</td>';
+              if (item.rns_state === '처리') {
+                  content += '<td style="color: green;"><b>' + '처리완료' + '</b></td>';
+              } else {
+                  content += '<td style="color: red;"><b>' + '처리중' + '</b></td>';
+              }
+              content += '<td>' + item.rep_content + '</td>';
+   
+             
+             var repDate = new Date(item.rep_date);
+             var repDateStr = repDate.toLocaleDateString("ko-KR");
+             
+             content += '<td>' + repDateStr + '</td>';
+             content += '</tr>';
+            
+         } 
+      }
       $('#repList').html(content);
    }
+   
+   function photoList(page) {
+         $.ajax({
+            type:'get',
+            url:'./photoList.ajax',
+            data:{
+               'page':page,
+               'cnt':1
+            },
+            dataType:'json',
+            success:function(data){
+                    console.log(data);
+                    drawPhoList(data.list);
+                    
+                    var startPage = data.currPage  > data.totalPages ? data.totalPages : data.currPage;
+                    
+                    $('#pagination_pho').twbsPagination({
+                        startPage:startPage, // 시작페이지
+                        totalPages:data.totalPages, // 총 페이지 갯수
+                        visiblePages:5, // 보여줄 페이지 수[1][2][3][4][5]
+                        onPageClick:function(evt, pg){
+                           console.log(evt);//이벤트 객체
+                           console.log(pg);//클릭한 페이지 번호
+                           showPage = pg;
+                           photoList(pg);
+                        }               
+                     });           
+               },
+               error:function(error){
+                   console.log(error);
+                } 
+         });
+      }
+      
+      function drawPhoList(list) {
+         var content = '';
+         if (list.length === 0) {
+             content += '<tr>';
+             content += '<td><img src="/photo/no_image.jpg" style="width: 300px; height: 300px;"></td>';
+             content += '</tr>';  
+         } else {
+             for (item of list) {
+                 content += '<tr>';
+                 content += '<td><img src="/photo/' + item.pho_name + '" style="width: 300px; height: 300px;"></td>';
+                 //content += '<td><button>삭제</button></td>'
+                 content += '</tr>';       
+             }   
+         } 
+         $('#photoList').html(content);
+      }
 </script>
 </html>

@@ -31,20 +31,24 @@ public interface MypageDAO {
 
    int introUpDo(String selfExp, String selfInt, int userId);
 
-	String isSelfEmpty(int userId);
-	
-	void introFileCreate(String newFileName, int userId);
-	
-	List<MypageDTO> list(int pagePerCnt, int start, int userId);
-	
-	int allCount(int pagePerCnt, int userId);
+   String isSelfEmpty(int userId);
+   
+   void introFileCreate(String newFileName, int userId);
+   
+   List<MypageDTO> list(int pagePerCnt, int start, int userId);
+   
+   int allCount(int pagePerCnt, int userId);
 
-	List<MypageDTO> createList(int pagePerCnt, int start, int userId);
+   List<MypageDTO> createList(int pagePerCnt, int start, int userId);
 
-	int allCountCre(int pagePerCnt, int userId);
+   int allCountCre(int pagePerCnt, int userId);
 
-	List<MypageDTO> repList(int pagePerCnt, int start, int userId);
+   List<MypageDTO> repList(int pagePerCnt, int start, int userId);
 
-	int allCountRep(int pagePerCnt, int userId);
+   int allCountRep(int pagePerCnt, int userId);
+
+   List<MypageDTO> photoList(int pagePerCnt, int start, int userId);
+
+   int allCountPho(int pagePerCnt, int userId);
 
 }

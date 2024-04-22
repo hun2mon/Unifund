@@ -136,55 +136,71 @@ public class MypageService {
       return row;
    }
 
-	
+   
 
-	public Map<String, Object> list(int currPage, int pagePerCnt, int userId) {
-		int start = (currPage-1) * pagePerCnt;	
-		logger.info("내가 펀딩한 목록 list(service)");
-		logger.info("pagePerCnt: "+pagePerCnt);
-		logger.info("시작 위치 : " + start);
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		
-		List<MypageDTO> list = mypageDAO.list(pagePerCnt,start,userId);
-		logger.info( "list size : "+ list.size());
-		result.put("list", list);
-		result.put("currPage", currPage);
-		result.put("totalPages", mypageDAO.allCount(pagePerCnt,userId));
-		
-		
-		return result;
-	}
+   public Map<String, Object> list(int currPage, int pagePerCnt, int userId) {
+      int start = (currPage-1) * pagePerCnt;   
+      logger.info("내가 펀딩한 목록 list(service)");
+      logger.info("pagePerCnt: "+pagePerCnt);
+      logger.info("시작 위치 : " + start);
+      
+      Map<String, Object> result = new HashMap<String, Object>();
+      
+      List<MypageDTO> list = mypageDAO.list(pagePerCnt,start,userId);
+      logger.info( "list size : "+ list.size());
+      result.put("list", list);
+      result.put("currPage", currPage);
+      result.put("totalPages", mypageDAO.allCount(pagePerCnt,userId));
+      
+      
+      return result;
+   }
 
-	public Map<String, Object> createList(int currPage, int pagePerCnt, int userId) {
-		int start = (currPage-1) * pagePerCnt;
-		logger.info("내가 등록한 펀딩 list(service)");
-		logger.info("pagePerCnt: "+pagePerCnt);
-		logger.info("시작 위치 : " + start);
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		
-		List<MypageDTO> list = mypageDAO.createList(pagePerCnt,start,userId);
-		logger.info( "list size : "+ list.size());
-		result.put("list", list);
-		result.put("currPage", currPage);
-		result.put("totalPages", mypageDAO.allCountCre(pagePerCnt,userId));
-		return result;
-	}
+   public Map<String, Object> createList(int currPage, int pagePerCnt, int userId) {
+      int start = (currPage-1) * pagePerCnt;
+      logger.info("내가 등록한 펀딩 list(service)");
+      logger.info("pagePerCnt: "+pagePerCnt);
+      logger.info("시작 위치 : " + start);
+      
+      Map<String, Object> result = new HashMap<String, Object>();
+      
+      List<MypageDTO> list = mypageDAO.createList(pagePerCnt,start,userId);
+      logger.info( "list size : "+ list.size());
+      result.put("list", list);
+      result.put("currPage", currPage);
+      result.put("totalPages", mypageDAO.allCountCre(pagePerCnt,userId));
+      return result;
+   }
 
-	public Map<String, Object> repList(int currPage, int pagePerCnt, int userId) {
-		int start = (currPage-1) * pagePerCnt;
-		logger.info("내가 신고한 목록 list(service)");
-		logger.info("[rep]pagePerCnt: "+pagePerCnt);
-		logger.info("[rep]시작 위치 : " + start);
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		
-		List<MypageDTO> list = mypageDAO.repList(pagePerCnt,start,userId);
-		logger.info( "[rep]list size : "+ list.size());
-		result.put("list", list);
-		result.put("currPage", currPage);
-		result.put("totalPages", mypageDAO.allCountRep(pagePerCnt,userId));
-		return result;
-	}
+   public Map<String, Object> repList(int currPage, int pagePerCnt, int userId) {
+      int start = (currPage-1) * pagePerCnt;
+      logger.info("내가 신고한 목록 list(service)");
+      logger.info("[rep]pagePerCnt: "+pagePerCnt);
+      logger.info("[rep]시작 위치 : " + start);
+      
+      Map<String, Object> result = new HashMap<String, Object>();
+      
+      List<MypageDTO> list = mypageDAO.repList(pagePerCnt,start,userId);
+      logger.info( "[rep]list size : "+ list.size());
+      result.put("list", list);
+      result.put("currPage", currPage);
+      result.put("totalPages", mypageDAO.allCountRep(pagePerCnt,userId));
+      return result;
+   }
+
+   public Map<String, Object> photoList(int currPage, int pagePerCnt, int userId) {
+      int start = (currPage-1) * pagePerCnt;
+      logger.info("[photo]내가 등록한 사진(자소서) list(service)");
+      logger.info("[photo]pagePerCnt: "+pagePerCnt);
+      logger.info("[photo]시작 위치 : " + start);
+      
+      Map<String, Object> result = new HashMap<String, Object>();
+      
+      List<MypageDTO> list = mypageDAO.photoList(pagePerCnt,start,userId);
+      logger.info( "[photo]list size : "+ list.size());
+      result.put("list", list);
+      result.put("currPage", currPage);
+      result.put("totalPages", mypageDAO.allCountPho(pagePerCnt,userId));
+      return result;
+   }
 }
