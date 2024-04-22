@@ -63,6 +63,7 @@ th, td {
 	});
 	
 	var showPage = 1;
+	var proIdx = ${proIdx};
 	
 	function listCall(showPage){
 		$.ajax({
@@ -70,7 +71,8 @@ th, td {
 			,url:'./appList.ajax'
 			,data:{
 				page:showPage,
-				cnt:10
+				cnt:10,
+				pro_idx:proIdx
 			}
 			,dataType:'json'
 			,success:function(data){

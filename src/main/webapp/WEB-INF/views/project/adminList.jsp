@@ -60,7 +60,8 @@ span {
 	<div class="divMain">
 		<table align="center">
 			<div class="divTop">
-				<span> <select name="revNum" class="selectNum">
+				<span> 
+				<select name="revNum" class="selectNum">
 						<option value="전체">전체</option>
 						<option value="삭제">삭제</option>
 						<option value="심사중">심사중</option>
@@ -68,10 +69,8 @@ span {
 						<option value="펀딩완료">펀딩완료</option>
 						<option value="펀딩실패">펀딩실패</option>
 				</select>
-					<form>
-						<input type="text" name="serch" placeholder="검색어를 입력하세요">
-						<input type="submit">
-					</form>
+						<input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
+						<input type="button" value="검색" onclick="search()">
 				</span>
 			</div>
 			<thead>
@@ -97,17 +96,6 @@ span {
 				</tr>
 			</thead>
 			<tbody id="list">
-				<tr>
-					<td class="checkBox"><input type="checkbox"></td>
-					<td class="proIdx">1</td>
-					<td class="userId">admin</td>
-					<td class="proTitle">가가가가가가가가가가가가가가가가가가가가</td>
-					<td class="proDeadLine">2024/04/29</td>
-					<td class="rewPrice">15000</td>
-					<td class="targerPrice">300000</td>
-					<td class="progress">50%</td>
-					<td class="fundState">펀딩중</td>
-				</tr>
 			</tbody>
 		</table>
 		<div class="delButton">
@@ -116,16 +104,106 @@ span {
 	</div>
 </body>
 <script>
-	listCall();
+	var cate = '전체';
+	listCall(cate);
+	$('.selectNum').on('change',function(){
+		var cate;
+		if ($('.selectNum').val() == '심사중') {
+			cate ='A';
+		}
+		if ($('.selectNum').val() == '펀딩완료') {
+			cate ='B';
+		}
+		if ($('.selectNum').val() == '펀딩중') {
+			cate ='C';
+		}
+		if ($('.selectNum').val() == '삭제') {
+			cate ='D';
+		}
+		if ($('.selectNum').val() == '펀딩실패') {
+			cate ='E';
+		}
+		if ($('.selectNum').val() == '거절') {
+			cate ='F';
+		}
+		if ($('.selectNum').val() == '전체') {
+			cate =$('.selectNum').val();
+		}
+		listCall(cate);
+	})
 	
-	function listCall(){
+	function listCall(cate){
 		$.ajax({
 			type:'get'
 			,url:'./adminList.ajax'
-			,data:{}
+			,data:{
+				category:cate
+			}
 			,dataType:'json'
 			,success:function(data){
-				consol.log(data);
+				drawList(data.list);
+				$('.keyWord').val(' ');
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+	
+	function drawList(list){
+		var num = 1;
+		var content = '';
+		for (item of list) {
+			
+			content += '<tr>';
+			content += '<td class="checkBox"><input type="checkbox"></td>';
+			content += '<td class="proIdx">' + item.pro_idx + '</td>';
+			content += '<td class="userId">' + item.mem_id + '</td>';
+			content += '<td class="proTitle"><a href="detail.go?pro_idx=' + item.pro_idx + '">' + item.pro_title + '</a></td>';
+			var date = new Date(item.pro_deadline);
+			var dateStr = date.toLocaleDateString("ko-KR");//en_US
+			content += '<td class="proDeadLine">' + dateStr + '</td>';
+			content += '<td class="rewPrice">' + Number(item.rew_price).toLocaleString()  + '원</td>';
+			content += '<td class="targerPrice">' + Number(item.target_price).toLocaleString() + '원</td>';
+			content += '<td class="progress">' + item.progress + '%</td>';
+			var state = '';
+			if (item.pro_state == 'A') {
+				state = '심사중';
+			}
+			if (item.pro_state == 'B') {
+				state = '펀딩완료';
+			}
+			if (item.pro_state == 'C') {
+				state = '펀딩중';
+			}
+			if (item.pro_state == 'D') {
+				state = '삭제';
+			}
+			if (item.pro_state == 'E') {
+				state = '실패';
+			}
+			if (item.pro_state == 'F') {
+				state = '거절';
+			}
+			content += '<td class="fundState">' + state + '</td>';
+			content += '</tr>';
+			num += 1;
+		}
+		$('#list').html(content);
+	};
+	
+	function search() {
+		console.log($('.keyWord').val());
+		$('.selectNum').val('전체');
+		$.ajax({
+			type:'get'
+			,url:'./search.ajax'
+			,data:{
+				keyWord:$('.keyWord').val()
+			}
+			,dataType:'json'
+			,success:function(data){
+				console.log(data.list)
 				drawList(data.list);
 			}
 			,error:function(error){
@@ -134,26 +212,10 @@ span {
 		});
 	}
 	
-	var num = 1;
-	function drawList(list){
-		var content = '';
-		for (item of list) {
-			
-			content += '<tr>';
-			content += '<td class="checkBox"><input type="checkbox"></td>';
-			content += '<td class="proIdx">' + num + '</td>';
-			content += '<td class="userId">' + admin + '</td>';
-			content += '<td class="proTitle">' + 가가가가가가가가가가가가가가가가가가가가 + '</td>';
-			content += '<td class="proDeadLine">' + 2024/04/29 + '</td>';
-			content += '<td class="rewPrice">' + 15000 + '</td>';
-			content += '<td class="targerPrice">' + 300000 + '</td>';
-			content += '<td class="progress">' + 50% + '</td>';
-			content += '<td class="fundState">' + 펀딩중 + '</td>';
-			content += '</tr>';
-			num += 1;
+	function enterKey() {
+		if (event.keyCode==13) {
+			search();
 		}
-		$('#list').html(content);
-	};
-	
+	}
 </script>
 </html>

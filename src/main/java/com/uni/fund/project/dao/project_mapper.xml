@@ -9,24 +9,24 @@
 			* 	
 			,(select cate_name from category 
 				where 
-					cate_idx = (select cate_idx from project where pro_idx = 7)) as category
-			,(select mem_id from member where mem_idx = (select mem_idx from project where pro_idx = 7)) as userId
-			,(select COUNT(pro_idx) from project_like where pro_idx = 7 group by pro_idx) as like_cnt
+					cate_idx = (select cate_idx from project where pro_idx = #{param2})) as category
+			,(select mem_id from member where mem_idx = (select mem_idx from project where pro_idx = #{param2})) as userId
+			,(select COUNT(pro_idx) from project_like where pro_idx = #{param2} group by pro_idx) as like_cnt
 			,(select SUM(a.total) from 
-				(select total_price as total from project_apply where pro_idx = 7 order by mem_idx,fund_idx desc limit 1) a) as now_price
-			,(select (rew_price * rew_max) from project p where pro_idx = 7) as target_price
+				(select total_price as total from project_apply where pro_idx = #{param2} and fund_state = 'A' order by mem_idx,fund_idx desc) a) as now_price
+			,(select (rew_price * rew_max) from project p where pro_idx = #{param2}) as target_price
 			,(select mem_mileage from member where mem_idx = #{param1}) as mileage
 			,(select mem_cash from member where mem_idx = #{param1}) as cash
 			,(select mem_post from member where mem_idx =#{param1}) as mem_post 
 			,(select mem_addr from member where mem_idx =#{param1}) as mem_addr 
 			,(select mem_detail from member where mem_idx =#{param1}) as mem_detail
 			,(select round((now_price/target_price) * 100)) as progress 
-			,(select pho_name from photo where ref_idx = 7 and pho_division = '프로젝트') as pro_img_name
-			,(select fund_state from project_apply where mem_idx = #{param1} and pro_idx = 7 order by fund_idx desc limit 1) as fund_state
+			,(select pho_name from photo where ref_idx = #{param2} and pho_division = '프로젝트') as pro_img_name
+			,(select fund_state from project_apply where mem_idx = #{param1} and pro_idx = #{param2} order by fund_idx desc limit 1) as fund_state
 			,(select pho_name from photo where ref_idx = #{param1} and pho_division = '프로필') as profile
-			,(select mem_idx from project_like where pro_idx = 7 and mem_idx = #{param1}) as like_mem_idx
-			,(select mem_idx from bookmark where pro_idx = 7 and mem_idx = #{param1}) as favorite_mem_idx
-		from project where pro_idx = 7;
+			,(select mem_idx from project_like where pro_idx = #{param2} and mem_idx = #{param1}) as like_mem_idx
+			,(select mem_idx from bookmark where pro_idx = #{param2} and mem_idx = #{param1}) as favorite_mem_idx
+		from project where pro_idx = #{param2};
 	</select>
 	
 	<insert id="projectCreate"
@@ -179,11 +179,11 @@
 	
 	<select id="appListCall" resultType="com.uni.fund.project.dto.ProjectDTO">
 		select mem_id , CONCAT(mem_addr,' ',mem_detail) as mem_addr , mem_number
-			from `member` m join project_apply pa on m.mem_idx = pa.mem_idx where pro_idx = 9 and fund_state = 'C' LIMIT #{param1},#{param2}
+			from `member` m join project_apply pa on m.mem_idx = pa.mem_idx where pro_idx = #{param3} and fund_state = 'C' LIMIT #{param1},#{param2}
 	</select>
 	
 	<select id="allCount" resultType="int">
-		SELECT CEIL(COUNT(mem_id)/#{param1}) AS pages FROM `member` m join project_apply pa on m.mem_idx = pa.mem_idx where pro_idx = 9 and fund_state = 'C'
+		SELECT CEIL(COUNT(mem_id)/#{param1}) AS pages FROM `member` m join project_apply pa on m.mem_idx = pa.mem_idx where pro_idx = #{param2} and fund_state = 'C'
 	</select>
 	
 	<insert id="likeDo" parameterType="String">
@@ -202,12 +202,26 @@
 		delete from bookmark where pro_idx = #{param1} and mem_idx = #{param2}
 	</delete>
 	
-	<select id="adminList" resultType="com.uni.fund.project.dto.ProjectDTO">
+	<select id="adminList" resultType="com.uni.fund.project.dto.ProjectDTO" parameterType="String">
 		select 
 		 	*,
 		 	rew_price * rew_max  as target_price,
-		 	(select round((pa.now_price/target_price) * 100)) as progress 
-		from project p join (select pro_idx ,SUM(total_price)as now_price from project_apply  where fund_state = 'A' group by pro_idx) pa on p.pro_idx = pa.pro_idx;
+		 	round(((ori_price-rew_price)/ori_price)*100) as progress
+		from project p left join (select pro_idx ,SUM(total_price)as now_price from project_apply  where fund_state = 'A' group by pro_idx) pa on p.pro_idx = pa.pro_idx
+		<if test='category != " " and category != "전체"'>
+			where pro_state like #{%category%}
+		</if>
+		order by pro_regdate desc
+	</select>
+	
+	<select id="search" resultType="com.uni.fund.project.dto.ProjectDTO" parameterType="String">
+		select 
+		 	*,
+		 	rew_price * rew_max  as target_price,
+		 	round(((ori_price-rew_price)/ori_price)*100) as progress
+		from project p left join (select pro_idx ,SUM(total_price)as now_price from project_apply  where fund_state = 'A' group by pro_idx) pa on p.pro_idx = pa.pro_idx
+			where pro_title like concat('%',#{param1},'%')
+		order by pro_regdate desc
 	</select>
 	
 </mapper>

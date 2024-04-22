@@ -6,7 +6,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+	integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <style>
 * {
 	margin: 0;
@@ -77,7 +81,7 @@ div.div_left {
 	font-size: 15px;
 }
 
-.pro_button, .buy_but, .delete,.like,.favorites {
+.pro_button, .buy_but, .delete, .like, .favorites {
 	width: 100;
 	font-size: 14;
 	margin-left: 5;
@@ -238,22 +242,60 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	border-radius: 5px 5px;
 	background-color: FFFFCC;
 }
+
 .rev_img {
 	width: 100;
 	height: auto;
 	margin-left: 10;
 }
-.more{
+
+.more {
 	width: 100;
-	margin-left:450;
-	border:0px;
+	margin-left: 450;
+	border: 0px;
 	border-radius: 5px 5px;
 	background-color: FFFFCC;
 }
-.selectNum{
-	margin-left:10;
-	margin-top: 20; 
+
+.selectNum {
+	margin-left: 10;
+	margin-top: 20;
 	width: 100;
+}
+
+.proDel {
+	border-collapse: collapse;
+	position: fixed;
+	right:50;
+	background-color: white;
+	display: none;
+}
+
+th, td {
+	width: 600px;
+	height: 50px;
+	text-align: left;
+	border: 1px solid #000;
+	vertical-align: top;
+	vertical-align: bottom;
+	vertical-align: middle;
+}
+
+.button {
+	text-align: center;
+}
+
+input[name=reportTitle] {
+	width: 550;
+}
+
+input[name=reportContent] {
+	width: 600;
+	height: 200;
+}
+
+.category {
+	width: 70;
 }
 </style>
 </head>
@@ -288,15 +330,32 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
 								onclick="delFrom()">
+							<form action="delete.do" method="post">
+								<table align="center" class="proDel">
+									<tr>
+										<th scope="col">삭제 사유 <input type="text" class="category"
+											value="${project.pro_idx}" hidden>
+										</td>
+									</tr>
+									<tr>
+										<td>사유<br> <input type="text" name="reportContent"></td>
+									</tr>
+									<tr>
+										<td class="button"><input type="button" value="삭제"
+											onclick="proDelete()">
+											<input type="button" onclick="delCancle()" value="취소"></td>
+									</tr>
+								</table>
+							</form>
 						</div>
 						<div class="buy_list">
 							<button class="buy_but" onclick="appListCall()">구매자 리스트</button>
 						</div>
 						<div class="project_bookmark">
 							<button onclick="proFavorite()" class="favorites">즐겨찾기</button>
-							<button onclick="proLike(this)"class="like">좋아요</button>
+							<button onclick="proLike(this)" class="like">좋아요</button>
 						</div>
-						
+
 					</div>
 					<div class="middle_middle">
 						<div class="project_progress">
@@ -322,7 +381,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 				</div>
 				<div class="bottom_top">
 					<div class="reword_name">${project.rew_name}</div>
-					<div class="ori_price" style="text-decoration:line-through">${project.ori_price}</div>
+					<div class="ori_price" style="text-decoration: line-through">${project.ori_price}</div>
 					<div class="buy_reword">
 						<div class="reword_price">>> ${project.rew_price}</div>
 						<div class="quantity">
@@ -370,7 +429,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					</div>
 					<div>
 						<input type="button" value="펀딩 신청하기" class="funding_button"
-						id="fund_apply" onclick="apply()">
+							id="fund_apply" onclick="apply()">
 					</div>
 					<div>
 						<input type="button" value="펀딩 수정하기" class="funding_button"
@@ -407,7 +466,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					</div>
 					<div>
 						<input type="file" class="file_select" name="photo"> <input
-							type="button" class="sub_review" value="등록하기" onclick="revWrite()">
+							type="button" class="sub_review" value="등록하기"
+							onclick="revWrite()">
 					</div>
 				</div>
 			</form>
@@ -424,18 +484,19 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		listCall();
 	});
 	
+	function delCancle() {
+		$('.proDel').css('display','none');
+	}
+	
 	function appListCall() {
-		var url = "project/appList.go";
+		var url = "appList.go?pro_idx=" + ${project.pro_idx};
         var name = "appList";
         var option = "width = 600, height = 700, top = 100, left = 200, location = no"
         window.open(url, name, option);
 	}
 	
 	function delFrom() {
-		var url = "project/delForm.go";
-        var name = "delForm";
-        var option = "width = 700, height = 500, top = 100, left = 200, location = no"
-        window.open(url, name, option);
+		$('.proDel').css('display','block');
 	}
 	
 	function revWrite(){
@@ -504,12 +565,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 			content += '<span><img src="/photo/' +item.profile + '" class="profile_img"></span>';
 			content += '<span class="spanMargin">평점 ' + item.rev_grade + '/5점</span>';
 			content += '<span class="spanMargin">작성자 : ' + item.mem_id + '</span>';
-			content += '<span class="spanMargin">' + item.rev_date + '</span>';
+			var date = new Date(item.rev_date);
+			var dateStr = date.toLocaleDateString("ko-KR");//en_US
+			content += '<span class="spanMargin">' + dateStr + '</span>';
 			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
 			content += '<div class="review_content">' + item.rev_content + '</div>';
 			content += '<div>';
 			if (item.mem_id == '${loginId}') {
-				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '">리뷰 삭제</a>';	
+				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '">리뷰 </a>';	
 				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
 				$('input[name="revContent"]').attr('readonly',true);
 				$('.sub_review').attr('type','hidden');
@@ -659,14 +722,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		if ($('.favorites').html() == '즐겨찾기') {
 			$.ajax({
 				type:'get'
-				,url:'./project/like.do'
+				,url:'./like.do'
 				,data:{
 					pro_idx:'${project.pro_idx}',
 					msg:'즐겨찾기'
 				}
 				,dataType:'json'
 				,success:function(data){
-					location.href='./';
+					createForm();
 				}
 				,error:function(error){
 					console.log(error);
@@ -675,14 +738,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		} else {
 			$.ajax({
 				type:'get'
-				,url:'./project/like.do'
+				,url:'./like.do'
 				,data:{
 					pro_idx:'${project.pro_idx}',
 					msg:'즐겨찾기 취소'
 				}
 				,dataType:'json'
 				,success:function(data){
-					location.href='./';
+					createForm();
 				}
 				,error:function(error){
 					console.log(error);
@@ -697,14 +760,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		if ($('.like').html() == '좋아요') {
 			$.ajax({
 				type:'get'
-				,url:'./project/like.do'
+				,url:'./like.do'
 				,data:{
 					pro_idx:'${project.pro_idx}',
 					msg:'좋아요'
 				}
 				,dataType:'json'
 				,success:function(data){
-					location.href='./';
+					createForm();
 				}
 				,error:function(error){
 					console.log(error);
@@ -713,14 +776,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		} else {
 			$.ajax({
 				type:'get'
-				,url:'./project/like.do'
+				,url:'./like.do'
 				,data:{
 					pro_idx:'${project.pro_idx}',
 					msg:'좋아요 취소'
 				}
 				,dataType:'json'
 				,success:function(data){
-					location.href='./';
+					createForm();
 				}
 				,error:function(error){
 					console.log(error);
@@ -729,7 +792,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 		}
 	}
 	function createForm() {
-		location.href='./';
+		location.href='./detail.go?pro_idx=' + ${project.pro_idx};
 	}
 	
 	var msg = '${msg}';

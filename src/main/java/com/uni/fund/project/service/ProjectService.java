@@ -31,8 +31,10 @@ public class ProjectService {
 
 	public String file_root = "/Users/jeounghun/upload/";
 
-	public ProjectDTO detail(String memIdx) {
-		return projectDAO.detail(memIdx);
+	public ProjectDTO detail(String pro_idx,String memIdx) {
+		logger.info("pro_idx : {}",pro_idx);
+		logger.info("memIdx : {}",memIdx);
+		return projectDAO.detail(memIdx,pro_idx);
 	}
 	
 	/* *
@@ -278,14 +280,14 @@ public class ProjectService {
 		return	projectDAO.revDel(rev_idx);
 	}
 
-	public Map<String, Object> list(int currPage, int pagePerCnt) {
+	public Map<String, Object> list(int currPage, int pagePerCnt, String pro_idx) {
 		int start = (currPage-1) * pagePerCnt;
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt);
+		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt,pro_idx);
 		result.put("list", list);
 		result.put("currPage", currPage);
-		result.put("totalPages", projectDAO.allCount(pagePerCnt));
+		result.put("totalPages", projectDAO.allCount(pagePerCnt,pro_idx));
 		return result;
 	}
 
@@ -305,8 +307,12 @@ public class ProjectService {
 		
 	}
 
-	public List<ProjectDTO> adminList() {
-		return projectDAO.adminList();
+	public List<ProjectDTO> adminList(String category) {
+		return projectDAO.adminList(category);
+	}
+
+	public List<ProjectDTO> search(String keyWord) {
+		return projectDAO.search(keyWord);
 	}
 
 }
