@@ -52,7 +52,7 @@ public interface ProjectDAO {
 
 	void favoriteCancle(String pro_idx, String mem_idx);
 
-	List<ProjectDTO> adminList(String category);
+	List<ProjectDTO> adminList(String category, int start, int pagePerCnt);
 	
 	int projectTotalCnt(Map<String, Object> param);
 
@@ -68,6 +68,16 @@ public interface ProjectDAO {
 
 	void projectDisLike(Integer pro_idx, Integer mem_idx);
 
-	List<ProjectDTO> search(String keyWord);
+	List<ProjectDTO> search(String keyWord, int start, int pagePerCnt);
+
+	Object adminAllCount(String category, int pagePerCnt);
+
+	Object searchAllCount(String keyWord, int pagePerCnt);
+
+	String stateCheck(String pro_idx);
+
+	void agree(String pro_idx);
+
+	void agreeHis(String pro_idx);
 
 }

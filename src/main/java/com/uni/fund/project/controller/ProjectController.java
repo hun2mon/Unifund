@@ -31,31 +31,33 @@ public class ProjectController {
 
 	@RequestMapping(value = "/project/detail.go")
 	public String detail(Model model, HttpSession session, String row, String pro_idx) {
-		session.setAttribute("loginId", "dds");
+		String page = "project/detail";
+		
+		session.setAttribute("loginId", "admin");
 		session.setAttribute("memIdx", "1");
 		model.addAttribute("mem_idx",1);
-		String memIdx = (String) session.getAttribute("memIdx");
-		ProjectDTO project = projectService.detail(pro_idx,memIdx);
-		model.addAttribute("project", project);
-		logger.info("memIdx : " + memIdx);
-		logger.info("row = " + row);
-		logger.info("pro_idx = " + pro_idx);
-		if (row != null) {
-			model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+		
+		String pro_idxState= projectService.stateCheck(pro_idx);
+		if (pro_idxState.equals("A")) {
+			String memIdx = (String) session.getAttribute("memIdx");
+			page = "project/adminJudge";
+			ProjectDTO project = projectService.detail(pro_idx,memIdx);
+			model.addAttribute("project", project);
+		}else {
+			String memIdx = (String) session.getAttribute("memIdx");
+			ProjectDTO project = projectService.detail(pro_idx,memIdx);
+			model.addAttribute("project", project);
+			logger.info("memIdx : " + memIdx);
+			logger.info("row = " + row);
+			logger.info("pro_idx = " + pro_idx);
+			if (row != null) {
+				model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+			}			
 		}
-		return "project/detail";
+		return page;
 	}
 	
-	@RequestMapping(value = "/project/adminList.ajax")
-	@ResponseBody
-	public Map<String, Object> adminList(String category){
-		logger.info("category : {}", category);
-		List<ProjectDTO> list = projectService.adminList(category);
-		Map<String, Object> map = new HashMap<String,Object>();
-		logger.info("list : {}", list.get(0));
-		map.put("list", list); // 관리자 페이지에 뿌리기
-		return map;
-	}
+
 	
 	@RequestMapping(value = "/project/appList.go")
 	public String appListGo(Model model, String pro_idx) {
@@ -244,10 +246,11 @@ public class ProjectController {
 		String page = "redirect:/";
 		logger.info("photo : {}", photo);
 		logger.info("param : {}", param);
+		logger.info("param_pro_idx : {}",param.get("pro_idx"));
 		int mem_idx = 1;
 		int row = projectService.reviewDo(photo,param,mem_idx);
 		logger.info("row : {}",row);
-		return "redirect:/";
+		return "redirect:/project/detail.go?pro_idx=" + param.get("pro_idx");
 	}
 	
 	@RequestMapping(value = "/project/review/list.ajax")
@@ -263,13 +266,13 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/project/review/delete.do")
-	public String revDel(String rev_idx) {
+	public String revDel(String rev_idx, String pro_idx) {
 		logger.info("rev_idx :{}", rev_idx);
 		String page = "redirect:/";
 		int row = 0;
 		row = projectService.revDel(rev_idx);
 		if (row >0) {
-			page = "redirect:/?row=" + row;
+			page = "redirect:/project/detail.go?row=" + row + "&pro_idx=" + pro_idx;
 		}
 		return page;
 	}
@@ -295,19 +298,45 @@ public class ProjectController {
 	@RequestMapping(value = "/project/delete.do", method = RequestMethod.POST)
 	public String proDel() {
 		logger.info("del요청 들어옴");
-		return "redirect:/";
+		return "redirect:/project/detail.go";
+	}
+	
+	@RequestMapping(value = "/project/adminList.ajax")
+	@ResponseBody
+	public Map<String, Object> adminList(String category, String page, String cnt){
+		logger.info("category : {}", category);
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+		
+
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = projectService.adminList(category,currPage,pagePerCnt);
+		
+		return map;
 	}
 	
 	@RequestMapping(value = "/project/search.ajax")
 	@ResponseBody
-	public Map<String, Object> search(String keyWord){
-		Map<String, Object> map = new HashMap<String, Object>();
-		logger.info("keyWord : {}", keyWord);
-		List<ProjectDTO> list = projectService.search(keyWord);
-		map.put("list", list);
+	public Map<String, Object> search(String keyWord, String page, String cnt){
+		
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = projectService.search(keyWord,currPage,pagePerCnt);
 		return map;
 	}
 	
+	@RequestMapping(value = "/project/agree.do")
+	public String agree(String pro_idx) {
+		logger.info("pro_idx : {}", pro_idx);
+		projectService.agree(pro_idx);
+		return "redirect:/project/adminList.go";
+	}
 	
 	
 	

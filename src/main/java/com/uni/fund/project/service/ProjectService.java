@@ -285,9 +285,11 @@ public class ProjectService {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt,pro_idx);
+		logger.info("service_pro_idx = " +pro_idx);
 		result.put("list", list);
 		result.put("currPage", currPage);
 		result.put("totalPages", projectDAO.allCount(pagePerCnt,pro_idx));
+		logger.info("tatalPage = " + projectDAO.allCount(pagePerCnt,pro_idx));
 		return result;
 	}
 
@@ -307,12 +309,36 @@ public class ProjectService {
 		
 	}
 
-	public List<ProjectDTO> adminList(String category) {
-		return projectDAO.adminList(category);
+	public Map<String, Object> adminList(String category, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<ProjectDTO> list = projectDAO.adminList(category,start,pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", projectDAO.adminAllCount(category,pagePerCnt));
+		
+		return result;
 	}
 
-	public List<ProjectDTO> search(String keyWord) {
-		return projectDAO.search(keyWord);
+	public Map<String, Object> search(String keyWord, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<ProjectDTO> list = projectDAO.search(keyWord, start, pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", projectDAO.searchAllCount(keyWord, pagePerCnt));
+		logger.info(projectDAO.searchAllCount(keyWord, pagePerCnt) + "asdfasd");
+		return result;
+	}
+
+	public String stateCheck(String pro_idx) {
+		return projectDAO.stateCheck(pro_idx);
+	}
+
+	public void agree(String pro_idx) {
+		projectDAO.agree(pro_idx);
+		projectDAO.agreeHis(pro_idx);
+		
 	}
 
 }

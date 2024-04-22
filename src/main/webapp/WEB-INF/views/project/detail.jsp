@@ -572,7 +572,7 @@ input[name=reportContent] {
 			content += '<div class="review_content">' + item.rev_content + '</div>';
 			content += '<div>';
 			if (item.mem_id == '${loginId}') {
-				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '">리뷰 </a>';	
+				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '&pro_idx=' + item.pro_idx +'">리뷰삭제 </a>';	
 				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
 				$('input[name="revContent"]').attr('readonly',true);
 				$('.sub_review').attr('type','hidden');

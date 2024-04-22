@@ -76,6 +76,7 @@ th, td {
 			}
 			,dataType:'json'
 			,success:function(data){
+				console.log(data.list);
 				drawList(data.list);
 				$('#pagination').twbsPagination({
 	            	startPage:1, // 시작페이지
