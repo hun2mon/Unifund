@@ -33,7 +33,7 @@ public class CrewService {
 
 	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, Integer mem_idx, Map<String, String> param) {
 		int row=-1;
-		logger.info("crew create do 들어왔다");
+		logger.info("service crew create do 들어왔다");
 		CrewDTO crewDTO = new CrewDTO();
 		crewDTO.setMem_idx(mem_idx);
 		crewDTO.setCrew_name(param.get("crew_name"));

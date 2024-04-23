@@ -124,6 +124,7 @@ img.icon{
 	<h3>크루 등록</h3>
 	<hr/>
 	<form action="crewCreate.do" method = "post" enctype="multipart/form-data">
+	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="5" >
 		<table>
 			<tr>
 				<th>크루명</th>

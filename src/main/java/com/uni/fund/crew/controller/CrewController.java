@@ -38,7 +38,7 @@ public class CrewController {
 		
 		String page="redirect:/";
 		String msg="크루 등록에 실패했습니다.";
-		mem_idx=2;
+		mem_idx=5;
 		
 		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,mem_idx,param);
 		if(row == 1) {

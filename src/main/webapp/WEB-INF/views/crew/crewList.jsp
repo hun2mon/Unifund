@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
-<link rel="stylesheet" href="resources/css/common.css" type="text/css">
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
@@ -137,7 +136,6 @@ $(document).ready(function(){
     // 검색 버튼 클릭 시
     $('#searchBtn').click(function() {
         var searchKeyword = $('#searchInput').val();
-        // 검색 기능을 위한 listCall 함수 호출
         listCall(showPage, 'search', searchKeyword);
     });
 });
@@ -161,12 +159,12 @@ function listCall(page, filterType, searchKeyword){
           var startPage = data.currentPage >data.totalPages ? data.totalPages : data.currentPage;
           
           $('#pagination').twbsPagination({
-              startPage:startPage,    // 시작페이지
-              totalPages:data.totalPages,   // 총 페이지 갯수
-              visiblePages:5,   // 보여줄 페이지 수 [1][2][3][4][5]
-              onPageClick:function(evt, pg){ // 페이지 클릭시 실행 함수
-                  console.log(evt);//이벤트 객체
-                  console.log(pg);//클릭한 페이지 번호
+              startPage:startPage,    
+              totalPages:data.totalPages,   
+              visiblePages:5,   
+              onPageClick:function(evt, pg){ 
+                  console.log(evt);
+                  console.log(pg);
                   showPage = pg;
                   listCall(pg);
               }

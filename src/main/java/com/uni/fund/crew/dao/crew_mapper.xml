@@ -75,7 +75,7 @@
             WHERE crew_idx = c.crew_idx
         	) AS crew_cool_cnt
 		FROM crew c 
-		ORDER BY c.crew_date DESC 
+		ORDER BY c.crew_idx DESC 
 		limit 10 offset #{param2}			
 	</select>
 	
@@ -101,7 +101,7 @@
             WHERE crew_idx = c.crew_idx
         	) AS crew_cool_cnt
 		FROM crew c 
-		ORDER BY crew_cool_cnt ASC
+		ORDER BY crew_cool_cnt DESC
 		limit 10 offset #{param2}			
 	</select>
 	
