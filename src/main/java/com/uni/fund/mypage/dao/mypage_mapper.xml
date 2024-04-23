@@ -4,5 +4,130 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.mypage.dao.MypageDAO">
-
+   <select id="profile" resultType="com.uni.fund.mypage.dto.MypageDTO">
+      SELECT mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
+            mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
+            mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
+            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
+      FROM member WHERE mem_idx = #{userId}
+   </select>
+   <select id="profileUp" resultType="com.uni.fund.mypage.dto.MypageDTO">
+      SELECT mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
+            mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
+            mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
+            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
+      FROM member WHERE mem_idx = #{userId}
+   </select>
+   <insert id="fileCreate" parameterType="String">
+         INSERT INTO photo(pho_name,ref_idx,pho_division) VALUES(#{param1},#{param2},'프로필')
+   </insert>
+   <update id="fileUpdate">
+          UPDATE photo SET pho_name = #{param1} WHERE ref_idx = #{param2}  And pho_division ='프로필'
+   </update>
+   <update id="proUpdo">
+         UPDATE member SET mem_number = #{number},mem_post = #{post},mem_addr = #{addr},
+            mem_detail=#{detail}, mem_email=#{email}, mem_bankName = #{bankName}, mem_bank= #{bank}
+         WHERE member.mem_id = #{id}
+   </update>
+   <select id="getIdx" resultType="String">
+         SELECT mem_idx FROM member WHERE member.mem_id = #{id}
+   </select>
+   <select id="proPhoto" resultType="String">
+         SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
+   </select>
+   <select id="proPhotoUp" resultType="String">
+          SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
+   </select>
+   <select id="isEmpty" resultType="String">
+          SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
+   </select>
+   <select id="introduction" resultType="com.uni.fund.mypage.dto.MypageDTO">
+          SELECT self_exp,self_introduce FROM introduction WHERE mem_idx = #{userId}
+   </select>
+   <insert id="introCreDo">
+         INSERT INTO introduction(mem_idx,self_introduce,self_exp) VALUES(#{param3},#{param2},#{param1})
+   </insert>
+   <update id="introUpDo">
+         UPDATE introduction SET self_introduce = #{param2}, self_exp = #{param1}  WHERE mem_idx = #{param3}
+   </update>
+   <select id="isSelfEmpty" resultType="String">
+         SELECT self_exp FROM introduction WHERE mem_idx = #{userId} 
+   </select>
+   <insert id="introFileCreate">
+               INSERT INTO photo(pho_name,ref_idx,pho_division) VALUES(#{param1},#{param2},'자기소개')
+   </insert>
+   <select id="list" resultType="com.uni.fund.mypage.dto.MypageDTO">
+            SELECT p.pro_title, p.pro_startdate, p.pro_deadline, pa.fund_state 
+         FROM project p 
+         JOIN project_apply pa ON p.pro_idx = pa.pro_idx 
+         WHERE pa.mem_idx = #{param3} AND (pa.fund_state ='A' OR pa.fund_state ='C')
+         ORDER BY CASE pa.fund_state
+                 WHEN 'A' THEN 0
+                 WHEN 'C' THEN 1
+              END ASC,
+                p.pro_deadline DESC 
+         LIMIT #{param1} OFFSET #{param2}
+   </select>
+   <select id="allCount" resultType="Integer">
+         SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+         FROM (
+             SELECT p.pro_title, p.pro_startdate, p.pro_deadline, pa.fund_state 
+             FROM project p 
+             JOIN project_apply pa ON p.pro_idx = pa.pro_idx 
+             WHERE pa.mem_idx = #{param2} AND (pa.fund_state = 'A' OR pa.fund_state = 'C')
+         ) AS subquery
+   </select>
+   <select id="createList" resultType="com.uni.fund.mypage.dto.MypageDTO">
+            SELECT pro_title, pro_state, pro_startdate ,pro_deadline 
+         from project 
+         WHERE mem_idx = #{param3} And pro_state  NOT IN ('D')
+         ORDER BY 
+             CASE 
+                 WHEN pro_state = 'B' THEN 1
+                 ELSE 0
+             END ASC,
+             CASE 
+                 WHEN pro_state = 'B' THEN pro_deadline
+                 ELSE NULL
+             END DESC,
+             FIELD(pro_state, 'F', 'A', 'C', 'E') ASC
+         LIMIT #{param1} OFFSET #{param2}
+   </select>
+   <select id="allCountCre" resultType="Integer">
+         SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+      FROM (
+         SELECT pro_title, pro_state, pro_startdate, pro_deadline 
+         FROM project 
+         WHERE mem_idx = #{param2} AND pro_state NOT IN ('D')
+         ) AS subquery
+   </select>
+   <select id="repList" resultType="com.uni.fund.mypage.dto.MypageDTO">
+            SELECT rep_division, rns_state ,rep_content ,rep_date  
+            FROM report 
+            WHERE mem_idx = #{param3}
+            ORDER BY rep_date DESC limit #{param1} offset #{param2}
+   </select>
+   <select id="allCountRep" resultType="Integer">
+         SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+      FROM (
+          SELECT rep_division, rns_state ,rep_content ,rep_date  FROM report WHERE mem_idx = #{param2})
+          AS subquery
+   </select>
+   <select id="photoList" resultType="com.uni.fund.mypage.dto.MypageDTO">
+            SELECT pho_name 
+         FROM photo 
+         where ref_idx = #{param3} AND pho_division ='자기소개'
+         ORDER  BY pho_idx asc LIMIT #{param1} offset #{param2}
+   </select>
+   <select id="allCountPho" resultType="Integer">
+         SELECT CEIL(COUNT(*) / #{param1}) AS pages 
+      FROM (
+        SELECT pho_name 
+         FROM photo 
+         where ref_idx = #{param2} AND pho_division ='자기소개')
+          AS subquery
+   </select>
+   <delete id="introPhoDel">
+   		DELETE FROM photo WHERE pho_name = #{param1} AND ref_idx = #{param2} 
+   </delete>
 </mapper>
