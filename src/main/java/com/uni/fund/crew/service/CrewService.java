@@ -120,20 +120,45 @@ public class CrewService {
 
 	
 
-	public Map<String, Object> crewList(int currentPage, int pagePerCnt) {
+	public Map<String, Object> crewList(int currentPage, int pagePerCnt, String filterType, String searchKeyword) {
 		
-		int start = (currentPage-1) * pagePerCnt;
-		Map<String, Object>result =  new HashMap<String, Object>();
-		List<CrewDTO> crewList= crewDAO.crewList(pagePerCnt,start);
-		
-		logger.info("crewList size : "+crewList.size());
-		
-		result.put("crewList",crewList);
-		result.put("currentPage", currentPage);
-		result.put("totalPages",crewDAO.allCountPage(pagePerCnt));
-		
-		return result;
-	}
+        Map<String, Object> map = new HashMap<>();
+        
+        int start = (currentPage - 1) * pagePerCnt;
+        
+        List<CrewDTO> crewList;
+        int totalPage;
+        
+        // 최신순 필터링
+        if ("latest".equals(filterType)) {
+            crewList = crewDAO.crewList(pagePerCnt, start);
+            totalPage = crewDAO.allCountPage(pagePerCnt);
+        }
+        // 인기도순 필터링 
+        else if ("popularity".equals(filterType)) {
+            // 인기도순으로 정렬된 크루 리스트 가져오는 DAO 메서드 호출
+            crewList = crewDAO.crewListByPopularity(pagePerCnt, start);
+            totalPage = crewDAO.allCountPage(pagePerCnt);
+        }
+        // 검색 필터링 
+        else if ("search".equals(filterType)) {
+            // 검색어를 포함하는 크루 리스트 가져오는 DAO 메서드 호출
+            crewList = crewDAO.crewListBySearch(pagePerCnt, start, searchKeyword);
+            logger.info("crewList"+ crewList);
+            totalPage = crewDAO.allCountPageBySearch(pagePerCnt, searchKeyword);
+        }
+        else {
+            crewList = crewDAO.crewList(pagePerCnt, start);
+            totalPage = crewDAO.allCountPage(pagePerCnt);            
+        }
+        
+        map.put("crewList", crewList);
+        map.put("currentPage", currentPage);
+        map.put("totalPages", totalPage);
+        
+        return map;
+    }
+	
 
 
 	public void crewApply(int mem_idx, int crew_idx) {

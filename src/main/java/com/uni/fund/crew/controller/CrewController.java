@@ -92,17 +92,19 @@ public class CrewController {
 	
 	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> crewListCall
-	(@RequestParam (value = "page", defaultValue = "1") String page,
-	@RequestParam (value = "cnt", defaultValue = "10")	String cnt){
-		logger.info("crewList.ajax");
-		
-		int currentPage = Integer.parseInt(page);	//현재 보여지는 페이지
-		int pagePerCnt =Integer.parseInt(cnt);		//페이당 보여줄 개
-		
-		Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt);
-		
-		return map;
+	public Map<String,Object> crewListCall(
+	    @RequestParam(value = "page", defaultValue = "1") String page,
+	    @RequestParam(value = "cnt", defaultValue = "10") String cnt,
+	    @RequestParam(value = "filterType", defaultValue = "latest") String filterType,
+	    @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
+	    logger.info("crewList.ajax");
+	    
+	    int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
+	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
+	    
+	    Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt, filterType, searchKeyword);
+	    
+	    return map;
 	}
 	
 	@RequestMapping(value="/crew/apply.ajax")
@@ -121,7 +123,7 @@ public class CrewController {
 	        response.put("error", "이미 신청 중 크루가 있습니다.");
 	    } else {
 	        response.put("error", "현재 가입된 크루가 있습니다.");
-	    }        
+	    }
 	    
 	    return response;        
 	}

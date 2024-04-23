@@ -6,9 +6,7 @@ import java.util.Map;
 import com.uni.fund.crew.dto.CrewDTO;
 
 public interface CrewDAO {
-
-	
-
+		
 	int crewOverlay(String crew_name);
 
 	int crewCreateDo(CrewDTO crewDTO);
@@ -22,12 +20,7 @@ public interface CrewDAO {
 
 	List<CrewDTO> crewPhoto(int crew_idx);
 
-	int crewUpdate(Map<String, String> param);
-
-	List<CrewDTO> crewList(int pagePerCnt, int start);
-
-	int allCountPage(int pagePerCnt);
-	
+	int crewUpdate(Map<String, String> param);	
 
 	int isApplying(int mem_idx);
 
@@ -41,6 +34,17 @@ public interface CrewDAO {
 	void crewMakeCool(Integer mem_idx, Integer crew_idx);
 
 	void crewUncool(Integer mem_idx, Integer crew_idx);
+	
+	
+	List<CrewDTO> crewList(int pagePerCnt, int start);	
+
+	List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
+
+	List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);
+
+	int allCountPageBySearch(int pagePerCnt, String searchKeyword);
+	
+	int allCountPage(int pagePerCnt);
 
 
 

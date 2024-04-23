@@ -5,8 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
+<link rel="stylesheet" href="resources/css/common.css" type="text/css">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 
 <style>
 .header {
@@ -90,12 +94,13 @@ input[type="text"] {
 <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="1" > <!--value값 바꿔줘야함 {crew.mem_idx} -->
 <div class="header">
     <div class="btn-group" style="margin-right: 20px;"> 
-        <button class="btn">최신순</button>
-        <button class="btn">인기도순</button>
+        <button class="btn" id="latestBtn">최신순</button>
+        <button class="btn" id="popularityBtn">인기도순</button>
     </div>
     <div style="flex-grow: 1;"></div> 
-    <input type="text" placeholder="검색어를 입력하세요" style="margin-right: 10px;"> 
-    <button class="btn" style="margin-right: 20px;">검색</button> 
+    <input type="text" id="searchInput" placeholder="검색어를 입력하세요" style="margin-right: 10px;"> 
+    <button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button> 
+    <button class="register-btn" onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button> <!-- 수정된 부분 -->
 </div>
 
 <div class="crew_list" id="list">
@@ -104,34 +109,57 @@ input[type="text"] {
 <div class="paging" id="pagination">
 </div>
 
-<button class="register-btn" style="float: right; margin: 20px;" onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button>
+<div class="container">                           
+     <nav aria-label="Page navigation" style="text-align:center">
+         <ul class="pagination" id="pagination"></ul>
+     </nav>               
+</div>
 
 </body>
 
 <script>
+
 var showPage = 1;
 
 $(document).ready(function(){ 
-  listCall(showPage);
-});
-var cnt = 10;
+    listCall(showPage);
 
-function listCall(page){
+    // 최신순 버튼 클릭 시
+    $('#latestBtn').click(function() {
+        listCall(showPage, 'latest');
+    });
+
+    // 인기도순 버튼 클릭 시
+    $('#popularityBtn').click(function() {
+        listCall(showPage,'popularity');
+    });
+
+    // 검색 버튼 클릭 시
+    $('#searchBtn').click(function() {
+        var searchKeyword = $('#searchInput').val();
+        // 검색 기능을 위한 listCall 함수 호출
+        listCall(showPage, 'search', searchKeyword);
+    });
+});
+
+function listCall(page, filterType, searchKeyword){
     $.ajax({
        type:'get',
        url:'./crewList.ajax',
        data:{
            'page':page,
-           'cnt':10
+           'cnt':10,
+           'filterType': filterType,         // 필터 타입 전달
+           'searchKeyword': searchKeyword    // 검색어 전달
        },
        dataType:'json',
        success:function(data){
           drawList(data.crewList);
           console.log(data);          
-          // 플러그인 추가
+          
           
           var startPage = data.currentPage >data.totalPages ? data.totalPages : data.currentPage;
-          /*
+          
           $('#pagination').twbsPagination({
               startPage:startPage,    // 시작페이지
               totalPages:data.totalPages,   // 총 페이지 갯수
@@ -142,7 +170,7 @@ function listCall(page){
                   showPage = pg;
                   listCall(pg);
               }
-          });*/
+          });
        },
        error:function(error){
           console.log(error);
@@ -152,7 +180,7 @@ function listCall(page){
 
 
 function drawList(list){
-	
+    
 var content = '';
 
 for(item of list){
@@ -163,7 +191,7 @@ for(item of list){
    content += '<input type="hidden" value="${crew.crew_idx}" name="crew_idx" class="crew_idx">';
    content += '<p>' + item.crew_exp + '</p>';
    content += '<p>' + item.crew_num + '</p>';
-   content += '<p>' + item.crew_cnt + '</p>';
+   content += '<p>' + item.crew_cool_cnt + '</p>';
    content += '<button class="btn" onclick="location.href=\'/main/crew/crewCreate.go\'">크루 정보</button>';
    content += '<button class="btn-apply" data-crew_idx="' + item.crew_idx + '">신청하기</button>';
    content += '</div>';
@@ -188,11 +216,9 @@ $(document).on('click', '.btn-apply', function() {
             },
             success: function(response) {
                 if (response.success) {
-                    alert(response.success);
-                    // 크루 신청이 성공한 경우 추가적인 동작 수행
+                    alert(response.success);                    
                 } else if (response.error) {
                     alert(response.error);
-                    // 크루 신청이 실패한 경우 추가적인 동작 수행
                 }
             },
             error: function(xhr, status, error) {
@@ -202,10 +228,5 @@ $(document).on('click', '.btn-apply', function() {
     }
 });
 
-
-
-
-
 </script>
-
 </html>

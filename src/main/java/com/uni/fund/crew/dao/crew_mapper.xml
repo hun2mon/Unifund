@@ -75,8 +75,67 @@
             WHERE crew_idx = c.crew_idx
         	) AS crew_cool_cnt
 		FROM crew c 
-		ORDER BY crew_idx DESC 
+		ORDER BY c.crew_date DESC 
 		limit 10 offset #{param2}			
+	</select>
+	
+	<select id="crewListByPopularity" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+			(SELECT COUNT(crew_logo) FROM crew c
+			JOIN( 
+				SELECT * FROM photo
+				WHERE pho_division='크루로고'
+			) p ON c.crew_idx= p.ref_idx
+			)AS pho_cnt,
+			c.crew_idx,
+			c.crew_name,
+			c.crew_exp,
+			c.crew_num,				
+			(SELECT pho_name FROM photo 
+			WHERE pho_division ='크루로고'
+			AND ref_idx= c.crew_idx
+			ORDER BY pho_idx DESC LIMIT 1
+			) AS crew_logo,
+			(
+            SELECT COUNT(*) FROM popularity 
+            WHERE crew_idx = c.crew_idx
+        	) AS crew_cool_cnt
+		FROM crew c 
+		ORDER BY crew_cool_cnt ASC
+		limit 10 offset #{param2}			
+	</select>
+	
+	<select id="crewListBySearch" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+    		(
+        	SELECT COUNT(crew_logo) 
+        	FROM crew c
+        	JOIN photo p ON c.crew_idx = p.ref_idx
+        	WHERE p.pho_division = '크루로고'
+    		) AS pho_cnt,
+    		c.crew_idx,
+    		c.crew_name,
+    		c.crew_exp,
+    		c.crew_num,				
+    		(
+        	SELECT pho_name 
+        	FROM photo 
+        	WHERE pho_division = '크루로고' AND ref_idx = c.crew_idx
+        	ORDER BY pho_idx DESC LIMIT 1
+    		) AS crew_logo,
+    		(
+        	SELECT COUNT(*) 
+        	FROM popularity 
+        	WHERE crew_idx = c.crew_idx
+    		) AS crew_cool_cnt
+		FROM crew c 
+		WHERE c.crew_name LIKE CONCAT('%', #{param3}, '%')
+		ORDER BY crew_cool_cnt ASC
+		LIMIT 10 OFFSET #{param2}
+	</select>
+	
+	<select id="allCountPageBySearch" resultType="Integer">
+		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
 	</select>
 	
 	<select id="allCountPage" resultType="Integer">
