@@ -50,33 +50,6 @@ public class CrewController {
 		return page;
 	}
 	
-	// @RequestMapping(value="/crew/apply")
-	
-	
-	
-	@RequestMapping(value="/crew/apply.ajax")
-	@ResponseBody
-	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx) {
-	    logger.info("memidx : {}", mem_idx); // 로그 출력 시 {}로 값을 대체합니다.
-	    String page="redirect:/crewList.go";
-	    
-	    Map<String, Object> response = new HashMap<String, Object>();
-	    
-	    String result = crewService.applyCrew(mem_idx, crew_idx);
-	    
-	    if(result.equals("success")) {
-	        response.put("success", "신청이 완료되었습니다.");
-	    } else if(result.equals("isApplying")) {
-	        response.put("error", "이미 신청 중 크루가 있습니다.");
-	    } else {
-	        response.put("error", "현재 가입된 크루가 있습니다.");
-	    }        
-	    
-	    return response;        
-	}
-	
-	
-	
 	@RequestMapping(value="/crew/crewOverlay.do")
 	@ResponseBody
 	public Map<String, Object> crewOverlay(String crew_name){
@@ -130,6 +103,40 @@ public class CrewController {
 		Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt);
 		
 		return map;
+	}
+	
+	@RequestMapping(value="/crew/apply.ajax")
+	@ResponseBody
+	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx) {
+	    logger.info("memidx : {}", mem_idx); // 로그 출력 시 {}로 값을 대체합니다.
+	    String page="redirect:/crewList.go";
+	    
+	    Map<String, Object> response = new HashMap<String, Object>();
+	    
+	    String result = crewService.applyCrew(mem_idx, crew_idx);
+	    
+	    if(result.equals("success")) {
+	        response.put("success", "신청이 완료되었습니다.");
+	    } else if(result.equals("isApplying")) {
+	        response.put("error", "이미 신청 중 크루가 있습니다.");
+	    } else {
+	        response.put("error", "현재 가입된 크루가 있습니다.");
+	    }        
+	    
+	    return response;        
+	}
+	
+	@RequestMapping(value="/crew/CoolCheck.ajax")
+	@ResponseBody
+	public Map<String, Object> crewCoolCheck(Integer mem_idx, Integer crew_idx){
+		logger.info("crewPopularityCheck");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("row", crewService.crewCoolCheck(mem_idx, crew_idx));
+		
+		return map;
+		
 	}
 	
 	

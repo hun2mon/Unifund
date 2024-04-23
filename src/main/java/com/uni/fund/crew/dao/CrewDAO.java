@@ -34,6 +34,13 @@ public interface CrewDAO {
 	int isMember(int mem_idx);
 
 	void applyCrew(Map<String, Object> param);
+	
+
+	int crewCoolCheck(Integer mem_idx, Integer crew_idx);
+	
+	void crewMakeCool(Integer mem_idx, Integer crew_idx);
+
+	void crewUncool(Integer mem_idx, Integer crew_idx);
 
 
 

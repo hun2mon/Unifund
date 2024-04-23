@@ -16,16 +16,15 @@ public class CrewDTO {
 	private String crew_status;
 	private Date crew_date;
 	private String pho_name;
-	private int pho_cnt;
-	
+	private int pho_cnt;	
 	private int crew_mem_idx;
 	private String crew_mem_status;
 	private Date crew_mem_date;
-	private String crew_mem_rsn;
-	
+	private String crew_mem_rsn;	
 	private String crew_list_logo;	
 	
-	private int crew_cool_idx;	
+	private int crew_cool_idx;
+	private int crew_cool_cnt;
 
 	
 	public int getCrew_idx() {
@@ -147,6 +146,12 @@ public class CrewDTO {
 	}
 	public void setCrew_list_logo(String crew_list_logo) {
 		this.crew_list_logo = crew_list_logo;
+	}
+	public int getCrew_cool_cnt() {
+		return crew_cool_cnt;
+	}
+	public void setCrew_cool_cnt(int crew_cool_cnt) {
+		this.crew_cool_cnt = crew_cool_cnt;
 	}
 	
 

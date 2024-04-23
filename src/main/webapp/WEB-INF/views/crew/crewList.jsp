@@ -163,6 +163,7 @@ for(item of list){
    content += '<input type="hidden" value="${crew.crew_idx}" name="crew_idx" class="crew_idx">';
    content += '<p>' + item.crew_exp + '</p>';
    content += '<p>' + item.crew_num + '</p>';
+   content += '<p>' + item.crew_cnt + '</p>';
    content += '<button class="btn" onclick="location.href=\'/main/crew/crewCreate.go\'">크루 정보</button>';
    content += '<button class="btn-apply" data-crew_idx="' + item.crew_idx + '">신청하기</button>';
    content += '</div>';
@@ -200,6 +201,9 @@ $(document).on('click', '.btn-apply', function() {
         });
     }
 });
+
+
+
 
 
 </script>

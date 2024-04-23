@@ -64,11 +64,16 @@
 			c.crew_idx,
 			c.crew_name,
 			c.crew_exp,
-			c.crew_num,
+			c.crew_num,				
 			(SELECT pho_name FROM photo 
 			WHERE pho_division ='크루로고'
 			AND ref_idx= c.crew_idx
-			ORDER BY pho_idx DESC LIMIT 1) as crew_logo
+			ORDER BY pho_idx DESC LIMIT 1
+			) AS crew_logo,
+			(
+            SELECT COUNT(*) FROM popularity 
+            WHERE crew_idx = c.crew_idx
+        	) AS crew_cool_cnt
 		FROM crew c 
 		ORDER BY crew_idx DESC 
 		limit 10 offset #{param2}			
@@ -96,6 +101,18 @@
 	<insert id="applyCrew" parameterType="map">
 		INSERT INTO crewMember_history (mem_idx, crew_idx, crew_mem_status) VALUES (#{mem_idx}, #{crew_idx}, 'A')
 	</insert>
+	
+	<select id="crewCoolCheck" resultType="Integer">
+		SELECT COUNT(*) FROM popularity WHERE mem_idx=#{param1} AND crew_idx=#{param2}
+	</select>
+	
+	<insert id="crewMakeCool">
+		INSERT INTO popularity VALUES(#{param1},#{param2})
+	</insert>
+	
+	<delete id="crewUncool">
+		DELETE FROM popularity WHERE mem_idx=#{param1} AND crew_idx=#{param2}
+	</delete>
 	
 	
 	

@@ -165,6 +165,25 @@ public class CrewService {
 		return "success";
 	}
 
+	public Object crewCoolCheck(Integer mem_idx, Integer crew_idx) {
+		
+		int row = crewDAO.crewCoolCheck(mem_idx,crew_idx);
+		
+		logger.info("crewPopularityCheck : ");
+		
+		if(row==1) {
+			crewDAO.crewUncool(mem_idx,crew_idx);
+			row = 0;
+		}else {
+			crewDAO.crewMakeCool(mem_idx, crew_idx);
+			row = 1;
+		}
+		
+		
+		return row;
+	}
+
+
 
 
 	
