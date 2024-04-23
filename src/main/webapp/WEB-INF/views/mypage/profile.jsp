@@ -241,7 +241,7 @@ th, td {
    }
    .container {
     width: 100%;
-    text-align: center; /* 컨테이너 안의 내용을 가운데 정렬합니다. */
+    text-align: center;
    
 }
    
@@ -251,7 +251,7 @@ th, td {
 </style>
 </head>
 <body>
-<%@ include file = "/WEB-INF/views/common/header.jsp" %>
+	<%@ include file = "/WEB-INF/views/common/header.jsp" %>
    <hr class="hr-13">
    
    

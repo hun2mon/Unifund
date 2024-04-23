@@ -312,7 +312,10 @@ input[name=reportContent] {
 }
 
 .category {
-	width: 70;
+	width: 210;
+}
+.project_report{
+	width: 100;
 }
 
 
@@ -330,14 +333,14 @@ input[name=reportContent] {
 		<div class="div_right">
 			<div>
 				<div class="top">
-					<div class="category" style="width: 210;">카테고리 >
+					<div class="category">카테고리 >
 						${project.category}</div>
-					<div class="project_report" style="width: 100;">
+					<div class="project_report">
 						<input type="button" class="pro_button" value="프로젝트 신고"
 							onclick="location.href='pro_report.go?pro_idx=${project.pro_idx }'">
 					</div>
 					<div class="userID">${project.userId}</div>
-					<div class="lisk_cnt" style="width: 30px;">
+					<div class="like_cnt">
 						${project.like_cnt}</div>
 				</div>
 				<div>
