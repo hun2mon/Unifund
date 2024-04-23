@@ -375,7 +375,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 					<div>
 						<input type="button" value="펀딩 수정하기" class="funding_button"
 							id="fund_update"
-							onclick="location.href='pro_update.go?pro_idx=${project.pro_idx }'">
+							onclick="location.href='./update.go?pro_idx=${project.pro_idx }'">
 					</div>
 				</div>
 			</div>
@@ -425,7 +425,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	});
 	
 	function appListCall() {
-		var url = "project/appList.go";
+		var url = "/appList.go";
         var name = "appList";
         var option = "width = 600, height = 700, top = 100, left = 200, location = no"
         window.open(url, name, option);

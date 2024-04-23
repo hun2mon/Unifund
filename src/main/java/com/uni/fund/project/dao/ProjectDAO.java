@@ -68,4 +68,6 @@ public interface ProjectDAO {
 
 	void projectDisLike(Integer pro_idx, Integer mem_idx);
 
+	int checkFundPeople(Integer pro_idx);
+
 }

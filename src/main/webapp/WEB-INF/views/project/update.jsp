@@ -7,37 +7,39 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f2f2f2;
- }
- 
-input[type="text"], textarea, input[type="date"], select, option{
-width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  font-size: 16px;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f2f2f2;
 }
 
- .container {
-    max-width: 900px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
- }
+input[type="text"], textarea, input[type="date"], select, option {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	font-size: 16px;
+}
 
- .form-container {
-    background: #fefefe;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    padding: 40px;
- }
+.container {
+	max-width: 900px;
+	margin: 50px auto;
+	background-color: #fff;
+	padding: 30px;
+	border-radius: 10px;
+	/*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+}
+
+.form-container {
+	background: #fefefe;
+	box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px
+		rgba(255, 255, 255, 0.8);
+	border-radius: 20px;
+	padding: 40px;
+}
+
 table {
 	text-align: left;
 	padding: 50px;
@@ -45,28 +47,29 @@ table {
 
 th, td {
 	padding: 10px;
+	color: #858686;
 }
 
 .file_input {
-	width: 100%;
+	width: 90%;
 	position: relative;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  font-size: 16px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	font-size: 16px;
 }
 
 .pro_photo, .pro_main_photo {
-	width: 85px;
+	width: 90px;
 	position: absolute;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  font-size: 16px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	font-size: 16px;
 }
 
 input[type="file"] {
@@ -85,48 +88,47 @@ textarea {
 	resize: none;
 }
 
-.btn_td{
-	text-align:center;
+.btn_td {
+	text-align: center;
 }
 
-.btn_submit, .btn_cancel{
+.btn_submit, .btn_cancel {
 	margin-top: 30px;
- 	background-color: #fdfdfd; 
-    border: none; 
-    width:200px;
-    margin-right:30px;
-    padding: 15px 30px; 
-    font-size: 16px; 
-    border-radius: 20px; 
-    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff; 
-    transition: all 0.3s ease; 
+	background-color: #fdfdfd;
+	border: none;
+	width: 200px;
+	margin-right: 30px;
+	padding: 15px 30px;
+	font-size: 16px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
 }
 
-.btn_submit:hover, .btn_cancel:hover{
- box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
+.btn_submit:hover, .btn_cancel:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
-
 
 #submit, #cancel {
-	background-color: #f0f0f0; 
-    border: none; 
-    padding: 15px 30px; 
-    font-size: 16px; 
-    width:100px;
-    margin-top:20px;
-    width:210px;
-    margin-right:10px;
-    border-radius: 20px; 
-    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff; 
-    transition: all 0.3s ease; 
+	background-color: #f0f0f0;
+	border: none;
+	padding: 15px 30px;
+	font-size: 16px;
+	width: 100px;
+	margin-top: 20px;
+	width: 210px;
+	margin-right: 10px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
 }
 
-#submit:hover, #cancel:hover{
- box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
+#submit:hover, #cancel:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .modal {
-	text-align:center;
+	text-align: center;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -141,12 +143,12 @@ textarea {
 }
 
 .box {
-  width:450px;
-  height:280px;
-  overflow:auto;  
-  border:1px solid gray;
-  padding: 0 0.5em;
-  background-color: #fcfcfc;
+	width: 450px;
+	height: 280px;
+	overflow: auto;
+	border: 1px solid gray;
+	padding: 0 0.5em;
+	background-color: #fcfcfc;
 }
 
 .modal-content {
@@ -165,14 +167,14 @@ textarea {
 	float: right;
 	width: 35px;
 	line-height: 0.5rem;
-	height:35px;
+	height: 35px;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 0.25rem;
 }
 
 .close-button:hover {
-	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .show-modal {
@@ -181,14 +183,13 @@ textarea {
 	transform: scale(1.0);
 	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
-
 </style>
 </head>
 <body>
 <%@ include file = "/WEB-INF/views/common/header.jsp" %>
 <div class="container">
 <div class="form-container">
-<form action="projectUpdate.do" method="post" enctype="multipart/form-data">
+<form action="./update.do" method="post" enctype="multipart/form-data">
 <input name="pro_idx" type="hidden" value="${project.pro_idx }"/>
 	<table>
 		<tr>
@@ -261,8 +262,8 @@ textarea {
 		</tr>
 		<tr>
 			<td class="btn_td" colspan="2">
-			<input type="button" onclick="location.href='./'" value="취소" class="btn_cancel">
-			<button class="btn_submit">수정</button>
+			<input type="button" onclick="location.href='./list.go'" value="취소" class="btn_cancel">
+			<input type="button" class ="btn_submit" onclick="btn_submit()" value="수정">
 			</td>
 		</tr>
 	</table>
@@ -271,6 +272,108 @@ textarea {
 </div>
 </body>
 <script>
+function btn_submit(){
+
+	$.ajax({
+		type : 'get',
+		url : './checkFundPeople.ajax',
+		data : {
+			pro_idx:'${project.pro_idx}'
+		},
+		success : function(data) {
+			console.log(data.FundPeople);
+			if (data.FundPeople > 0) {
+				alert('펀딩에 참여중인 회원이있으므로 프로젝트 수정이 불가능합니다.');
+				return;
+			}
+			
+			var $pro_title = $('.pro_title');
+			var $pro_main_photo = $('#pro_main_photo');
+			var $pro_content = $('.pro_content');
+			var $pro_photo = $('#pro_photo');
+			var $pro_phone = $('.pro_phone');
+			var $rew_name = $('.rew_name');
+			var $rew_max = $('.rew_max');
+			var $ori_price = $('.ori_price');
+			var $rew_price = $('.rew_price');
+			var $pro_deadline = $('.pro_deadline');
+			var $pro_startdate = $('.pro_startdate');
+			var $pro_tos = $('input[name="pro_tos"]:checked');
+			var regExp = new RegExp('[a-zA-Zㄱ-ㅎ가-힣]');
+			var rew_max_match = regExp.test($rew_max.val());
+			var ori_price_match = regExp.test($ori_price.val()); 
+			var rew_price_match = regExp.test($rew_price.val());
+			
+			if($pro_title.val() == ''){
+				alert('프로젝트 제목을 입력해주세요.');
+		     	$pro_title.focus();
+			}else if($pro_title.val().length > 20){
+				alert('프로젝트 제목은 20자 이하로 입력해주세요.');
+				$pro_title.focus();
+			}else if($pro_main_photo.get(0).files.length > 1){
+				alert('프로젝트 대표사진은 1장만 추가해주세요.');
+			}else if($pro_content.val() == ''){
+				alert('프로젝트 내용을 입력해주세요.');
+		     	$pro_content.focus();
+			}else if($pro_content.val().length > 1500){
+				alert('프로젝트 내용은 1500자까지 허용됩니다.');
+		     	$pro_content.focus();
+			}else if($pro_photo.get(0).files.length > 1){
+				alert('프로젝트 제출사진은 1장만 추가해주세요.');
+				$pro_photo.focus();
+			}else if($rew_name.val() == ''){
+				alert('리워드의 이름을 입력 해주세요.');
+		     	$rew_name.focus();
+			}else if($rew_max.val() == ''){
+				alert('리워드 수량을 입력 해주세요.');
+		     	$rew_max.focus();
+			}else if($ori_price.val() == ''){
+				alert('정가를 입력 해주세요.');
+		     	$ori_price.focus();
+			}else if($rew_price.val() == ''){
+				alert('리워드 가격을 입력 해주세요.');
+		     	$rew_price.focus();
+			}else if($pro_deadline.val() == ''){
+				alert('마감기한을 선택해주세요.');
+		     	$pro_deadline.focus();
+			}else if($pro_startdate.val() == ''){
+				alert('전시/공연/출품 날짜를 선택해주세요.');
+		     	$pro_startdate.focus();
+			}else if($pro_tos.val() == null){
+				alert('개인정보 처리방침 및 프로젝트 약관에 동의해주세요.');
+			}else if(rew_max_match){
+				alert('숫자만 입력해주세요.');
+				$rew_max.val('');
+				$rew_max.focus();
+			}else if(ori_price_match) {
+				alert('숫자만 입력해주세요.');
+				$ori_price.val('');
+				$ori_price.focus();
+			}else if(rew_price_match) {
+				alert('숫자만 입력해주세요.');
+				$rew_price.val('');
+				$rew_price.focus();
+			}else if($pro_deadline.val() > $pro_startdate.val()){
+				alert('마감기한은 전시/공연/출품날짜보다 빨라야합니다. 확인후 다시 설정해주세요.');
+				$pro_deadline.focus();
+			}else{
+				console.log('수정하시겠습니다?');
+				if(confirm("정말 수정하시겠습니까?") == true){
+					$('form').submit();
+					alert("수정완료");
+				}else{
+					$('form').submit();
+				}
+			}
+			
+		},
+		error : function(error) {
+			console.log(error);
+		}
+	});
+	
+}
+
 $('input[id="pro_main_photo"]').on('change',function(){
 	var fileName = $('input[id="pro_main_photo"]').val();
 	$('.file1').val(fileName);
@@ -280,5 +383,6 @@ $('input[id="pro_photo"]').on('change',function(){
 	var fileName = $('input[id="pro_photo"]').val();
 	$('.file2').val(fileName);
 });
+
 </script>
 </html>

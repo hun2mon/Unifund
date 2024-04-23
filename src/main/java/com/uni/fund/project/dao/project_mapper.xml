@@ -61,6 +61,10 @@
     j.pro_idx = #{param1};
 	</select>
 	
+	<select id="checkFundPeople" resultType="int">
+		SELECT COUNT(fund_state) FROM project_apply WHERE fund_state = 'A' and pro_idx = #{param1}
+	</select>
+	
 	<update id="projectUpdate" parameterType="map">
 		UPDATE project 
 		SET pro_title=#{pro_title}, pro_content=#{pro_content}, cate_idx=#{cate_idx}, pro_phone=#{pro_phone}, 
@@ -69,16 +73,24 @@
 		WHERE pro_idx=#{pro_idx}
 	</update>
 	
+	<select id="projectTotalCnt" resultType="int">
+		SELECT 
+			COUNT(p.pro_idx) 
+		FROM project p
+		WHERE 1=1
+        <if test="keyword != null and keyword != '' ">
+            AND p.pro_title like CONCAT('%',#{keyword},'%')
+        </if>
+		<if test="category != null and category != '' ">
+         	AND p.cate_idx = #{category}
+        </if>
+	</select>
+	
 	<select id="projectList" parameterType="map" resultType="com.uni.fund.project.dto.ProjectDTO">
 		SELECT *
 		FROM (
 			SELECT 
-				p.pro_idx
-			    , p.pro_title
-			    , p.ori_price
-			    , p.rew_price
-			    , p.pro_deadline
-			    , m.mem_id as userId
+				p.pro_idx, p.pro_title, p.ori_price, p.rew_price, p.pro_deadline, m.mem_id as userId
 			    , c.cate_name as cateName
 			    , (SELECT pho_name 
 			    	FROM photo
@@ -86,19 +98,32 @@
 				    AND ref_idx = p.pro_idx
 				    ORDER BY pho_idx DESC
 				    LIMIT 1) as pro_main_name
-				 , (SELECT ROUND((sum(total_price) / (p.rew_price * p.rew_max)) * 100) 
-			    	FROM project_apply as total_price 
-			    	WHERE pro_idx = p.pro_idx group by pro_idx) as progress
-			     , COUNT(pl.pro_idx) as like_cnt
+				, (SELECT round((sum(pa.total_price) / (p.rew_price * p.rew_max)) * 100)
+			    	FROM project_apply pa
+			    	WHERE pa.pro_idx = p.pro_idx and pa.fund_state='A' group by pa.pro_idx) as progress
+			    , COUNT(pl.pro_idx) as like_cnt
+			    , COUNT(b.pro_idx) as favorites
 			FROM project p
 			LEFT JOIN member m on m.mem_idx = p.mem_idx
 			LEFT JOIN project_like pl on p.pro_idx = pl.pro_idx
 			LEFT JOIN category c on p.cate_idx = c.cate_idx	
+			LEFT JOIN bookmark b on b.pro_idx = p.pro_idx
 			WHERE 1=1
+				<if test="keyword != null and kewyword != '' ">
+	        		AND p.pro_title like CONCAT('%',#{keyword},'%')
+	        	</if>
 	        	<if test="category != null and category != '' ">
 	        		AND p.cate_idx = #{category}
 	        	</if>
         	GROUP BY p.pro_idx) T
+        	<choose>
+			<when test="filter == 'recent'"> ORDER BY T.pro_idx DESC </when>
+	    	<when test="filter == 'progress'"> ORDER BY T.progress DESC, T.pro_idx DESC </when>
+	    	<when test="filter == 'like'"> ORDER BY T.like_cnt DESC, T.pro_idx DESC </when>
+	    	<when test="filter == 'favorites'"> ORDER BY T.favorites DESC, T.pro_idx DESC </when>
+			<otherwise> ORDER BY T.pro_idx DESC </otherwise>
+			</choose>
+			LIMIT #{start}, 8
 	</select>
 	
 	<select id="checkProject" resultType="int">
