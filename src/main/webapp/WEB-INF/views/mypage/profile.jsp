@@ -541,7 +541,7 @@ th, td {
              } else if (item.pro_state == 'E') {
                  content += '<td><b>펀딩실패</b></td>';
              } else if (item.pro_state == 'F') {
-                 content += '<td style="color: red;"><b>거절</b></td>';
+                 content += '<td style="color: red;"><a onclick="alert(\''+item.rsn_content +'\')">거절</a></td>';
              }
              var startdate = new Date(item.pro_startdate);
              var startdateStr = startdate.toLocaleDateString("ko-KR");
@@ -667,6 +667,10 @@ th, td {
              }   
          } 
          $('#photoList').html(content);
+      }
+      
+      function refuseReason(rsn_reason){
+    	  alert(rsn_reason);
       }
 </script>
 </html>

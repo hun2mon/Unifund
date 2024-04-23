@@ -24,10 +24,6 @@ public interface ProjectDAO {
 
 	void moneyMng(Map<String, String> map);
 
-	int fundingCancle(Map<String, String> map);
-
-	void moneyRefund(Map<String, String> map);
-
 	int reviewDo(ProjectDTO proDTO);
 
 	void fileWrite(int idx, String newFileName);
@@ -81,5 +77,27 @@ public interface ProjectDAO {
 	void agree(String pro_idx);
 
 	void agreeHis(String pro_idx);
+
+	void refuse(String pro_idx);
+
+	void refuseHis(String pro_idx, String refuseContent);
+
+	void proDel(String pro_idx);
+
+	void proDelHis(String pro_idx, String reportContent);
+
+	String[] appList(String pro_idx);
+
+	void moneyRefund(int mem_idx, String pro_idx);
+
+	int fundingCancle(int mem_idx, String pro_idx);
+
+	void cashHis(Map<String, String> map);
+
+	void delCashHis(int parseInt, String pro_idx);
+
+	void mileageHis(Map<String, String> map);
+
+	void delMileHis(int parseInt, String pro_idx);
 
 }

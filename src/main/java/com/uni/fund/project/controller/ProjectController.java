@@ -333,9 +333,13 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/project/delete.do", method = RequestMethod.POST)
-	public String proDel() {
+	public String proDel(String pro_idx, String reportContent) {
 		logger.info("del요청 들어옴");
-		return "redirect:/project/detail.go";
+		logger.info("pro_idx :{}", pro_idx);
+		logger.info("reportContent :{}", reportContent);
+		projectService.proDel(pro_idx, reportContent);
+		
+		return "redirect:/project/list.go";
 	}
 	
 	@RequestMapping(value = "/project/adminList.ajax")
@@ -375,6 +379,13 @@ public class ProjectController {
 		return "redirect:/project/adminList.go";
 	}
 	
+	@RequestMapping(value = "/project/refuse.do")
+	public String refuse(String pro_idx, String refuseContent) {
+		logger.info("pro_idx : {}", pro_idx);
+		logger.info("refuseContent : {}", refuseContent);
+		projectService.refuse(pro_idx,refuseContent);
+		return "redirect:/project/adminList.go";
+	}
 	
 	
 	

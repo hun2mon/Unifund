@@ -330,12 +330,12 @@ input[name=reportContent] {
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
 								onclick="delFrom()">
-							<form action="delete.do" method="post">
+							<form action="delete.do" method="post" class="proDelete">
 								<table align="center" class="proDel">
 									<tr>
-										<th scope="col">삭제 사유 <input type="text" class="category"
+										<th scope="col">삭제 사유 
+											<input type="text" class="category" name="pro_idx"
 											value="${project.pro_idx}" hidden>
-										</td>
 									</tr>
 									<tr>
 										<td>사유<br> <input type="text" name="reportContent"></td>
@@ -618,13 +618,13 @@ input[name=reportContent] {
 	}
 	
 	function apply() {
+		var quantitys = $('.quan').val();
+		var cash = '${project.cash}' + $('.use_mileage_value').val();
+		var price = ${project.rew_price} *quantitys;
 		if (${project.now_price} == ${project.target_price} && $('.funding_button').val() == '펀딩 신청하기') {
 			alert('모집금액이 충족되어 신청이 마감되었습니다.');
 		}else
 		if ($('.funding_button').val() == '펀딩 신청하기') {
-			var quantitys = $('.quan').val();
-			var cash = '${project.cash}' + $('.use_mileage_value').val();
-			var price = ${project.rew_price} *quantitys;
 			if (price > ${project.target_price}-${project.now_price}) {
 				alert('최대 구매 가능 개수를 초과했습니다.');
 				$('.quan').val(0);
@@ -650,7 +650,8 @@ input[name=reportContent] {
 							mem_idx:'1',
 							rew_quantity:quantitys,
 							mileage:$('.use_mileage_value').val(),
-							total_price:price
+							total_price:price,
+							filter:'apply'
 						}
 						,dataType:'json'
 						,success:function(data){
@@ -673,7 +674,8 @@ input[name=reportContent] {
 						mem_idx:'1',
 						rew_quantity:quantitys,
 						mileage:$('.use_mileage_value').val(),
-						total_price:price
+						total_price:price,
+						filter:'apply'
 					}
 					,dataType:'json'
 					,success:function(data){
@@ -692,10 +694,11 @@ input[name=reportContent] {
 				,url:'./fund_cancle.do'
 				,data:{
 					pro_idx:'${project.pro_idx}',
-					mem_idx:'1',
+					mem_idx:'${mem_idx}',
 					rew_quantity:quantitys,
 					mileage:$('.use_mileage_value').val(),
-					total_price:price
+					total_price:price,
+					filter:'cancle'
 				}
 				,dataType:'json'
 				,success:function(data){
@@ -793,6 +796,11 @@ input[name=reportContent] {
 	}
 	function createForm() {
 		location.href='./detail.go?pro_idx=' + ${project.pro_idx};
+	}
+	
+	function proDelete() {
+		alert('삭제되었습니다.');
+		$('.proDelete').submit();
 	}
 	
 	var msg = '${msg}';

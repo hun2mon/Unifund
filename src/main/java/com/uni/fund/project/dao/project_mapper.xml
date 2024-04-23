@@ -158,18 +158,18 @@
 		WHERE mem_idx = #{mem_idx}
 	</update>
 	
-	<update id="fundingCancle" parameterType="map">
+	<update id="fundingCancle">
 		update project_apply set
-			fund_state = 'B' where pro_idx = #{pro_idx} and mem_idx = #{mem_idx};
+			fund_state = 'B' where pro_idx = #{param2} and mem_idx = #{param1};
 	</update>
 	
-	<update id="moneyRefund" parameterType="map">
+	<update id="moneyRefund">
 		UPDATE `member` SET 
-			mem_cash = (select mem_cash from member where mem_idx = #{mem_idx})
-									+(select total_price-mile_use from project_apply where mem_idx = #{mem_idx} and pro_idx = #{pro_idx} order by fund_idx desc limit 1),
-			mem_mileage = (select mem_mileage from member where mem_idx = #{mem_idx})
-										+(select mile_use from project_apply where mem_idx = #{mem_idx} and pro_idx = #{pro_idx} order by fund_idx desc limit 1)
-		WHERE mem_idx = #{mem_idx};
+			mem_cash = (select mem_cash from member where mem_idx = #{param1})
+									+(select total_price-mile_use from project_apply where mem_idx = #{param1} and pro_idx = #{param2} order by fund_idx desc limit 1),
+			mem_mileage = (select mem_mileage from member where mem_idx = #{param1})
+										+(select mile_use from project_apply where mem_idx = #{param1} and pro_idx = #{param2} order by fund_idx desc limit 1)
+		WHERE mem_idx = #{param1};
 	</update>
 	
 	<insert id="reviewDo" useGeneratedKeys="true" keyColumn="rev_idx" keyProperty="rev_idx" parameterType="com.uni.fund.project.dto.ProjectDTO">
@@ -273,5 +273,79 @@
 	<update id="agree">
 		update project set pro_state = 'C' where pro_idx = #{param1}
 	</update>
+	
+	<insert id="refuseHis">
+		insert into project_admin (pro_idx,rsn_content,pro_state) values (#{param1},#{param2},'거절')
+	</insert>
+	
+	<update id="refuse">
+		update project set pro_state = 'F' where pro_idx = #{param1}
+	</update>
+	
+	<insert id="proDelHis">
+		insert into project_admin (pro_idx,rsn_content,pro_state) values (#{param1},#{param2},'삭제')
+	</insert>
+	
+	<update id="proDel">
+		update project set pro_state = 'D' where pro_idx = #{param1}
+	</update>
+	
+	<select id="appList" resultType="String">
+		select mem_idx from project_apply where pro_idx = #{param1} and fund_state = 'A'
+	</select>
+	
+	<insert id="cashHis" parameterType="map">
+	<if test='filter == "apply"'>
+		INSERT INTO cash(mem_idx,cash_content,cash_amount,ref_idx,cash_division)
+			VALUES (${mem_idx},'-',${total_price}-${mileage},${pro_idx},'프로젝트')	
+	</if>
+	<if test='filter == "cancle"'>
+		INSERT INTO cash(mem_idx,cash_content,cash_amount,ref_idx,cash_division)
+			VALUES (${mem_idx},'+',${total_price}-${mileage},${pro_idx},'환불')	
+	</if>
+	</insert>
+	<insert id="mileageHis" parameterType="map">
+	<if test='filter == "apply"'>
+		INSERT INTO mileage(mem_idx,mile_content,mile_amount,ref_idx,mile_division)
+			VALUES (
+				${mem_idx},
+				'-',
+				(select mile_use from project_apply where pro_idx = ${pro_idx} and mem_idx = ${mem_idx} and fund_state = 'A'),
+				${pro_idx},
+				'프로젝트')	
+	</if>
+	<if test='filter == "cancle"'>
+		INSERT INTO mileage(mem_idx,mile_content,mile_amount,ref_idx,mile_division)
+			VALUES (
+				${mem_idx},
+				'+',
+				(select mile_use from project_apply where pro_idx = ${pro_idx} and mem_idx = ${mem_idx} and fund_state = 'A'),
+				${pro_idx},
+				'프로젝트')	
+	</if>
+	</insert>
+	
+	<insert id="delCashHis">
+		INSERT INTO cash(mem_idx,cash_content,cash_amount,ref_idx,cash_division)
+			VALUES (
+				${param1},
+				'+',
+				(select total_price from project_apply where pro_idx = ${param2} and fund_state = 'A' and mem_idx = #{param1})
+					- (select mile_use from project_apply where pro_idx = ${param2} and fund_state = 'A' and mem_idx = #{param1}),
+				${param2},
+				'환불')	;
+	</insert>
+	
+	<insert id="delMileHis">
+		INSERT INTO mileage(mem_idx,mile_content,mile_amount,ref_idx,mile_division)
+			VALUES (
+				${param1},
+				'+',
+				(select mile_use from project_apply where pro_idx = ${param2} and mem_idx = ${param1} and fund_state = 'A'),
+				${param2},
+				'프로젝트')	
+	</insert>
+	
+	
 	
 </mapper>

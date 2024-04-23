@@ -78,8 +78,9 @@
          ) AS subquery
    </select>
    <select id="createList" resultType="com.uni.fund.mypage.dto.MypageDTO">
-            SELECT pro_title, pro_state, pro_startdate ,pro_deadline 
-         from project 
+            SELECT pro_title, pro_state, pro_startdate ,pro_deadline,
+            	(select rsn_content from project_admin pa where pro_idx = p.pro_idx and pro_state = '거절') as rsn_content
+         from project p
          WHERE mem_idx = #{param3} And pro_state  NOT IN ('D')
          ORDER BY 
              CASE 

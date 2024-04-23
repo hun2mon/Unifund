@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -232,12 +233,19 @@ public class ProjectService {
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
+//		int cash = Integer.parseInt(map.get("total_Price")) - Integer.parseInt(map.get("mileage")); 
+		projectDAO.cashHis(map);
+		projectDAO.mileageHis(map);
 		logger.info("성공여부 : {}", cnt);
 	}
 
 	public void fundingCancle(Map<String, String> map) {
-		projectDAO.moneyRefund(map);
-		int cnt = projectDAO.fundingCancle(map);
+		int mem_idx = Integer.parseInt(map.get("mem_idx")) ;
+		String pro_idx = map.get("pro_idx");
+		projectDAO.moneyRefund(mem_idx,pro_idx);
+		projectDAO.cashHis(map);
+		projectDAO.mileageHis(map);
+		int cnt = projectDAO.fundingCancle(mem_idx,pro_idx);
 		logger.info("성공여부 : {}", cnt);
 	}
 
@@ -347,6 +355,24 @@ public class ProjectService {
 		projectDAO.agree(pro_idx);
 		projectDAO.agreeHis(pro_idx);
 		
+	}
+
+	public void refuse(String pro_idx, String refuseContent) {
+		projectDAO.refuse(pro_idx);
+		projectDAO.refuseHis(pro_idx,refuseContent);
+	}
+
+	public void proDel(String pro_idx, String reportContent) {
+		projectDAO.proDel(pro_idx);
+		projectDAO.proDelHis(pro_idx, reportContent);
+		String[] appList = projectDAO.appList(pro_idx);
+		logger.info("appList : {}", Arrays.toString(appList));
+		for (String mem_idx :  appList) {
+			projectDAO.moneyRefund(Integer.parseInt(mem_idx), pro_idx);
+			projectDAO.delCashHis(Integer.parseInt(mem_idx), pro_idx);
+			projectDAO.delMileHis(Integer.parseInt(mem_idx), pro_idx);
+			projectDAO.fundingCancle(Integer.parseInt(mem_idx), pro_idx);
+		}
 	}
 
 }
