@@ -4,5 +4,117 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.crew.dao.CrewDAO">
-
+	<select id="crewOverlay" resultType="int">
+		SELECT COUNT(crew_name) FROM crew WHERE crew_name = #{param1}
+	</select>
+	
+	<insert id="crewCreateDo"
+		useGeneratedKeys="true" 
+		keyColumn="crew_idx" 
+		keyProperty="crew_idx"
+		 parameterType="com.uni.fund.crew.dto.CrewDTO">
+		INSERT INTO crew (mem_idx,crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local)
+			VALUES(#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_link},#{crew_local})
+	</insert>
+	
+	<insert id="createCrewLogoPhoto">
+		INSERT INTO photo(ref_idx, pho_name, pho_division)
+		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="createCrewRecruPhoto">
+		INSERT INTO photo(ref_idx, pho_name, pho_division)
+		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<select id="crewUpdateForm" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT crew_idx,crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local
+			FROM crew WHERE crew_idx = ${param1}
+	</select>
+	
+	<select id="crewPhoto" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT pho_name
+		FROM crew c 
+		JOIN (
+  		  SELECT * 
+    		FROM photo 
+    		WHERE pho_division = '크루로고' OR pho_division='모집설명'
+		) p ON c.crew_idx = p.ref_idx			
+	</select>
+	
+	<update id="crewUpdate" parameterType="map">
+		UPDATE crew SET
+			<!-- crew_name=#{crew_name}, -->
+			crew_exp=#{crew_exp},
+			crew_con=#{crew_con},
+			crew_num=#{crew_num},
+			crew_link=#{crew_link},
+			crew_local=#{crew_local}
+		WHERE crew_idx=	#{crew_idx}
+	</update>
+	
+	<select id="crewList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+			(SELECT COUNT(crew_logo) FROM crew c
+			JOIN( 
+				SELECT * FROM photo
+				WHERE pho_division='크루로고'
+			) p ON c.crew_idx= p.ref_idx
+			)AS pho_cnt,
+			c.crew_idx,
+			c.crew_name,
+			c.crew_exp,
+			c.crew_num,				
+			(SELECT pho_name FROM photo 
+			WHERE pho_division ='크루로고'
+			AND ref_idx= c.crew_idx
+			ORDER BY pho_idx DESC LIMIT 1
+			) AS crew_logo,
+			(
+            SELECT COUNT(*) FROM popularity 
+            WHERE crew_idx = c.crew_idx
+        	) AS crew_cool_cnt
+		FROM crew c 
+		ORDER BY crew_idx DESC 
+		limit 10 offset #{param2}			
+	</select>
+	
+	<select id="allCountPage" resultType="Integer">
+		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
+	</select>
+	
+	<select id="isApplying" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*) FROM crewMember_history WHERE mem_idx =#{mem_idx} AND crew_mem_status ='A'
+	</select>
+	
+	<select id="isMember" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM crewMember_history 
+		WHERE mem_idx= 1 AND 
+			(crew_mem_status='B' 
+			OR crew_mem_status='C' 
+			OR crew_mem_status='D' 
+			OR crew_mem_status='E' 
+			OR crew_mem_status='K')
+	</select>
+	
+	<insert id="applyCrew" parameterType="map">
+		INSERT INTO crewMember_history (mem_idx, crew_idx, crew_mem_status) VALUES (#{mem_idx}, #{crew_idx}, 'A')
+	</insert>
+	
+	<select id="crewCoolCheck" resultType="Integer">
+		SELECT COUNT(*) FROM popularity WHERE mem_idx=#{param1} AND crew_idx=#{param2}
+	</select>
+	
+	<insert id="crewMakeCool">
+		INSERT INTO popularity VALUES(#{param1},#{param2})
+	</insert>
+	
+	<delete id="crewUncool">
+		DELETE FROM popularity WHERE mem_idx=#{param1} AND crew_idx=#{param2}
+	</delete>
+	
+	
+	
+	
 </mapper>
