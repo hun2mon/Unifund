@@ -8,7 +8,7 @@ import com.uni.fund.project.dto.ReviewDTO;
 
 public interface ProjectDAO {
 
-	ProjectDTO detail(String memIdx);
+	ProjectDTO detail(String memIdx, String pro_idx);
 
 	int projectCreate(ProjectDTO projectDTO);
 
@@ -40,9 +40,9 @@ public interface ProjectDAO {
 
 	void mileageSaveUp(int mem_idx);
 
-	List<ProjectDTO> appListCall(int start, int pagePerCnt);
+	List<ProjectDTO> appListCall(int start, int pagePerCnt, String pro_idx);
 
-	Object allCount(int pagePerCnt);
+	Object allCount(int pagePerCnt, String pro_idx);
 
 	void likeDo(String pro_idx, String mem_idx);
 
@@ -52,7 +52,7 @@ public interface ProjectDAO {
 
 	void favoriteCancle(String pro_idx, String mem_idx);
 
-	List<ProjectDTO> adminList();
+	List<ProjectDTO> adminList(String category, int start, int pagePerCnt);
 	
 	int projectTotalCnt(Map<String, Object> param);
 
@@ -67,5 +67,17 @@ public interface ProjectDAO {
 	void projectAddLike(Integer pro_idx, Integer mem_idx);
 
 	void projectDisLike(Integer pro_idx, Integer mem_idx);
+
+	List<ProjectDTO> search(String keyWord, int start, int pagePerCnt);
+
+	Object adminAllCount(String category, int pagePerCnt);
+
+	Object searchAllCount(String keyWord, int pagePerCnt);
+
+	String stateCheck(String pro_idx);
+
+	void agree(String pro_idx);
+
+	void agreeHis(String pro_idx);
 
 }

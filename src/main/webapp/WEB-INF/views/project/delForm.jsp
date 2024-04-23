@@ -53,7 +53,7 @@ input[name=reportContent] {
 			</tr>
 			<tr>
 				<td class="button">
-					<button>삭제하기</button>
+					<input type="button" value="삭제" onclick="proDelete()">
 					<button onclick="window.close()">취소</button>
 				</td>
 			</tr>
@@ -61,6 +61,9 @@ input[name=reportContent] {
 	</form>
 </body>
 <script>
-	
+	function proDelete(){
+		$('form').submit();
+		self.close();
+	}
 </script>
 </html>

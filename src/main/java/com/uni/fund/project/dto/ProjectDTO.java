@@ -42,6 +42,7 @@ public class ProjectDTO {
 	private String mem_id;
 	private String like_mem_idx;
 	private String favorite_mem_idx;
+	private String keyWord;
 	
 	
 	public int getPro_idx() {
@@ -271,6 +272,12 @@ public class ProjectDTO {
 	}
 	public void setFavorite_mem_idx(String favorite_mem_idx) {
 		this.favorite_mem_idx = favorite_mem_idx;
+	}
+	public String getKeyWord() {
+		return keyWord;
+	}
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
 	}
 	
 }

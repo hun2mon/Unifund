@@ -256,9 +256,9 @@ body {
 					<tr>
 						<td>
 						<span><del>${project.ori_price}</del></span> >> 
-						<span><fmt:parseNumber var="price_up" value="${project.rew_price * 1.05}" integerOnly="true" />${price_up}</span> 
+						<span><fmt:parseNumber var="price_up" value="${project.rew_price }" integerOnly="true" />${price_up}</span> 
 						<span>
-						<fmt:parseNumber var="percent" value="${((project.ori_price - (project.rew_price*1.05)) / project.ori_price) * 100}" integerOnly="true" />${percent}%
+						<fmt:parseNumber var="percent" value="${((project.ori_price - (project.rew_price)) / project.ori_price) * 100}" integerOnly="true" />${percent}%
 						</span>
 						</td>
 					</tr>
