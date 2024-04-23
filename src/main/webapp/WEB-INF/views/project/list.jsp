@@ -36,7 +36,7 @@ body {
 	transition: background 0.3s ease, color 0.3s ease;
 	margin: 20px;
 	float: left;
-	height: 330px;
+	height: 350px;
 	border-radius: 20px;
 	padding: 10px;
 	width: 247px;
@@ -81,7 +81,7 @@ body {
 .search_container {
 	margin-left: 20px;
 	padding: 0px 0px 0px 22px;
-	width: 289px;
+	width: 230px;
 	height: 50px;
 	display: inline-block;
 	align-items: center;
@@ -94,7 +94,7 @@ body {
 .filter_container {
 	margin-left: 20px;
     padding: 0px 0px 0px 10px;
-    width: 337px;
+    width: 353px;
     height: 50px;
     display: inline-block;
     align-items: center;
@@ -172,7 +172,7 @@ body {
 .filter_button{
 	background: rgba(255, 255, 255, 0.15);
     padding: 7px;
-    width: 75px;
+    width: 80px;
     margin-top: 6px;
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -182,12 +182,60 @@ body {
     border-radius: 15px;
 }
 
+.paging {
+	margin-top: 30px;
+	background-color: #fdfdfd;
+	border: none;
+	width: 50px;
+	margin: 5px;
+	padding: 10px 15px;
+	font-size: 16px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
+}
+
 .filter_button:hover{
 	background:rgb(0 0 0 / 15%);
 }
+
 .filter_button.active {
 	background-color: black;
 	color: white;
+}
+
+.paging:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
+
+.paging_container {
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.currentPaging {
+	background-color: #a1a1a1;
+	color: white;
+}
+
+.go_btn{
+background: rgba(255, 255, 255, 0.15);
+    padding: 7px;
+    width: 100%;
+    margin-top: 25px;
+    backdrop-filter: blur(10px); 
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    border-radius: 15px;
+}
+
+.go_btn:hover{
+	background:rgb(0 0 0 / 15%);
 }
 
 .title_size{
@@ -209,7 +257,7 @@ body {
 				<input type="button"  class="filter_button <c:if test="${filter == 'recent'}">active</c:if>" value="최신순" data-filter="recent"/>
 				<input type="button" id="progressFilter_button"  class="filter_button <c:if test="${filter == 'progress'}">active</c:if>" value="달성률순" data-filter="progress"/>
 				<input type="button" id="likeFilter_button"  class="filter_button <c:if test="${filter == 'like'}">active</c:if>" value="좋아요순" data-filter="like"/>
-				<!-- <input type="button" id="startFilter_button"  class="filter_button <c:if test="${filter == 'we dont need it'}">active</c:if>" value="즐겨찾기순" data-filter="we dont need it"/> -->
+				<input type="button" id="startFilter_button"  class="filter_button <c:if test="${filter == 'favorites'}">active</c:if>" value="즐겨찾기순" data-filter="favorites"/>
 			</div>
 			<div class="search_container">
 				<i id="search_button" class="fa fa-search"></i>
@@ -231,7 +279,7 @@ body {
 				<table>
 					<tr>
 						<input type="hidden" value="${project.pro_idx}" name="pro_idx" class="pro_idx" />
-						<td><img src="/photo/${project.pro_main_name }" class="thumb_img" onerror="this.onerror=null;this.src='resources/project_img/noImg.png'"></td>
+						<td><img src="/photo/${project.pro_main_name }" class="thumb_img" onerror="this.onerror=null;this.src='../resources/project_img/noImg.png'"></td>
 						<td><i class="fa fa-heart heart_icon readLike like_button"  style="color: #cccccc"></i></td>
 					</tr>
 					<tr>
@@ -256,7 +304,7 @@ body {
 					<tr>
 						<td>
 						<span><del>${project.ori_price}</del></span> >> 
-						<span><fmt:parseNumber var="price_up" value="${project.rew_price }" integerOnly="true" />${price_up}</span> 
+						<span><fmt:parseNumber var="price_up" value="${project.rew_price}" integerOnly="true" />${price_up}</span> 
 						<span>
 						<fmt:parseNumber var="percent" value="${((project.ori_price - (project.rew_price)) / project.ori_price) * 100}" integerOnly="true" />${percent}%
 						</span>
@@ -272,51 +320,62 @@ body {
 						</div>
 						</td>
 					</tr>
+					<tr>
+						<td><input type="button" class="go_btn" onclick="goDetail()" value="프로젝트 상세보기"/></td>
+					</tr>
 				</table>
 			</div>
 		</c:forEach>
+		<div class="paging_container">
+			<c:if test="${startPage > 5}">
+				<a class="paging" href="./list.go?category=${category}&pg=${startPage-1 }&keyword=${keyword}&filter=${filter}">이전</a>
+			</c:if>
+			<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+				<a class="paging <c:if test="${pg == i}">currentPaging</c:if>" href="./list.go?category=${category}&pg=${i}&keyword=${keyword}&filter=${filter}">${i}</a>
+			</c:forEach>
+			<c:if test="${endPage < totalP}">
+				<a class="paging" href="./list.go?category=${category}&pg=${endPage+1 }&keyword=${keyword}&filter=${filter}">다음</a>
+			</c:if>
+		</div>
 	</div>
 </body>
 <script>
 	
-	$('.form-container').each(function() {
-		var mem_idx = $('input[type="hidden"].mem_idx').val();
-		var pro_idx = $(this).find('input[type="hidden"].pro_idx').val();
-		var each_project = $(this);
-		
-		$.ajax({
-			type : 'get',
-			url : 'projectReadLike.ajax',
-			data : {
-				'mem_idx' : mem_idx,
-				'pro_idx' : pro_idx
-			},
-			success : function(data) {
-				console.log(data.projectReadLike);
-				if (data.projectReadLike > 0) {
-					each_project.find('.readLike').css('color', '#ff2600');
+	$('.like_button').each(function() {
+		$('.form-container').each(function() {
+			var mem_idx = $('input[type="hidden"].mem_idx').val();
+			var pro_idx = $(this).find('input[type="hidden"].pro_idx').val();
+			var each_project = $(this);
+			
+			$.ajax({
+				type : 'get',
+				url : './readLike.ajax',
+				data : {
+					'mem_idx' : mem_idx,
+					'pro_idx' : pro_idx
+				},
+				success : function(data) {
+					console.log(data.projectReadLike);
+					if (data.projectReadLike > 0) {
+						each_project.find('.readLike').css('color', '#ff2600');
+					}
+				},
+				error : function(error) {
+					console.log(error);
 				}
-			},
-			error : function(error) {
-				console.log(error);
-			}
+			});
+			
 		});
 		
-	});
-
-	$('.like_button').each(function() {
 		$(this).on('click',function() {
 			var mem_idx = $('input[type="hidden"].mem_idx').val();
 			var pro_idx = $(this).closest('.form-container').find('input[type="hidden"].pro_idx').val();
 			var like_cnt = $(this).parents('.form-container').find('.like_cnt').text();
 			var each_project = $(this);
-			console.log("mem_idx::", mem_idx);
-			console.log("pro_idx::", pro_idx);
-			console.log("like_cnt::", like_cnt);
 
 			$.ajax({
 				type : 'get',
-				url : 'projectCheckLike.ajax',
+				url : './checkLike.ajax',
 				data : {
 					'mem_idx' : mem_idx,
 					'pro_idx' : pro_idx
@@ -343,23 +402,45 @@ body {
 		var mem_idx = $('input[type="hidden"].mem_idx').val();
 		$.ajax({
 			type : 'get',
-			url : 'checkProject.ajax',
+			url : './checkProject.ajax',
 			data : {
 				'mem_idx' : mem_idx
 			},
 			success : function(data) {
 				console.log(data.checkProject);
-				if (data.checkProject > 100) {
+				if (data.checkProject > 3) {
 					alert('프로젝트는 1인당 최대 3개까지 진행가능합니다.');
 					return;
 				}
-				location.href="./projectCreateForm";
+				location.href="./create.go";
 			},
 			error : function(error) {
 				console.log(error);
 			}
 		});
 	}
-
+	
+	$('#search_button').on('click', function() {
+		var keyword = $('#keyword').val();
+		var category = $('.category').val();
+		if (keyword == '') {
+			alert('검색어를 입력해주세요.');
+			return;
+		}
+		location.href = './list.go?category='+ category+'&pg=1'+'&keyword='+ keyword;
+	});
+	
+	$('.filter_button').on('click', function() {
+		var filter = $(this).attr("data-filter");
+		var keyword = $('#keyword').val();
+		var category = $('.category').val();
+		
+		location.href = './list.go?category='+category+'&keyword=' + keyword + '&filter=' + filter;
+	});
+	
+	$('.go_btn').on('click',function(){
+		var pro_idx = $(this).closest('.form-container').find('input[type="hidden"].pro_idx').val();
+		location.href = './detail?pro_idx='+ pro_idx
+	});
 </script>
 </html>
