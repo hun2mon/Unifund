@@ -15,4 +15,9 @@ public class MainController {
 	@Autowired MainService mainService;
 	
 	
+	@RequestMapping(value = "/")
+	public String main() {
+		return "main";
+	}
+	
 }
