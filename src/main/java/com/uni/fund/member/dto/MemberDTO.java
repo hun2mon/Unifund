@@ -13,7 +13,6 @@ public class MemberDTO {
 	private String mem_email;
 	private String mem_bankName;
 	private String mem_bank;
-	private String mem_cor;
 	private String mem_uni;
 	private Date mem_joindate;
 	private String mem_status;
@@ -82,12 +81,6 @@ public class MemberDTO {
 	}
 	public void setMem_bank(String mem_bank) {
 		this.mem_bank = mem_bank;
-	}
-	public String getMem_cor() {
-		return mem_cor;
-	}
-	public void setMem_cor(String mem_cor) {
-		this.mem_cor = mem_cor;
 	}
 	public String getMem_uni() {
 		return mem_uni;

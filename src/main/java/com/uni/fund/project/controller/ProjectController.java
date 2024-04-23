@@ -29,7 +29,7 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 
-	@RequestMapping(value = "/project/detail.go")
+	@RequestMapping(value = "/detail.go")
 	public String detail(Model model, HttpSession session, String row) {
 		session.setAttribute("loginId", "dds");
 		session.setAttribute("memIdx", "1");

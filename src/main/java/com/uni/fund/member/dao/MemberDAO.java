@@ -14,8 +14,6 @@ public interface MemberDAO {
 
 	int overlay(String id);
 
-	
-
 	int write(MemberDTO dto);
 
 	void fileWrite(String fileName, String newFileName, int idx);
