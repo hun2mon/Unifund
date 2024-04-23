@@ -29,7 +29,7 @@ public class ProjectService {
 	@Autowired
 	ProjectDAO projectDAO;
 
-	public String file_root = "/Users/jeounghun/upload/";
+	public String file_root = "/Users/hsg/upload/Unifund";
 
 	public ProjectDTO detail(String pro_idx,String memIdx) {
 		logger.info("pro_idx : {}",pro_idx);
@@ -172,6 +172,14 @@ public class ProjectService {
 		return row;
 	}
 	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 수정 버튼 클릭시 펀딩신청한 사람 체크하기
+	 * */
+	public Object checkFundPeople(Integer pro_idx) {
+		return projectDAO.checkFundPeople(pro_idx);
+	}
+
 	/* *
 	 * 작성자 : 허승경
 	 * 각 회원별 프로젝트 등록 개수 세기

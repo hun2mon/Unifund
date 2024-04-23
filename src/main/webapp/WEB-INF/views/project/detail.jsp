@@ -434,7 +434,7 @@ input[name=reportContent] {
 					<div>
 						<input type="button" value="펀딩 수정하기" class="funding_button"
 							id="fund_update"
-							onclick="location.href='pro_update.go?pro_idx=${project.pro_idx }'">
+							onclick="location.href='./update.go?pro_idx=${project.pro_idx }'">
 					</div>
 				</div>
 			</div>

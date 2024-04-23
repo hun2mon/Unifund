@@ -68,6 +68,8 @@ public interface ProjectDAO {
 
 	void projectDisLike(Integer pro_idx, Integer mem_idx);
 
+	int checkFundPeople(Integer pro_idx);
+
 	List<ProjectDTO> search(String keyWord, int start, int pagePerCnt);
 
 	Object adminAllCount(String category, int pagePerCnt);
