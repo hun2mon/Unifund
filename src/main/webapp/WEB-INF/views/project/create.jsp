@@ -7,38 +7,39 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f2f2f2;
- }
- 
-input[type="text"], textarea, input[type="date"], select, option{
-width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  font-size: 16px;
- 
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f2f2f2;
 }
 
- .container {
-    max-width: 900px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
- }
+input[type="text"], textarea, input[type="date"], select, option {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 15px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	font-size: 16px;
+}
 
- .form-container {
-    background: #fefefe;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    padding: 40px;
- }
+.container {
+	max-width: 900px;
+	margin: 50px auto;
+	background-color: #fff;
+	padding: 30px;
+	border-radius: 10px;
+	/*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+}
+
+.form-container {
+	background: #fefefe;
+	box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px
+		rgba(255, 255, 255, 0.8);
+	border-radius: 20px;
+	padding: 40px;
+}
+
 table {
 	text-align: left;
 	padding: 50px;
@@ -50,25 +51,25 @@ th, td {
 }
 
 .file_input {
-	width: 100%;
+	width: 90%;
 	position: relative;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  font-size: 16px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	font-size: 16px;
 }
 
 .pro_photo, .pro_main_photo {
-	width: 85px;
+	width: 90px;
 	position: absolute;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  font-size: 16px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	font-size: 16px;
 }
 
 input[type="file"] {
@@ -87,48 +88,47 @@ textarea {
 	resize: none;
 }
 
-.btn_td{
-	text-align:center;
+.btn_td {
+	text-align: center;
 }
 
-.btn_submit, .btn_cancel{
+.btn_submit, .btn_cancel {
 	margin-top: 30px;
- 	background-color: #fdfdfd; 
-    border: none; 
-    width:200px;
-    margin-right:30px;
-    padding: 15px 30px; 
-    font-size: 16px; 
-    border-radius: 20px; 
-    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff; 
-    transition: all 0.3s ease; 
+	background-color: #fdfdfd;
+	border: none;
+	width: 200px;
+	margin-right: 30px;
+	padding: 15px 30px;
+	font-size: 16px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
 }
 
-.btn_submit:hover, .btn_cancel:hover{
- box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
+.btn_submit:hover, .btn_cancel:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
-
 
 #submit, #cancel {
-	background-color: #f0f0f0; 
-    border: none; 
-    padding: 15px 30px; 
-    font-size: 16px; 
-    width:100px;
-    margin-top:20px;
-    width:210px;
-    margin-right:10px;
-    border-radius: 20px; 
-    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff; 
-    transition: all 0.3s ease; 
+	background-color: #f0f0f0;
+	border: none;
+	padding: 15px 30px;
+	font-size: 16px;
+	width: 100px;
+	margin-top: 20px;
+	width: 210px;
+	margin-right: 10px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
 }
 
-#submit:hover, #cancel:hover{
- box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
+#submit:hover, #cancel:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .modal {
-	text-align:center;
+	text-align: center;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -143,12 +143,12 @@ textarea {
 }
 
 .box {
-  width:450px;
-  height:280px;
-  overflow:auto;  
-  border:1px solid gray;
-  padding: 0 0.5em;
-  background-color: #fcfcfc;
+	width: 450px;
+	height: 280px;
+	overflow: auto;
+	border: 1px solid gray;
+	padding: 0 0.5em;
+	background-color: #fcfcfc;
 }
 
 .modal-content {
@@ -167,14 +167,14 @@ textarea {
 	float: right;
 	width: 35px;
 	line-height: 0.5rem;
-	height:35px;
+	height: 35px;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 0.25rem;
 }
 
 .close-button:hover {
-	 box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff; 
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .show-modal {
@@ -183,14 +183,13 @@ textarea {
 	transform: scale(1.0);
 	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
-
 </style>
 </head>
 <body>
 <%@ include file = "/WEB-INF/views/common/header.jsp" %>
 <div class="container">
 <div class="form-container">
-<form action="projectCreate" method="post" enctype="multipart/form-data">
+<form action="./create.do" method="post" enctype="multipart/form-data">
 	<table>
 		<tr>
 			<th>프로젝트 제목(최대 20자)</th>

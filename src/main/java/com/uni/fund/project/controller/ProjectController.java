@@ -91,7 +91,7 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 등록 페이지 IN
 	 * */
-	@RequestMapping(value="/project/projectCreateForm")
+	@RequestMapping(value="/project/create.go")
 	public String projectCreateForm() {
 		logger.info(":: projectCreateForm IN ::");
 		return "project/create";
@@ -101,17 +101,17 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 등록하기
 	 * */
-	@RequestMapping(value="/project/projectCreate", method=RequestMethod.POST)
+	@RequestMapping(value="/project/create.do", method=RequestMethod.POST)
 	public String projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo,@RequestParam Map<String, String> param, Integer mem_idx,Model model) {
 		logger.info(":: projectCreate CONTROLLER IN ::");
 		logger.info(":: Create param:{}",param);
-		String page = "project/create";
+		String page = "redirect:/project/list.go";
 		String msg = "등록실패";
 		mem_idx = 1;
 		
 		int row = projectService.projectCreate(pro_main_photo,pro_photo,param,mem_idx);
 		if(row == 1) {
-			page = "redirect:/";
+			page = "redirect:/project/list.go";
 			msg = "등록완료되었습니다. 심사가 완료될때까지 기다려주세요.";
 		}
 		model.addAttribute("msg",msg);
@@ -123,7 +123,7 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 수정페이지 IN
 	 * */
-	@RequestMapping(value = "/project/pro_update.go")
+	@RequestMapping(value = "/project/update.go")
 	public String updateGo(String pro_idx,Model model) {
 		logger.info(":: updateGo CONTROLLER IN ::");
 		logger.info("pro_idx {}",pro_idx);
@@ -135,27 +135,43 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 수정하기
 	 * */
-	@RequestMapping(value = "/project/projectUpdate.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/project/update.do", method = RequestMethod.POST)
 	public String updateProject(MultipartFile pro_main_photo, MultipartFile pro_photo, @RequestParam Map<String, String> param) {
 		logger.info(":: updateProject CONTROLLER IN ::");
 		logger.info("pro_idx:{}",param.get("pro_idx"));
 		logger.info("pro_title:{}",param.get("pro_title"));
-		String page = "redirect:/pro_update.go";
+		String page = "redirect:/project/list.go";
 		
 		int row = projectService.projectUpdate(pro_main_photo,pro_photo,param);
 		if(row == 1 ) {
-			page = "redirect:/";
+			page = "redirect:/project/detail";
 			//page = "redirect:/detail?idx=" + param.get("idx");
 		}
 		return page;
 	}
 	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 수정 버튼 클릭시 펀딩신청한 사람 체크하기
+	 * */
+	@RequestMapping(value="/project/checkFundPeople.ajax")
+	@ResponseBody
+	public Map<String, Object> checkFundPeople(Integer pro_idx){
+		logger.info(":: checkFundPeople CONTROLLER IN ::");
+		logger.info(":: checkFundPeople ::", projectService.checkFundPeople(pro_idx));
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("FundPeople", projectService.checkFundPeople(pro_idx));
+		
+		return map;
+	}
 	
 	/* *
 	 * 작성자 : 허승경
 	 * 프로젝트 리스트페이지 IN
 	 * */
-	@GetMapping(value = "/project/proList.go")
+
+	@GetMapping(value = "/project/list.go")
 	public String proList(String pro_idx,Model model, @RequestParam Map<String, Object> param) {
 		logger.info(":: proList CONTROLLER IN ::");
 		
@@ -163,6 +179,22 @@ public class ProjectController {
 		param.put("pg", String.valueOf(pg));
 
 		String category = (String) param.get("category");
+		String keyword = (String)param.get("keyword");
+		String filter = (String)param.get("filter");
+		
+		if(filter == null) {
+			filter = "recent";
+		}
+		
+		int showList = 8;
+		int spaceBlock = 5;
+		int total = projectService.projectTotalCnt(param);
+		int totalP = (total + (showList-1)) / showList;	
+		int wantStart = (pg-1) / spaceBlock*spaceBlock + 1;	
+		int endPage= wantStart + (spaceBlock-1);
+		if(endPage > totalP) endPage = totalP;
+		
+		param.put("start", (pg-1) * showList);
 		
 		List<ProjectDTO> projectList = projectService.projectList(param);
 		
@@ -171,8 +203,13 @@ public class ProjectController {
 		// 데이터 공유
 		model.addAttribute("pg", pg);
 		model.addAttribute("list", projectList);
+		model.addAttribute("startPage", wantStart);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("totalP", totalP);
+		model.addAttribute("blockScale", spaceBlock);
 		model.addAttribute("category", category);
-		
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("filter", filter);
 
 		return "project/list";
 	}
@@ -195,7 +232,7 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 리스트페이지 IN --> 좋아요 읽어오기
 	 * */
-	@RequestMapping(value="/project/projectReadLike.ajax")
+	@RequestMapping(value="/project/readLike.ajax")
 	@ResponseBody
 	public Map<String, Object> projectReadLike(int pro_idx, int mem_idx){
 		logger.info(":: projectReadLike CONTROLLER IN ::");
@@ -211,7 +248,7 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 좋아요 확인 / 추가 / 삭제
 	 * */
-	@RequestMapping(value="/project/projectCheckLike.ajax")
+	@RequestMapping(value="/project/checkLike.ajax")
 	@ResponseBody
 	public Map<String, Object> projectCheckLike(Integer pro_idx, Integer mem_idx){
 		logger.info(":: projectCheckLike CONTROLLER IN ::");
