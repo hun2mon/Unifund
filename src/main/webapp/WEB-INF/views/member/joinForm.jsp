@@ -10,37 +10,82 @@
 <link rel="stylesheet" href="resources/css/common.css" type="text/css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-//개인정보 동의 모달창 css
+
+<!--개인정보 동의 모달창 css -->
+#submit, #cancel {
+	background-color: #f0f0f0;
+	border: none;
+	padding: 15px 30px;
+	font-size: 16px;
+	width: 100px;
+	margin-top: 20px;
+	width: 210px;
+	margin-right: 10px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
+}
+
+#submit:hover, #cancel:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
+
 .modal {
-	display: none;
+	text-align: center;
 	position: fixed;
-	top: 0;
 	left: 0;
+	top: 0;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(1.1);
+	transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform
+		0.25s;
 }
 
-.modal_popup {
+.box {
+	width: 450px;
+	height: 280px;
+	overflow: auto;
+	border: 1px solid gray;
+	padding: 0 0.5em;
+	background-color: #fcfcfc;
+}
+
+.modal-content {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: white;
-	padding: 20px;
-	border-radius: 5px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	background-color: #e6e6e6;
+	padding: 1rem 1.5rem;
+	width: 500px;
+	height: 450px;
+	border-radius: 0.5rem;
 }
 
-.close_btn {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background-color: transparent;
-	border: none;
+.close-button {
+	float: right;
+	width: 35px;
+	line-height: 0.5rem;
+	height: 35px;
+	text-align: center;
 	cursor: pointer;
+	border-radius: 0.25rem;
 }
 
+.close-button:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
+
+.show-modal {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
 .left-align {
 	text-align: left;
 }
@@ -57,19 +102,12 @@ input[name="연락처 인증"] {
 	width: 65%
 }
 </style>
-
-
 </head>
 <body>
-	<div class="modal" >
-		<div class="modal_popup">
-			<h3>모달 팝업 타이틀 입니다!</h3>
-			<p>약관 내용입니다</p>
-			<button type="button" class="close_btn">닫기</button>
-		</div>
-	</div>
+
+
 	<!--end 모달 팝업-->
-	
+
 	<h3>UNIFUND 회원가입</h3>
 	<hr />
 	<form action="join.do" method="post" enctype="multipart/form-data">
@@ -91,7 +129,7 @@ input[name="연락처 인증"] {
 			</tr>
 			<tr>
 				<th>비밀번호 확인</th>
-				<td><input type="text" id="mem_confirm"
+				<td><input type="password" id="mem_confirm"
 					placeholder="비밀번호를 입력하세요" /><span id="msg"></span></td>
 			</tr>
 			<tr>
@@ -156,8 +194,8 @@ input[name="연락처 인증"] {
 					placeholder="상세주소를 입력하세요" /></td>
 			</tr>
 			<tr>
-				<td><input type="checkbox" name="mem_consent" class="consent_checkbox" /></td>
-				<th><a href="#" class="modal_btn">개인정보 수집 및 이용 동의에 동의합니다</a></th>
+			<td colspan="2"><input type="checkbox" name="mem_consent" class="mem_consent" disabled><a class="agreement">&nbsp(필수)개인정보 수집 및 이용 동의에 동의합니다</a></td>
+			<input name="mem_consent" type="hidden" value="Y"/>
 			</tr>
 			<tr>
 				<!-- button 태그에 type="button" 을 넣으면 submit 기능이 사라진다. -->
@@ -166,20 +204,33 @@ input[name="연락처 인증"] {
 
 		</table>
 	</form>
+	
+	<div class="modal"> 
+	<div class="modal-content"> 
+	<span class="close-button"><h2>X</h2></span> 
+		<h3 class="title">개인정보 수집 및 이용동의</h3> 
+		<div class="box">
+			<p>
+				제1조 (목적)<br></br> 본 이용약관은 개인정보 보호 및 이용에 관한 사항을 명확히 하고, 이를 준수함으로써
+				이용자의 권익을 보호하는 것을 목적으로 합니다.</br> </br> 제2조 (수집하는 개인정보의 항목 및 이용 목적)</br> 수집하는 개인정보의
+				항목: 성명, 생년월일, 주소, 전화번호, 이메일 주소 등 이용 목적: 서비스 제공, 고객 문의 응대, 이벤트 참여 및
+				당첨 안내, 서비스 개선 및 제공, 고객 서비스 관리 등</br> </br> 제3조 (개인정보의 보유 및 이용기간) 개인정보의 보유 기간은
+				이용자가 서비스를 이용하는 동안 유지되며, 이용목적 달성 시에는 지체 없이 파기됩니다. 법령에 따라 보존할 필요가 있는
+				경우 관련 법령의 규정에 따라 보존됩니다.</br> </br> 제4조 (개인정보의 제공) 개인정보는 이용자의 동의 없이 타인에게 제공되지
+				않으며, 법령에 의해 요구되는 경우에 한하여 제외됩니다. 외부 업체에 개인정보를 제공할 필요가 있는 경우, 이용자에게
+				사전 동의를 얻은 후에 제공됩니다.</br> </br> 제5조 (이용자의 권리) 이용자는 본인의 개인정보에 대해 열람, 정정, 삭제를
+				요청할 수 있습니다. 개인정보의 정정 및 삭제를 요청하는 경우, 이에 따른 처리는 신속히 이루어집니다.</br> </br> 제6조
+				(개인정보의 안전성 확보 조치) 개인정보의 안전성 확보를 위해 필요한 기술적, 관리적 조치를 취합니다. 개인정보 관련
+				취급 직원에 대한 교육을 실시하고 있으며, 개인정보보호를 위한 정기적인 감사를 실시합니다. 위의 내용에 동의합니다.
+			</p>
+		</div>
+			<input type="button" id="submit" value="동의"> 
+			<input type="button" id="cancel" value="취소">
+	</div>
+</div>
 </body>
 <script>
 
-$(document).ready(function(){
-    // 모달 팝업 열기
-    $(".modal_btn").click(function(){
-        $(".modal").fadeIn();
-    });
-
-    // 모달 팝업 닫기
-    $(".close_btn").click(function(){
-        $(".modal").fadeOut();
-    });
-});
 
 function showFirstAlert() {
     alert("인증번호를 확인 해주세요!");
@@ -190,18 +241,16 @@ function showSecondAlert() {
   }
   
 
-
-	var overChk = false;
-
-	$('#confirm').on('keyup',function(){
-		if($('input[name="mem_pw"]').val() == $(this).val()){
-			$('#msg').html('비밀번호가 일치 합니다.');
-			$('#msg').css({'color':'green'});
-		}else{
-			$('#msg').html('비밀번호가 일치하지 않습니다.');
-			$('#msg').css({'color':'red'});
-		}
-	});
+$('#mem_confirm').on('keyup', function(){
+    if($('input[name="mem_pw"]').val() == $(this).val()){
+        $('#msg').html('비밀번호가 일치 합니다.');
+        $('#msg').css({'color':'green'});
+    }else{
+        $('#msg').html('비밀번호가 일치하지 않습니다.');
+        $('#msg').css({'color':'red'});
+    }
+});
+	
 	
 	
 	
@@ -222,7 +271,14 @@ function showSecondAlert() {
 		var $post = $('input[name="mem_post"]');
 		var $addr = $('input[name="mem_addr"]');
 		var $detail = $('input[name="mem_detail"]');
-				
+		var $consent = $('input[name="mem_consent"]:checked');
+		var $profilePhoto = $('input[name="profilePhoto"]');
+		var $cor = $('input[name="mem_cor"]');
+		
+
+		
+		
+		
 		if(overChk == false){
 			alert('중복 체크를 해 주세요!');
 			$id.focus();
@@ -238,8 +294,8 @@ function showSecondAlert() {
 		}else if($birth.val()==''){
 			alert('생년월일을 입력 해 주세요!');			
 			$birth.focus();
-		}else if($number.val()==''){
-			alert('연락처를 입력 해 주세요!');			
+		}else if($number.val()=='' || !/^[0-9-]+$/.test($number.val())){
+			alert('연락처를 입력 해 주세요! (숫자와 하이픈만 허용됩니다.)');			
 			$number.focus();
 		}else if($confirm.val()==''){
 			alert('인증번호를 입력 해 주세요!');			
@@ -268,8 +324,52 @@ function showSecondAlert() {
 		}else if($detail.val()==''){
 			alert(' 상세주소를 입력 해 주세요!');			
 			$detail.focus();
+		}else if($consent.val()== null){
+			alert(' 개인정보 수집 및 이용에 동의해주세요!');			
+			$consent.focus();
+		} else if($profilePhoto.val()==''){
+		        alert('프로필 사진을 첨부해 주세요!'); 
+		    $profilePhoto.focus();   
+		} else if($cor.val()==''){
+	        alert('재학증명서 사진을 첨부해 주세요!'); 
+	    $cor.focus(); 
+	
+	   
+	    
+			
 				
 			}else{
+			
+				var $post = $('input[name="mem_post"]');
+			    var postValue = $post.val();
+			    
+			    // 우편번호가 입력되지 않았을 때
+			    if (postValue === '') {
+			        alert('우편번호를 입력해 주세요!');
+			        $post.focus();
+			        return false;
+			    }
+			    
+			    // 입력된 값이 숫자로만 이루어져 있는지 확인
+			    if (!/^\d+$/.test(postValue)) {
+			        alert('우편번호에는 숫자만 입력해주세요!');
+			        $post.val(''); // 입력된 값을 초기화하여 숫자만 입력하도록 유도
+			        return false; // 숫자가 아닌 문자가 포함되어 있으므로 회원가입을 중단
+			        
+			    }
+			    
+		        // 이메일에 '@' 포함 여부 확인
+		        var $email = $('input[name="mem_email"]');
+		        var emailValue = $email.val();
+		        
+		        if (emailValue.indexOf('@') === -1) {
+		            alert('이메일 주소에는 "@"가 포함되어야 합니다!');
+		            $email.focus();
+		            return false; // 폼 제출 방지
+		        }
+			    
+
+			    
 			// 데이터 넣기 전에 확인
 			var regExp = new RegExp('[a-zA-Zㄱ-ㅎ가-힣]');
 			var $birth = $('input[name="mem_birth"]');
@@ -295,8 +395,7 @@ function showSecondAlert() {
 		
 	}
 	
-	
-	
+
 	function overlay() {
 		console.log('click');
 		var id = $('input[name="mem_id"]').val();
@@ -322,5 +421,39 @@ function showSecondAlert() {
 			} 
 		});
 	}
+	
+	var modal = document.querySelector(".modal"); 
+	var agreement = document.querySelector(".agreement"); 
+	var close = document.querySelector(".close-button"); 
+	var cancel = document.querySelector("#cancel");
+
+	function openModal() { 
+	    modal.classList.toggle("show-modal"); 
+	}
+
+	function onClick(event) { 
+	    if (event.target == modal) { 
+	    	openModal(); 
+	    } 
+	}
+
+	agreement.addEventListener("click", openModal); 
+	close.addEventListener("click", openModal); 
+	cancel.addEventListener("click", openModal); 
+	window.addEventListener("click", onClick); 
+
+	$('#submit').on('click',function(){
+		$('input[name="mem_consent"]').attr('checked',true);
+		openModal();
+	});
+
+	$('#cancel').on('click',function(){
+		$('input[name="mem_consent"]').attr('checked',false);
+		onClick();
+	});
+	
+	
+	
+	
 </script>
 </html>
