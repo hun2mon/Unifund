@@ -248,10 +248,29 @@ th, td {
    #mile{
       margin-left: 3;
    }
+   
+ 	.clickable-text {
+    cursor: pointer;
+    color: green; /* 클릭 가능한 링크 색상 설정 */
+    text-decoration: underline; /* 밑줄 추가 */
+	}
+	
+	.clickable-text:hover {
+	    color: darkblue; /* 마우스를 올렸을 때 색상 변경 */
+	}
+	
+	.proRep{
+		border-collapse: collapse;
+		position: fixed;
+		right:50;
+		background-color: white;
+		display: none;
+	}
+	
 </style>
 </head>
 <body>
-<%@ include file = "/WEB-INF/views/common/header.jsp" %>
+<%@ include file = "/WEB-INF/views/common/mainHeader.jsp" %>
    <hr class="hr-13">
    
    
@@ -380,7 +399,23 @@ th, td {
                  <th>작성일</th>
               </tr>
          </thead>       
-      <tbody id="repList"></tbody>   
+      <tbody id="repList">
+      		<table align="center" class="proRep">
+				<tr>
+					<th scope="col">신고 사유 <input type="text" class="category"
+						value="${project.pro_idx}" name="pro_idx" hidden>
+					</td>
+				</tr>
+				<tr>
+					<td>사유<br> <input type="text" name="repContent"></td>
+				</tr>
+				<tr>
+					<td class="button"><input type="button" value="신고"
+						onclick="report()">
+						<input type="button" onclick="repCancle()" value="취소"></td>
+				</tr>
+			</table>
+      </tbody>   
          <tr>
             <td colspan="4">
                <div class="container">
@@ -424,7 +459,7 @@ th, td {
    
    function mileageList() {
       location.href = 'mileageList.go';
-   }
+   }  
    
    function listCall(page) {
    $.ajax({
@@ -601,9 +636,10 @@ th, td {
             content += '<tr>';
               content += '<td>' + item.rep_division + '</td>';
               if (item.rns_state === '처리') {
-                  content += '<td style="color: green;"><b>' + '처리완료' + '</b></td>';
+            	  content += '<td style="color: green;"><span class="clickable-text" onclick="repComCall(' + item.rep_idx + ')"><b>' + '처리완료' + '</b></span></td>';
               } else {
                   content += '<td style="color: red;"><b>' + '처리중' + '</b></td>';
+				  
               }
               content += '<td>' + item.rep_content + '</td>';
    
@@ -613,7 +649,8 @@ th, td {
              
              content += '<td>' + repDateStr + '</td>';
              content += '</tr>';
-            
+   
+            	     	 
          } 
       }
       $('#repList').html(content);
@@ -663,10 +700,19 @@ th, td {
                  content += '<tr>';
                  content += '<td><img src="/photo/' + item.pho_name + '" style="width: 300px; height: 300px;"></td>';
                  //content += '<td><button>삭제</button></td>'
-                 content += '</tr>';       
+                 content += '</tr>';     
              }   
          } 
          $('#photoList').html(content);
+    	
       }
+      
+      function repComCall(rep_idx) {
+    	  var url = "repComCall.go?rep_idx=" + rep_idx;
+          var name = "repComCall";
+          var option = "width = 600, height = 700, top = 100, left = 200, location = no"
+          window.open(url, name, option);
+	 }
+
 </script>
 </html>

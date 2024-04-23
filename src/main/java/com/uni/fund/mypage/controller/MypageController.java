@@ -168,4 +168,16 @@ public class MypageController {
 	  mypageService.introPhoDel(phoName,userId);
 	  return null;
   }
+  
+  @RequestMapping(value="/mypage/repComCall.go")
+  public String repComCall(String rep_idx,Model model) {
+	  logger.info("repComCall.go 요청");
+	  logger.info("rep_idx 값 : " +rep_idx);
+	  MypageDTO repCon = mypageService.repComCall(rep_idx,userId);
+	  
+	  model.addAttribute("repCon",repCon);
+	  
+	  
+	  return "mypage/repComCall";
+  }
 }

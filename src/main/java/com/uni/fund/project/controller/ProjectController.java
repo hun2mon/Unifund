@@ -338,6 +338,19 @@ public class ProjectController {
 		return "redirect:/project/detail.go";
 	}
 	
+	@RequestMapping(value = "/project/report.do", method = RequestMethod.POST)
+	public String report(String pro_idx, String repContent,HttpSession session) {
+		logger.info("rep요청 들어옴");
+		logger.info("신고 사유 : " +repContent);
+		logger.info("프로젝트 번호 : " +pro_idx);
+		String mem_idx = (String) session.getAttribute("memIdx");
+		logger.info(mem_idx);
+		projectService.report(pro_idx,repContent,mem_idx);
+	
+		return "redirect:/project/detail.go?pro_idx="+pro_idx;
+	}
+	
+	
 	@RequestMapping(value = "/project/adminList.ajax")
 	@ResponseBody
 	public Map<String, Object> adminList(String category, String page, String cnt){
