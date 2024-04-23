@@ -415,7 +415,10 @@ th, td {
    }
    
    function cashCharge() {
-      location.href = 'cashCharge.go';
+	   var url = "../money/charge.go"
+       var name = "charge";
+       var option = "width = 1000, height = 500, top = 100, left = 200, location = no"
+       window.open(url, name, option);
    }
    
    function cashList() {

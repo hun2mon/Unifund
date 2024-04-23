@@ -237,7 +237,7 @@
 		<if test='param1 != " " and param1 != "전체"'>
 			where pro_state = #{param1}
 		</if>
-		order by pro_regdate desc  LIMIT #{param2},#{param3}
+		order by p.pro_idx desc  LIMIT #{param2},#{param3}
 	</select>
 	
 	<select id="search" resultType="com.uni.fund.project.dto.ProjectDTO">

@@ -103,8 +103,6 @@ span {
 			</div>
 			<thead>
 				<tr>
-					<th class="checkBox"><input type="checkbox">
-					</td>
 					<th class="proIdx">번호
 					</td>
 					<th class="userId">사용자 ID
@@ -126,7 +124,7 @@ span {
 			<tbody id="list">
 			</tbody>
 			<tr>
-	      		<td colspan="9">
+	      		<td colspan="8">
 					<div class="container">                           
 	               		<nav aria-label="Page navigation" style="text-align:center">
 	                		<ul class="pagination" id="pagination"></ul>
@@ -135,9 +133,6 @@ span {
 	      		</td>
       		</tr>
 		</table>
-		<div class="delButton">
-			<button>삭제</button>
-		</div>
 	</div>
 </body>
 <script>
@@ -212,7 +207,6 @@ span {
 		for (item of list) {
 			
 			content += '<tr>';
-			content += '<td class="checkBox"><input type="checkbox"></td>';
 			content += '<td class="proIdx">' + item.pro_idx + '</td>';
 			content += '<td class="userId">' + item.mem_id + '</td>';
 			content += '<td class="proTitle"><a href="detail.go?pro_idx=' + item.pro_idx + '">' + item.pro_title + '</a></td>';

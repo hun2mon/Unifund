@@ -11,7 +11,7 @@
 </head>
 <body>
 	<header>
-		<%@ include file="/WEB-INF/views/common/mainHeader.jsp"%>
+		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 	</header>
 </body>

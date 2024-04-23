@@ -4,5 +4,19 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.money.dao.MoneyDAO">
-
+	<update id="chargeDo">
+		UPDATE member 
+			SET mem_cash = (select mem_cash from member where mem_idx = #{param2}) + #{param1} where mem_idx = #{param2}
+	</update>
+	
+	<insert id="chargeHis">
+		INSERT INTO cash(mem_idx,cash_content,cash_amount,ref_idx,cash_division)
+			VALUES (
+				#{param2},
+				'+',
+				#{param1},
+				'0',
+				'충전'
+				);
+	</insert>
 </mapper>

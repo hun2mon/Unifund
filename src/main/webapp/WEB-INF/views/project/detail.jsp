@@ -25,8 +25,9 @@ div.div_main {
 .div_right {
 	width: 510px;
 	height: 900px;
-	background-color: FFFFCC;
-	margin-top: 10;
+	background-color: rgba(255, 255, 255, 0.15);
+	margin-top: 50;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 div.div_left {
@@ -58,21 +59,26 @@ div.div_left {
 }
 
 .project_bookmark {
-	margin-left: 60;
-	right: 0;
+    width: 220;
+    margin: 0 280;
 }
 
 .project_good {
 	margin-left: 5;
 }
 
+.project_delete{
+    width: 210;
+    display: flex;
+}
+
 .project_title {
 	font-size: 20px;
 	font-weight: 600;
-	width: 220;
+	width: 500;
 }
 
-.middle_top, .middle_middle, .middle_bottom, .money, .buy_reword,
+ .middle_middle, .middle_bottom, .money, .buy_reword,
 	.total_price, .mileage {
 	display: flex;
 }
@@ -94,13 +100,19 @@ div.div_left {
 }
 
 hr {
+    border: 1px solid;
 	margin: 0;
 	margin-top: 5;
 }
 
 .quantity {
-	margin-left: 300;
+	width: 0;
 }
+
+.quan{
+	margin-left: 315;
+}
+
 
 input[type=number] {
 	width: 50;
@@ -130,6 +142,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .mileage_form>div {
 	padding: 7;
+	width: 500;
 }
 
 .mileage_value, .use_mileage_value {
@@ -196,6 +209,10 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .more_review {
 	text-align: center;
+}
+
+.use_mileage_value{
+	margin-left:  410;
 }
 
 .div_review {
@@ -297,6 +314,8 @@ input[name=reportContent] {
 .category {
 	width: 70;
 }
+
+
 </style>
 </head>
 <body>
@@ -327,6 +346,7 @@ input[name=reportContent] {
 				<div class="top_middle">
 					<div class="middle_top">
 						<div class="project_title">${project.pro_title}</div>
+						<c:if test="${mem_Idx == project.mem_idx}">
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
 								onclick="delFrom()">
@@ -347,10 +367,10 @@ input[name=reportContent] {
 									</tr>
 								</table>
 							</form>
-						</div>
-						<div class="buy_list">
 							<button class="buy_but" onclick="appListCall()">구매자 리스트</button>
 						</div>
+						</c:if>
+							
 						<div class="project_bookmark">
 							<button onclick="proFavorite()" class="favorites">즐겨찾기</button>
 							<button onclick="proLike(this)" class="like">좋아요</button>
@@ -381,9 +401,9 @@ input[name=reportContent] {
 				</div>
 				<div class="bottom_top">
 					<div class="reword_name">${project.rew_name}</div>
-					<div class="ori_price" style="text-decoration: line-through">${project.ori_price}</div>
+					<div class="ori_price" style="text-decoration: line-through">${project.ori_price}원</div>
 					<div class="buy_reword">
-						<div class="reword_price">>> ${project.rew_price}</div>
+						<div class="reword_price">>> ${project.rew_price}원</div>
 						<div class="quantity">
 							<input type="number" value="1" class="quan"
 								onclick="click_price()" onkeyup="click_price()" min="1">
@@ -396,7 +416,7 @@ input[name=reportContent] {
 				<div class="bottom">
 					<div class="total_price">
 						<div>총 리워드 금액</div>
-						<div class="final_price">${project.rew_price}</div>
+						<div class="final_price">${project.rew_price}원</div>
 					</div>
 					<div>
 						마일리지 사용 <input type="checkbox" class="mileageCheck"
@@ -602,7 +622,7 @@ input[name=reportContent] {
 	function click_price(){
 		var quantitys = $('.quan').val();
 		var price = ${project.rew_price} * quantitys;
-		$('.final_price').html(price);
+		$('.final_price').html(price + '원');
 	}
 	
 	var cnt = 0;
@@ -807,6 +827,7 @@ input[name=reportContent] {
 	if (msg != '') {
 		alert(msg);
 	}
+
 
 </script>
 </html>

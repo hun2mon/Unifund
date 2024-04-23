@@ -30,7 +30,7 @@ public class ProjectService {
 	@Autowired
 	ProjectDAO projectDAO;
 
-	public String file_root = "/Users/hsg/upload/Unifund";
+	public String file_root = "/Users/jeounghun/upload/Unifund/";
 
 	public ProjectDTO detail(String pro_idx,String memIdx) {
 		logger.info("pro_idx : {}",pro_idx);

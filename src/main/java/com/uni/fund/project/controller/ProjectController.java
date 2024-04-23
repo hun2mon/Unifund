@@ -29,13 +29,14 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 
+	
 	@RequestMapping(value = "/project/detail.go")
 	public String detail(Model model, HttpSession session, String row, String pro_idx) {
 		String page = "project/detail";
 		
 		session.setAttribute("loginId", "admin");
 		session.setAttribute("memIdx", "1");
-		model.addAttribute("mem_idx",1);
+		model.addAttribute("mem_idx",2);
 		
 		String pro_idxState= projectService.stateCheck(pro_idx);
 		if (pro_idxState.equals("A")) {
