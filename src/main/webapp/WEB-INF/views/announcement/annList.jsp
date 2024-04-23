@@ -117,7 +117,7 @@ function drawList(list){
 	      content += '</tr>';
 	   }
 	   
-	   $('tbody').html(content);
+	   $('#list').append(content);
 	}
 
 	
