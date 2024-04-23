@@ -693,7 +693,7 @@ th, td {
          var content = '';
          if (list.length === 0) {
              content += '<tr>';
-             content += '<td><img src="/photo/no_image.jpg" style="width: 300px; height: 300px;"></td>';
+             content += '<td><img src="../resources/project_img/noImg.png" style="width: 300px; height: 300px;"></td>';
              content += '</tr>';  
          } else {
              for (item of list) {

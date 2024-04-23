@@ -81,6 +81,7 @@
    .out{
      margin-left: -48%;
     margin-right: 105px;
+        margin-top: -12px;
    }
    
    input[readonly] {
@@ -208,25 +209,25 @@
 		var $bank = $('input[name="bank"]');
 		
 		if ($number.val() == '') {
-			alert('연락처를 입력 해 주세요!');
+			alert('연락처를 입력해 주세요!');
 			$number.focus();
 		}else if ($post.val() == '') {
-			alert('우편번호 입력 해 주세요!');
+			alert('우편번호 입력해 주세요!');
 			$post.focus();
 		}else if ($addr.val() == '') {
-			alert('주소를 입력 해 주세요!');
+			alert('주소를 입력해 주세요!');
 			$addr.focus();
 		}else if ($detail.val() == '') {
-			alert('상세주소를 입력 해 주세요!');
+			alert('상세주소를 입력해 주세요!');
 			$detail.focus();
 		}else if ($email.val() == '') {
-			alert('이메일 입력 해 주세요!');
+			alert('이메일 입력해 주세요!');
 			$email.focus();	
 		}else if ($bankName.val() == null) {
-			alert('은행명 체크 해 주세요!');	
+			alert('은행명 체크해 주세요!');	
 			$bankName.focus();
 		}else if ($bank.val() == null) {
-			alert('계좌번호 체크 해 주세요!');	
+			alert('계좌번호 체크해 주세요!');	
 			$bank.focus();
 		}else{
 			$('form').submit();

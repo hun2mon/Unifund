@@ -4,5 +4,18 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.admin.dao.ReportDAO">
-
+	<select id="adminList" resultType="com.uni.fund.admin.dto.ReportDTO">
+		SELECT rep_idx,mem_idx,ref_idx,rep_content,rep_date,rep_division,rns_state
+		FROM report
+		<if test='param1 != " " and param1 != "전체"'>
+			where rep_division = #{param1}
+		</if>
+		order by rep_idx DESC  LIMIT #{param2},#{param3}
+	</select>
+	<select id="adminAllCount" resultType="int">
+		SELECT CEIL(COUNT(rep_idx)/#{param2}) AS pages FROM report
+		<if test='param1 != " " and param1 != "전체"'>
+			where rep_division = #{param1}
+		</if>
+	</select>
 </mapper>

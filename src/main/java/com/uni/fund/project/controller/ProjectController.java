@@ -57,7 +57,7 @@ public class ProjectController {
 		return page;
 	}
 	
-
+	
 	
 	@RequestMapping(value = "/project/appList.go")
 	public String appListGo(Model model, String pro_idx) {

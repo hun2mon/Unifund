@@ -840,8 +840,19 @@ input[name=repContent] {
 	}
 	
 	function report() {
-		alert('신고되었습니다.');
-		$('.report').submit();
+
+		var repContent = $('input[name="repContent"]').val(); // input 요소의 name 속성이 "repContent"인 것을 가져옵니다.
+	    var charLength = repContent.length;
+	    
+	    if (charLength > 750) {
+	        alert('내용은 750자 이내로 입력해 주세요!');
+	    } else if (repContent.trim() === '') {
+	        alert('내용을 입력해 주세요!');
+	    } else {
+	        alert('신고되었습니다.');
+	        $('.report').submit();
+	    }
+		
 	}
 </script>
 </html>
