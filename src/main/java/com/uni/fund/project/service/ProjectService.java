@@ -31,8 +31,10 @@ public class ProjectService {
 
 	public String file_root = "/Users/hsg/upload/Unifund";
 
-	public ProjectDTO detail(String memIdx) {
-		return projectDAO.detail(memIdx);
+	public ProjectDTO detail(String pro_idx,String memIdx) {
+		logger.info("pro_idx : {}",pro_idx);
+		logger.info("memIdx : {}",memIdx);
+		return projectDAO.detail(memIdx,pro_idx);
 	}
 	
 	/* *
@@ -286,14 +288,16 @@ public class ProjectService {
 		return	projectDAO.revDel(rev_idx);
 	}
 
-	public Map<String, Object> list(int currPage, int pagePerCnt) {
+	public Map<String, Object> list(int currPage, int pagePerCnt, String pro_idx) {
 		int start = (currPage-1) * pagePerCnt;
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt);
+		List<ProjectDTO> list = projectDAO.appListCall(start,pagePerCnt,pro_idx);
+		logger.info("service_pro_idx = " +pro_idx);
 		result.put("list", list);
 		result.put("currPage", currPage);
-		result.put("totalPages", projectDAO.allCount(pagePerCnt));
+		result.put("totalPages", projectDAO.allCount(pagePerCnt,pro_idx));
+		logger.info("tatalPage = " + projectDAO.allCount(pagePerCnt,pro_idx));
 		return result;
 	}
 
@@ -313,8 +317,36 @@ public class ProjectService {
 		
 	}
 
-	public List<ProjectDTO> adminList() {
-		return projectDAO.adminList();
+	public Map<String, Object> adminList(String category, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<ProjectDTO> list = projectDAO.adminList(category,start,pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", projectDAO.adminAllCount(category,pagePerCnt));
+		
+		return result;
+	}
+
+	public Map<String, Object> search(String keyWord, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<ProjectDTO> list = projectDAO.search(keyWord, start, pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", projectDAO.searchAllCount(keyWord, pagePerCnt));
+		logger.info(projectDAO.searchAllCount(keyWord, pagePerCnt) + "asdfasd");
+		return result;
+	}
+
+	public String stateCheck(String pro_idx) {
+		return projectDAO.stateCheck(pro_idx);
+	}
+
+	public void agree(String pro_idx) {
+		projectDAO.agree(pro_idx);
+		projectDAO.agreeHis(pro_idx);
+		
 	}
 
 }

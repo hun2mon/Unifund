@@ -10,7 +10,9 @@
 </style>
 </head>
 <body>
-
+	<header>
+		<%@ include file="/WEB-INF/views/common/mainHeader.jsp"%>
+	</header>
 </body>
 <script>
 
