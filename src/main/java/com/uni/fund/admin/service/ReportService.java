@@ -27,5 +27,25 @@ public class ReportService {
 		result.put("totalPages", reportDAO.adminAllCount(category,pagePerCnt));
 		return result;
 	}
+	public Map<String, Object> search(String keyWord, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<ReportDTO> list = reportDAO.search(keyWord, start, pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", reportDAO.searchAllCount(keyWord, pagePerCnt));
+		logger.info(reportDAO.searchAllCount(keyWord, pagePerCnt) + "asdfasd");
+		return result;
+		
+	}
+	public ReportDTO adminDetail(String rep_idx) {
+		
+		return reportDAO.adminDetail(rep_idx);
+	}
+	public void transContent(int refIdx,int mem_idx,String transContent,int cateRefIdx,String cate) {
+		reportDAO.changeStatus(refIdx);
+		reportDAO.transContent(refIdx,mem_idx,transContent,cateRefIdx,cate);
+		
+	}
 	
 }

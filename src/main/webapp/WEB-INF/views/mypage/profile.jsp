@@ -568,7 +568,7 @@ th, td {
             content += '<tr>';
              content += '<td>' + item.pro_title + '</td>';
              if (item.pro_state == 'A') {
-                 content += '<td><b>신청중</b></td>';
+                 content += '<td><b>심사중</b></td>';
              } else if (item.pro_state == 'B') {
                  content += '<td style="color: gray;"><b>펀딩완료</b></td>';
              } else if (item.pro_state == 'C') {

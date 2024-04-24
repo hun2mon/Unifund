@@ -5,9 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 <style>
 .divMain {
@@ -85,6 +82,7 @@ span {
 </style>
 </head>
 <body>
+	<%@ include file = "/WEB-INF/views/common/sideBar.jsp" %>
 	<div class="divMain">
 		<table align="center" class="proList">
 			<div class="divTop">
@@ -133,6 +131,9 @@ span {
 		</div>
 	</div>
 </body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <script>
 	var showPage = 1;
 
@@ -191,7 +192,7 @@ span {
 		var num = 1;
 		var content = '';
 		for (item of list) {
-			var shortenedContent = getByteLength(item.rep_content) > 30 ? item.rep_content.substring(0, 20) + '...' : item.rep_content;
+			 var shortenedContent = (item.rep_content && typeof item.rep_content === 'string') ? (getByteLength(item.rep_content) > 30 ? item.rep_content.substring(0, 20) + '...' : item.rep_content) : '';
 			content += '<tr>';
 			content += '<td class="checkBox"><input type="checkbox"></td>';
 			content += '<td class="repIdx">' + item.rep_idx + '</td>';
@@ -199,7 +200,7 @@ span {
 			content += '<td class="repContent"><a href="adminDetail.go?rep_idx=' + item.rep_idx + '">' + shortenedContent + '</a></td>';
 			var date = new Date(item.rep_date);
 			var dateStr = date.toLocaleDateString("ko-KR");//en_US
-			content += '<td class="repIdx">' + item.mem_idx + '</td>';
+			content += '<td class="repIdx">' + item.mem_id + '</td>';
 			content += '<td class="repDate">' + dateStr + '</td>';
 			content += '<td class="repState">' + item.rns_state + '</td>';
 			content += '</tr>';

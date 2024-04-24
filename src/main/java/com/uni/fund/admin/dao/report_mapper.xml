@@ -5,12 +5,12 @@
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.admin.dao.ReportDAO">
 	<select id="adminList" resultType="com.uni.fund.admin.dto.ReportDTO">
-		SELECT rep_idx,mem_idx,ref_idx,rep_content,rep_date,rep_division,rns_state
-		FROM report
+		SELECT r.rep_idx,r.ref_idx,r.rep_content,r.rep_date,r.rep_division,r.rns_state,m.mem_id
+		FROM report r left join member m on r.mem_idx = m.mem_idx  	
 		<if test='param1 != " " and param1 != "전체"'>
 			where rep_division = #{param1}
 		</if>
-		order by rep_idx DESC  LIMIT #{param2},#{param3}
+		order by rep_idx DESC  LIMIT #{param2},#{param3};
 	</select>
 	<select id="adminAllCount" resultType="int">
 		SELECT CEIL(COUNT(rep_idx)/#{param2}) AS pages FROM report
@@ -18,4 +18,28 @@
 			where rep_division = #{param1}
 		</if>
 	</select>
+	<select id="search" resultType="com.uni.fund.admin.dto.ReportDTO">
+		SELECT r.rep_idx,r.ref_idx,r.rep_content,r.rep_date,r.rep_division,r.rns_state,m.mem_id
+		FROM report r left join member m on r.mem_idx = m.mem_idx 
+		WHERE m.mem_id like concat('%',#{param1},'%') OR rep_content like concat('%',#{param1},'%')
+		ORDER BY rep_idx desc LIMIT #{param2},#{param3}
+	</select>
+	<select id="searchAllCount" resultType="int">
+		SELECT CEIL(COUNT(rep_idx)/#{param2}) AS pages 
+		FROM report r left join member m on r.mem_idx = m.mem_idx 
+		WHERE m.mem_id like concat('%',#{param1},'%') OR rep_content like concat('%',#{param1},'%')
+	</select>
+	<select id="adminDetail" resultType="com.uni.fund.admin.dto.ReportDTO">
+		SELECT r.rep_idx,r.ref_idx,r.rep_content,r.rep_date,r.rep_division,r.rns_state,m.mem_id,
+			(select trans_content FROM rep_trans WHERE rep_idx = #{param1})as trans_content
+		FROM report r left join member m on r.mem_idx = m.mem_idx  	
+		where rep_idx = #{param1};
+	</select>
+	<update id="changeStatus" parameterType="int">
+		UPDATE report SET rns_state = "처리" WHERE rep_idx = #{param1};
+	</update>
+	<insert id="transContent">
+		INSERT INTO rep_trans (rep_idx ,mem_idx,trans_content,ref_idx,rep_division)
+			Values(#{param1},#{param2},#{param3},#{param4},#{param5});
+	</insert>
 </mapper>

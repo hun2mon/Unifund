@@ -219,9 +219,10 @@ span {
 			var date = new Date(item.pro_deadline);
 			var dateStr = date.toLocaleDateString("ko-KR");//en_US
 			content += '<td class="proDeadLine">' + dateStr + '</td>';
-			content += '<td class="rewPrice">' + Number(item.rew_price).toLocaleString()  + '원</td>';
-			content += '<td class="targerPrice">' + Number(item.target_price).toLocaleString() + '원</td>';
-			content += '<td class="progress">' + item.progress + '%</td>';
+			content += '<td class="rewPrice">' + (item.rew_price !== null ? Number(item.rew_price).toLocaleString() : '') + '원</td>';
+			content += '<td class="targerPrice">' + (item.target_price !== null ? Number(item.target_price).toLocaleString() : '') + '원</td>';
+			content += '<td class="progress">' + (item.progress !== null ? item.progress + '%' : '') + '</td>';
+
 			var state = '';
 			if (item.pro_state == 'A') {
 				state = '심사중';

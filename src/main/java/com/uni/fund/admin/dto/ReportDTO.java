@@ -10,6 +10,22 @@ public class ReportDTO {
 	private Date rep_date;
 	private String rep_division;
 	private String rns_state;
+	private String mem_id;
+	private String trans_content;
+	
+	
+	public String getTrans_content() {
+		return trans_content;
+	}
+	public void setTrans_content(String trans_content) {
+		this.trans_content = trans_content;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
+	}
 	public int getRep_idx() {
 		return rep_idx;
 	}
