@@ -21,7 +21,7 @@ public class AnnouncementController {
 	@Autowired AnnouncementService annService;
 	
 	
-	@RequestMapping("/annList")
+	@RequestMapping("/annList.go")
 	public String annList(Model model) {
 		logger.info("annList요청");
 		return "announcement/annList";
@@ -36,6 +36,21 @@ public class AnnouncementController {
 		int currPage = Integer.parseInt(page);
 		int pagePerCnt = Integer.parseInt(cnt);
 		Map<String, Object> map = annService.annList(currPage,pagePerCnt);
+		return map;
+	}
+	
+	@RequestMapping(value = "/annListSearch.ajax")
+	@ResponseBody
+	public Map<String, Object> annListSearch(String keyWord, String page, String cnt){
+		
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+		logger.info("keyword:::"+ keyWord);
+
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = annService.annListSearch(keyWord,currPage,pagePerCnt);
 		return map;
 	}
 	

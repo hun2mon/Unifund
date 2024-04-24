@@ -14,6 +14,10 @@ public interface AnnouncementDAO {
 
 	void createNotiPhoto(int noti_idx, String newAnnFileName, String noti_photoDiv);
 
+	List<AnnouncementDTO> annListSearch(String keyWord, int pagePerCnt, int pagePerCnt2);
+
+	int searchAllCount(String keyWord, int pagePerCnt);
+
 
 
 }

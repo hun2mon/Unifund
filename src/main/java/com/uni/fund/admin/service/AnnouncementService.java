@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.admin.dao.AnnouncementDAO;
 import com.uni.fund.admin.dto.AnnouncementDTO;
+import com.uni.fund.project.dto.ProjectDTO;
 
 @Service
 public class AnnouncementService {
@@ -86,30 +87,47 @@ public class AnnouncementService {
  		
 	}
 
+	public Map<String, Object> annListSearch(String keyWord, int currPage, int pagePerCnt) {
+	    int start = (currPage - 1) * pagePerCnt;
+	    
+	    List<AnnouncementDTO> list = annDAO.annListSearch(keyWord, start, pagePerCnt); // 검색어를 LIKE 연산자로 감싸서 전달
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    int totalCount = annDAO.searchAllCount(keyWord,pagePerCnt ); // 검색 결과에 대한 총 공지사항 수 가져오기
+	    int totalPages = (int) Math.ceil(totalCount / pagePerCnt); // 전체 페이지 수 계산	
+	    
+	    logger.info(totalCount+"asdfasd"+totalPages);
+	    
+	    result.put("annList", list);
+	    result.put("currPage", currPage);
+	    result.put("totalPages", totalCount); // 검색어를 LIKE 연산자로 감싸서 전달
+//	    logger.info(annDAO.searchAllCount(keyWord, pagePerCnt) + "asdfasd");
+	    return result;
+	}
+	
+	
+	
+	
+	
+//	
+//	public Map<String, Object> annListSearch(String keyWord, int currPage, int pagePerCnt) {
+//	    int start = (currPage - 1) * pagePerCnt;
+//	    List<AnnouncementDTO> list = annDAO.annListSearch(keyWord, start, pagePerCnt);
+//	    int totalCount = annDAO.searchAllCount("%" + keyWord + "%"); // 검색 결과에 대한 총 공지사항 수 가져오기
+//	    int totalPages = (int) Math.ceil((double) totalCount / pagePerCnt); // 전체 페이지 수 계산
+//	    Map<String, Object> result = new HashMap<String, Object>();
+//	    result.put("annList", list);
+//	    result.put("currPage", currPage);
+//	    result.put("totalPages", totalPages); // 검색 결과에 대한 전체 페이지 수 전달
+//	    return result;
+//	}
+
 	
 	
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	
