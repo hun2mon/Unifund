@@ -10,9 +10,8 @@
 <link rel="stylesheet" href="resources/css/common.css" type="text/css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-
-<!--개인정보 동의 모달창 css -->
-#submit, #cancel {
+<!--
+개인정보 동의 모달창 css -->#submit, #cancel {
 	background-color: #f0f0f0;
 	border: none;
 	padding: 15px 30px;
@@ -86,6 +85,7 @@
 	transform: scale(1.0);
 	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
+
 .left-align {
 	text-align: left;
 }
@@ -118,9 +118,8 @@ input[name="연락처 인증"] {
 			</tr>
 			<tr>
 				<th>아이디</th>
-				<td><input type="text" name="mem_id"
-					placeholder="프로필 사진을 첨부하세요" /> <input type="button" value="아이디체크"
-					onclick="overlay()" /></td>
+				<td><input type="text" name="mem_id" placeholder="프로필 사진을 첨부하세요" />
+				 <input type="button" value="아이디체크" onclick="overlay()"/></td>
 			</tr>
 			<tr>
 				<th>비밀번호</th>
@@ -194,8 +193,10 @@ input[name="연락처 인증"] {
 					placeholder="상세주소를 입력하세요" /></td>
 			</tr>
 			<tr>
-			<td colspan="2"><input type="checkbox" name="mem_consent" class="mem_consent" disabled><a class="agreement">&nbsp(필수)개인정보 수집 및 이용 동의에 동의합니다</a></td>
-			<input name="mem_consent" type="hidden" value="Y"/>
+				<td colspan="2"><input type="checkbox" name="mem_consent"
+					class="mem_consent" disabled><a class="agreement">&nbsp(필수)개인정보
+						수집 및 이용 동의에 동의합니다</a></td>
+				<input name="mem_consent" type="hidden" value="Y" />
 			</tr>
 			<tr>
 				<!-- button 태그에 type="button" 을 넣으면 submit 기능이 사라진다. -->
@@ -204,33 +205,32 @@ input[name="연락처 인증"] {
 
 		</table>
 	</form>
-	
-	<div class="modal"> 
-	<div class="modal-content"> 
-	<span class="close-button"><h2>X</h2></span> 
-		<h3 class="title">개인정보 수집 및 이용동의</h3> 
-		<div class="box">
-			<p>
-				제1조 (목적)<br></br> 본 이용약관은 개인정보 보호 및 이용에 관한 사항을 명확히 하고, 이를 준수함으로써
-				이용자의 권익을 보호하는 것을 목적으로 합니다.</br> </br> 제2조 (수집하는 개인정보의 항목 및 이용 목적)</br> 수집하는 개인정보의
-				항목: 성명, 생년월일, 주소, 전화번호, 이메일 주소 등 이용 목적: 서비스 제공, 고객 문의 응대, 이벤트 참여 및
-				당첨 안내, 서비스 개선 및 제공, 고객 서비스 관리 등</br> </br> 제3조 (개인정보의 보유 및 이용기간) 개인정보의 보유 기간은
-				이용자가 서비스를 이용하는 동안 유지되며, 이용목적 달성 시에는 지체 없이 파기됩니다. 법령에 따라 보존할 필요가 있는
-				경우 관련 법령의 규정에 따라 보존됩니다.</br> </br> 제4조 (개인정보의 제공) 개인정보는 이용자의 동의 없이 타인에게 제공되지
-				않으며, 법령에 의해 요구되는 경우에 한하여 제외됩니다. 외부 업체에 개인정보를 제공할 필요가 있는 경우, 이용자에게
-				사전 동의를 얻은 후에 제공됩니다.</br> </br> 제5조 (이용자의 권리) 이용자는 본인의 개인정보에 대해 열람, 정정, 삭제를
-				요청할 수 있습니다. 개인정보의 정정 및 삭제를 요청하는 경우, 이에 따른 처리는 신속히 이루어집니다.</br> </br> 제6조
-				(개인정보의 안전성 확보 조치) 개인정보의 안전성 확보를 위해 필요한 기술적, 관리적 조치를 취합니다. 개인정보 관련
-				취급 직원에 대한 교육을 실시하고 있으며, 개인정보보호를 위한 정기적인 감사를 실시합니다. 위의 내용에 동의합니다.
-			</p>
+
+	<div class="modal">
+		<div class="modal-content">
+			<span class="close-button"><h2>X</h2></span>
+			<h3 class="title">개인정보 수집 및 이용동의</h3>
+			<div class="box">
+				<p>
+					제1조 (목적)<br></br> 본 이용약관은 개인정보 보호 및 이용에 관한 사항을 명확히 하고, 이를 준수함으로써
+					이용자의 권익을 보호하는 것을 목적으로 합니다.</br> </br> 제2조 (수집하는 개인정보의 항목 및 이용 목적)</br> 수집하는 개인정보의
+					항목: 성명, 생년월일, 주소, 전화번호, 이메일 주소 등 이용 목적: 서비스 제공, 고객 문의 응대, 이벤트 참여 및
+					당첨 안내, 서비스 개선 및 제공, 고객 서비스 관리 등</br> </br> 제3조 (개인정보의 보유 및 이용기간) 개인정보의 보유 기간은
+					이용자가 서비스를 이용하는 동안 유지되며, 이용목적 달성 시에는 지체 없이 파기됩니다. 법령에 따라 보존할 필요가 있는
+					경우 관련 법령의 규정에 따라 보존됩니다.</br> </br> 제4조 (개인정보의 제공) 개인정보는 이용자의 동의 없이 타인에게 제공되지
+					않으며, 법령에 의해 요구되는 경우에 한하여 제외됩니다. 외부 업체에 개인정보를 제공할 필요가 있는 경우, 이용자에게
+					사전 동의를 얻은 후에 제공됩니다.</br> </br> 제5조 (이용자의 권리) 이용자는 본인의 개인정보에 대해 열람, 정정, 삭제를
+					요청할 수 있습니다. 개인정보의 정정 및 삭제를 요청하는 경우, 이에 따른 처리는 신속히 이루어집니다.</br> </br> 제6조
+					(개인정보의 안전성 확보 조치) 개인정보의 안전성 확보를 위해 필요한 기술적, 관리적 조치를 취합니다. 개인정보 관련
+					취급 직원에 대한 교육을 실시하고 있으며, 개인정보보호를 위한 정기적인 감사를 실시합니다. 위의 내용에 동의합니다.
+				</p>
+			</div>
+			<input type="button" id="submit" value="동의"> <input
+				type="button" id="cancel" value="취소">
 		</div>
-			<input type="button" id="submit" value="동의"> 
-			<input type="button" id="cancel" value="취소">
 	</div>
-</div>
 </body>
 <script>
-
 
 function showFirstAlert() {
     alert("인증번호를 확인 해주세요!");
@@ -252,9 +252,9 @@ $('#mem_confirm').on('keyup', function(){
 });
 	
 	
-	
-	
 	function join(){
+		
+		
 		
 		var $id = $('input[name="mem_id"]');
 		var $pw = $('input[name="mem_pw"]');
@@ -335,7 +335,7 @@ $('#mem_confirm').on('keyup', function(){
 	    $cor.focus(); 
 	
 	   
-	    
+	 
 			
 				
 			}else{
@@ -368,7 +368,6 @@ $('#mem_confirm').on('keyup', function(){
 		            return false; // 폼 제출 방지
 		        }
 			    
-
 			    
 			// 데이터 넣기 전에 확인
 			var regExp = new RegExp('[a-zA-Zㄱ-ㅎ가-힣]');
@@ -383,6 +382,8 @@ $('#mem_confirm').on('keyup', function(){
 			console.log('서버로 회원가입 요청');
 			$('form').submit();//submit 버튼 역활
 			
+			
+			
 		}
 		
 		
@@ -394,7 +395,7 @@ $('#mem_confirm').on('keyup', function(){
 		alert(msg);
 		
 	}
-	
+
 
 	function overlay() {
 		console.log('click');

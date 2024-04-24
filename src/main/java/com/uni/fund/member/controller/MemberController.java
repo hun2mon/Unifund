@@ -36,7 +36,12 @@ public class MemberController {
 		logger.info("회원가입 페이지 이동");
 		return "member/joinForm";
 	}
-	
+	//id찾기 페이지 이동
+	@RequestMapping(value = "/member/findId.go")
+	public String findId() {
+		logger.info("아이디찾기 페이지 이동");
+		return "member/findId";
+	}
 	
 	
 	@RequestMapping(value="member/login.do")
