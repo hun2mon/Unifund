@@ -13,6 +13,8 @@ public class MemberDTO {
     private String mem_bank;
     private String mem_cor;
     private String mem_uni;
+    private String mem_birth;
+	private String mem_bankName;
     private Date mem_joindate;
     private String mem_status;
     private String mem_post;
@@ -23,8 +25,7 @@ public class MemberDTO {
     private int ref_idx_cnt;
     private int stop_mem_idx;
     
-
-    public int getMem_idx() {
+	public int getMem_idx() {
 		return mem_idx;
 	}
 	public void setMem_idx(int mem_idx) {
@@ -48,6 +49,12 @@ public class MemberDTO {
 	public void setMem_name(String mem_name) {
 		this.mem_name = mem_name;
 	}
+	public String getMem_birth() {
+		return mem_birth;
+	}
+	public void setMem_birth(String mem_birth) {
+		this.mem_birth = mem_birth;
+	}
 	public String getMem_number() {
 		return mem_number;
 	}
@@ -65,6 +72,12 @@ public class MemberDTO {
 	}
 	public void setMem_email(String mem_email) {
 		this.mem_email = mem_email;
+	}
+	public String getMem_bankName() {
+		return mem_bankName;
+	}
+	public void setMem_bankName(String mem_bankName) {
+		this.mem_bankName = mem_bankName;
 	}
 	public String getMem_bank() {
 		return mem_bank;

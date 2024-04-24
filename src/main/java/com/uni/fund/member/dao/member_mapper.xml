@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
-   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
->
-
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
 <mapper namespace="com.uni.fund.member.dao.MemberDAO">
 
-    <select id="memberListAjax" parameterType="map" resultType="com.uni.fund.member.dto.MemberDTO">
+	<insert id ="write" useGeneratedKeys="true" keyColumn="mem_idx" keyProperty="mem_idx" parameterType="map">
+		INSERT INTO member(mem_id, mem_pw, mem_name, mem_birth, mem_number, mem_gender, mem_email,
+		mem_bankName, mem_bank, mem_uni, mem_post, mem_addr, mem_detail)
+		VALUES(#{mem_id},#{mem_pw},#{mem_name},#{mem_birth},#{mem_number},#{mem_gender},#{mem_email},#{mem_bankName},
+		#{mem_bank},#{mem_uni},#{mem_post},#{mem_addr},#{mem_detail})
+	</insert>
+	
+	<select id="login" resultType="com.uni.fund.member.dto.MemberDTO">
+		select * from member
+	WHERE mem_id = #{param1} AND mem_pw = #{param2}
+	</select>
+	
+	<select id="memberList" resultType="com.uni.fund.member.dto.MemberDTO">
+		Select mem_idx, mem_id, mem_pw, mem_name, mem_birth, mem_number, mem_gender, mem_email,
+		mem_bankName, mem_bank, mem_cor, mem_uni, mem_joindate, mem_status, mem_post, mem_addr, mem_detail, mem_cash, mem_mileage FROM member
+	</select>
+	
+   <insert id="setPermission">
+      INSERT INTO author (id, perm)
+         VALUES (#{param1}, #{param2})
+   </insert>
+   
+   <select id="overlay" resultType="int">
+		select count(mem_id) from member where mem_id = #{param1}
+   </select>
+   
+   <select id="memberListAjax" parameterType="map" resultType="com.uni.fund.member.dto.MemberDTO">
       	SELECT m.*, COUNT(pt.ref_idx) AS ref_idx_cnt, COUNT(mm.mem_mng_idx) AS stop_mem_idx
 		FROM member m
 		LEFT JOIN rep_trans pt ON pt.ref_idx = m.mem_idx
