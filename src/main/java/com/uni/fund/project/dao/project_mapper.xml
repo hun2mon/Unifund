@@ -346,6 +346,17 @@
 				'프로젝트')	
 	</insert>
 	
+	<update id="stateChange">
+		UPDATE project SET pro_state = 
+			<if test='param2 == "A"'>
+				'B'
+			</if>
+			<if test='param2 == "B"'>
+				'C'
+			</if>
+			WHERE pro_idx = #{param1}
+	</update>
+	
 	
 	
 </mapper>

@@ -13,7 +13,7 @@
 </head>
 <body>
 	<h2>★UNIFUND LOGIN★</h2>
-	<form action="login.do" method="post">
+	<form action="/main/member/login.do" method="post">
 		<table>
             <tr>
                 <th>ID</th>
@@ -34,7 +34,7 @@
     <a href="findId.go">아이디찾기</a>
     <br>
     <a href="findid.jsp">비밀번호 변경</a>
-    <br> ${msg}
+    <br>
 </body>
 <script>
 	var msg = '${msg}';

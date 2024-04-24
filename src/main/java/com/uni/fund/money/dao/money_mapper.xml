@@ -19,4 +19,20 @@
 				'충전'
 				);
 	</insert>
+	
+	<select id="cashListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT * FROM cash WHERE mem_idx = #{param1} 
+			<if test='param2 != null'>
+				and cash_date like '${param2}'
+        	</if>
+			order by cash_date desc
+	</select>
+	
+	<select id="selectCash" resultType="int">
+		SELECT mem_cash FROM member WHERE mem_idx = #{param1}
+	</select>
+	
+	<select id="yearCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		select year(cash_date) as year from cash c group by  year(cash_date) order by cash_date desc
+	</select>
 </mapper>

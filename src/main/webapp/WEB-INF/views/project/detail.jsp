@@ -450,15 +450,19 @@ input[name=reportContent] {
 					<div>
 						<input type="text" class="path" value="${project.mem_detail}">
 					</div>
-					<div>
-						<input type="button" value="펀딩 신청하기" class="funding_button"
-							id="fund_apply" onclick="apply()">
-					</div>
-					<div>
-						<input type="button" value="펀딩 수정하기" class="funding_button"
-							id="fund_update"
-							onclick="location.href='./update.go?pro_idx=${project.pro_idx }'">
-					</div>
+					<c:if test="${mem_idx != project.mem_idx}">
+						<div>
+							<input type="button" value="펀딩 신청하기" class="funding_button"
+								id="fund_apply" onclick="applyPro()">
+						</div>
+					</c:if>
+					<c:if test="${mem_idx == project.mem_idx}">
+						<div>
+							<input type="button" value="펀딩 수정하기" class="funding_button"
+								id="fund_update"
+								onclick="location.href='./update.go?pro_idx=${project.pro_idx }'">
+						</div>
+					</c:if>
 				</div>
 			</div>
 		</div>
@@ -606,14 +610,14 @@ input[name=reportContent] {
 		$('#list').html(content);
 	};
 	
-	if ('${project.like_mem_idx}' == ${memIdx}) {
+	if ('${project.like_mem_idx}' == ${mem_idx}) {
 		$('.like').html('좋아요 취소');
 	}
 	
-	if ('${project.favorite_mem_idx}' == ${memIdx}) {
+	if ('${project.favorite_mem_idx}' == ${mem_idx}) {
 		$('.favorites').html('즐겨찾기 취소');
 	}
-	
+
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
 	} else {
@@ -640,7 +644,44 @@ input[name=reportContent] {
 		}
 	}
 	
-	function apply() {
+	if (${project.now_price} == ${project.target_price}){
+		$.ajax({
+			type:'post'
+			,url:'./stateChange.ajax'
+			,data:{
+				pro_idx:'${project.pro_idx}',
+				state:'A'
+			}
+			,dataType:'json'
+			,success:function(data){
+				if ('${project.fund_state}' != 'A') {
+					$('#fund_apply').val('펀딩마감');
+					$('#fund_apply').attr('readonly', true);
+				}
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}else{
+		$.ajax({
+			type:'post'
+			,url:'./stateChange.ajax'
+			,data:{
+				pro_idx:'${project.pro_idx}',
+				state:'B'
+			}
+			,dataType:'json'
+			,success:function(data){
+			
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+	
+	function applyPro() {
 		var quantitys = $('.quan').val();
 		var cash = '${project.cash}' + $('.use_mileage_value').val();
 		var price = ${project.rew_price} *quantitys;
@@ -670,7 +711,7 @@ input[name=reportContent] {
 						,url:'./fund.do'
 						,data:{
 							pro_idx:'${project.pro_idx}',
-							mem_idx:'1',
+							mem_idx:'${mem_idx}',
 							rew_quantity:quantitys,
 							mileage:$('.use_mileage_value').val(),
 							total_price:price,
@@ -694,7 +735,7 @@ input[name=reportContent] {
 					,url:'./fund.do'
 					,data:{
 						pro_idx:'${project.pro_idx}',
-						mem_idx:'1',
+						mem_idx:'${mem_idx}',
 						rew_quantity:quantitys,
 						mileage:$('.use_mileage_value').val(),
 						total_price:price,

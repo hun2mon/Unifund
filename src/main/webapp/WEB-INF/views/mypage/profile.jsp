@@ -422,11 +422,11 @@ th, td {
    }
    
    function cashList() {
-      location.href = 'cashList.go';
+      location.href = '/main/money/cashList.go?mem_idx=${mem_idx}';
    }
    
    function mileageList() {
-      location.href = 'mileageList.go';
+      location.href = './mileageList.go';
    }
    
    function listCall(page) {

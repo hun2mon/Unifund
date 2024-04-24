@@ -100,4 +100,7 @@ public interface ProjectDAO {
 
 	void delMileHis(int parseInt, String pro_idx);
 
+	void stateChange(String pro_idx, String state);
+
+
 }

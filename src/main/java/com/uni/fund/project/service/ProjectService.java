@@ -375,4 +375,11 @@ public class ProjectService {
 		}
 	}
 
+	public void stateChange(String pro_idx, String state) {
+		projectDAO.stateChange(pro_idx, state);
+		
+	}
+
+	
+
 }

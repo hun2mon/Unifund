@@ -34,27 +34,32 @@ public class ProjectController {
 	public String detail(Model model, HttpSession session, String row, String pro_idx) {
 		String page = "project/detail";
 		
-		session.setAttribute("loginId", "admin");
-		session.setAttribute("memIdx", "1");
-		model.addAttribute("mem_idx",1);
-		
-		String pro_idxState= projectService.stateCheck(pro_idx);
-		if (pro_idxState.equals("A")) {
-			String memIdx = (String) session.getAttribute("memIdx");
-			page = "project/adminJudge";
-			ProjectDTO project = projectService.detail(pro_idx,memIdx);
-			model.addAttribute("project", project);
-		}else {
-			String memIdx = (String) session.getAttribute("memIdx");
-			ProjectDTO project = projectService.detail(pro_idx,memIdx);
-			model.addAttribute("project", project);
-			logger.info("memIdx : " + memIdx);
-			logger.info("row = " + row);
-			logger.info("pro_idx = " + pro_idx);
-			if (row != null) {
-				model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
-			}			
+		if (session.getAttribute("mem_id") != null) {
+			logger.info("loginId : {}", session.getAttribute("mem_id"));
+			logger.info("mem_idx : {}", session.getAttribute("mem_idx"));
+			
+			String pro_idxState= projectService.stateCheck(pro_idx);
+			if (pro_idxState.equals("A")) {
+				String memIdx = (String) session.getAttribute("mem_idx");
+				page = "project/adminJudge";
+				ProjectDTO project = projectService.detail(pro_idx,memIdx);
+				model.addAttribute("project", project);
+			}else {
+				String memIdx = (String) session.getAttribute("mem_idx");
+				ProjectDTO project = projectService.detail(pro_idx,memIdx);
+				model.addAttribute("project", project);
+				logger.info("memIdx : " + memIdx);
+				logger.info("row = " + row);
+				logger.info("pro_idx = " + pro_idx);
+				if (row != null) {
+					model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+				}			
+			}
+		} else {
+			page = "member/login";
+			model.addAttribute("msg", "로그인이 필요한 서비스 입니다.");
 		}
+		
 		return page;
 	}
 	
@@ -321,17 +326,17 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		logger.info("msg : {}", msg);
 		logger.info("pro_idx : {}", pro_idx);
-		logger.info("session : {}", session.getAttribute("memIdx"));
-		String mem_idx = (String) session.getAttribute("memIdx");
+		logger.info("session : {}", session.getAttribute("mem_idx"));
+		String mem_idx = (String) session.getAttribute("mem_idx");
 		projectService.likeDo(pro_idx,msg,mem_idx);
-		logger.info("session : {}", session.getAttribute("memIdx"));
+		logger.info("session : {}", session.getAttribute("mem_idx"));
 		return map;
 	}
 	
 	@RequestMapping(value = "/project/delForm.go")
 	public String delFormGo(HttpSession session) {
 		String page = "member/login";
-		if (session.getAttribute("loginId") != null) {
+		if (session.getAttribute("mem_id") != null) {
 			page = "project/delForm";
 		}
 		return page;
@@ -392,6 +397,15 @@ public class ProjectController {
 		return "redirect:/project/adminList.go";
 	}
 	
+	@RequestMapping(value = "/project/stateChange.ajax")
+	@ResponseBody
+	public Map<String, Object> stateChange(String pro_idx, String state){
+		Map<String, Object> map = new HashMap<String, Object>();
+		logger.info("stateChange : {}",pro_idx);
+		logger.info("stateChange : {}",state);
+		projectService.stateChange(pro_idx,state);
+		return map;
+	}
 	
 	
 	
