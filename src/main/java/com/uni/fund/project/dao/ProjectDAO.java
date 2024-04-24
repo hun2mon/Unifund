@@ -63,6 +63,10 @@ public interface ProjectDAO {
 	int projectReadLike(int pro_idx, int mem_idx);
 
 	int projectCheckLike(int pro_idx, int mem_idx);
+	
+	int projectReadFavorites(Integer pro_idx, Integer mem_idx);
+
+	int projectCheckFavorites(Integer pro_idx, Integer mem_idx);
 
 	void projectAddLike(Integer pro_idx, Integer mem_idx);
 

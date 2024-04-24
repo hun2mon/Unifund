@@ -143,6 +143,16 @@ body {
 	border-radius: 20px;
 }
 
+.star_button{
+position: absolute;
+	padding: 5px;
+	position: flex;
+	margin-left: -37px;
+	margin-top: -50px;
+	background-color: white;
+	border-radius: 20px;s
+}
+
 .small_content {
 	font-size: 12px;
 	margin-top: 11px;
@@ -281,6 +291,7 @@ background: rgba(255, 255, 255, 0.15);
 						<input type="hidden" value="${project.pro_idx}" name="pro_idx" class="pro_idx" />
 						<td><img src="/photo/${project.pro_main_name }" class="thumb_img" onerror="this.onerror=null;this.src='../resources/project_img/noImg.png'"></td>
 						<td><i class="fa fa-heart heart_icon readLike like_button"  style="color: #cccccc"></i></td>
+						<td><i class="fa fa-star star_icon readFavorites star_button"  style="color: #cccccc"></i></td>
 					</tr>
 					<tr>
 						<c:if test="${project.progress == null}">
@@ -340,7 +351,6 @@ background: rgba(255, 255, 255, 0.15);
 	</div>
 </body>
 <script>
-	
 	$('.like_button').each(function() {
 		$('.form-container').each(function() {
 			var mem_idx = $('input[type="hidden"].mem_idx').val();
@@ -397,7 +407,61 @@ background: rgba(255, 255, 255, 0.15);
 			
 		});
 	});
+	
+	$('.star_button').each(function() {
+		$('.form-container').each(function() {
+			var mem_idx = $('input[type="hidden"].mem_idx').val();
+			var pro_idx = $(this).find('input[type="hidden"].pro_idx').val();
+			var projectFav = $(this);
+		
+			$.ajax({
+				type : 'get',
+				url : './projectReadFavorites.ajax',
+				data : {
+					'mem_idx' : mem_idx,
+					'pro_idx' : pro_idx
+				},
+				success : function(data) {
+					console.log(data.projectReadFavorites);
+					if (data.projectReadFavorites > 0) {
+						projectFav.find('.readFavorites').css('color', '#ffd968');
+					}
+				},
+				error : function(error) {
+					console.log(error);
+				}
+			});
+			
+		});
+		
+		$(this).on('click',function() {
+			var mem_idx = $('input[type="hidden"].mem_idx').val();
+			var pro_idx = $(this).closest('.form-container').find('input[type="hidden"].pro_idx').val();
+			var each_favorite = $(this);
 
+			$.ajax({
+				type : 'get',
+				url : './checkFavorites.ajax',
+				data : {
+					'mem_idx' : mem_idx,
+					'pro_idx' : pro_idx
+				},
+				success : function(data) {
+					console.log(data.projectCheckFavoritesRow);
+					if (data.projectCheckFavoritesRow == 0) {
+						each_favorite.css('color','#cccccc');
+					} else {
+						each_favorite.css('color','#ffd968');
+					}
+				},
+				error : function(error) {
+					console.log(error);
+				}
+			});
+			
+		});
+	});
+	
 	function check_create() {
 		var mem_idx = $('input[type="hidden"].mem_idx').val();
 		$.ajax({
@@ -440,7 +504,7 @@ background: rgba(255, 255, 255, 0.15);
 	
 	$('.go_btn').on('click',function(){
 		var pro_idx = $(this).closest('.form-container').find('input[type="hidden"].pro_idx').val();
-		location.href = './detail?pro_idx='+ pro_idx
+		location.href = './detail.go?pro_idx='+ pro_idx
 	});
 </script>
 </html>

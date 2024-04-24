@@ -77,7 +77,7 @@
 		SELECT 
 			COUNT(p.pro_idx) 
 		FROM project p
-		WHERE 1=1
+		WHERE p.pro_state IN('B','C')
         <if test="keyword != null and keyword != '' ">
             AND p.pro_title like CONCAT('%',#{keyword},'%')
         </if>
@@ -108,7 +108,7 @@
 			LEFT JOIN project_like pl on p.pro_idx = pl.pro_idx
 			LEFT JOIN category c on p.cate_idx = c.cate_idx	
 			LEFT JOIN bookmark b on b.pro_idx = p.pro_idx
-			WHERE 1=1
+			WHERE p.pro_state IN('B','C')
 				<if test="keyword != null and kewyword != '' ">
 	        		AND p.pro_title like CONCAT('%',#{keyword},'%')
 	        	</if>
@@ -136,6 +136,14 @@
 	
 	<select id="projectCheckLike" resultType="int">
 		SELECT count(*) FROM project_like WHERE pro_idx=#{param1} AND mem_idx=#{param2}
+	</select>
+	
+	<select id="projectReadFavorites" resultType="int">
+		SELECT count(*) FROM bookmark WHERE pro_idx=#{param1} AND mem_idx=#{param2}
+	</select>
+	
+	<select id="projectCheckFavorites" resultType="int">
+		SELECT count(*) FROM bookmark WHERE pro_idx=#{param1} AND mem_idx=#{param2}
 	</select>
 	
 	<insert id="projectAddLike">
