@@ -67,7 +67,7 @@ th, td {
 	
 	function listCall(showPage){
 		$.ajax({
-			type:'get'
+			type:'post'
 			,url:'./appList.ajax'
 			,data:{
 				page:showPage,

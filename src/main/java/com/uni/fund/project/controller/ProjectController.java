@@ -36,7 +36,7 @@ public class ProjectController {
 		
 		session.setAttribute("loginId", "admin");
 		session.setAttribute("memIdx", "1");
-		model.addAttribute("mem_idx",2);
+		model.addAttribute("mem_idx",1);
 		
 		String pro_idxState= projectService.stateCheck(pro_idx);
 		if (pro_idxState.equals("A")) {
@@ -72,7 +72,7 @@ public class ProjectController {
 		return "project/adminList";
 	}
 	
-	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.GET)
+	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> appListCall(String page, String cnt, String pro_idx){
 		logger.info("appListCall요청 들어옴");
@@ -329,8 +329,12 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/project/delForm.go")
-	public String delFormGo() {
-		return "project/delForm";
+	public String delFormGo(HttpSession session) {
+		String page = "member/login";
+		if (session.getAttribute("loginId") != null) {
+			page = "project/delForm";
+		}
+		return page;
 	}
 	
 	@RequestMapping(value = "/project/delete.do", method = RequestMethod.POST)
@@ -380,7 +384,7 @@ public class ProjectController {
 		return "redirect:/project/adminList.go";
 	}
 	
-	@RequestMapping(value = "/project/refuse.do")
+	@RequestMapping(value = "/project/refuse.do", method = RequestMethod.POST)
 	public String refuse(String pro_idx, String refuseContent) {
 		logger.info("pro_idx : {}", pro_idx);
 		logger.info("refuseContent : {}", refuseContent);

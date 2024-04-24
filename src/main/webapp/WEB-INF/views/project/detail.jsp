@@ -349,7 +349,7 @@ input[name=reportContent] {
 				<div class="top_middle">
 					<div class="middle_top">
 						<div class="project_title">${project.pro_title}</div>
-						<c:if test="${mem_Idx == project.mem_idx}">
+						<c:if test="${mem_idx == project.mem_idx}">
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
 								onclick="delFrom()">
