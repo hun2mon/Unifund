@@ -11,6 +11,11 @@ public class MoneyDTO {
 	private String cash_division;
 	private Date cash_date;
 	private int year;
+	private int mile_idx;
+	private String mile_content;
+	private int mile_amount;
+	private String mile_division;
+	private Date mile_date;
 	
 	
 	public int getCash_idx() {
@@ -60,5 +65,35 @@ public class MoneyDTO {
 	}
 	public void setYear(int year) {
 		this.year = year;
+	}
+	public int getMile_idx() {
+		return mile_idx;
+	}
+	public void setMile_idx(int mile_idx) {
+		this.mile_idx = mile_idx;
+	}
+	public String getMile_content() {
+		return mile_content;
+	}
+	public void setMile_content(String mile_content) {
+		this.mile_content = mile_content;
+	}
+	public int getMile_amount() {
+		return mile_amount;
+	}
+	public void setMile_amount(int mile_amount) {
+		this.mile_amount = mile_amount;
+	}
+	public String getMile_division() {
+		return mile_division;
+	}
+	public void setMile_division(String mile_division) {
+		this.mile_division = mile_division;
+	}
+	public Date getMile_date() {
+		return mile_date;
+	}
+	public void setMile_date(Date mile_date) {
+		this.mile_date = mile_date;
 	}
 }

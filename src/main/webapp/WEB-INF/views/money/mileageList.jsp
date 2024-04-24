@@ -82,8 +82,8 @@ thead {
 }
 
 .middleTop {
-	margin-left: 1220;
-	width: 80;
+	margin-left: 1180;
+	width: 114;
 }
 
 .middleBottom {
@@ -117,10 +117,10 @@ thead {
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 	<div class="mainDiv">
-		<div class="topTitle">캐시내역</div>
+		<div class="topTitle">마일리지 내역</div>
 		<hr>
 		<div class="middle">
-			<div class="middleTop">보유 캐시</div>
+			<div class="middleTop">보유 마일리지</div>
 			<div class="middleBottom">
 				<div class="dateSelect">
 					<select name="year" class="selectYear" id="year">
@@ -140,10 +140,9 @@ thead {
 						<option value="12">12</option>
 					</select>
 				</div>
-				<div class="nowCash">${mem_cash}원</div>
+				<div class="nowCash">${mem_mileage}원</div>
 			</div>
 		</div>
-		<form action="./charge.do">
 			<table align="center">
 				<thead>
 					<tr>
@@ -164,7 +163,6 @@ thead {
 					</td>
 				</tr>
 			</table>
-		</form>
 	</div>
 </body>
 <script>
@@ -203,7 +201,7 @@ thead {
  	    
 		$.ajax({
 			type : 'post',
-			url : './cashList.ajax',
+			url : './mileageList.ajax',
 			data : {
 				mem_idx:${mem_idx},
 				year:year,
@@ -243,9 +241,9 @@ thead {
 		for (item of list) {
 			/* console.log(item); */
 			content += '<tr>';
-			content += '<td>' + item.cash_content +item.cash_amount + '</td>';
-			content += '<td>' + item.cash_division + '</td>';
-			var date = new Date(item.cash_date);
+			content += '<td>' + item.mile_content +item.mile_amount + '</td>';
+			content += '<td>' + item.mile_division + '</td>';
+			var date = new Date(item.mile_date);
 			var dateStr = date.toLocaleDateString("ko-KR");//en_US
 			content += '<td>' + dateStr + '</td>';
 			content += '</tr>';

@@ -426,7 +426,7 @@ th, td {
    }
    
    function mileageList() {
-      location.href = './mileageList.go';
+      location.href = '/main/money/mileageList.go?mem_idx=${mem_idx}';
    }
    
    function listCall(page) {

@@ -235,7 +235,9 @@ public class ProjectService {
 		projectDAO.moneyMng(map);
 //		int cash = Integer.parseInt(map.get("total_Price")) - Integer.parseInt(map.get("mileage")); 
 		projectDAO.cashHis(map);
-		projectDAO.mileageHis(map);
+		if (Integer.parseInt(map.get("mileage"))  != 0) {
+			projectDAO.mileageHis(map);			
+		}
 		logger.info("성공여부 : {}", cnt);
 	}
 
@@ -244,7 +246,12 @@ public class ProjectService {
 		String pro_idx = map.get("pro_idx");
 		projectDAO.moneyRefund(mem_idx,pro_idx);
 		projectDAO.cashHis(map);
-		projectDAO.mileageHis(map);
+		logger.info("mileage:{}", map.get("mileage"));
+		String mileage = String.valueOf(projectDAO.mileageSelect(map));
+		map.put("mileage", mileage);
+		if (Integer.parseInt(map.get("mileage"))  != 0) {
+			projectDAO.mileageHis(map);			
+		}		
 		int cnt = projectDAO.fundingCancle(mem_idx,pro_idx);
 		logger.info("성공여부 : {}", cnt);
 	}

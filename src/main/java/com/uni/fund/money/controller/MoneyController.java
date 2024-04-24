@@ -22,9 +22,14 @@ public class MoneyController {
 	@Autowired MoneyService moneyService;
 	
 	@RequestMapping(value = "/money/charge.go")
-	public String chargeGo() {
-		
-		return "money/cashCharge";
+	public String chargeGo(HttpSession session, Model model) {
+		String page = "./member/login";
+		if (session.getAttribute("mem_idx") != null) {
+			page = "money/cashCharge";
+		} else {
+			model.addAttribute("msg", "로그인이 필요한 서비스 입니다.");
+		}
+		return page;
 	}
 	
 	@RequestMapping(value = "/money/charge.do")
@@ -52,13 +57,69 @@ public class MoneyController {
 		return "money/cashList";
 	}
 	
+	@RequestMapping(value = "/money/mileageList.go")
+	public String mileageListGo(String mem_idx, Model model) {
+		logger.info("mem_idx : {}", mem_idx );
+		int mem_mileage = moneyService.selectMileage(mem_idx);
+		model.addAttribute("mem_mileage", mem_mileage);
+		return "money/mileageList";
+	}
+	
 	@RequestMapping(value = "/money/cashList.ajax", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> cashListCall(String mem_idx,String year, String month){
-		Map<String, Object> map = moneyService.cashListCall(mem_idx,year,month);
-		logger.info("year:{}", year);
-		logger.info("month:{}", month);
+	public Map<String, Object> cashListCall(String mem_idx,String year, String month,String page,String cnt){
+		String serchMonth = "%" + month + "%";
+		String serchYear = year + "%";
+		String day = year + "-" + month + "%";
+		logger.info("page : {}", page);
+		logger.info("cnt : {}", cnt);
+		logger.info("year : {}", year);
+		logger.info("month:{}",month);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (!month.equals("전체")&&year.equals("전체")) {
+			map = moneyService.filterListCall(mem_idx,serchMonth,currPage,pagePerCnt);
+		} else if (month.equals("전체")&&!year.equals("전체")) {
+			map = moneyService.filterListCall(mem_idx,serchYear,currPage,pagePerCnt);	
+		}else if(!month.equals("전체")&&!year.equals("전체")){
+			map = moneyService.filterListCall(mem_idx,day,currPage,pagePerCnt);	
+		}else {
+			logger.info("month:{}",month);
+			map = moneyService.cashListCall(mem_idx,month,currPage,pagePerCnt);
+		}
 		return map;
 	}
 	
+	@RequestMapping(value = "/money/mileageList.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> mileageListCall(String mem_idx,String year, String month,String page,String cnt){
+		String serchMonth = "%" + month + "%";
+		String serchYear = year + "%";
+		String day = year + "-" + month + "%";
+		logger.info("page : {}", page);
+		logger.info("cnt : {}", cnt);
+		logger.info("year : {}", year);
+		logger.info("month:{}",month);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (!month.equals("전체")&&year.equals("전체")) {
+			map = moneyService.mileFilterListCall(mem_idx,serchMonth,currPage,pagePerCnt);
+		} else if (month.equals("전체")&&!year.equals("전체")) {
+			map = moneyService.mileFilterListCall(mem_idx,serchYear,currPage,pagePerCnt);	
+		}else if(!month.equals("전체")&&!year.equals("전체")){
+			map = moneyService.mileFilterListCall(mem_idx,day,currPage,pagePerCnt);	
+		}else {
+			logger.info("month:{}",month);
+			map = moneyService.mileageListCall(mem_idx,month,currPage,pagePerCnt);
+		}
+		return map;
+	}
 }

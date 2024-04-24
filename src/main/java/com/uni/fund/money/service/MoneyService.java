@@ -1,5 +1,6 @@
 package com.uni.fund.money.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +26,65 @@ public class MoneyService {
 		}
 	}
 
-	public Map<String, Object> cashListCall(String mem_idx, String filterYear, String month) {
-		String day = filterYear + "-" + month + "%";
-		logger.info("day :{}", day);
-		List<MoneyDTO> list = moneyDAO.cashListCall(mem_idx,day);
+	public int selectCash(String mem_idx) {
+		return moneyDAO.selectCash(mem_idx);
+	}
+	
+	public int selectMileage(String mem_idx) {
+		return moneyDAO.selectMileage(mem_idx);
+	}
+	
+	public Map<String, Object> cashListCall(String mem_idx, String month, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		
+		List<MoneyDTO> list = moneyDAO.cashListCall(mem_idx,month,start,pagePerCnt);
 		List<MoneyDTO> year = moneyDAO.yearCall();
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("list", list);
 		result.put("year", year);
+		result.put("currPage", currPage);
+		result.put("totalPages", moneyDAO.allCount(pagePerCnt,mem_idx));
+		logger.info("tatalPage = " + moneyDAO.allCount(pagePerCnt,mem_idx));
 		return result;
 	}
 
-	public int selectCash(String mem_idx) {
-		return moneyDAO.selectCash(mem_idx);
+
+	public Map<String, Object> filterListCall(String mem_idx, String serchMonth, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<MoneyDTO> list = moneyDAO.cashListCall(mem_idx,serchMonth,start,pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", moneyDAO.filterAllCount(pagePerCnt,mem_idx,serchMonth));
+		logger.info("tatalPage = " + moneyDAO.filterAllCount(pagePerCnt,mem_idx,serchMonth));
+		return result;
 	}
+	
+	public Map<String, Object> mileageListCall(String mem_idx, String month, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		
+		List<MoneyDTO> list = moneyDAO.mileageListCall(mem_idx,month,start,pagePerCnt);
+		List<MoneyDTO> year = moneyDAO.yearCall();
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("year", year);
+		result.put("currPage", currPage);
+		result.put("totalPages", moneyDAO.mileAllCount(pagePerCnt,mem_idx));
+		logger.info("tatalPage = " + moneyDAO.mileAllCount(pagePerCnt,mem_idx));
+		return result;
+	}
+	
+	public Map<String, Object> mileFilterListCall(String mem_idx, String serchMonth, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<MoneyDTO> list = moneyDAO.mileageListCall(mem_idx,serchMonth,start,pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", moneyDAO.mileFilterAllCount(pagePerCnt,mem_idx,serchMonth));
+		logger.info("tatalPage = " + moneyDAO.mileFilterAllCount(pagePerCnt,mem_idx,serchMonth));
+		return result;
+	}
+
+
 	
 }

@@ -20,19 +20,43 @@
 				);
 	</insert>
 	
-	<select id="cashListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
-		SELECT * FROM cash WHERE mem_idx = #{param1} 
-			<if test='param2 != null'>
-				and cash_date like '${param2}'
-        	</if>
-			order by cash_date desc
-	</select>
-	
 	<select id="selectCash" resultType="int">
 		SELECT mem_cash FROM member WHERE mem_idx = #{param1}
 	</select>
 	
+	<select id="selectMileage" resultType="int">
+		SELECT mem_mileage FROM member WHERE mem_idx = #{param1}
+	</select>
+	
+	<select id="cashListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT * FROM cash WHERE mem_idx = #{param1}<if test="param2 == '전체'">order by cash_idx desc</if><if test="param2 != '전체'">and cash_date like '${param2}' order by cash_idx desc</if>
+		LIMIT #{param3},#{param4}
+	</select>
+	
+	<select id="mileageListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT * FROM mileage WHERE mem_idx = #{param1} and mile_amount != 0<if test="param2 == '전체'">order by mile_idx desc</if><if test="param2 != '전체'">and mile_date like '${param2}' order by mile_idx desc</if>
+		LIMIT #{param3},#{param4}
+	</select>
+
 	<select id="yearCall" resultType="com.uni.fund.money.dto.MoneyDTO">
 		select year(cash_date) as year from cash c group by  year(cash_date) order by cash_date desc
 	</select>
+	
+	<select id="allCount" resultType="int">
+		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash where mem_idx = #{param2}
+	</select>
+	
+	<select id="filterAllCount" resultType="int">
+		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash where mem_idx = #{param2} and cash_date like '${param3}'
+	</select>
+		
+	<select id="mileAllCount" resultType="int">
+		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage where mem_idx = #{param2} and mile_amount != 0
+	</select>
+	
+	<select id="mileFilterAllCount" resultType="int">
+		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage where mem_idx = #{param2} and mile_date like '${param3}' and mile_amount != 0
+	</select>
+	
+	
 </mapper>

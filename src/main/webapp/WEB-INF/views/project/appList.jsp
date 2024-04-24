@@ -84,7 +84,6 @@ th, td {
 	            	visiblePages:5,
 	            	onPageClick:function(evt,pg){
 	            		console.log(pg);
-	            		num = pg;
 	            		listCall(pg);
 	            	}
 	            })

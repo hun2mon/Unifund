@@ -102,5 +102,7 @@ public interface ProjectDAO {
 
 	void stateChange(String pro_idx, String state);
 
+	int mileageSelect(Map<String, String> map);
+
 
 }

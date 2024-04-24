@@ -301,7 +301,11 @@
 	</if>
 	<if test='filter == "cancle"'>
 		INSERT INTO cash(mem_idx,cash_content,cash_amount,ref_idx,cash_division)
-			VALUES (${mem_idx},'+',${total_price}-${mileage},${pro_idx},'환불')	
+			VALUES (${mem_idx},'+',(SELECT pa.total_price-mile_use
+                FROM project_apply pa 
+                WHERE pa.pro_idx = #{pro_idx} AND pa.mem_idx = #{mem_idx}
+                ORDER BY pa.fund_idx DESC
+                LIMIT 1),${pro_idx},'환불')	
 	</if>
 	</insert>
 	<insert id="mileageHis" parameterType="map">
@@ -356,6 +360,10 @@
 			</if>
 			WHERE pro_idx = #{param1}
 	</update>
+	
+	<select id="mileageSelect" resultType="int" parameterType="map">
+		select mile_use FROM project_apply WHERE pro_idx = ${pro_idx} and mem_idx = ${mem_idx} ORDER BY fund_idx DESC LIMIT 1
+	</select>
 	
 	
 	

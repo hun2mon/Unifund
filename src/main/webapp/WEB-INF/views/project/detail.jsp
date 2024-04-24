@@ -760,7 +760,6 @@ input[name=reportContent] {
 					pro_idx:'${project.pro_idx}',
 					mem_idx:'${mem_idx}',
 					rew_quantity:quantitys,
-					mileage:$('.use_mileage_value').val(),
 					total_price:price,
 					filter:'cancle'
 				}
