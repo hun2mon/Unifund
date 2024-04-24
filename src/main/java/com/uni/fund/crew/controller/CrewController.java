@@ -38,7 +38,7 @@ public class CrewController {
 		
 		String page="redirect:/";
 		String msg="크루 등록에 실패했습니다.";
-		mem_idx=5;
+		mem_idx=3;
 		
 		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,mem_idx,param);
 		if(row == 1) {
@@ -92,17 +92,28 @@ public class CrewController {
 	
 	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> crewListCall(
-	    @RequestParam(value = "page", defaultValue = "1") String page,
-	    @RequestParam(value = "cnt", defaultValue = "10") String cnt,
-	    @RequestParam(value = "filterType", defaultValue = "latest") String filterType,
-	    @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
+	public Map<String,Object> crewListCall(String page, String cnt) {
 	    logger.info("crewList.ajax");
+	    logger.info("페이지 당 보여줄 갯수 : "+cnt);
+		logger.info("요청 페이지 : " +page);
 	    
 	    int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
 	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
 	    
-	    Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt, filterType, searchKeyword);
+	    Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt);
+	    
+	    return map;
+	}
+	
+	@RequestMapping(value="/searchCrew.ajax", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> searchCrew(@RequestParam(value = "page", defaultValue = "1") String page,
+	                                      @RequestParam(value = "cnt", defaultValue = "10") String cnt,
+	                                      @RequestParam(value = "searchKeyword") String searchKeyword) {
+	    int currentPage = Integer.parseInt(page);
+	    int pagePerCnt = Integer.parseInt(cnt);
+	    
+	    Map<String,Object> map = crewService.searchCrew(currentPage, pagePerCnt, searchKeyword);
 	    
 	    return map;
 	}

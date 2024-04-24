@@ -37,14 +37,20 @@ public interface CrewDAO {
 	
 	
 	List<CrewDTO> crewList(int pagePerCnt, int start);	
-
-	List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
-
-	List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);
-
-	int allCountPageBySearch(int pagePerCnt, String searchKeyword);
 	
 	int allCountPage(int pagePerCnt);
+	
+	List<CrewDTO> searchCrew(int pagePerCnt, int start, String searchKeyword);
+	
+	int searchCountPage(int pagePerCnt, String searchKeyword);
+
+	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
+
+	//List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);
+
+	//int allCountPageBySearch(int pagePerCnt, String searchKeyword);
+	
+	
 
 
 

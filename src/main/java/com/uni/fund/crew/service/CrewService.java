@@ -23,6 +23,7 @@ public class CrewService {
 	
 	private static final String file_root="/Users/ku-ilseung/Desktop/C/upload/";
 	
+	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CrewDAO crewDAO;	
 
@@ -120,51 +121,34 @@ public class CrewService {
 
 	
 
-	public Map<String, Object> crewList(int currentPage, int pagePerCnt, String filterType, String searchKeyword) {
+	public Map<String, Object> crewList(int currentPage, int pagePerCnt) {
 		
-        Map<String, Object> map = new HashMap<>();
-        
-        int start = (currentPage - 1) * pagePerCnt;
-        
-        List<CrewDTO> crewList;
-        int totalPage;
-        
-        // 최신순 필터링
-        if ("latest".equals(filterType)) {
-            crewList = crewDAO.crewList(pagePerCnt, start);
-            totalPage = crewDAO.allCountPage(pagePerCnt);
-        }
-        // 인기도순 필터링 
-        else if ("popularity".equals(filterType)) {
-            // 인기도순으로 정렬된 크루 리스트 가져오는 DAO 메서드 호출
-            crewList = crewDAO.crewListByPopularity(pagePerCnt, start);
-            totalPage = crewDAO.allCountPage(pagePerCnt);
-        }
-        // 검색 필터링 
-        else if ("search".equals(filterType)) {
-            // 검색어를 포함하는 크루 리스트 가져오는 DAO 메서드 호출
-            crewList = crewDAO.crewListBySearch(pagePerCnt, start, searchKeyword);
-            logger.info("crewList"+ crewList);
-            totalPage = crewDAO.allCountPageBySearch(pagePerCnt, searchKeyword);
-        }
-        else {
-            crewList = crewDAO.crewList(pagePerCnt, start);
-            totalPage = crewDAO.allCountPage(pagePerCnt);            
-        }
+		int start = (currentPage - 1) * pagePerCnt;
+        Map<String, Object> map = new HashMap<String,Object>();
+        List<CrewDTO> crewList= crewDAO.crewList(pagePerCnt, start);
         
         map.put("crewList", crewList);
         map.put("currentPage", currentPage);
-        map.put("totalPages", totalPage);
+        map.put("totalPages", crewDAO.allCountPage(pagePerCnt));
+        logger.info("totalPage = "+crewDAO.allCountPage(pagePerCnt));
         
         return map;
     }
 	
-
-
-	public void crewApply(int mem_idx, int crew_idx) {
-		// TODO Auto-generated method stub
-		
+	public Map<String, Object> searchCrew(int currentPage, int pagePerCnt, String searchKeyword) {
+	    Map<String, Object> map = new HashMap<>();
+	    
+	    int start = (currentPage - 1) * pagePerCnt;
+	    
+	    List<CrewDTO> searchResult = crewDAO.searchCrew(pagePerCnt, start, searchKeyword);
+	    
+	    map.put("searchResult", searchResult);
+	    map.put("currentPage", currentPage);
+	    map.put("totalPages", crewDAO.searchCountPage(pagePerCnt, searchKeyword));
+	    
+	    return map;
 	}
+	
 
 	public String applyCrew(int mem_idx, int crew_idx) {
 		

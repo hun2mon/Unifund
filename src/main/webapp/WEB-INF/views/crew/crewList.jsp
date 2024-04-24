@@ -122,7 +122,7 @@ var showPage = 1;
 
 $(document).ready(function(){ 
     listCall(showPage);
-
+	/*
     // 최신순 버튼 클릭 시
     $('#latestBtn').click(function() {
         listCall(showPage, 'latest');
@@ -132,13 +132,43 @@ $(document).ready(function(){
     $('#popularityBtn').click(function() {
         listCall(showPage,'popularity');
     });
+    */
 
     // 검색 버튼 클릭 시
     $('#searchBtn').click(function() {
         var searchKeyword = $('#searchInput').val();
-        listCall(showPage, 'search', searchKeyword);
+        searchAndPaginate(showPage, 'search', searchKeyword);
     });
+    
 });
+
+function searchAndPaginate(page, searchKeyword) {
+    $.ajax({
+       type: 'get',
+       url: './searchCrew.ajax',
+       data: {
+           'page': page,
+           'cnt': 10,
+           'searchKeyword': searchKeyword
+       },
+       dataType: 'json',
+       success: function(data) {
+           drawList(data.searchResult);
+           // 페이징 처리
+           $('#pagination').twbsPagination({
+               startPage: data.currentPage,
+               totalPages: data.totalPages,
+               visiblePages: 5,
+               onPageClick: function(evt, pg) {
+                   searchAndPaginate(pg, searchKeyword);
+               }
+           });
+       },
+       error: function(error) {
+           console.log(error);
+       }
+    });
+}
 
 function listCall(page, filterType, searchKeyword){
     $.ajax({
@@ -146,20 +176,15 @@ function listCall(page, filterType, searchKeyword){
        url:'./crewList.ajax',
        data:{
            'page':page,
-           'cnt':10,
-           'filterType': filterType,         // 필터 타입 전달
-           'searchKeyword': searchKeyword    // 검색어 전달
+           'cnt':10
        },
        dataType:'json',
        success:function(data){
           drawList(data.crewList);
-          console.log(data);          
-          
-          
-          var startPage = data.currentPage >data.totalPages ? data.totalPages : data.currentPage;
+          console.log(data);           
           
           $('#pagination').twbsPagination({
-              startPage:startPage,    
+              startPage:1,    
               totalPages:data.totalPages,   
               visiblePages:5,   
               onPageClick:function(evt, pg){ 
