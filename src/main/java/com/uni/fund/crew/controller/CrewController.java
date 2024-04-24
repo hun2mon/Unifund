@@ -92,28 +92,30 @@ public class CrewController {
 	
 	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> crewListCall(String page, String cnt) {
+	public Map<String,Object> crewListCall(String filterType,String page, String cnt,Integer crew_idx) {
 	    logger.info("crewList.ajax");
+	    logger.info("filterType : {}"+filterType);
 	    logger.info("페이지 당 보여줄 갯수 : "+cnt);
 		logger.info("요청 페이지 : " +page);
 	    
 	    int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
 	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
 	    
-	    Map<String,Object> map = crewService.crewList(currentPage, pagePerCnt);
+	    Map<String,Object> map = crewService.crewList(filterType,currentPage, pagePerCnt,crew_idx);
 	    
 	    return map;
 	}
 	
-	@RequestMapping(value="/searchCrew.ajax", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/searchCrew.ajax", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> searchCrew(@RequestParam(value = "page", defaultValue = "1") String page,
-	                                      @RequestParam(value = "cnt", defaultValue = "10") String cnt,
-	                                      @RequestParam(value = "searchKeyword") String searchKeyword) {
-	    int currentPage = Integer.parseInt(page);
+	public Map<String,Object> searchCrew(String Page, String cnt,String keyword) {
+	    int currentPage = Integer.parseInt(Page);
 	    int pagePerCnt = Integer.parseInt(cnt);
+	    logger.info("페이지당 보여줄 갯수 : "+Page);
+	    logger.info("요청 페이지 : "+cnt);
+	    logger.info("searchKeyword : "+keyword);
 	    
-	    Map<String,Object> map = crewService.searchCrew(currentPage, pagePerCnt, searchKeyword);
+	    Map<String,Object> map = crewService.searchCrew(keyword,currentPage,pagePerCnt);
 	    
 	    return map;
 	}

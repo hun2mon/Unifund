@@ -36,13 +36,13 @@ public interface CrewDAO {
 	void crewUncool(Integer mem_idx, Integer crew_idx);
 	
 	
-	List<CrewDTO> crewList(int pagePerCnt, int start);	
+	List<CrewDTO> crewList(String filterType,int start, int pagePerCnt, Integer crew_idx);	
 	
-	int allCountPage(int pagePerCnt);
+	Object allCountPage(String filterType, int pagePerCnt, Integer crew_idx);
 	
-	List<CrewDTO> searchCrew(int pagePerCnt, int start, String searchKeyword);
+	List<CrewDTO> searchCrew(String keyword, int start, int pagePerCnt);
 	
-	int searchCountPage(int pagePerCnt, String searchKeyword);
+	int searchCountPage(String keyword, int pagePerCnt);
 
 	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
 

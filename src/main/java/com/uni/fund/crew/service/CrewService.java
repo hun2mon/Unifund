@@ -121,30 +121,32 @@ public class CrewService {
 
 	
 
-	public Map<String, Object> crewList(int currentPage, int pagePerCnt) {
+	public Map<String, Object> crewList(String filterType, int currentPage, int pagePerCnt, Integer crew_idx) {
 		
 		int start = (currentPage - 1) * pagePerCnt;
         Map<String, Object> map = new HashMap<String,Object>();
-        List<CrewDTO> crewList= crewDAO.crewList(pagePerCnt, start);
+        List<CrewDTO> crewList= crewDAO.crewList(filterType,start,pagePerCnt,crew_idx);
         
         map.put("crewList", crewList);
         map.put("currentPage", currentPage);
-        map.put("totalPages", crewDAO.allCountPage(pagePerCnt));
-        logger.info("totalPage = "+crewDAO.allCountPage(pagePerCnt));
+        map.put("totalPages", crewDAO.allCountPage(filterType,pagePerCnt,crew_idx));
+        logger.info("totalPage = "+crewDAO.allCountPage(filterType,pagePerCnt,crew_idx));
         
         return map;
     }
 	
-	public Map<String, Object> searchCrew(int currentPage, int pagePerCnt, String searchKeyword) {
-	    Map<String, Object> map = new HashMap<>();
-	    
+	public Map<String, Object> searchCrew(String keyword,int currentPage, int pagePerCnt) {
+	    	    
 	    int start = (currentPage - 1) * pagePerCnt;
 	    
-	    List<CrewDTO> searchResult = crewDAO.searchCrew(pagePerCnt, start, searchKeyword);
+	    List<CrewDTO> searchResult = crewDAO.searchCrew(keyword,start,pagePerCnt);
+	    Map<String, Object> map = new HashMap<String, Object>();
 	    
 	    map.put("searchResult", searchResult);
-	    map.put("currentPage", currentPage);
-	    map.put("totalPages", crewDAO.searchCountPage(pagePerCnt, searchKeyword));
+	    logger.info("searchResult : "+searchResult);
+	    map.put("currentPage : ",currentPage);
+	    map.put("totalPages", crewDAO.searchCountPage(keyword,pagePerCnt));
+	    logger.info("searchKeyword,pagePerCnt"+crewDAO.searchCountPage(keyword,pagePerCnt)+"asdf");
 	    
 	    return map;
 	}

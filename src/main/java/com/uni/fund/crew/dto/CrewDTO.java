@@ -22,6 +22,7 @@ public class CrewDTO {
 	private Date crew_mem_date;
 	private String crew_mem_rsn;	
 	private String crew_list_logo;	
+	private int pages;
 	
 	private int crew_cool_idx;
 	private int crew_cool_cnt;
@@ -152,6 +153,12 @@ public class CrewDTO {
 	}
 	public void setCrew_cool_cnt(int crew_cool_cnt) {
 		this.crew_cool_cnt = crew_cool_cnt;
+	}
+	public int getPages() {
+		return pages;
+	}
+	public void setPages(int pages) {
+		this.pages = pages;
 	}
 	
 

@@ -54,29 +54,57 @@
 	</update>
 	
 	<select id="crewList" resultType="com.uni.fund.crew.dto.CrewDTO">
-		SELECT 
-			(SELECT COUNT(crew_logo) FROM crew c
-			JOIN( 
-				SELECT * FROM photo
-				WHERE pho_division='크루로고'
-			) p ON c.crew_idx= p.ref_idx
-			)AS pho_cnt,
-			c.crew_idx,
-			c.crew_name,
-			c.crew_exp,
-			c.crew_num,				
-			(SELECT pho_name FROM photo 
-			WHERE pho_division ='크루로고'
-			AND ref_idx= c.crew_idx
-			ORDER BY pho_idx DESC LIMIT 1
-			) AS crew_logo,
-			(
-            SELECT COUNT(*) FROM popularity 
-            WHERE crew_idx = c.crew_idx
-        	) AS crew_cool_cnt
-		FROM crew c 
-		ORDER BY c.crew_idx DESC 
-		limit 10 offset #{param2}			
+SELECT 
+    (
+        SELECT COUNT(crew_logo) FROM crew c
+        JOIN (
+            SELECT * FROM photo
+            WHERE pho_division='크루로고'
+        ) p ON c.crew_idx= p.ref_idx
+    ) AS pho_cnt,
+    c.crew_idx,
+    c.crew_name,
+    c.crew_exp,
+    c.crew_num,               
+    (
+        SELECT pho_name FROM photo 
+        WHERE pho_division ='크루로고'
+        AND ref_idx= c.crew_idx
+        ORDER BY pho_idx DESC LIMIT 1
+    ) AS crew_logo,
+    (SELECT COUNT(*) FROM popularity 
+     WHERE crew_idx = c.crew_idx
+    ) AS crew_cool_cnt
+FROM crew c 
+<if test='param1 == "latest"'>
+    ORDER BY c.crew_idx DESC
+</if>
+<if test='param1 == "popularity"'>
+    ORDER BY crew_cool_cnt DESC
+</if>
+<!-- Default order -->
+<if test='param1 != "latest" and param1 != "popularity"'>
+    ORDER BY c.crew_idx DESC
+</if>
+LIMIT 10 OFFSET #{param2}          
+</select>
+
+	<select id="allCountPage" resultType="Object">
+		SELECT CEIL(COUNT(c.crew_idx) / #{param2}) AS pages,
+		c.crew_idx,p.crew_cool_cnt
+	FROM crew c 
+	left join 
+	(SELECT crew_idx,COUNT(*) as crew_cool_cnt FROM popularity group by crew_idx) p on c.crew_idx = p.crew_idx
+		 <if test='param1 == "latest"'>
+        ORDER BY c.crew_idx DESC
+    	</if>
+    	<if test='param1 == "popularity"'>
+        	ORDER BY crew_cool_cnt DESC
+    	</if>
+    	<!-- Default order -->	
+    	<if test='param1 != "latest" and param1 != "popularity"'>
+        	ORDER BY c.crew_idx DESC
+    	</if>	
 	</select>
 	
 	<select id="searchCrew" resultType="com.uni.fund.crew.dto.CrewDTO">
@@ -100,46 +128,19 @@
             SELECT COUNT(*) FROM popularity 
             WHERE crew_idx = c.crew_idx
         	) AS crew_cool_cnt
-    FROM crew c
-    WHERE c.crew_name LIKE CONCAT('%', #{searchKeyword}, '%')
-    ORDER BY c.crew_idx DESC 
-    LIMIT #{pagePerCnt} OFFSET #{start}
+    	FROM crew c
+    	WHERE c.crew_name LIKE CONCAT('%', #{param1}, '%')
+    	ORDER BY c.crew_idx DESC 
+    	LIMIT 10 OFFSET #{param2}
 </select>
 
-<select id="searchCountPage" resultType="Integer">
-    SELECT CEIL(COUNT(crew_idx) / #{pagePerCnt}) AS pages FROM crew
-    WHERE crew_name LIKE CONCAT('%', #{searchKeyword}, '%')
+<select id="searchCountPage" resultType="int">
+    SELECT CEIL(COUNT(crew_idx) / #{param2}) AS pages FROM crew
+    WHERE crew_name LIKE CONCAT('%',#{param1},'%')
 </select>
 	
-	<select id="crewListByPopularity" resultType="com.uni.fund.crew.dto.CrewDTO">
-		SELECT 
-			(SELECT COUNT(crew_logo) FROM crew c
-			JOIN( 
-				SELECT * FROM photo
-				WHERE pho_division='크루로고'
-			) p ON c.crew_idx= p.ref_idx
-			)AS pho_cnt,
-			c.crew_idx,
-			c.crew_name,
-			c.crew_exp,
-			c.crew_num,				
-			(SELECT pho_name FROM photo 
-			WHERE pho_division ='크루로고'
-			AND ref_idx= c.crew_idx
-			ORDER BY pho_idx DESC LIMIT 1
-			) AS crew_logo,
-			(
-            SELECT COUNT(*) FROM popularity 
-            WHERE crew_idx = c.crew_idx
-        	) AS crew_cool_cnt
-		FROM crew c 
-		ORDER BY crew_cool_cnt DESC
-		limit 10 offset #{param2}			
-	</select>		
 	
-	<select id="allCountPage" resultType="Integer">
-		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
-	</select>
+	
 	
 	<select id="isApplying" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*) FROM crewMember_history WHERE mem_idx =#{mem_idx} AND crew_mem_status ='A'
