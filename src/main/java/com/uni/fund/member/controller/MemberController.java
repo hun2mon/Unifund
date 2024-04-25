@@ -55,7 +55,7 @@ public class MemberController {
 		
 		if(loginInfo != null) {
 			String mem_id = loginInfo.getMem_id();
-			String mem_idx = loginInfo.getMem_idx() + "";
+			int mem_idx = loginInfo.getMem_idx();
 			page = "main";
 			session.setAttribute("mem_id", mem_id);
 			session.setAttribute("mem_idx", mem_idx);

@@ -122,4 +122,89 @@ public class MoneyController {
 		}
 		return map;
 	}
+	
+	@RequestMapping(value = "/money/adminCashList.go")
+	public String adminCashListGo(HttpSession session) {
+		String page = "member/login";
+		if (session.getAttribute("mem_id") != null) {
+			page = "money/adminCashList";
+		}
+		return page;
+	}
+	
+	@RequestMapping(value = "/money/adminMileageList.go")
+	public String adminMileageListGo(HttpSession session) {
+		String page = "member/login";
+		if (session.getAttribute("mem_id") != null) {
+			page = "money/adminMileageList";
+		}
+		return page;
+	}
+	
+	@RequestMapping(value = "/money/allCashList.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> allCashListCall(String year, String month,String page,String cnt,String keyWord){
+		String serchMonth = "%" + month + "%";
+		String serchYear = year + "%";
+		String day = year + "-" + month + "%";
+		logger.info("keyWord : {}", keyWord);
+		logger.info("page : {}", page);
+		logger.info("cnt : {}", cnt);
+		logger.info("year : {}", year);
+		logger.info("month:{}",month);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (!month.equals("전체")&&year.equals("전체")) {
+			map = moneyService.allFilterListCall(serchMonth,currPage,pagePerCnt,keyWord);
+		} else if (month.equals("전체")&&!year.equals("전체")) {
+			map = moneyService.allFilterListCall(serchYear,currPage,pagePerCnt,keyWord);	
+		}else if(!month.equals("전체")&&!year.equals("전체")){
+			map = moneyService.allFilterListCall(day,currPage,pagePerCnt,keyWord);	
+		}else {
+			logger.info("month:{}",month);
+	 		map = moneyService.allCashListCall(month,currPage,pagePerCnt,keyWord);
+		}
+ 		return map;
+	}
+	
+	@RequestMapping(value = "/money/allMileageList.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> allMileageListCall(String year, String month,String page,String cnt,String keyWord){
+		String serchMonth = "%" + month + "%";
+		String serchYear = year + "%";
+		String day = year + "-" + month + "%";
+		logger.info("keyWord : {}", keyWord);
+		logger.info("page : {}", page);
+		logger.info("cnt : {}", cnt);
+		logger.info("year : {}", year);
+		logger.info("month:{}",month);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (!month.equals("전체")&&year.equals("전체")) {
+			map = moneyService.allMileFilterListCall(serchMonth,currPage,pagePerCnt,keyWord);
+		} else if (month.equals("전체")&&!year.equals("전체")) {
+			map = moneyService.allMileFilterListCall(serchYear,currPage,pagePerCnt,keyWord);	
+		}else if(!month.equals("전체")&&!year.equals("전체")){
+			map = moneyService.allMileFilterListCall(day,currPage,pagePerCnt,keyWord);	
+		}else {
+			logger.info("month:{}",month);
+	 		map = moneyService.allMileListCall(month,currPage,pagePerCnt,keyWord);
+		}
+ 		return map;
+	}
+	
+	
+	
+	
+	
+	
+	
 }

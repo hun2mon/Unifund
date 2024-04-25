@@ -32,7 +32,7 @@ public class ProjectService {
 
 	public String file_root = "/Users/jeounghun/upload/Unifund/";
 
-	public ProjectDTO detail(String pro_idx,String memIdx) {
+	public ProjectDTO detail(String pro_idx,int memIdx) {
 		logger.info("pro_idx : {}",pro_idx);
 		logger.info("memIdx : {}",memIdx);
 		return projectDAO.detail(memIdx,pro_idx);
@@ -316,7 +316,7 @@ public class ProjectService {
 		return result;
 	}
 
-	public void likeDo(String pro_idx, String msg, String mem_idx) {
+	public void likeDo(String pro_idx, String msg, int mem_idx) {
 		if (msg.equals("좋아요")) {
 			projectDAO.likeDo(pro_idx,mem_idx);
 		}

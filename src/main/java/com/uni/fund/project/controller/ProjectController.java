@@ -40,12 +40,12 @@ public class ProjectController {
 			
 			String pro_idxState= projectService.stateCheck(pro_idx);
 			if (pro_idxState.equals("A")) {
-				String memIdx = (String) session.getAttribute("mem_idx");
+				int memIdx = (int) session.getAttribute("mem_idx");
 				page = "project/adminJudge";
 				ProjectDTO project = projectService.detail(pro_idx,memIdx);
 				model.addAttribute("project", project);
 			}else {
-				String memIdx = (String) session.getAttribute("mem_idx");
+				int memIdx = (int) session.getAttribute("mem_idx");
 				ProjectDTO project = projectService.detail(pro_idx,memIdx);
 				model.addAttribute("project", project);
 				logger.info("memIdx : " + memIdx);
@@ -285,12 +285,12 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/project/review/write.do", method = RequestMethod.POST)
-	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model) {
+	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model,HttpSession session) {
 		String page = "redirect:/";
 		logger.info("photo : {}", photo);
 		logger.info("param : {}", param);
 		logger.info("param_pro_idx : {}",param.get("pro_idx"));
-		int mem_idx = 1;
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		int row = projectService.reviewDo(photo,param,mem_idx);
 		logger.info("row : {}",row);
 		return "redirect:/project/detail.go?pro_idx=" + param.get("pro_idx");
@@ -327,7 +327,7 @@ public class ProjectController {
 		logger.info("msg : {}", msg);
 		logger.info("pro_idx : {}", pro_idx);
 		logger.info("session : {}", session.getAttribute("mem_idx"));
-		String mem_idx = (String) session.getAttribute("mem_idx");
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		projectService.likeDo(pro_idx,msg,mem_idx);
 		logger.info("session : {}", session.getAttribute("mem_idx"));
 		return map;

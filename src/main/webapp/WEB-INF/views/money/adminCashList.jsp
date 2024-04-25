@@ -5,287 +5,289 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <style>
-#divMain {
-	width:1000px;
-	margin: 0 auto;
-}
-
-.proList {
+table {
 	border-collapse: collapse;
-	width: 1000px;
+	margin-top: 20;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+	background-color: rgba(255, 255, 255, 0.15);
+	font-size: 20;
 }
 
-thead>*{
+th, td {
+	width: 500;
+	height: 50px;
+	text-align: center;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	vertical-align: top;
+	vertical-align: bottom;
+	vertical-align: middle;
+}
+
+.mainDiv {
+	width: 1300;
+	margin: 0 auto;
+	margin-top: 20;
+}
+
+.middle {
+	width: 1300;
+}
+
+.topTitle {
+	font-size: 40;
+}
+
+thead {
 	background-color: lightgray;
 }
 
-th,td {
-	text-align: center;
-	border-bottom: 1px solid #000;
-	height: 50;
+.cashBtn {
+	width: 325;
+	margin: 0 auto;
+	margin-top: 20;
 }
 
-span {
+.chargeBtn, .cancleBtn {
+	width: 150;
+	height: 35;
+	font-size: 15;
+	border: 0px;
+	box-shadow: 0px 8px 32px rgba(60, 59, 59, 0.3);
+	background-color: rgba(255, 255, 255, 0.15);
+	border-radius: 170px;
+}
+
+.cancleBtn {
+	margin-left: 20;
+}
+
+.writeNum {
+	height: 30;
+	font-size: 15;
+	text-align: right;
+}
+
+.middleBottom, .middleTop, .dateSelect {
 	display: flex;
+	font-size: 20;
 }
 
-.divTop {
-	float: right;
-	margin: 20px 0;
+.middleTop {
+	margin-left: 1220;
+	width: 80;
 }
 
-.delButton {
-	border: 1px solid rebeccapurple;
-	width: 50;
-	float: right;
-	margin: 10px 0;
+.middleBottom {
+	width: 1300;
 }
 
-.text {
-	width: 55;
-	border: 1px solid red;
+.nowCash {
+	margin-left: 881;
+	width: 208;
+	font-size: 40;
+	text-align: right;
+}
+
+.selectYear, .selectMonth {
+	width: 104;
+	height: 30;
+	font-size: 20;
+}
+
+.dateSelect {
+	height: 30;
+	width: 1300;
+}
+
+.selectMonth {
+	margin-left: 10px;
+}
+
+.moveMoney{
 	display: flex;
+	margin-left: 30;
 }
-.pagination {
-  display: flex;
-  justify-content: center;
-  list-style-type: none;
-  padding: 0;
-  margin: 20px 0;
-}
-
-.pagination li {
-  margin: 0 5px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.pagination li a {
-  display: block;
-  padding: 8px 16px;
-  text-decoration: none;
-  color: #333;
-  border-radius: 4px;
-}
-
-.pagination li.active a {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.pagination li a:hover {
-  background-color: #e9ecef;
-  color: #495057;
+.search{
+	margin-left: 597;
 }
 </style>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/common/header.jsp"%>
-<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
-	<div id="divMain">
-		<table align="center" class="proList">
-			<div class="divTop">
-				<span> 
-				<select name="revNum" class="selectNum">
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
+	<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+	<div class="mainDiv">
+		<div class="topTitle">캐시내역</div>
+		<hr>
+		<div class="middle">
+			<div class="middleBottom">
+				<div class="dateSelect">
+					<select name="year" class="selectYear" id="year">
+					</select> <select name="month" class="selectMonth">
 						<option value="전체">전체</option>
-						<option value="삭제">삭제</option>
-						<option value="심사중">심사중</option>
-						<option value="펀딩중">펀딩중</option>
-						<option value="펀딩완료">펀딩완료</option>
-						<option value="펀딩실패">펀딩실패</option>
-				</select>
-						<input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
+						<option value="01">01</option>
+						<option value="02">02</option>
+						<option value="03">03</option>
+						<option value="04">04</option>
+						<option value="05">05</option>
+						<option value="06">06</option>
+						<option value="07">07</option>
+						<option value="08">08</option>
+						<option value="09">09</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+					<div class="moveMoney">
+						<input type="button" value="마일리지 리스트" onclick="location.href='./adminMileageList.go'">
+					</div>
+					<div class="search">
+						<input type="text" class="searchVal">
 						<input type="button" value="검색" onclick="search()">
-				</span>
+					</div>
+				</div>
 			</div>
-			<thead>
+		</div>
+		<form action="./charge.do">
+			<table align="center">
+				<thead>
+					<tr>
+						<th scope="col"></th>
+			            <th scope="col">사용자ID</th>
+			            <th scope="col">구분</th>
+			            <th scope="col">금액</th>
+			            <th scope="col">입출금 내역</th>
+			            <th scope="col">입출금 날짜</th>
+					</tr>
+				</thead>
+				<tbody id="list">
+				</tbody>
 				<tr>
-					<th class="proIdx">번호
-					</td>
-					<th class="userId">사용자 ID
-					</td>
-					<th class="proTitle">프로젝트 제목
-					</td>
-					<th class="proDeadLine">마감기한
-					</td>
-					<th class="rewPrice">리워드 가격
-					</td>
-					<th class="targerPrice">목표 금액
-					</td>
-					<th class="progress">할인율
-					</td>
-					<th class="fundState">펀딩 상태
+					<td colspan="6">
+						<div class="container">
+							<nav aria-label="Page navigation" style="text-align: center">
+								<ul class="pagination" id="pagination"></ul>
+							</nav>
+						</div>
 					</td>
 				</tr>
-			</thead>
-			<tbody id="list">
-			</tbody>
-			<tr>
-	      		<td colspan="8">
-					<div class="container">                           
-	               		<nav aria-label="Page navigation" style="text-align:center">
-	                		<ul class="pagination" id="pagination"></ul>
-						</nav>               
-	            	</div>
-	      		</td>
-      		</tr>
-		</table>
+			</table>
+		</form>
 	</div>
 </body>
 <script>
+	var isRun = false;
+
+	$(document).ready(function(){
+		var year = '전체';
+		var month = '전체';
+		listCall(year,month,showPage);
+	});
+	
 	var showPage = 1;
 	
-
-	$(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
-		listCall(cate,showPage);
-	});
-
-	var cate = '전체';
-	$('.selectNum').on('change',function(){
+ 	$('.selectMonth').on('change',function(){
+		var month = $('.selectMonth').val();
+		var year = $('.selectYear').val();
+		isRun = false;
 		$('#pagination').twbsPagination('destroy');
-		var cate;
-		if ($('.selectNum').val() == '심사중') {
-			cate ='A';
-		}
-		if ($('.selectNum').val() == '펀딩완료') {
-			cate ='B';
-		}
-		if ($('.selectNum').val() == '펀딩중') {
-			cate ='C';
-		}
-		if ($('.selectNum').val() == '삭제') {
-			cate ='D';
-		}
-		if ($('.selectNum').val() == '펀딩실패') {
-			cate ='E';
-		}
-		if ($('.selectNum').val() == '거절') {
-			cate ='F';
-		}
-		if ($('.selectNum').val() == '전체') {
-			cate =$('.selectNum').val();
-		}
-		listCall(cate,showPage);
+		listCall(year,month,showPage);
 	})
 	
-	function listCall(cate,showPage){
-		console.log(cate);
-		console.log(showPage);
+	$('.selectYear').on('change',function(){
+		var month = $('.selectMonth').val();
+		var year = $('.selectYear').val();
+		isRun = false;
+		$('#pagination').twbsPagination('destroy');
+		listCall(year,month,showPage);
+	}) 
+	
+	function search() {
+		console.log($('.searchVal').val());
+		var month = $('.selectMonth').val();
+		var year = $('.selectYear').val();
+		var keyWord = $('.searchVal').val(); 
+		isRun = false;
+		$('#pagination').twbsPagination('destroy');
+		console.log(month);
+		console.log(year);
+		listCall(year,month,showPage, keyWord);
+	}
+
+	function listCall(year,month,showPage, keyWord) {
+ 		console.log(year);
+ 		console.log(month);
+ 		if(isRun == true) {
+ 	        return;
+ 	    }
+
+ 	    isRun = true;
+ 	    
 		$.ajax({
-			type:'get'
-			,url:'./adminList.ajax'
-			,data:{
-				category:cate,
+			type : 'post',
+			url : './allCashList.ajax',
+			data : {
+				year:year,
+				month:month,
 				page:showPage,
-				cnt:20
-			}
-			,dataType:'json'
-			,success:function(data){
+				cnt:20,
+				keyWord:keyWord
+			},
+			dataType : 'json',
+			success : function(data) {
+				console.log(data.list);
+				console.log(data.year);
 				drawList(data.list);
-				$('#pagination').twbsPagination({
-	            	startPage:1, // 시작페이지
-	            	totalPages:data.totalPages, // 총 페이지 수
-	            	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
-	            	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
-	            		console.log(pg); // 클릭한 페이지 번호
-	            		num = pg;
-	            		listCall(cate,pg);
-	            	}
-	            })
-			}
-			,error:function(error){
+				if (data.year != null) {
+					$('#year').html('');		
+					drawYear(data.year);							
+				}
+ 				$('#pagination').twbsPagination({
+	            	startPage:data.currPage, 
+	            	totalPages:data.totalPages,
+	            	visiblePages:5,
+		            onPageClick:function(evt,pg){
+		            	console.log(pg);
+		            	listCall(year,month,pg, keyWord);
+		            	isRun = false;
+		            }
+	            }) 
+			},
+			error : function(error) {
 				console.log(error);
 			}
 		});
 	}
 	
 	function drawList(list){
-		var num = 1;
 		var content = '';
 		for (item of list) {
-			
 			content += '<tr>';
-			content += '<td class="proIdx">' + item.pro_idx + '</td>';
-			content += '<td class="userId">' + item.mem_id + '</td>';
-			content += '<td class="proTitle"><a href="detail.go?pro_idx=' + item.pro_idx + '">' + item.pro_title + '</a></td>';
-			var date = new Date(item.pro_deadline);
+			content += '<td>' + item.cash_idx + '</td>';
+			content += '<td>' + item.mem_id + '</td>';
+			content += '<td>캐시</td>';
+			content += '<td>' + item.cash_content +item.cash_amount + '</td>';
+			content += '<td>' + item.cash_division + '</td>';
+			var date = new Date(item.cash_date);
 			var dateStr = date.toLocaleDateString("ko-KR");//en_US
-			content += '<td class="proDeadLine">' + dateStr + '</td>';
-			content += '<td class="rewPrice">' + Number(item.rew_price).toLocaleString()  + '원</td>';
-			content += '<td class="targerPrice">' + Number(item.target_price).toLocaleString() + '원</td>';
-			content += '<td class="progress">' + item.progress + '%</td>';
-			var state = '';
-			if (item.pro_state == 'A') {
-				state = '심사중';
-			}
-			if (item.pro_state == 'B') {
-				state = '펀딩완료';
-			}
-			if (item.pro_state == 'C') {
-				state = '펀딩중';
-			}
-			if (item.pro_state == 'D') {
-				state = '삭제';
-			}
-			if (item.pro_state == 'E') {
-				state = '실패';
-			}
-			if (item.pro_state == 'F') {
-				state = '거절';
-			}
-			content += '<td class="fundState">' + state + '</td>';
+			content += '<td>' + dateStr + '</td>';
 			content += '</tr>';
-			num += 1;
-		}
+		}		
 		$('#list').html(content);
 	};
 	
-	function search(showPage) {
-		console.log($('.keyWord').val());
-		console.log(showPage);
-		$('.selectNum').val('전체');
-		$.ajax({
-			type:'get'
-			,url:'./search.ajax'
-			,data:{
-				keyWord:$('.keyWord').val(),
-				page:showPage,
-				cnt:20
-			}
-			,dataType:'json'
-			,success:function(data){
-				console.log(data.list);
-				console.log(data.totalPages);
-				drawList(data.list);
-				$('#pagination').twbsPagination({
-	            	startPage:1, // 시작페이지
-	            	totalPages:data.totalPages, // 총 페이지 수
-	            	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
-	            	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
-	            		console.log(pg); // 클릭한 페이지 번호
-	            		num = pg;
-	            		search(pg);
-	            	}
-	            })
-			}
-			,error:function(error){
-				console.log(error);
-			}
-		});
-	}
-	
-	function enterKey() {
-		if (event.keyCode==13) {
-			var showPage = 1;
-			$('#pagination').twbsPagination('destroy');
-			search(showPage);
+	function drawYear(list){
+		var content = '';
+		content+='<option value="전체">전체</option>';
+		for (item of list) {
+			console.log(item.year)
+			content += '<option value="' + item.year + '">' + item.year + '</option>'
 		}
-	}
-	
-	
+		$('#year').append(content);
+	};
 	
 	
 	
@@ -619,14 +621,5 @@ span {
 	    $.fn.twbsPagination.version = "1.4.1";
 
 	})(window.jQuery, window, document);
-	
-	
-	
-	
-	
-	
-	
-	
-	
 </script>
 </html>

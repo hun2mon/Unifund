@@ -233,7 +233,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .reviewFrom, .review_content {
 	width: 1000;
-	height: 100;
+	height: 170;
 }
 
 .sub_review {
@@ -487,9 +487,8 @@ input[name=reportContent] {
 				</div>
 				<div>
 					<div>
-						<input type="hidden" class="reviewFrom" name="pro_idx"
-							value="${project.pro_idx }"> <input type="text"
-							class="reviewFrom" name="revContent">
+						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }"> 
+						<input type="text" class="reviewFrom" name="revContent" min="5" maxlength="500" onkeyup="lengthCheck(this)">
 					</div>
 					<div>
 						<input type="file" class="file_select" name="photo"> <input
@@ -598,7 +597,7 @@ input[name=reportContent] {
 			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
 			content += '<div class="review_content">' + item.rev_content + '</div>';
 			content += '<div>';
-			if (item.mem_id == '${loginId}') {
+			if (item.mem_id == '${mem_id}') {
 				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '&pro_idx=' + item.pro_idx +'">리뷰삭제 </a>';	
 				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
 				$('input[name="revContent"]').attr('readonly',true);
@@ -870,6 +869,16 @@ input[name=reportContent] {
 	if (msg != '') {
 		alert(msg);
 	}
+	
+	function lengthCheck(text){
+		var content = $(text).val();
+		if (content.length >= 500) {
+			alert('입력 가능 글자수를 초과하였습니다.');
+		}
+		
+	}
+	
+	
 
 
 </script>

@@ -28,4 +28,18 @@ public interface MoneyDAO {
 
 	int selectMileage(String mem_idx);
 
+	List<MoneyDTO> mileYearCall();
+
+	List<MoneyDTO> allListCall(String month, int start, int pagePerCnt, String keyWord);
+
+	int allCashCount(int pagePerCnt, String keyWord);
+
+	int allFilterAllCount(int pagePerCnt, String serchMonth, String keyWord);
+	
+	List<MoneyDTO> allMileListCall(String month, int start, int pagePerCnt, String keyWord);
+
+	int allMileCount(int pagePerCnt, String keyWord);
+
+	int allMileFilterAllCount(int pagePerCnt, String serchMonth, String keyWord);
+
 }

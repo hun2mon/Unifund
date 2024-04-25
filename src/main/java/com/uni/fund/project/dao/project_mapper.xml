@@ -211,19 +211,19 @@
 		SELECT CEIL(COUNT(mem_id)/#{param1}) AS pages FROM `member` m join project_apply pa on m.mem_idx = pa.mem_idx where pro_idx = #{param2} and fund_state = 'C'
 	</select>
 	
-	<insert id="likeDo" parameterType="String">
+	<insert id="likeDo">
 		insert into project_like(pro_idx,mem_idx)values(#{param1},#{param2})
 	</insert>
 	
-	<delete id="likeCancle" parameterType="String">
+	<delete id="likeCancle">
 		delete from project_like where pro_idx = #{param1} and mem_idx = #{param2}
 	</delete>
 	
-	<insert id="favorite" parameterType="String">
+	<insert id="favorite">
 		insert into bookmark(pro_idx,mem_idx)values(#{param1},#{param2})
 	</insert>
 	
-	<delete id="favoriteCancle" parameterType="String">
+	<delete id="favoriteCancle">
 		delete from bookmark where pro_idx = #{param1} and mem_idx = #{param2}
 	</delete>
 	

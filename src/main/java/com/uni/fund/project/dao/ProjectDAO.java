@@ -8,7 +8,7 @@ import com.uni.fund.project.dto.ReviewDTO;
 
 public interface ProjectDAO {
 
-	ProjectDTO detail(String memIdx, String pro_idx);
+	ProjectDTO detail(int memIdx, String pro_idx);
 
 	int projectCreate(ProjectDTO projectDTO);
 
@@ -40,13 +40,13 @@ public interface ProjectDAO {
 
 	Object allCount(int pagePerCnt, String pro_idx);
 
-	void likeDo(String pro_idx, String mem_idx);
+	void likeDo(String pro_idx, int mem_idx);
 
-	void likeCancle(String pro_idx, String mem_idx);
+	void likeCancle(String pro_idx, int mem_idx);
 
-	void favorite(String pro_idx, String mem_idx);
+	void favorite(String pro_idx, int mem_idx);
 
-	void favoriteCancle(String pro_idx, String mem_idx);
+	void favoriteCancle(String pro_idx, int mem_idx);
 
 	List<ProjectDTO> adminList(String category, int start, int pagePerCnt);
 	

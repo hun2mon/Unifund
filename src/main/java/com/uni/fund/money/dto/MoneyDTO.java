@@ -16,6 +16,7 @@ public class MoneyDTO {
 	private int mile_amount;
 	private String mile_division;
 	private Date mile_date;
+	private String mem_id;
 	
 	
 	public int getCash_idx() {
@@ -95,5 +96,11 @@ public class MoneyDTO {
 	}
 	public void setMile_date(Date mile_date) {
 		this.mile_date = mile_date;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
 	}
 }
