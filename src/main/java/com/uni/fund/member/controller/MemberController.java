@@ -43,6 +43,13 @@ public class MemberController {
 		return "member/findId";
 	}
 	
+	//비밀번호찾기 페이지 이동
+	@RequestMapping(value = "/member/findPw.go")
+	public String findPw() {
+		logger.info("비밀번호찾기 페이지 이동");
+		return "member/findPw";
+	}
+	
 	
 	@RequestMapping(value="member/login.do")
 	public String login(Model model, HttpSession session, String id, String pw) {
@@ -59,7 +66,7 @@ public class MemberController {
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
-		
+	
 		return page;
 	}
 	
@@ -72,12 +79,11 @@ public class MemberController {
 		
 		String page = "redirect:/main";
 		
-		if(session.getAttribute("mem_idx")!=null) {
 			int row = memberService.write(profilePhoto,mem_cor,param);
 			if(row>0) {
-				page = "writeForm";
+				page = "/member/joinForm";
+				
 			}
-		}
 		return page;
 	}
 	
@@ -91,6 +97,7 @@ public class MemberController {
 		
 		return map;
 	}
+	
 	
 	
 	

@@ -33,14 +33,11 @@
     <br>
     <a href="findId.go">아이디찾기</a>
     <br>
-    <a href="findid.jsp">비밀번호 변경</a>
+    <a href="findPw.go">비밀번호 변경</a>
     <br> ${msg}
 </body>
 <script>
-	var msg = '${msg}';
-	if(msg != ''){
-		alert(msg);
-	}
+
 	
 </script>
 </html>

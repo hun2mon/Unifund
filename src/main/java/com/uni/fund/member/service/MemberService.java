@@ -78,7 +78,11 @@ public class MemberService {
 				byte[] bytes = mem_cor.getBytes(); // MultipartFile 로 부터 바이너리 추출
 				Path path = Paths.get(file_root + newFileName);// 저장경로지정
 				Files.write(path, bytes);// 저장
-				memberDAO.fileWrite(fileName, newFileName, idx);
+				
+				Object profilePhoto = null;
+				String param3 = profilePhoto != null ? "A" : "B";
+				
+				memberDAO.fileWrite(newFileName, idx, param3);
 				Thread.sleep(1);// 파일명을 위해 강제 휴식 부여
 			} catch (Exception e) {
 				e.printStackTrace();

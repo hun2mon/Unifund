@@ -16,6 +16,6 @@ public interface MemberDAO {
 
 	int write(MemberDTO dto);
 
-	void fileWrite(String fileName, String newFileName, int idx);
+	void fileWrite(String fileName, int idx, String param3);
 
 }

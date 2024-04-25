@@ -196,7 +196,7 @@ input[name="연락처 인증"] {
 				<td colspan="2"><input type="checkbox" name="mem_consent"
 					class="mem_consent" disabled><a class="agreement">&nbsp(필수)개인정보
 						수집 및 이용 동의에 동의합니다</a></td>
-				<input name="mem_consent" type="hidden" value="Y" />
+				<!--  <input name="mem_consent" type="hidden" value="Y" />-->
 			</tr>
 			<tr>
 				<!-- button 태그에 type="button" 을 넣으면 submit 기능이 사라진다. -->
@@ -236,9 +236,19 @@ function showFirstAlert() {
     alert("인증번호를 확인 해주세요!");
   }
   
+
 function showSecondAlert() {
-    alert("인증번호가 확인되었습니다. ");
+	var $confirm = $('input[name="mem_confirm"]');
+	if ($confirm.val() === null || $confirm.val() === ' ') {
+		alert("인증번호를 입력해 주세요!");
+	}else if ($confirm.val() === '0000') {
+    	alert("인증번호가 확인되었습니다. ");
+	} else {
+		alert("인증번호가 일치하지 않습니다. ");
+		}
   }
+  
+  
   
 
 $('#mem_confirm').on('keyup', function(){
@@ -276,7 +286,8 @@ $('#mem_confirm').on('keyup', function(){
 		var $cor = $('input[name="mem_cor"]');
 		
 
-		
+		var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 		
 		
 		if(overChk == false){
@@ -327,9 +338,6 @@ $('#mem_confirm').on('keyup', function(){
 		}else if($consent.val()== null){
 			alert(' 개인정보 수집 및 이용에 동의해주세요!');			
 			$consent.focus();
-		} else if($profilePhoto.val()==''){
-		        alert('프로필 사진을 첨부해 주세요!'); 
-		    $profilePhoto.focus();   
 		} else if($cor.val()==''){
 	        alert('재학증명서 사진을 첨부해 주세요!'); 
 	    $cor.focus(); 
@@ -358,15 +366,7 @@ $('#mem_confirm').on('keyup', function(){
 			        
 			    }
 			    
-		        // 이메일에 '@' 포함 여부 확인
-		        var $email = $('input[name="mem_email"]');
-		        var emailValue = $email.val();
-		        
-		        if (emailValue.indexOf('@') === -1) {
-		            alert('이메일 주소에는 "@"가 포함되어야 합니다!');
-		            $email.focus();
-		            return false; // 폼 제출 방지
-		        }
+		   
 			    
 			    
 			// 데이터 넣기 전에 확인
