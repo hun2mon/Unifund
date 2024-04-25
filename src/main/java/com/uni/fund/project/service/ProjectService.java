@@ -389,5 +389,9 @@ public class ProjectService {
 		
 	}
 
+	public void report(String pro_idx, String repContent, String mem_idx) {
+		projectDAO.report(pro_idx,repContent,mem_idx);
+		
+	}
 
 }
