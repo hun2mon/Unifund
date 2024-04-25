@@ -42,7 +42,11 @@ public interface CrewDAO {
 	
 	List<CrewDTO> searchCrew(String keyword, int start, int pagePerCnt);
 	
-	int searchCountPage(String keyword, int pagePerCnt);
+	Object searchCountPage(String keyword, int pagePerCnt);
+
+	String stateCheck(String crew_idx);
+
+	CrewDTO detail(String memId, String crew_idx);
 
 	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
 

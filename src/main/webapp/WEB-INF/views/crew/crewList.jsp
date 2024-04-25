@@ -94,9 +94,7 @@ input[type="text"] {
 
 <body>
 
-	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx"
-		value="1">
-	<!--value값 바꿔줘야함 {crew.mem_idx} -->
+	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="1">	<!--value값 바꿔줘야함 {crew.mem_idx} -->
 	<div class="header">
 		<div class="btn-group" style="margin-right: 20px;">
 			<button class="btn" id="latestBtn">최신순</button>
@@ -189,7 +187,7 @@ for(item of list){
    content += '<p>' + item.crew_exp + '</p>';
    content += '<p>' + item.crew_num + '</p>';
    content += '<p>' + item.crew_cool_cnt + '</p>';
-   content += '<button class="btn" onclick="location.href=\'/main/crew/crewCreate.go\'">크루 정보</button>';
+   content += '<button class="btn" onclick=\'location.href="/main/crew/detail.go?crew_idx=' +item.crew_idx + '"\'>크루 정보</button>';
    content += '<button class="btn-apply" data-crew_idx="' + item.crew_idx + '">신청하기</button>';
    content += '</div>';
 }

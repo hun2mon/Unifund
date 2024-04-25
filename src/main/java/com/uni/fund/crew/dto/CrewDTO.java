@@ -26,6 +26,8 @@ public class CrewDTO {
 	
 	private int crew_cool_idx;
 	private int crew_cool_cnt;
+	
+	private String crew_recruitment_information;
 
 	
 	public int getCrew_idx() {
@@ -159,6 +161,12 @@ public class CrewDTO {
 	}
 	public void setPages(int pages) {
 		this.pages = pages;
+	}
+	public String getCrew_recruitment_information() {
+		return crew_recruitment_information;
+	}
+	public void setCrew_recruitment_information(String crew_recruitment_information) {
+		this.crew_recruitment_information = crew_recruitment_information;
 	}
 	
 

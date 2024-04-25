@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uni.fund.crew.dto.CrewDTO;
 import com.uni.fund.crew.service.CrewService;
 
 @Controller
@@ -90,6 +91,7 @@ public class CrewController {
 		return page;
 	}
 	
+	
 	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> crewListCall(String filterType,String page, String cnt,Integer crew_idx) {
@@ -150,8 +152,36 @@ public class CrewController {
 		
 		map.put("row", crewService.crewCoolCheck(mem_idx, crew_idx));
 		
-		return map;
-		
+		return map;		
+	}
+	
+	@RequestMapping(value="/crew/detail.go",method = RequestMethod.GET)
+	public String crewDetailGo(Model model, HttpSession session, String row, String crew_idx) {
+	    logger.info("crewDetail 들어간다.");
+	    String page="crew/detail";
+	    String memId= (String) session.getAttribute("mem_id");
+	    
+		model.addAttribute("mem_idx",memId);
+	    
+	    logger.info("loginId : "+session.getAttribute("mem_id"));
+	    logger.info("memIdx : "+session.getAttribute("mem_idx"));
+	    model.addAttribute("mem_idx","memIdx");	    
+	    
+	    CrewDTO crew= new CrewDTO();
+	    
+	    if(session.getAttribute("loginId")!=null) {
+	    	String crew_state= crewService.stateCheck(crew_idx);
+		    // 그게 아니라면 크루상 A =활동중인 상
+		    	   crew= crewService.detail(crew_idx,memId);
+		    	   model.addAttribute("crew",crew);
+		    	   logger.info("else session in, memIdx : " +memId);
+		    	   logger.info("else session in, row = "+row);
+		    	   logger.info("else session in, crew_idx = "+crew_idx);   
+		    	   if(row !=null) {
+		    		   model.addAttribute("msg","크루가 정상적으로 삭제되었습니다.");
+		    	   }
+		   }
+	    return page;
 	}
 	
 	

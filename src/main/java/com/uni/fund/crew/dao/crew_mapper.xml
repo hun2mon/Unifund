@@ -54,47 +54,47 @@
 	</update>
 	
 	<select id="crewList" resultType="com.uni.fund.crew.dto.CrewDTO">
-SELECT 
-    (
+	SELECT 
+    	(
         SELECT COUNT(crew_logo) FROM crew c
         JOIN (
             SELECT * FROM photo
             WHERE pho_division='크루로고'
         ) p ON c.crew_idx= p.ref_idx
-    ) AS pho_cnt,
-    c.crew_idx,
-    c.crew_name,
-    c.crew_exp,
-    c.crew_num,               
-    (
-        SELECT pho_name FROM photo 
-        WHERE pho_division ='크루로고'
-        AND ref_idx= c.crew_idx
-        ORDER BY pho_idx DESC LIMIT 1
-    ) AS crew_logo,
-    (SELECT COUNT(*) FROM popularity 
-     WHERE crew_idx = c.crew_idx
-    ) AS crew_cool_cnt
-FROM crew c 
-<if test='param1 == "latest"'>
-    ORDER BY c.crew_idx DESC
-</if>
-<if test='param1 == "popularity"'>
-    ORDER BY crew_cool_cnt DESC
-</if>
-<!-- Default order -->
-<if test='param1 != "latest" and param1 != "popularity"'>
-    ORDER BY c.crew_idx DESC
-</if>
-LIMIT 10 OFFSET #{param2}          
-</select>
+    	) AS pho_cnt,
+    	c.crew_idx,
+    	c.crew_name,
+    	c.crew_exp,
+    	c.crew_num,               
+    	(
+    	SELECT pho_name FROM photo 
+    	WHERE pho_division ='크루로고'
+    	AND ref_idx= c.crew_idx
+    	ORDER BY pho_idx DESC LIMIT 1
+    	) AS crew_logo,
+    	(SELECT COUNT(*) FROM popularity 
+     	WHERE crew_idx = c.crew_idx
+    	) AS crew_cool_cnt
+	FROM crew c 
+	<if test='param1 == "latest"'>
+    	ORDER BY c.crew_idx DESC
+	</if>
+	<if test='param1 == "popularity"'>
+    	ORDER BY crew_cool_cnt DESC
+	</if>
+	<!-- Default order -->
+	<if test='param1 != "latest" and param1 != "popularity"'>
+    	ORDER BY c.crew_idx DESC
+	</if>
+		LIMIT 10 OFFSET #{param2}          
+	</select>
 
 	<select id="allCountPage" resultType="Object">
 		SELECT CEIL(COUNT(c.crew_idx) / #{param2}) AS pages,
 		c.crew_idx,p.crew_cool_cnt
-	FROM crew c 
-	left join 
-	(SELECT crew_idx,COUNT(*) as crew_cool_cnt FROM popularity group by crew_idx) p on c.crew_idx = p.crew_idx
+		FROM crew c 
+		left join 
+		(SELECT crew_idx,COUNT(*) as crew_cool_cnt FROM popularity group by crew_idx) p on c.crew_idx = p.crew_idx
 		 <if test='param1 == "latest"'>
         ORDER BY c.crew_idx DESC
     	</if>
@@ -108,8 +108,8 @@ LIMIT 10 OFFSET #{param2}
 	</select>
 	
 	<select id="searchCrew" resultType="com.uni.fund.crew.dto.CrewDTO">
-    SELECT 
-        (SELECT COUNT(crew_logo) FROM crew c
+    	SELECT 
+        	(SELECT COUNT(crew_logo) FROM crew c
 			JOIN( 
 				SELECT * FROM photo
 				WHERE pho_division='크루로고'
@@ -118,7 +118,7 @@ LIMIT 10 OFFSET #{param2}
 			c.crew_idx,
 			c.crew_name,
 			c.crew_exp,
-			c.crew_num,				
+			c.crew_num,	
 			(SELECT pho_name FROM photo 
 			WHERE pho_division ='크루로고'
 			AND ref_idx= c.crew_idx
@@ -132,15 +132,12 @@ LIMIT 10 OFFSET #{param2}
     	WHERE c.crew_name LIKE CONCAT('%', #{param1}, '%')
     	ORDER BY c.crew_idx DESC 
     	LIMIT 10 OFFSET #{param2}
-</select>
+	</select>
 
-<select id="searchCountPage" resultType="int">
-    SELECT CEIL(COUNT(crew_idx) / #{param2}) AS pages FROM crew
-    WHERE crew_name LIKE CONCAT('%',#{param1},'%')
-</select>
-	
-	
-	
+	<select id="searchCountPage" resultType="int">
+    	SELECT CEIL(COUNT(crew_idx) / #{param2}) AS pages FROM crew
+    	WHERE crew_name LIKE CONCAT('%',#{param1},'%')
+	</select>
 	
 	<select id="isApplying" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*) FROM crewMember_history WHERE mem_idx =#{mem_idx} AND crew_mem_status ='A'
@@ -173,7 +170,28 @@ LIMIT 10 OFFSET #{param2}
 		DELETE FROM popularity WHERE mem_idx=#{param1} AND crew_idx=#{param2}
 	</delete>
 	
+	<select id="detail" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT
+			c.crew_name
+			,c.crew_exp
+			,c.crew_local
+			,c.crew_con
+			,c.crew_link
+			,(SELECT pho_name FROM photo
+			WHERE pho_division ='모집설명'
+			AND ref_idx= c.crew_idx
+			ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information
+			,(SELECT pho_name FROM photo 
+			WHERE pho_division ='크루로고'
+			AND ref_idx= c.crew_idx
+			ORDER BY pho_idx DESC LIMIT 1
+			) AS crew_logo
+		FROM crew c 
+		WHERE crew_idx=#{param2}
+	</select>
 	
-	
+	<select id="stateCheck" resultType="String">
+		SELECT crew_status FROM crew WHERE crew_idx=#{param1}
+	</select>
 	
 </mapper>

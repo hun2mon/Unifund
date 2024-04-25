@@ -193,6 +193,20 @@ public class CrewService {
 		
 		return row;
 	}
+	
+
+	public CrewDTO detail(String crew_idx, String memId) {
+		logger.info("crew_idx : {}",crew_idx);
+		logger.info("memIdx : {}",memId);
+		
+		return crewDAO.detail(memId,crew_idx);
+	}
+
+
+	public String stateCheck(String crew_idx) {
+		logger.info("stateCheck : {}",crewDAO.stateCheck(crew_idx));
+		return crewDAO.stateCheck(crew_idx);
+	}
 
 
 
