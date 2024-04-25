@@ -8,30 +8,69 @@
 	<select id="annList"
 		resultType="com.uni.fund.admin.dto.AnnouncementDTO">
 		SELECT noti_idx, noti_title, noti_date, noti_top
-		FROM announcement 
+		FROM
+		announcement
+		WHERE noti_status = 'A'
+		ORDER BY noti_top DESC, noti_idx DESC
+		LIMIT #{param1}, #{param2}
+	</select>
+
+	<select id="adminList"
+		resultType="com.uni.fund.admin.dto.AnnouncementDTO">
+		SELECT a.noti_idx, m.mem_id, a.noti_title, a.noti_date, a.noti_top, a.noti_status
+		FROM
+		announcement a join member m ON a.mng_idx = m.mem_idx
 		ORDER BY noti_top DESC, noti_idx DESC
 		LIMIT #{param1}, #{param2}
 	</select>
 	
-	<select id="annListSearch" resultType="com.uni.fund.admin.dto.AnnouncementDTO">
-	SELECT *
-		FROM announcement 
+	<update id="updateAnnouncementStatus">
+    UPDATE announcement
+    SET noti_status = #{status}
+    WHERE noti_idx IN
+    <foreach collection="notiIdxList" item="notiIdx" separator="," open="(" close=")">
+        #{notiIdx}
+    </foreach>
+</update>
+
+	<select id="annListSearch"
+		resultType="com.uni.fund.admin.dto.AnnouncementDTO">
+		SELECT *
+		FROM announcement
 		where noti_title like concat('%',#{param1},'%')
-		ORDER BY noti_top DESC, noti_idx DESC
-		LIMIT #{param2}, #{param3} 
-		
+		ORDER BY noti_top DESC,
+		noti_idx DESC
+		LIMIT #{param2}, #{param3}
+
 	</select>
-	
+
+
+	<select id="adminListSearch"
+		resultType="com.uni.fund.admin.dto.AnnouncementDTO">
+		SELECT *
+		FROM announcement
+		where noti_title like concat('%',#{param1},'%')
+		ORDER BY noti_top DESC,
+		noti_idx DESC
+		LIMIT #{param2}, #{param3}
+
+	</select>
+
+
+
 	<select id="allCount" resultType="Integer">
-		SELECT CEIL(COUNT(*) / #{pagePerCnt}) AS pages
+		SELECT CEIL(COUNT(*) /
+		#{pagePerCnt}) AS pages
 		FROM announcement
 	</select>
 
 	<insert id="adminAnnForm" useGeneratedKeys="true"
 		keyColumn="noti_idx" keyProperty="noti_idx"
 		parameterType="com.uni.fund.admin.dto.AnnouncementDTO">
-		INSERT INTO announcement(mng_idx,noti_title,noti_content,noti_top)
-		VALUES (#{mng_idx},#{noti_title},#{noti_content},#{noti_top})
+		INSERT INTO
+		announcement(mng_idx,noti_title,noti_content,noti_top)
+		VALUES
+		(#{mng_idx},#{noti_title},#{noti_content},#{noti_top})
 	</insert>
 
 	<insert id="createNotiPhoto">
@@ -39,12 +78,63 @@
 		VALUES(#{param1},#{param2},#{param3})
 	</insert>
 
-<select id="searchAllCount" resultType="int">
-		SELECT CEIL(COUNT(noti_idx)/#{param2})
-		FROM announcement 
+	<select id="searchAllCount" resultType="int">
+		SELECT
+		CEIL(COUNT(noti_idx)/#{param2})
+		FROM announcement
 		where noti_title like concat('%',#{param1},'%')
-		ORDER BY noti_top DESC, noti_idx DESC 
-</select>
+		ORDER BY noti_top DESC,
+		noti_idx DESC
+	</select>
+
+
+	<select id="annDetail" resultType="com.uni.fund.admin.dto.AnnouncementDTO">
+	SELECT noti_title,noti_date,noti_content from announcement  where noti_idx = #{param1};
+	
+	
+	</select>
+
+
+ <select id="notiPhoto" resultType="String">
+         SELECT pho_name FROM photo WHERE ref_idx = #{noti_idx} AND pho_division = '공지사항사진'
+   </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

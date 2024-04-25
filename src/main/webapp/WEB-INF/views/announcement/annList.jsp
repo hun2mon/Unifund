@@ -175,7 +175,7 @@ function search(showpage) {
     });
 }
 function goToDetail(notiIdx) {
-    window.location.href = 'annDetail.jsp?noti_idx=' + notiIdx; // 공지사항 상세 페이지로 이동
+    window.location.href = './annDetail.go?noti_idx=' + notiIdx; // 공지사항 상세 페이지로 이동
 }
 function searchDo(){
 	var showPage = 1;
