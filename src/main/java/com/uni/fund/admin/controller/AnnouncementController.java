@@ -25,8 +25,7 @@ import com.uni.fund.admin.service.AnnouncementService;
 public class AnnouncementController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired
-	AnnouncementService annService;
+	@Autowired AnnouncementService annService;
 
 	@RequestMapping("/announcement/annList.go")
 	public String annList(Model model) {

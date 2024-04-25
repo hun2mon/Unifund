@@ -1,5 +1,6 @@
 package com.uni.fund.member.service;
 
+import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dao.MemberDAO;
 import com.uni.fund.member.dto.MemberDTO;
-
 
 @Service
 public class MemberService {
@@ -91,4 +91,20 @@ public class MemberService {
 	}
 
 	
+	public List<MemberDTO> memberListAjax(Map<String, Object> param) {
+		return memberDAO.memberListAjax(param);
+	}
+
+	public int memberTotalCnt(Map<String, Object> param) {
+		return memberDAO.memberTotalCnt(param);
+	}
+
+	public List<MemberDTO> adminMemberJoinReqAjax(Map<String, Object> param) {
+		return memberDAO.adminMemberJoinReqAjax(param);
+	}
+	
+	public int memberJoinCnt(Map<String, Object> param) {
+		return memberDAO.memberJoinCnt(param);
+	}
+
 }

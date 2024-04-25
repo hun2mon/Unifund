@@ -23,8 +23,7 @@ import com.uni.fund.admin.dto.AnnouncementDTO;
 public class AnnouncementService {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired
-	AnnouncementDAO annDAO;
+	@Autowired AnnouncementDAO annDAO;
 
 	public String file_root = "C:/upload/Unifund/";
 

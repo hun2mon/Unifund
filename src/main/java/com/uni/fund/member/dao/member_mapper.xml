@@ -4,6 +4,7 @@
 
 <mapper namespace="com.uni.fund.member.dao.MemberDAO">
 
+
 	<insert id="write" useGeneratedKeys="true" keyColumn="mem_idx"
 		keyProperty="mem_idx"
 		parameterType="com.uni.fund.member.dto.MemberDTO">
@@ -37,8 +38,6 @@
 	</select>
 
 
-
-
  <insert id="fileWrite">
         <if test='param3 == "A"'>
             insert into photo (pho_name, ref_idx, pho_division)
@@ -49,7 +48,51 @@
             values(#{param1},#{param2},'재학증명서')
         </if>;
    </insert>
+   
+   <select id="memberListAjax" parameterType="map" resultType="com.uni.fund.member.dto.MemberDTO">
+      	SELECT m.*, m.mem_joindate, COUNT(pt.ref_idx) AS ref_idx_cnt, COUNT(mm.mem_mng_idx) AS stop_mem_idx
+		FROM member m
+		LEFT JOIN rep_trans pt ON pt.ref_idx = m.mem_idx
+		LEFT JOIN mem_mng mm ON mm.mng_div = m.mem_idx
+		WHERE 1=1
+		<if test="searchType != null and searchType != ''">
+        AND mem_status = #{searchType}
+    	</if>
+		<if test="keyword != null and keyword != ''">
+        AND mem_id LIKE CONCAT('%', #{keyword}, '%')
+    	</if>
+		GROUP BY m.mem_idx
+		ORDER BY m.mem_joindate DESC
+       	LIMIT #{start}, 10
+    </select>
 
+    <select id="memberTotalCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM member
+        WHERE 1=1
+        <if test="searchType != null and searchType != ''">
+        AND mem_status = #{searchType}
+    	</if>
+		<if test="keyword != null and keyword != ''">
+        AND mem_id LIKE CONCAT('%', #{keyword}, '%')
+    	</if>
+    </select>
+    
+    <select id="adminMemberJoinReqAjax" parameterType="map" resultType="com.uni.fund.member.dto.MemberDTO">
+      	SELECT * FROM member WHERE mem_status = 'Y'
+		<if test="keyword != null and keyword != ''">
+        AND mem_id LIKE CONCAT('%', #{keyword}, '%')
+    	</if>
+		GROUP BY mem_idx
+		ORDER BY mem_joindate DESC
+       	LIMIT #{start}, 10
+    </select>
 
+    <select id="memberJoinCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM member
+        WHERE mem_status = 'Y'
+		<if test="keyword != null and keyword != ''">
+        AND mem_id LIKE CONCAT('%', #{keyword}, '%')
+    	</if>
+    </select>
 
 </mapper>
