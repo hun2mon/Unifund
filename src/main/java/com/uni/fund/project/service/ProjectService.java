@@ -230,6 +230,44 @@ public class ProjectService {
 		return projectCheckLikeRow;
 	}
 	
+	public int projectReadFavorites(Integer pro_idx, Integer mem_idx) {
+		return projectDAO.projectReadFavorites(pro_idx,mem_idx);
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 즐겨찾기 확인 / 추가 / 삭제
+	 * */
+	public int projectCheckFavorites(Integer pro_idx, Integer mem_idx) {
+		int projectCheckFavoritesRow = projectDAO.projectCheckFavorites(pro_idx,mem_idx);
+		logger.info("projectCheckFavoritesRow : {}",projectCheckFavoritesRow);
+		if(projectCheckFavoritesRow == 1) {
+			String proIdx = pro_idx.toString();
+			String memIDx = mem_idx.toString();
+			projectDAO.favoriteCancle(proIdx,memIDx);
+			projectCheckFavoritesRow = 0;
+		}else {
+			String proIdx = pro_idx.toString();
+			String memIDx = mem_idx.toString();
+			projectDAO.favorite(proIdx,memIDx);
+			projectCheckFavoritesRow = 1;
+		}
+		return projectCheckFavoritesRow;
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 펀딩상태 실패 / 펀딩중 불러오기
+	 * */
+	public String projectFundingState(int pro_idx) {
+		int result = projectDAO.projectFundingState(pro_idx);
+		logger.info("성공여부 : {}", result);
+		if(result > 0) {
+			return "projectFundingFail";
+		}else {
+			return "projectFundingProgress";
+		}
+	}
 	
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);

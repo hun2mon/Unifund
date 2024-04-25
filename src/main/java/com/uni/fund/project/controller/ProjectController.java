@@ -170,10 +170,12 @@ public class ProjectController {
 	 * 작성자 : 허승경
 	 * 프로젝트 리스트페이지 IN
 	 * */
-
 	@GetMapping(value = "/project/list.go")
-	public String proList(String pro_idx,Model model, @RequestParam Map<String, Object> param) {
+	public String proList(String pro_idx,Model model, @RequestParam Map<String, Object> param, HttpSession session) {
 		logger.info(":: proList CONTROLLER IN ::");
+
+		session.setAttribute("loginId", "admin");
+		session.setAttribute("memIdx", "1");
 		
 		int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
 		param.put("pg", String.valueOf(pg));
@@ -181,10 +183,6 @@ public class ProjectController {
 		String category = (String) param.get("category");
 		String keyword = (String)param.get("keyword");
 		String filter = (String)param.get("filter");
-		
-		if(filter == null) {
-			filter = "recent";
-		}
 		
 		int showList = 8;
 		int spaceBlock = 5;
@@ -257,6 +255,54 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("projectCheckLikeRow", projectService.projectCheckLike(pro_idx, mem_idx));
 
+		return map;
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 리스트페이지 IN --> 즐겨찾기 읽어오기
+	 * */
+	@RequestMapping(value="/project/projectReadFavorites.ajax")
+	@ResponseBody
+	public Map<String, Object> projectReadFavorites(int pro_idx, int mem_idx){
+		logger.info(":: projectReadLike CONTROLLER IN ::");
+		logger.info("mem_idx:{}",mem_idx);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("projectReadFavorites", projectService.projectReadFavorites(pro_idx, mem_idx));
+
+		return map;
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 즐겨찾기 확인 / 추가 / 삭제
+	 * */
+	@RequestMapping(value="/project/checkFavorites.ajax")
+	@ResponseBody
+	public Map<String, Object> projectCheckFavorites(Integer pro_idx, Integer mem_idx){
+		logger.info(":: projectCheckLike CONTROLLER IN ::");
+		logger.info("mem_idx:{}",mem_idx);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("projectCheckFavorites", projectService.projectCheckFavorites(pro_idx, mem_idx));
+
+		return map;
+	}
+	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 리스트페이지 IN --> 펀딩진행중 -> 실패상태 읽어오기
+	 * */
+	@RequestMapping(value="/project/projectFundingState.ajax")
+	@ResponseBody
+	public Map<String, Object> projectFundingState(int pro_idx, int mem_idx){
+		logger.info(":: projectFundingState CONTROLLER IN ::");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("projectFundingState", projectService.projectFundingState(pro_idx));
+		logger.info("projectFundingState:{}",projectService.projectFundingState(pro_idx));
+		
 		return map;
 	}
 	
