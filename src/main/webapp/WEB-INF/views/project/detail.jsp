@@ -271,6 +271,15 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	display: none;
 }
 
+.proRep{
+	border-collapse: collapse;
+	position: fixed;
+	right:50;
+	background-color: white;
+	display: none;
+
+}
+
 th, td {
 	width: 600px;
 	height: 50px;
@@ -290,6 +299,11 @@ input[name=reportTitle] {
 }
 
 input[name=reportContent] {
+	width: 600;
+	height: 200;
+}
+
+input[name=repContent] {
 	width: 600;
 	height: 200;
 }
@@ -314,9 +328,26 @@ input[name=reportContent] {
 					<div class="category" style="width: 210;">카테고리 >
 						${project.category}</div>
 					<div class="project_report" style="width: 100;">
-						<input type="button" class="pro_button" value="프로젝트 신고"
-							onclick="location.href='pro_report.go?pro_idx=${project.pro_idx }'">
+						<input type="button" clas	s="pro_button" value="프로젝트 신고" onclick="repForm()">
+						<form action="report.do" method="post" class="report">
+								<table align="center" class="proRep">
+									<tr>
+										<th scope="col">신고 사유 <input type="text" class="category"
+											value="${project.pro_idx}" name="pro_idx" hidden>
+										</td>
+									</tr>
+									<tr>
+										<td>사유<br> <input type="text" name="repContent"></td>
+									</tr>
+									<tr>
+										<td class="button"><input type="button" value="신고"
+											onclick="report()">
+											<input type="button" onclick="repCancle()" value="취소"></td>
+									</tr>
+								</table>
+							</form>
 					</div>
+					
 					<div class="userID">${project.userId}</div>
 					<div class="lisk_cnt" style="width: 30px;">
 						${project.like_cnt}</div>
@@ -488,6 +519,10 @@ input[name=reportContent] {
 		$('.proDel').css('display','none');
 	}
 	
+	function repCancle() {
+		$('.proRep').css('display','none');
+	}
+	
 	function appListCall() {
 		var url = "appList.go?pro_idx=" + ${project.pro_idx};
         var name = "appList";
@@ -497,6 +532,10 @@ input[name=reportContent] {
 	
 	function delFrom() {
 		$('.proDel').css('display','block');
+	}
+	
+	function repForm() {
+		$('.proRep').css('display','block');
 	}
 	
 	function revWrite(){
@@ -799,6 +838,21 @@ input[name=reportContent] {
 	if (msg != '') {
 		alert(msg);
 	}
+	
+	function report() {
 
+		var repContent = $('input[name="repContent"]').val(); // input 요소의 name 속성이 "repContent"인 것을 가져옵니다.
+	    var charLength = repContent.length;
+	    
+	    if (charLength > 750) {
+	        alert('내용은 750자 이내로 입력해 주세요!');
+	    } else if (repContent.trim() === '') {
+	        alert('내용을 입력해 주세요!');
+	    } else {
+	        alert('신고되었습니다.');
+	        $('.report').submit();
+	    }
+		
+	}
 </script>
 </html>

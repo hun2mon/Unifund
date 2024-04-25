@@ -26,8 +26,8 @@
      <a href="../announcement/list.go" class="w3-bar-item w3-button w3-padding-large w3-hover-purple">공지사항 </a>
      <a href="../qna/list.go" class="w3-bar-item w3-button w3-padding-large w3-hover-purple">Q&A </a>
     
-    
-     <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
+   
+     <a href="/main/mypage/profile.go?userIdx=${mem_idx}" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
    	 <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-bell"></i></a>
    	 <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
   </div>

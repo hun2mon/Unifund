@@ -285,5 +285,7 @@
 	<update id="agree">
 		update project set pro_state = 'C' where pro_idx = #{param1}
 	</update>
-	
+	<insert id="report" parameterType="String">
+		INSERT INTO report(mem_idx,ref_idx,rep_content,rep_division) VALUES(#{param3},#{param1},#{param2},'프로젝트')
+	</insert>
 </mapper>
