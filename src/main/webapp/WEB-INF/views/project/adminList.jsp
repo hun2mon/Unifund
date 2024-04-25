@@ -84,7 +84,9 @@ span {
 }
 </style>
 </head>
+<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 <body>
+
 	<div class="divMain">
 		<table align="center" class="proList">
 			<div class="divTop">

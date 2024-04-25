@@ -5,23 +5,27 @@ import java.sql.Date;
 public class MemberDTO {
 	private int mem_idx;
 	private String mem_id;
-	private String mem_pw;
-	private String mem_name;
-	private String mem_birth;
-	private String mem_number;
-	private String mem_gender;
-	private String mem_email;
+    private String mem_pw;
+    private String mem_name;
+    private String mem_number;
+    private String mem_gender;
+    private String mem_email;
+    private String mem_bank;
+    private String mem_cor;
+    private String mem_uni;
+    private String mem_birth;
 	private String mem_bankName;
-	private String mem_bank;
-	private String mem_uni;
-	private Date mem_joindate;
-	private String mem_status;
-	private String mem_post;
-	private String mem_addr;
-	private String mem_detail;
-	private int mem_cash;
-	private int mem_mileage;
-	
+    private Date mem_joindate;
+    private String mem_status;
+    private String mem_post;
+    private String mem_addr;
+    private String mem_detail;
+    private int mem_cash;
+    private int mem_mileage;
+    private int ref_idx_cnt;
+    private int stop_mem_idx;
+    private Date create_date;
+    
 	public int getMem_idx() {
 		return mem_idx;
 	}
@@ -82,6 +86,12 @@ public class MemberDTO {
 	public void setMem_bank(String mem_bank) {
 		this.mem_bank = mem_bank;
 	}
+	public String getMem_cor() {
+		return mem_cor;
+	}
+	public void setMem_cor(String mem_cor) {
+		this.mem_cor = mem_cor;
+	}
 	public String getMem_uni() {
 		return mem_uni;
 	}
@@ -130,8 +140,23 @@ public class MemberDTO {
 	public void setMem_mileage(int mem_mileage) {
 		this.mem_mileage = mem_mileage;
 	}
-	
-	
-	
+	public int getStop_mem_idx() {
+		return stop_mem_idx;
+	}
+	public void setStop_mem_idx(int stop_mem_idx) {
+		this.stop_mem_idx = stop_mem_idx;
+	}
+	public int getRef_idx_cnt() {
+		return ref_idx_cnt;
+	}
+	public void setRef_idx_cnt(int ref_idx_cnt) {
+		this.ref_idx_cnt = ref_idx_cnt;
+	}
+	public Date getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(Date create_date) {
+		this.create_date = create_date;
+	}
 	
 }
