@@ -7,129 +7,107 @@
 <title>Insert title here</title>
 <style>
 <style>
-.divMain {
-	right: 50;
-	border: 1px solid red;
-	width: 1000px;
-}
-
-.proList {
-	border-collapse: collapse;
-	width: 1000px;
-}
-
-thead>*{
-	background-color: lightgray;
-}
-
-th,td {
-	text-align: center;
-	border-bottom: 1px solid #000;
-	height: 30;
-}
-
-span {
-	display: flex;
-}
-
-.divTop {
-	border: 1px solid rebeccapurple;
-	width: 260;
-	margin-left: 1065;
-}
-
-.delButton {
-	border: 1px solid rebeccapurple;
-	width: 40;
-}
-
-.text {
-	width: 55;
-	border: 1px solid red;
-	display: flex;
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-  list-style-type: none;
-  padding: 0;
-  margin: 20px 0;
-}
-
-.pagination li {
-  margin: 0 5px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.pagination li a {
-  display: block;
-  padding: 8px 16px;
-  text-decoration: none;
-  color: #333;
-  border-radius: 4px;
-}
-
-.pagination li.active a {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.pagination li a:hover {
-  background-color: #e9ecef;
-  color: #495057;
-}
+ /* 전체 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: lightgray;
+            font-weight: bold;
+        }
+        /* 검색 관련 스타일 */
+        .searchContainer {
+            float: right;
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+        .searchContainer input[type="text"],
+        .searchContainer input[type="button"] {
+            padding: 6px;
+            margin-right: 6px;
+        }
+        /* 페이지네이션 스타일 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .pagination li {
+            margin: 0 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .pagination li a {
+            display: block;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+        }
+        .pagination li.active a {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .pagination li a:hover {
+            background-color: #e9ecef;
+            color: #495057;
+        }
 </style>
 </head>
 <body>
-	<%@ include file = "/WEB-INF/views/common/sideBar.jsp" %>
-	<div class="divMain">
-		<table align="center" class="proList">
-			<div class="divTop">
-				<span> 
-				<select name="revNum" class="selectNum">
-						<option value="전체">전체</option>
-						<option value="프로젝트">프로젝트</option>
-						<option value="크루">크루</option>
-				</select>
-						<input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-						<input type="button" value="검색" onclick="search()">
-				</span>
-			</div>
-			<thead>
-				<tr>
-					<th class="checkBox"><input type="checkbox">
-					</th>
-					<th class="repIdx">번호
-					</th>
-					<th class="category">카테고리
-					</th>
-					<th class="repContent">신고내용
-					</th>
-					<th class="repIdx">신고자ID
-					</th>
-					<th class="repDate">신고날짜
-					</th>
-					<th class="repState">처리상태
-					</th>
-				</tr>
-			</thead>
-			<tbody id="list">
-			</tbody>
-			<tr>
-	      		<td colspan="7">
-					<div class="container">                           
-	               		<nav aria-label="Page navigation" style="text-align:center">
-	                		<ul class="pagination" id="pagination"></ul>
-						</nav>               
-	            	</div>
-	      		</td>
-      		</tr>
-		</table>
-		<div class="delButton">
-			<button>삭제</button>
-		</div>
-	</div>
+<%@ include file = "/WEB-INF/views/common/sideBar.jsp" %>
+	 <div class="container">
+        <div class="searchContainer">
+            <span>
+                <select name="revNum" class="selectNum">
+                    <option value="전체">전체</option>
+                    <option value="프로젝트">프로젝트</option>
+                    <option value="크루">크루</option>
+                </select>
+                <input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
+                <input type="button" value="검색" onclick="search()">
+            </span>
+        </div>
+        <table class="proList">
+            <thead>
+                <tr>
+                    <th class="repIdx">번호</th>
+                    <th class="category">카테고리</th>
+                    <th class="repContent">신고내용</th>
+                    <th class="repIdx">신고자ID</th>
+                    <th class="repDate">신고날짜</th>
+                    <th class="repState">처리상태</th>
+                </tr>
+            </thead>
+            <tbody id="list"></tbody>
+        </table>
+        <div class="paginationContainer">
+            <nav aria-label="Page navigation">
+                <ul class="pagination" id="pagination"></ul>
+            </nav>
+        </div>
+        
+    </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
@@ -194,7 +172,6 @@ span {
 		for (item of list) {
 			 var shortenedContent = (item.rep_content && typeof item.rep_content === 'string') ? (getByteLength(item.rep_content) > 30 ? item.rep_content.substring(0, 20) + '...' : item.rep_content) : '';
 			content += '<tr>';
-			content += '<td class="checkBox"><input type="checkbox"></td>';
 			content += '<td class="repIdx">' + item.rep_idx + '</td>';
 			content += '<td class="category">' + item.rep_division + '</td>';
 			content += '<td class="repContent"><a href="adminDetail.go?rep_idx=' + item.rep_idx + '">' + shortenedContent + '</a></td>';

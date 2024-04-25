@@ -286,14 +286,17 @@ th, td {
          </c:if>
       </div>
       
+      <c:if test="${mem_idx eq info.mem_idx}">
       <div class ="mincmb"><b>캐시</b></div>
       <div class ="mincmb2">${info.mem_cash}</div>
       <button onclick="cashList()">내역보기</button>
       <button onclick="cashCharge()">충전</button>
-   
+   	  
+   	  	
       <div class ="mincmb1"><b>마일리지</b></div>
       <div class ="mincmb3">${info.mem_mileage}</div>
       <button id="mile" onclick="mileageList()">내역보기</button>
+      </c:if>
       <div>
        <table class="custom-table">
              <tr>
@@ -319,8 +322,11 @@ th, td {
         </table>
       </div>
       <br>
+      
       <button>신청자목록</button>
-      <button onclick="proUp()">프로필수정</button>
+      <c:if test="${mem_idx eq info.mem_idx}">
+    	  <button onclick="proUp()">프로필수정</button>
+      </c:if>
       <br><br>
       <div id="minibox">
          <h1>자기소개서</h1>
@@ -342,8 +348,11 @@ th, td {
                </td>
             </tr>
         </table> 
-         <button onclick="introBtn()" id="proBtn">자소서 수정</button>
+        <c:if test="${mem_idx eq info.mem_idx}">
+         	<button onclick="introBtn()" id="proBtn">자소서 수정</button>
+      	</c:if>
       </div>
+       <c:if test="${mem_idx eq info.mem_idx}">
          <h2>신청한 펀딩 목록</h2>
         <hr class="hr-13">
         <table>
@@ -426,7 +435,7 @@ th, td {
             </td>
          </tr>
         </table> 
-        
+       </c:if> 
    </div>
 </body>
 <script>
@@ -441,12 +450,12 @@ th, td {
    });
    
    function proUp() {
-      location.href = 'profileUpdate.go';
+      location.href = 'profileUpdate.go?userIdx='+ ${info.mem_idx};
    }
 
    
    function introBtn() {
-      location.href = 'introUpdate.go';
+      location.href = 'introUpdate.go?userIdx='+ ${info.mem_idx};
    }
    
    function cashCharge() {
@@ -503,17 +512,24 @@ th, td {
       } else {
          for(item of list){
             content += '<tr>';
-             content += '<td>' + item.pro_title + '</td>';
+            
+            
+            var startdate = new Date(item.pro_startdate);
+            var startdateStr = startdate.toLocaleDateString("ko-KR");
+            var pro_deadline = new Date(item.pro_deadline);
+            var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
+            
+            
              if (item.fund_state == 'A') {
-                 content += '<td style="color: green;font-weight: bolder;"><b>'+'신청중'+'</b></td>';
+           		 content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></a></td>';
+            	 content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '">' + '<span style="color:green; font-size: 16px; font-weight: bold;">신청중</span>' + '</a></td>';
+            	 
+                 
              } else if (item.fund_state == 'C') {
-                 content += '<td style="color: gray;font-weight: bolder;" ><b>'+'펀딩완료'+'</b></td>';
+            	 content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></a></td>';
+            	 content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '">' + '<span style="color: #6C757D; font-size: 16px; font-weight: bold;">펀딩완료</span>' + '</a></td>';
+            	 
              }
-             var startdate = new Date(item.pro_startdate);
-             var startdateStr = startdate.toLocaleDateString("ko-KR");
-             var pro_deadline = new Date(item.pro_deadline);
-             var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
-             
              content += '<td>' + startdateStr + '</td>';
              content += '<td>' + pro_deadlineStr + '</td>';
              content += '</tr>';
@@ -566,26 +582,40 @@ th, td {
       } else {
          for(item of list){
             content += '<tr>';
-             content += '<td>' + item.pro_title + '</td>';
-             if (item.pro_state == 'A') {
-                 content += '<td><b>심사중</b></td>';
-             } else if (item.pro_state == 'B') {
-                 content += '<td style="color: gray;"><b>펀딩완료</b></td>';
-             } else if (item.pro_state == 'C') {
-                 content += '<td style="color: green;"><b>펀딩중</b></td>';
-             } else if (item.pro_state == 'E') {
-                 content += '<td><b>펀딩실패</b></td>';
-             } else if (item.pro_state == 'F') {
-                 content += '<td style="color: red;"><b>거절</b></td>';
-             }
-             var startdate = new Date(item.pro_startdate);
-             var startdateStr = startdate.toLocaleDateString("ko-KR");
-             var pro_deadline = new Date(item.pro_deadline);
-             var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
-             
-             content += '<td>' + startdateStr + '</td>';
-             content += '<td>' + pro_deadlineStr + '</td>';
-             content += '</tr>';
+            
+            var startdate = new Date(item.pro_startdate);
+            var startdateStr = startdate.toLocaleDateString("ko-KR");
+            var pro_deadline = new Date(item.pro_deadline);
+            var pro_deadlineStr = pro_deadline.toLocaleDateString("ko-KR");
+            
+            if (item.pro_state == 'A') {
+                content += '<td><span style="color:#6ab04c; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></td>';
+                content += '<td><span style="color:#6ab04c; font-size: 16px; font-weight: bold;">' + '심사중' + '</span></td>';
+               
+            } else if (item.pro_state == 'B') {
+            	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></a></td>';
+            	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + '펀딩완료' + '</span></a></td>';
+            	 content += '<td><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + startdateStr + '</span></td>';
+                 content += '<td><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + pro_deadlineStr + '</span></td>';
+            } else if (item.pro_state == 'C') {
+            	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></a></td>';
+            	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">' + '펀딩중' + '</span></a></td>';
+            	 
+            } else if (item.pro_state == 'E') {
+            	content += '<td><span style="color:orange; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></td>';
+                content += '<td style="color: orange;"><b>펀딩실패</b></td>';
+                      	
+            } else if (item.pro_state == 'F') {
+            	content += '<td><span style="color:red; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></td>';
+                content += '<td style="color: red;"><b>거절</b></td>';
+                
+            }
+            
+
+            content += '<td>' + startdateStr + '</td>';
+            content += '<td>' + pro_deadlineStr + '</td>';
+            content += '</tr>'; 
+
             
          } 
       }
@@ -634,10 +664,12 @@ th, td {
       } else {
          for(item of list){
             content += '<tr>';
-              content += '<td>' + item.rep_division + '</td>';
+              
               if (item.rns_state === '처리') {
+            	  content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.pro_title +'</td>';
             	  content += '<td style="color: green;"><span class="clickable-text" onclick="repComCall(' + item.rep_idx + ')"><b>' + '처리완료' + '</b></span></td>';
               } else {
+            	  content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.pro_title +'</td>';
                   content += '<td style="color: red;"><b>' + '처리중' + '</b></td>';
 				  
               }

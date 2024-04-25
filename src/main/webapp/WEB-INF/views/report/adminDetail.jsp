@@ -128,23 +128,18 @@
         <div class="modal-content" >
             <h2>신고 처리 내용</h2>
             <form action="transContent" method="post">  
-            	<c:if test="${detail.trans_content != null}">
-            		<textarea style="background-color: #f2f2f2;" type="text" name="transContent" placeholder="처리내용을 입력해주세요." readonly="readonly">${detail.trans_content}</textarea>
-	            </c:if>
-	            <c:if test="${detail.trans_content == null}">
-	            	<textarea type="text" name="transContent" placeholder="처리내용을 입력해주세요." ></textarea>
-	            </c:if>
+            	
+            	<textarea style="background-color: #f2f2f2;" type="text" name="transContent" oninput="checkLength(this, 80)" placeholder="처리내용을 입력해주세요.최대 80자까지 입력 가능합니다." >${detail.trans_content}</textarea>
+	           
 	            <input name ="refIdx" value="${detail.rep_idx}" hidden="">
 	            <input name ="cateRefIdx" value="${detail.ref_idx}" hidden="">
 	            <input name ="cate" value="${detail.rep_division}" hidden="">
+	            <input name ="state" value="${detail.rns_state}" hidden="">
 	            
 	            <br>
-	            <c:if test="${detail.trans_content != null}">
-	            	 <input type="button" class="btn" onclick="closeModal()" value="확인">
-	            </c:if>
-	            <c:if test="${detail.trans_content == null}">
-	            	<input type="submit"  class="btn" value="확인">
-	            </c:if>	
+	           
+	           <!-- <c:if test="${detail.trans_content == null}"> </c:if>	 --> 
+	            <input type="submit"  class="btn" value="확인">     
 	            <input type="button" class="btn" onclick="closeModal()" value="닫기">
             </form>
         </div>
@@ -176,5 +171,12 @@
             modal.style.display = "none";
         }
     });
+    
+    function checkLength(textarea, maxLength) {
+        if (textarea.value.length > maxLength) {
+            textarea.value = textarea.value.substring(0, maxLength);
+            alert("최대 글자수를 초과했습니다.");
+        }
+    }    
 </script>
 </html>

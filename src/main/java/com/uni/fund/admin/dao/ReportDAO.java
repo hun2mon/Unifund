@@ -20,4 +20,8 @@ public interface ReportDAO {
 
 	void transContent(int refIdx, int mem_idx ,String transContent , int cateRefIdx ,String cate);
 
+	void transContentUpdate(String transContent, int refIdx);
+
+	
+
 }

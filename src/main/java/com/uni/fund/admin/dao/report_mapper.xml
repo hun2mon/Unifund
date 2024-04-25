@@ -10,7 +10,7 @@
 		<if test='param1 != " " and param1 != "전체"'>
 			where rep_division = #{param1}
 		</if>
-		order by rep_idx DESC  LIMIT #{param2},#{param3};
+		order by rns_state asc, rep_idx DESC LIMIT #{param2},#{param3};
 	</select>
 	<select id="adminAllCount" resultType="int">
 		SELECT CEIL(COUNT(rep_idx)/#{param2}) AS pages FROM report
@@ -42,4 +42,7 @@
 		INSERT INTO rep_trans (rep_idx ,mem_idx,trans_content,ref_idx,rep_division)
 			Values(#{param1},#{param2},#{param3},#{param4},#{param5});
 	</insert>
+	<update id="transContentUpdate">
+		UPDATE rep_trans SET trans_content = #{param1} WHERE rep_idx = #{param2}
+	</update>
 </mapper>

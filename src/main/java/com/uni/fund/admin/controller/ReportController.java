@@ -65,13 +65,18 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/report/transContent" ,method = RequestMethod.POST)
-	public String transContent(String transContent, int refIdx, int cateRefIdx, String cate,Model model ) {
+	public String transContent(String transContent, int refIdx, int cateRefIdx, String cate,String state,Model model ) {
 		logger.info("refIdx : " +refIdx);
 		logger.info("transContent : " +transContent);
 		logger.info("cateRefIdx : " +cateRefIdx);
 		logger.info("cate : " +cate);
+		logger.info("state : " +state);
 		
-		reportService.transContent(refIdx,mem_idx,transContent,cateRefIdx,cate);
+		if (state.equals("미처리")) {
+			reportService.transContent(refIdx,mem_idx,transContent,cateRefIdx,cate);			
+		}else {
+			reportService.transContentUpdate(transContent,refIdx);		
+		}
 		
 		return "redirect:/report/adminDetail.go?rep_idx="+refIdx;
 	}

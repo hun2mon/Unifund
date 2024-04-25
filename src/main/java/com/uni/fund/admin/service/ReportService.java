@@ -47,5 +47,11 @@ public class ReportService {
 		reportDAO.transContent(refIdx,mem_idx,transContent,cateRefIdx,cate);
 		
 	}
+	public void transContentUpdate(String transContent, int refIdx) {
+
+		reportDAO.transContentUpdate(transContent,refIdx);
+		
+	}
+
 	
 }

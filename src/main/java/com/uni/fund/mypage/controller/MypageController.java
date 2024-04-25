@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,91 +24,106 @@ import com.uni.fund.mypage.service.MypageService;
 public class MypageController {
    Logger logger = LoggerFactory.getLogger(getClass());
    @Autowired MypageService mypageService;
-   int userId =1;
-   
-   @RequestMapping(value = "/mypage/profile.go")
-   public String profile(Model model) {
-      logger.info("profile요청");
-      
-      
-      MypageDTO dto = mypageService.profile(userId);
-      logger.info("UserInfo :{}",dto.toString());
-     
-      String proPhoto = mypageService.proPhoto(userId);
-      logger.info("proPhoName :" +proPhoto);
-      
-      MypageDTO introDto = mypageService.introduction(userId);
-      logger.info("introductionInfo : {}", introDto);
-      
   
-      model.addAttribute("info",dto);
-      model.addAttribute("proPhoto",proPhoto);
-      model.addAttribute("introDto",introDto);
-
-      return "mypage/profile";
+   // mem_idx -> userId로 바꿔서 처리 함(문의 : 김진호)
+   @RequestMapping(value = "/mypage/profile.go")
+   public String profile(Model model, String userIdx,HttpSession session) {
+      logger.info("profile요청");
+      logger.info("userIdx : ",userIdx);
+      String page = "redirect:/member/login.go";
+      String memId = (String) session.getAttribute("mem_id");
+      int mem_idx = Integer.parseInt(userIdx);
+      	if (memId != null) {
+      		page = "mypage/profile";
+      		MypageDTO dto = mypageService.profile(mem_idx);
+      		logger.info("UserInfo :{}",dto.toString());
+      		
+      		String proPhoto = mypageService.proPhoto(mem_idx);
+      		logger.info("proPhoName :" +proPhoto);
+      		
+      		MypageDTO introDto = mypageService.introduction(mem_idx);
+      		logger.info("introductionInfo : {}", introDto);
+      		
+      		
+      		model.addAttribute("info",dto);
+      		model.addAttribute("proPhoto",proPhoto);
+      		model.addAttribute("introDto",introDto);
+			
+		}		
+      return page;
    }
    
    @RequestMapping(value = "/mypage/profileUpdate.go")
-   public String profileUpdate(Model model) {
+   public String profileUpdate(Model model, String userIdx,HttpSession session) {
       logger.info("profileUpdate.go 요청");
-      
-      
-      MypageDTO dto = mypageService.profileUp(userId);
-      logger.info("UserInfo :{}",dto.toString());
-      
-      String proPhoto = mypageService.proPhotoUp(userId);
-      logger.info("proPhoName :" +proPhoto);
-      
-      model.addAttribute("info",dto);
-      model.addAttribute("proPhoto", proPhoto);
-      return "mypage/profileUpdate";
+      String page = "redirect:/member/login.go";
+      String memId = (String) session.getAttribute("mem_id");
+      int mem_idx = Integer.parseInt(userIdx);
+  	  if (memId != null) {
+  		  page = "mypage/profileUpdate";  		  
+  		  MypageDTO dto = mypageService.profileUp(mem_idx);
+  		  logger.info("UserInfo :{}",dto.toString());
+  		  
+  		  String proPhoto = mypageService.proPhotoUp(mem_idx);
+  		  logger.info("proPhoName :" +proPhoto);
+  		  
+  		  model.addAttribute("info",dto);
+  		  model.addAttribute("proPhoto", proPhoto);
+  	  }
+      return page;
    }
    
    @RequestMapping(value = "/mypage/profileUpdate.do", method = RequestMethod.POST)
-   public String profileUpdateDo(MultipartFile photo, @RequestParam Map<String,String> param, Model model){
+   public String profileUpdateDo(MultipartFile photo,HttpSession session , @RequestParam Map<String,String> param, Model model){
       logger.info("profileUpdate.do 요청");
       logger.info("photo : {}",photo.toString());
       logger.info("param : {}",param);
       
+      int mem_idx =  (int) session.getAttribute("mem_idx");
 
-      int row = mypageService.proUpDo(photo,param,userId);
+      int row = mypageService.proUpDo(photo,param,mem_idx);
       
-      return "redirect:/mypage/profile.go";
+      return "redirect:/mypage/profile.go?userIdx="+mem_idx;
    }
    
    @RequestMapping(value = "/mypage/introUpdate.go")
-   public String introUpdate(Model model) {
+   public String introUpdate(Model model, String userIdx,HttpSession session) {
       logger.info("introUpdate.go 요청");
+      String page = "redirect:/member/login.go";
+      String memId = (String) session.getAttribute("mem_id");
+      int mem_idx = Integer.parseInt(userIdx);
+      if (memId != null) {
+    	  page = "mypage/introUpdate";
+    	  MypageDTO introDto = mypageService.introduction(mem_idx);
+    	  model.addAttribute("introDto",introDto);
+      }
       
-      MypageDTO introDto = mypageService.introduction(userId);
-      model.addAttribute("introDto",introDto);
-      
- 
-      return "mypage/introUpdate";
+      return page;
    }
    
    @RequestMapping(value = "/mypage/introUpdate.do", method = RequestMethod.POST)
-   public String introUpdateDo(MultipartFile[] photos, String selfExp, String selfInt ) {
+   public String introUpdateDo(MultipartFile[] photos, HttpSession session, String selfExp, String selfInt ) {
       logger.info("photos : {}",Arrays.toString(photos));
       logger.info("selfExp : "+selfExp+" / selfInt : " + selfInt);
      
-      int row = mypageService.introCreDo(photos,selfExp,selfInt,userId);
+      int mem_idx =  (int) session.getAttribute("mem_idx");
+      int row = mypageService.introCreDo(photos,selfExp,selfInt,mem_idx);
       
       
-      return "redirect:/mypage/profile.go";
+      return "redirect:/mypage/profile.go?userIdx="+mem_idx;
    }
    
    @RequestMapping(value = "/mypage/appList.ajax")
    @ResponseBody
-   public Map<String, Object> listCall(String page, String cnt){
+   public Map<String, Object> listCall(String page,HttpSession session, String cnt){
       logger.info("listCall 요청");
       logger.info("페이지당 보여줄 개수 : " +cnt);
       logger.info("요청 페이지" + page);
-      
+      int mem_idx =  (int) session.getAttribute("mem_idx");
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.list(currPage,pagePerCnt,userId);
+      Map<String, Object> map = mypageService.list(currPage,pagePerCnt,mem_idx);
       logger.info("map: " + map);
       
       return map;
@@ -114,15 +131,16 @@ public class MypageController {
    
    @RequestMapping(value = "/mypage/createList.ajax")
    @ResponseBody
-   public Map<String, Object> createList(String page, String cnt){
+   public Map<String, Object> createList(String page,HttpSession session, String cnt){
       logger.info("createList 요청");
       logger.info("페이지당 보여줄 개수 : " +cnt);
       logger.info("요청 페이지" + page);
       
+      int mem_idx =  (int) session.getAttribute("mem_idx");
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.createList(currPage,pagePerCnt,userId);
+      Map<String, Object> map = mypageService.createList(currPage,pagePerCnt,mem_idx);
       logger.info("map: " + map);
   
       return map;
@@ -130,15 +148,16 @@ public class MypageController {
    
    @RequestMapping(value = "/mypage/repList.ajax")
    @ResponseBody
-   public Map<String, Object> repList(String page, String cnt){
+   public Map<String, Object> repList(String page,HttpSession session, String cnt){
       logger.info("repList 요청");
       logger.info("[rep]페이지당 보여줄 개수 : " +cnt);
       logger.info("[rep]요청 페이지" + page);
       
+      int mem_idx =  (int) session.getAttribute("mem_idx");
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.repList(currPage,pagePerCnt,userId);
+      Map<String, Object> map = mypageService.repList(currPage,pagePerCnt,mem_idx);
       logger.info("[rep]map: " + map);
   
       return map;
@@ -146,15 +165,16 @@ public class MypageController {
    
    @RequestMapping(value= "/mypage/photoList.ajax")
    @ResponseBody
-   public Map<String, Object> photoList(String page, String cnt){
+   public Map<String, Object> photoList(String page,HttpSession session, String cnt){
       logger.info("photoList 요청");
       logger.info("[photo]페이지당 보여줄 개수 : " +cnt);
       logger.info("[photo]요청 페이지" + page);
       
+      int mem_idx =  (int) session.getAttribute("mem_idx");
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.photoList(currPage,pagePerCnt,userId);
+      Map<String, Object> map = mypageService.photoList(currPage,pagePerCnt,mem_idx);
       logger.info("[photo]map: " + map);
       
       return map;
@@ -162,18 +182,21 @@ public class MypageController {
    
   @RequestMapping(value = "/mypage/introPhoDel.ajax")
   @ResponseBody
-  public Map<String, Object> introPhoDel(String phoName){
+  public Map<String, Object> introPhoDel(HttpSession session,String phoName){
 	  logger.info("introPhoDel 요청");
 	  logger.info("[del]phoName : "+ phoName);
-	  mypageService.introPhoDel(phoName,userId);
+	 
+	  int mem_idx =  (int) session.getAttribute("mem_idx");
+	  mypageService.introPhoDel(phoName,mem_idx);
 	  return null;
   }
   
   @RequestMapping(value="/mypage/repComCall.go")
-  public String repComCall(String rep_idx,Model model) {
+  public String repComCall(String rep_idx,HttpSession session,Model model) {
 	  logger.info("repComCall.go 요청");
 	  logger.info("rep_idx 값 : " +rep_idx);
-	  MypageDTO repCon = mypageService.repComCall(rep_idx,userId);
+	  int mem_idx =  (int) session.getAttribute("mem_idx");
+	  MypageDTO repCon = mypageService.repComCall(rep_idx,mem_idx);
 	  
 	  model.addAttribute("repCon",repCon);
 	  
