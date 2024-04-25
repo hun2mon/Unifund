@@ -86,4 +86,6 @@ public interface ProjectDAO {
 
 	void agreeHis(String pro_idx);
 
+	int projectFundingState(int pro_idx);
+
 }

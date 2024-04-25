@@ -24,6 +24,7 @@ public class MemberDTO {
     private int mem_mileage;
     private int ref_idx_cnt;
     private int stop_mem_idx;
+    private Date create_date;
     
 	public int getMem_idx() {
 		return mem_idx;
@@ -150,6 +151,12 @@ public class MemberDTO {
 	}
 	public void setRef_idx_cnt(int ref_idx_cnt) {
 		this.ref_idx_cnt = ref_idx_cnt;
+	}
+	public Date getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(Date create_date) {
+		this.create_date = create_date;
 	}
 	
 }

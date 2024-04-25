@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<jsp:useBean id="now" class="java.util.Date" />
 <html>
 <head>
 <meta charset="UTF-8">
@@ -260,6 +261,8 @@ background: rgba(255, 255, 255, 0.15);
 <body>
 	<input type="hidden" value="1" name="mem_idx" class="mem_idx" />
 	<input type="hidden" value="${category}" name="category" class="category" />
+	<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
+	
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 	<div class="container">
 		<div class="top_content">
@@ -288,26 +291,45 @@ background: rgba(255, 255, 255, 0.15);
 			<div class="form-container">
 				<table>
 					<tr>
-						<input type="hidden" value="${project.pro_idx}" name="pro_idx" class="pro_idx" />
+						<input type="hidden" value="${project.pro_idx}" id="pro_idx" name="pro_idx" class="pro_idx" />
 						<td><img src="/photo/${project.pro_main_name }" class="thumb_img" onerror="this.onerror=null;this.src='../resources/project_img/noImg.png'"></td>
 						<td><i class="fa fa-heart heart_icon readLike like_button"  style="color: #cccccc"></i></td>
 						<td><i class="fa fa-star star_icon readFavorites star_button"  style="color: #cccccc"></i></td>
 					</tr>
 					<tr>
-						<c:if test="${project.progress == null}">
-							<td>0% 진행중</td>
-						</c:if>
-						<c:if test="${project.progress != null}">
-							<fmt:parseNumber value="${project.progress}" var="NUM" />
-							<c:if test="${NUM < 100}">
-								<fmt:parseNumber var="NUM_round" value="${NUM}"
-									integerOnly="true" />
-								<td><c:out value="${NUM_round}" />% 진행중</td>
+
+						<c:if test="${project.pro_state == 'C'}">
+							<c:if test="${project.pro_deadline < today }">
+								<td>펀딩실패</td>
 							</c:if>
-							<c:if test="${NUM >= 100}">
-								<td style="color: gray">펀딩완료</td>
+							
+							<c:if test="${project.pro_deadline >= today }">
+								
+								<c:if test="${project.progress == null }">
+									<td>0% 진행중</td>
+								</c:if>
+								
+								<c:if test="${project.progress != null }">
+									<fmt:parseNumber value="${project.progress}" var="NUM" />
+									<c:if test="${NUM < 100}">
+										<fmt:parseNumber var="NUM_round" value="${NUM}"
+											integerOnly="true" />
+										<td><c:out value="${NUM_round}"/>% 진행중</td>
+									</c:if>
+									
+									<c:if test="${NUM >= 100 }">
+										<td style="color: gray">펀딩완료</td>
+									</c:if>
+								</c:if>
+							
 							</c:if>
+						
 						</c:if>
+						
+						<c:if test="${project.pro_state == 'B'}">
+							<td style="color: gray">펀딩완료</td>
+						</c:if>
+			
 					</tr>
 					<tr>
 						<td class="title_size"><span>[${project.cateName}] </span><span>${project.pro_title}</span></td>
@@ -365,7 +387,6 @@ background: rgba(255, 255, 255, 0.15);
 					'pro_idx' : pro_idx
 				},
 				success : function(data) {
-					console.log(data.projectReadLike);
 					if (data.projectReadLike > 0) {
 						each_project.find('.readLike').css('color', '#ff2600');
 					}
@@ -391,7 +412,6 @@ background: rgba(255, 255, 255, 0.15);
 					'pro_idx' : pro_idx
 				},
 				success : function(data) {
-					console.log(data.projectCheckLikeRow);
 					if (data.projectCheckLikeRow == 0) {
 						each_project.css('color','#cccccc');
 						each_project.closest('.form-container').find('.like_cnt').text(Number(like_cnt) - 1);
@@ -422,7 +442,6 @@ background: rgba(255, 255, 255, 0.15);
 					'pro_idx' : pro_idx
 				},
 				success : function(data) {
-					console.log(data.projectReadFavorites);
 					if (data.projectReadFavorites > 0) {
 						projectFav.find('.readFavorites').css('color', '#ffd968');
 					}
@@ -447,7 +466,6 @@ background: rgba(255, 255, 255, 0.15);
 					'pro_idx' : pro_idx
 				},
 				success : function(data) {
-					console.log(data.projectCheckFavoritesRow);
 					if (data.projectCheckFavoritesRow == 0) {
 						each_favorite.css('color','#cccccc');
 					} else {
@@ -471,7 +489,6 @@ background: rgba(255, 255, 255, 0.15);
 				'mem_idx' : mem_idx
 			},
 			success : function(data) {
-				console.log(data.checkProject);
 				if (data.checkProject > 3) {
 					alert('프로젝트는 1인당 최대 3개까지 진행가능합니다.');
 					return;

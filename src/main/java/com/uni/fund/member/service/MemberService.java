@@ -94,5 +94,13 @@ public class MemberService {
 	public int memberTotalCnt(Map<String, Object> param) {
 		return memberDAO.memberTotalCnt(param);
 	}
+
+	public List<MemberDTO> adminMemberJoinReqAjax(Map<String, Object> param) {
+		return memberDAO.adminMemberJoinReqAjax(param);
+	}
 	
+	public int memberJoinCnt(Map<String, Object> param) {
+		return memberDAO.memberJoinCnt(param);
+	}
+
 }

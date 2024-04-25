@@ -23,4 +23,8 @@ public interface MemberDAO {
 
 	int memberTotalCnt(Map<String, Object> param);
 
+	List<MemberDTO> adminMemberJoinReqAjax(Map<String, Object> param);
+
+	int memberJoinCnt(Map<String, Object> param);
+
 }

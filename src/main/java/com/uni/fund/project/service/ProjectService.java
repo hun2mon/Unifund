@@ -253,6 +253,20 @@ public class ProjectService {
 		return projectCheckFavoritesRow;
 	}
 	
+	/* *
+	 * 작성자 : 허승경
+	 * 펀딩상태 실패 / 펀딩중 불러오기
+	 * */
+	public String projectFundingState(int pro_idx) {
+		int result = projectDAO.projectFundingState(pro_idx);
+		logger.info("성공여부 : {}", result);
+		if(result > 0) {
+			return "projectFundingFail";
+		}else {
+			return "projectFundingProgress";
+		}
+	}
+	
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
@@ -372,5 +386,6 @@ public class ProjectService {
 		projectDAO.agreeHis(pro_idx);
 		
 	}
+
 
 }

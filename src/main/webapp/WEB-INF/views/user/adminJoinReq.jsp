@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<jsp:useBean id="now" class="java.util.Date" />
 <html>
 <head>
 <meta charset="UTF-8">
@@ -8,23 +9,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 <style>
-body {
-	width: 100%;
-	background-color: #f2f2f2;
-}
-
-.container {
-	font-family: arial;
-	position: relative;
-	height: 100%;
-	max-width: 100%;
-	background-color: #f2f2f2;
-	margin: 20px auto;
-	padding: 10px;
-	border-radius: 10px;
-	margin-left: 20px;
-}
-
 .form-container {
 	background: white;
 	backdrop-filter: blur(10px);
@@ -73,6 +57,19 @@ body {
 	padding-right: 14px;
 }
 
+.submit_btn, .refuse_btn{
+	cursor:pointer;
+	height: 24px;
+    border-radius: 35px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    background: #3b3b3b;
+    position: relative;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 hr {
 	color: black;
 	height: 5px;
@@ -92,16 +89,6 @@ table {
 	border: 1px solid lightgray
 }
 
-select, option {
-	width: 130px;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 15px;
-	box-sizing: border-box;
-	font-size: 16px;
-	cursor: pointer;
-}
-
 thead {
 	font-size: 19px;
 }
@@ -115,8 +102,17 @@ tr.tr_bottom:hover {
 	font-weight: bold;
 }
 
+td.tr_bottom {
+	margin-bottom: 70px;
+}
+
+td.tr_bottom:hover {
+	background: #e4dfdf;
+	font-weight: bold;
+}
+
 td {
-	padding: 10px;
+	padding: 8px;
 }
 
 .empty-container {
@@ -247,27 +243,93 @@ td {
 	max-width: 100px;
 	word-break: break-all;
 }
+
+
+.modal {
+	text-align: center;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(1.1);
+	transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform
+		0.25s;
+}
+
+.modal-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 1rem 1.5rem;
+	width: 500px;
+	height: 250px;
+	border-radius: 0.5rem;
+}
+
+.box {
+	width: 450px;
+	height: 108px;
+	overflow: auto;
+	border: none;
+	padding: 20px;
+	background-color: white;
+}
+
+.close-button {
+	float: right;
+	width: 35px;
+	line-height: 0.5rem;
+	height: 35px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 0.25rem;
+}
+
+.close-button:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
+
+.show-modal {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+#cancelc, #ok {
+	background-color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    width: 210px;
+    margin-right: 10px;
+    margin-top: -30px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+    transition: all 0.3s ease;
+}
+
+#cancelc:hover, #ok:hover {
+	background-color: lightgray;
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
 </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 	<div class="container">
-		
 		<div class="form-container">
 		<div class="top-container">
 		<h1>회원관리</h1>
-		<button class="anotherMem_btn" onclick="location.href='./adminJoinReq.go'">가입요청 회원보기</button>
+		<button class="anotherMem_btn" onclick="location.href='./adminMemberList.go'">전체회원 보기</button>
 		</div>
 			<div class="top_content" style="height:8%;">
-				<div class="searchType_container">
-					<select class="search_type" id="keywordType">
-						<option value="">전체회원</option>
-						<option value="M">관리자</option>
-						<option value="B">가입심사중</option>
-						<option value="Y">활동중</option>
-						<option value="N">탈퇴</option>
-						<option value="S">정지</option>
-					</select>
-				</div>
 				<div class="search_container">
 					<i id="search_button" class="fa fa-search"></i> <input type="text"
 						id="keyword" value="${keyword}"
@@ -280,18 +342,18 @@ td {
     			<col style="width: 23%;"/> 
         		<col style="width: 15%;"/> 
        		 	<col style="width: 15%;"/> 
-        		<col style="width: 10%;"/> 
-        		<col style="width: 10%;"/> 
-        		<col style="width: 27%;"/> 
+        		<col style="width: 21%;"/> 
+        		<col style="width: 13%;"/> 
+        		<col style="width: 13%;"/> 
     			</colgroup> 
 				<thead>
 					<tr style="background-color:lightgray;height:5px;">
 					<th>사용자ID</th>
 					<th>이름</th>
 					<th>회원상태</th>
-					<th>신고횟수</th>
-					<th>정지횟수</th>
 					<th>가입날짜</th>
+					<th>승인처리</th>
+					<th>거절처리</th>
 					</tr>
 				</thead>
 				<tbody id="dataList" style="text-align:center">
@@ -303,6 +365,7 @@ td {
 	</div>
 	<input type="hidden" id="searchIn" value="" />
 	<input type="hidden" id="searchType" value="M" />
+	<div class="modal-container"></div>
 </body>
 <script>
 
@@ -312,19 +375,15 @@ $(document).ready(function(){
 
 $('#search_button').click(function(){
 	var keyword = $('#keyword').val();
-	var searchType = $('#keywordType').val();
 	
 	$('#searchIn').val(keyword);
-	$('#searchType').val(searchType);
 	pageNlist();
 });
 
 $('#keywordType').change(function(){
 	var keyword = $('#keyword').val();
-	var searchType = $('#keywordType').val();
 	
 	$('#searchIn').val(keyword);
-	$('#searchType').val(searchType);
 	pageNlist();
 });
 
@@ -334,29 +393,29 @@ function pageNlist(page) {
 
     $.ajax({
         type: 'get',
-        url: './adminMemberList.ajax',
+        url: './adminMemberJoinReq.ajax',
         data:{
 			pg:page,
-			searchType:searchType,
 			keyword:keyword		
 		},
 		 success: function(data) {
 	            var content = '';
 	            var a = '';
 	            var none = '';
+	            var modal = '';
 	            var pg = data.pg;
 	            var startPage = data.startPage;
 	            var endPage = data.endPage;
 	            var totalP = data.totalP;
 				
-	            if(data.memberList.length == 0){
+	            if(data.joinMemList.length == 0){
 	            	none += '<h1>결과가 존재하지 않습니다.</h1>';
  	            }
 	            
-	            $.each(data.memberList, function(i, member) {
+	            $.each(data.joinMemList, function(i, member) {
 	            	console.log(data.memberList)
-	                content += '<tr style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'./memDetail.go?mem_idx=' + member.mem_idx + '\'">';
-	                content += '<td>' + member.mem_id + '</td>';
+	                content += '<tr>';
+	                content += '<td style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'./memDetail.go?mem_idx=' + member.mem_idx + '\'">' + member.mem_id + '</td>';
 	                content += '<td>' + member.mem_name + '</td>';
 	                content += '<td>'
 	                if(member.mem_status  == 'M') {
@@ -369,19 +428,32 @@ function pageNlist(page) {
 	                	content += '탈퇴';	
 	                }else if(member.mem_status  == 'S'){
 	                	content += '정지';
-	                }else {
-	                    content += '전체선택';
+	                }else{
+	                	content += '알수없음';
 	                }
 	                content += '</td>';
 	                
-	                content += '<td>' + member.ref_idx_cnt + '</td>';
-	                content += '<td>' + member.stop_mem_idx + '</td>';
-
 	                var date = new Date(member.mem_joindate);
 	    			var dateStr = date.toLocaleDateString("ko-KR");//en_US지
-	    			
 	                content += '<td>' + dateStr + '</td>';
+	                
+	                content += '<td><button id="submit" class="submit_btn" style="background: #77ce11;" data-mem="'+ member.mem_idx +'">승인</button></td>';
+	    			content += '<td><button class="refuse_btn" style="background: #ee2a2a;" onclick="refuse()">거절 </button></td>';
+	    			
 	                content += '</tr>';
+	                
+	                modal += '<div class="modal">'; 
+		        	modal += '<div class="modal-content">'; 
+		        	modal += '<span class="close-button"><h2>X</h2></span>'; 
+		        	modal += '<h3 class="title"> </h3> ';
+		        	modal += '<p><div class="box">';
+		        	modal += '<h2>가입을 승인하시겠습니까?</h2>';
+		        	modal += '</div></p>';
+		        	modal += '<input type="button" id="cancel" class="cancelc" value="취소"> ';
+		        	modal += '<input type="button" id="ok" class="ok" value="동의"> ';
+		        	modal += '</div> ';
+		        	modal += '</div>';
+	                
 	            });
 	            
 	            if (startPage > 5) {
@@ -398,15 +470,48 @@ function pageNlist(page) {
 	                a += '<a class="paging" href="#" onclick="pageNlist(' + (endPage + 1) + '); return false;">다음</a>';
 	            }
 	            
+	           	
 	            $("#dataList").html(content);
 	            $('.paging_container').html(a);
 	            $('.empty-container').html(none);
+	            $('.modal-container').html(modal)
+	            
+	            var modal = document.querySelector(".modal"); 
+	            var submit_btn = document.querySelector(".submit_btn"); 
+	            var close = document.querySelector(".close-button"); 
+	            var cancel = document.querySelector(".cancelc");
+
+	            function openModal() { 
+	                modal.classList.toggle("show-modal"); 
+	            }
+
+	            function onClick(event) { 
+	                if (event.target == modal) { 
+	                	openModal(); 
+	                } 
+	            }
+
+	            submit_btn.addEventListener("click", openModal); 
+	            close.addEventListener("click", openModal); 
+	            cancel.addEventListener("click", openModal); 
+	            window.addEventListener("click", onClick); 
+	            
 	        },
 	        error: function(xhr, status, error) {
 	            console.error(xhr.responseText);
 	        }
     });
 }
+
+
+$(document).on('click','#submit',function(){
+	alert("dddddㅣ");
+	var memIdx = $(this).attr('data-mem');
+	openModal();
+	console.log("memIdx::"+ memIdx);
+	
+});
+
 
 </script>
 </html>

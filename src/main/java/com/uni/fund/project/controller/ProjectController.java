@@ -290,6 +290,22 @@ public class ProjectController {
 		return map;
 	}
 	
+	/* *
+	 * 작성자 : 허승경
+	 * 프로젝트 리스트페이지 IN --> 펀딩진행중 -> 실패상태 읽어오기
+	 * */
+	@RequestMapping(value="/project/projectFundingState.ajax")
+	@ResponseBody
+	public Map<String, Object> projectFundingState(int pro_idx, int mem_idx){
+		logger.info(":: projectFundingState CONTROLLER IN ::");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("projectFundingState", projectService.projectFundingState(pro_idx));
+		logger.info("projectFundingState:{}",projectService.projectFundingState(pro_idx));
+		
+		return map;
+	}
+	
 	@RequestMapping(value = "/project/fund.do", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> fundDo(@RequestParam Map<String,String> map) {

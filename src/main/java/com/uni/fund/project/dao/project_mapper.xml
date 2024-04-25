@@ -90,7 +90,7 @@
 		SELECT *
 		FROM (
 			SELECT 
-				p.pro_idx, p.pro_title, p.ori_price, p.rew_price, p.pro_deadline, m.mem_id as userId
+				p.pro_idx, p.pro_title, p.ori_price, p.rew_price, p.pro_state, p.pro_deadline, m.mem_id as userId
 			    , c.cate_name as cateName
 			    , (SELECT pho_name 
 			    	FROM photo
@@ -144,6 +144,10 @@
 	
 	<select id="projectCheckFavorites" resultType="int">
 		SELECT count(*) FROM bookmark WHERE pro_idx=#{param1} AND mem_idx=#{param2}
+	</select>
+	
+	<select id="projectFundingState" resultType="int">
+		<![CDATA[ SELECT COUNT(pro_idx) FROM project WHERE pro_idx = #{pro_idx} AND  pro_state='C' AND pro_deadline < now() ]]>
 	</select>
 	
 	<insert id="projectAddLike">
