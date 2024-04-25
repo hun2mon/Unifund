@@ -53,10 +53,11 @@ public class MemberController {
 		logger.info("login :" + loginInfo);
 		
 		if(loginInfo != null) {
-			page = "member/joinForm";
+			page = "main";
 			session.setAttribute("mem_idx", loginInfo.getMem_idx());
 			session.setAttribute("mem_status", loginInfo.getMem_status());
 			session.setAttribute("mem_id", loginInfo.getMem_id());
+			session.setAttribute("mem_status", loginInfo.getMem_status());
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
