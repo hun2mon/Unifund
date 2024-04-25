@@ -54,13 +54,10 @@ public class MemberController {
 
 		
 		if(loginInfo != null) {
-			String mem_id = loginInfo.getMem_id();
-			int mem_idx = loginInfo.getMem_idx();
 			page = "main";
-			session.setAttribute("mem_id", mem_id);
-			session.setAttribute("mem_idx", mem_idx);
-			logger.info("sadfasd : {}", loginInfo.getMem_id());
-			model.addAttribute("msg", "로그인에 성공하였습니다.");
+			session.setAttribute("mem_idx", loginInfo.getMem_idx());
+			session.setAttribute("mem_id", loginInfo.getMem_id());
+			session.setAttribute("mem_status", loginInfo.getMem_status());
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
