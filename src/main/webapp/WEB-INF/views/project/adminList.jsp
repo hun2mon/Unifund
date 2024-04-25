@@ -82,10 +82,16 @@ span {
 }
 </style>
 </head>
+<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 <body>
+<<<<<<< HEAD
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 	<div id="divMain">
+=======
+
+	<div class="divMain">
+>>>>>>> 8b9ace3f4cf8aa0a769e95a007f36d92c9dd6af2
 		<table align="center" class="proList">
 			<div class="divTop">
 				<span> 

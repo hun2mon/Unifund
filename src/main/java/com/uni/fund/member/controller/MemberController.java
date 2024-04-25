@@ -56,6 +56,7 @@ public class MemberController {
 		if(loginInfo != null) {
 			page = "main";
 			session.setAttribute("mem_idx", loginInfo.getMem_idx());
+			session.setAttribute("mem_status", loginInfo.getMem_status());
 			session.setAttribute("mem_id", loginInfo.getMem_id());
 			session.setAttribute("mem_status", loginInfo.getMem_status());
 		}else {
@@ -94,23 +95,96 @@ public class MemberController {
 		return map;
 	}
 	
+	@RequestMapping(value = "/user/adminMemberList.go")
+	public String adminMemberList(HttpSession session, Model model) {
+		String status = (String)session.getAttribute("mem_status"); 
+		String page= "redirect:/member/login.go";
+		logger.info("mem_status="+status);
+		logger.info("status="+status);
+		
+		if(status != null && status.equals("M")) {
+			page = "./user/adminMemberList";
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+		}
+		
+	    return page;
+	}
 	
+	@RequestMapping(value = "/user/adminMemberList.ajax")
+	@ResponseBody
+	public Map<String, Object> adminMemberListAjax(@RequestParam Map<String,Object> param,Model model) {
+		int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
+		String searchType = (String)param.get("searchType");
+		String keyword = (String)param.get("keyword");
+		logger.info("pg::"+pg);
+		logger.info("searchType::"+searchType);
+		logger.info("keyword::"+keyword);
+		
+		int showList = 20;
+		int spaceBlock = 5;
+		param.put("start", (pg-1) * showList);
+		int total = memberService.memberTotalCnt(param);
+		int totalP = (total + (showList-1)) / showList;	
+		int startPage = (pg-1) / spaceBlock*spaceBlock + 1;	
+		int endPage= startPage + (spaceBlock-1);
+		if(endPage > totalP) endPage = totalP;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberList",memberService.memberListAjax(param));
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
+		map.put("totalP", totalP);
+		
+		logger.info("#### memberList : {}", map.get("memberList"));
+
+		model.addAttribute("total", total);
+		model.addAttribute("pg", pg);
+		model.addAttribute("blockScale", spaceBlock);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("searchType", searchType);
+
+		return map;
+	}
 	
+	// 회원가입 페이지 이동
+	@RequestMapping(value = "/user/adminJoinReq.go")
+	public String adminJoinReq() {
+		logger.info("adminJoinReq 페이지 이동");
+		
+		return "user/adminJoinReq";
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@RequestMapping(value = "/user/adminMemberJoinReq.ajax")
+	@ResponseBody
+	public Map<String, Object> adminMemberJoinReq(@RequestParam Map<String,Object> param,Model model) {
+		int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
+		String keyword = (String)param.get("keyword");
+		logger.info("pg::"+pg);
+		logger.info("keyword::"+keyword);
+		
+		int showList = 20;
+		int spaceBlock = 5;
+		param.put("start", (pg-1) * showList);
+		int total = memberService.memberJoinCnt(param);
+		int totalP = (total + (showList-1)) / showList;	
+		int startPage = (pg-1) / spaceBlock*spaceBlock + 1;	
+		int endPage= startPage + (spaceBlock-1);
+		if(endPage > totalP) endPage = totalP;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("joinMemList",memberService.adminMemberJoinReqAjax(param));
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
+		map.put("totalP", totalP);
+		
+		model.addAttribute("total", total);
+		model.addAttribute("pg", pg);
+		model.addAttribute("blockScale", spaceBlock);
+		model.addAttribute("keyword", keyword);
+
+		return map;
+	}
 	
 	
 }
