@@ -37,9 +37,30 @@ public class MypageDTO {
    private Date rep_date;
    private String pho_name;
    private String rsn_content;
+   private int rep_idx;
+   private String trans_content;
+   private int pro_idx;
    
-    public String getRep_division() {
-      return rep_division;
+   	public int getPro_idx() {
+	return pro_idx;
+}
+public void setPro_idx(int pro_idx) {
+	this.pro_idx = pro_idx;
+}
+	public String getTrans_content() {
+	return trans_content;
+	}
+	public void setTrans_content(String trans_content) {
+		this.trans_content = trans_content;
+	}
+	public int getRep_idx() {
+	return rep_idx;
+	}
+	public void setRep_idx(int rep_idx) {
+		this.rep_idx = rep_idx;
+	}
+	public String getRep_division() {
+	      return rep_division;
    }
    public void setRep_division(String rep_division) {
       this.rep_division = rep_division;

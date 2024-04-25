@@ -108,6 +108,8 @@ public interface ProjectDAO {
 
 	int mileageSelect(Map<String, String> map);
 
+	void report(String pro_idx, String repContent, String mem_idx);
+	
 	int projectFundingState(int pro_idx);
 
 }

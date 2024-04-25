@@ -377,6 +377,7 @@
 		select mile_use FROM project_apply WHERE pro_idx = ${pro_idx} and mem_idx = ${mem_idx} ORDER BY fund_idx DESC LIMIT 1
 	</select>
 	
-	
-	
+	<insert id="report" parameterType="String">
+		INSERT INTO report(mem_idx,ref_idx,rep_content,rep_division) VALUES(#{param3},#{param1},#{param2},'프로젝트')
+	</insert>
 </mapper>

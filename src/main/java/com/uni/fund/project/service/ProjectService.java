@@ -424,6 +424,11 @@ public class ProjectService {
 
 	public void stateChange(String pro_idx, String state) {
 		projectDAO.stateChange(pro_idx, state);
+	}
+		
+	public void report(String pro_idx, String repContent, String mem_idx) {
+		projectDAO.report(pro_idx,repContent,mem_idx);
+		
 		
 	}
 

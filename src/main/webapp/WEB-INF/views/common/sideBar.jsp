@@ -174,15 +174,9 @@ label:hover {
 	</div>
 </body>
 <script>
-<<<<<<< HEAD
-  const navBar = document.querySelector("nav"),
-       menuBtns = document.querySelectorAll(".menu-icon"),
-       overlay = document.querySelector(".overlay");
-=======
   const navBar = document.querySelector(".side_bar");
        menuBtns = document.querySelectorAll(".button.bars");
        overlay = document.querySelector(".button.cancel");
->>>>>>> 8b9ace3f4cf8aa0a769e95a007f36d92c9dd6af2
 
      menuBtns.forEach((menuBtn) => {
        menuBtn.addEventListener("click", () => {

@@ -224,4 +224,9 @@ public void introPhoDel(String phoName, int userId) {
 	mypageDAO.introPhoDel(phoName,userId);
 	
 }
+
+public MypageDTO repComCall(String rep_idx, int userId) {
+	
+	return mypageDAO.repComCall(rep_idx,userId);
+}
 }

@@ -5,7 +5,7 @@
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.mypage.dao.MypageDAO">
    <select id="profile" resultType="com.uni.fund.mypage.dto.MypageDTO">
-      SELECT mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
+      SELECT mem_idx,mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
             mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
             mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
             (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
@@ -57,7 +57,7 @@
                INSERT INTO photo(pho_name,ref_idx,pho_division) VALUES(#{param1},#{param2},'자기소개')
    </insert>
    <select id="list" resultType="com.uni.fund.mypage.dto.MypageDTO">
-            SELECT p.pro_title, p.pro_startdate, p.pro_deadline, pa.fund_state 
+         SELECT p.pro_idx, p.pro_title, p.pro_startdate, p.pro_deadline, pa.fund_state 
          FROM project p 
          JOIN project_apply pa ON p.pro_idx = pa.pro_idx 
          WHERE pa.mem_idx = #{param3} AND (pa.fund_state ='A' OR pa.fund_state ='C')
@@ -78,20 +78,19 @@
          ) AS subquery
    </select>
    <select id="createList" resultType="com.uni.fund.mypage.dto.MypageDTO">
-            SELECT pro_title, pro_state, pro_startdate ,pro_deadline,
-            	(select rsn_content from project_admin pa where pro_idx = p.pro_idx and pro_state = '거절') as rsn_content
-         from project p
+            SELECT pro_idx, pro_title, pro_state, pro_startdate ,pro_deadline 
+         from project 
          WHERE mem_idx = #{param3} And pro_state  NOT IN ('D')
          ORDER BY 
              CASE 
-                 WHEN pro_state = 'B' THEN 1
+                 WHEN pro_state = 'F' THEN 1
                  ELSE 0
              END ASC,
              CASE 
-                 WHEN pro_state = 'B' THEN pro_deadline
+                 WHEN pro_state = 'F' THEN pro_deadline
                  ELSE NULL
              END DESC,
-             FIELD(pro_state, 'F', 'A', 'C', 'E') ASC
+             FIELD(pro_state, 'A', 'C', 'B', 'E') ASC
          LIMIT #{param1} OFFSET #{param2}
    </select>
    <select id="allCountCre" resultType="Integer">
@@ -103,10 +102,11 @@
          ) AS subquery
    </select>
    <select id="repList" resultType="com.uni.fund.mypage.dto.MypageDTO">
-            SELECT rep_division, rns_state ,rep_content ,rep_date  
-            FROM report 
-            WHERE mem_idx = #{param3}
-            ORDER BY rep_date DESC limit #{param1} offset #{param2}
+            SELECT r.rep_division, r.rns_state ,r.rep_content ,r.rep_date,r.rep_idx,p.pro_title,p.pro_idx 
+            FROM report r left join project p on r.ref_idx = p.pro_idx 
+            WHERE r.mem_idx = #{param3}
+            ORDER BY rns_state asc ,rep_date DESC
+            limit #{param1} offset #{param2}
    </select>
    <select id="allCountRep" resultType="Integer">
          SELECT CEIL(COUNT(*) / #{param1}) AS pages 
@@ -131,4 +131,10 @@
    <delete id="introPhoDel">
    		DELETE FROM photo WHERE pho_name = #{param1} AND ref_idx = #{param2} 
    </delete>
+   <select id="repComCall" resultType="com.uni.fund.mypage.dto.MypageDTO">
+           SELECT rep_content ,
+				(SELECT trans_content FROM rep_trans WHERE mem_idx = #{param2} AND rep_idx = #{param1}) as trans_content 
+			from report Where rep_idx = #{param1} AND mem_idx = #{param2}
+   </select>
+     
 </mapper>
