@@ -76,6 +76,8 @@ public class ProjectService {
 
 		if (row > 0) {
 			int pro_idx = projectDTO.getPro_idx();
+
+
 			String projectMainPhotoDiv = "프로젝트대표사진";
 			String projectPhotoDiv = "프로젝트";
 			projectMainFileSave(pro_idx, pro_main_photo, projectMainPhotoDiv);
