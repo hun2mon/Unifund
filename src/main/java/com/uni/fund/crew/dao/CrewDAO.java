@@ -48,6 +48,8 @@ public interface CrewDAO {
 
 	CrewDTO detail(String memId, String crew_idx);
 
+	void report(String crew_idx, String repContent, String memIdx);
+
 	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
 
 	//List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);

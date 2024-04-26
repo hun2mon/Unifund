@@ -61,12 +61,20 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crew/crewUpdateForm.go")
-	public String crewUpdateFormGo(Model model) {
+	public String crewUpdateFormGo(Model model, HttpSession session, int crew_idx) {
 		String page="redirect:/crewDetail";
-		int crew_idx = 1;
 		logger.info("update form idx = "+crew_idx);
 		crewService.crewUpdateForm(crew_idx,model);
-		page="crew/crewUpdateForm";
+		page="crew/crewUpdateForm";		
+
+	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
+	    logger.info("memIdx : "+session.getAttribute("mem_idx"));
+		
+		String memId= (String) session.getAttribute("mem_id");
+		if(memId!=null) {
+			page="crew/crewUpdateForm";
+		}
+	    
 		
 		return page;
 	}
@@ -161,18 +169,18 @@ public class CrewController {
 	    String page="crew/detail";
 	    String memId= (String) session.getAttribute("mem_id");
 	    
-		model.addAttribute("mem_idx",memId);
-	    
-	    logger.info("loginId : "+session.getAttribute("mem_id"));
+		model.addAttribute("mem_idx",memId);	    
+	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
 	    logger.info("memIdx : "+session.getAttribute("mem_idx"));
 	    model.addAttribute("mem_idx","memIdx");	    
 	    
 	    CrewDTO crew= new CrewDTO();
+	    logger.info("crew"+crew);
 	    
-	    if(session.getAttribute("loginId")!=null) {
+	    if(session.getAttribute("mem_idx")!=null) {
 	    	String crew_state= crewService.stateCheck(crew_idx);
-		    // 그게 아니라면 크루상 A =활동중인 상
-		    	   crew= crewService.detail(crew_idx,memId);
+		    
+	    	crew= crewService.detail(crew_idx,memId);
 		    	   model.addAttribute("crew",crew);
 		    	   logger.info("else session in, memIdx : " +memId);
 		    	   logger.info("else session in, row = "+row);
@@ -182,6 +190,20 @@ public class CrewController {
 		    	   }
 		   }
 	    return page;
+	}
+	
+	@RequestMapping(value="/crew/report.ajax",method = RequestMethod.POST)
+	@ResponseBody
+	public String report(String crew_idx,HttpSession session, String repContent) {
+		logger.info("report.do 들어간다.");
+		logger.info("신고사유 : "+repContent);
+		logger.info("크루번호 : "+crew_idx);
+		String memIdx=(String)session.getAttribute("mem_idx");
+		if(memIdx!=null) {
+			crewService.report(crew_idx,repContent,memIdx);
+		}
+		
+		return "redirect:/crew/detail.go?crew_idx="+crew_idx;
 	}
 	
 	

@@ -45,7 +45,7 @@
             margin-right: 20px;
         }
         
-        .crew-con recruitment_information {
+        .crew-con img.recruitment_information {
             width: 150px;
             height: 150px;
             border-radius: 50%;
@@ -153,6 +153,40 @@
             margin-top: 20px;
             text-align: right;
         }
+        
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -170,13 +204,23 @@
             </div>
             <div class="buttons">
                 <button class="btn apply-btn" >크루 신청</button>
-                <button class="btn report-btn">크루 신고</button>
+                <button class="btn report-btn" onclick="openReportModal()">크루 신고</button>
+					<!-- 크루 신고 팝업 모달 -->
+					<div id="reportModal" class="modal">
+    					<div class="modal-content">
+        					<span class="close" onclick="closeReportModal()">&times;</span>
+        					<h2>크루 신고</h2>
+        					<textarea id="repContent" name="repContent" rows="4" placeholder="신고 사유를 입력해주세요"></textarea>
+        					<button class="btn report-submit-btn" onclick="submitReport()">신고</button>
+        					<button class="btn cancel-btn" onclick="closeReportModal()">취소</button>
+    					</div>
+					</div>
                 <div class="thumb">
                     <button class="btn like-btn">👍</button>
                 </div>
                 <button class="btn leave-btn">크루 탈퇴하기</button>
-                <button class="btn edit-btn" onclick="location.href=\'/main/crew/crewUpdate.go\'">크루 수정</button>
-                <button class="btn delete-btn">크루 삭제</button>
+				<button class="btn edit-btn" onclick="location.href='/main/crew/crewUpdateForm.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
+				<button class="btn delete-btn">크루 삭제</button>
             </div>
         </div>
         <hr>
@@ -216,7 +260,37 @@
 </body>
 
 <script>
+//모달 열기
+function openReportModal() {
+    document.getElementById("reportModal").style.display = "block";
+}
 
+// 모달 닫기
+function closeReportModal() {
+    document.getElementById("reportModal").style.display = "none";
+}
+
+// 신고 제출
+function submitReport() {
+        var repContent = $("#repContent").val();
+        console.log(repContent);
+        $.ajax({
+            type: 'post',
+            url: './report.ajax',
+            data: {
+            	'repContent': repContent
+            },
+            dataType: 'json',
+            success: function(response) {
+                alert("신고가 접수되었습니다.");
+                $("#reportModal").modal("hide"); // 팝업 닫기
+            },
+            error: function(xhr, status, error) {
+                // 오류 시 처리할 내용
+                alert("오류가 발생했습니다.");
+            }
+        });
+}
 
 
 </script>

@@ -172,26 +172,33 @@
 	
 	<select id="detail" resultType="com.uni.fund.crew.dto.CrewDTO">
 		SELECT
-			c.crew_name
-			,c.crew_exp
-			,c.crew_local
-			,c.crew_con
-			,c.crew_link
-			,(SELECT pho_name FROM photo
-			WHERE pho_division ='모집설명'
-			AND ref_idx= c.crew_idx
-			ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information
-			,(SELECT pho_name FROM photo 
-			WHERE pho_division ='크루로고'
-			AND ref_idx= c.crew_idx
-			ORDER BY pho_idx DESC LIMIT 1
-			) AS crew_logo
+    		c.crew_idx,
+    		c.crew_name,
+    		c.crew_exp,
+    		c.crew_local,
+    		c.crew_con,
+    		c.crew_link,
+    		(SELECT pho_name FROM photo
+     		WHERE pho_division ='모집설명'
+     		AND ref_idx= c.crew_idx
+     		ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information,
+    		(SELECT pho_name FROM photo 
+     		WHERE pho_division ='크루로고'
+     		AND ref_idx= c.crew_idx
+     		ORDER BY pho_idx DESC LIMIT 1
+    		) AS crew_logo,
+    		(SELECT COUNT(*) FROM member WHERE mem_status='M') AS mem_status_manager,
+    		(SELECT COUNT(*) FROM crewMember_list WHERE state='크루장') AS crew_leader_count
 		FROM crew c 
 		WHERE crew_idx=#{param2}
 	</select>
 	
 	<select id="stateCheck" resultType="String">
 		SELECT crew_status FROM crew WHERE crew_idx=#{param1}
+	</select>
+	
+	<select id="report" parameterType="String">
+		INSERT INTO report(mem_idx,ref_idx,rep_content,rep_division) VALUES(#{param3},#{param1},#{param2},'크루')
 	</select>
 	
 </mapper>

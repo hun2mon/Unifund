@@ -208,6 +208,11 @@ public class CrewService {
 		return crewDAO.stateCheck(crew_idx);
 	}
 
+	public void report(String crew_idx, String repContent, String memIdx) {
+		crewDAO.report(crew_idx,repContent,memIdx);
+		
+	}
+
 
 
 
