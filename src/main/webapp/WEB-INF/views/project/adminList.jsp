@@ -82,16 +82,10 @@ span {
 }
 </style>
 </head>
-<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 <body>
-<<<<<<< HEAD
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 	<div id="divMain">
-=======
-
-	<div class="divMain">
->>>>>>> 8b9ace3f4cf8aa0a769e95a007f36d92c9dd6af2
 		<table align="center" class="proList">
 			<div class="divTop">
 				<span> 
@@ -218,7 +212,7 @@ span {
 			content += '<td class="userId">' + item.mem_id + '</td>';
 			content += '<td class="proTitle"><a href="detail.go?pro_idx=' + item.pro_idx + '">' + item.pro_title + '</a></td>';
 			var date = new Date(item.pro_deadline);
-			var dateStr = date.toLocaleDateString("ko-KR");//en_US
+			var dateStr = date.toLocaleDateString("ko-KR");
 			content += '<td class="proDeadLine">' + dateStr + '</td>';
 			content += '<td class="rewPrice">' + (item.rew_price !== null ? Number(item.rew_price).toLocaleString() : '') + '원</td>';
 			content += '<td class="targerPrice">' + (item.target_price !== null ? Number(item.target_price).toLocaleString() : '') + '원</td>';

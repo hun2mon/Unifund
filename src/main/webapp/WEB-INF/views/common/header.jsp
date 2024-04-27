@@ -4,6 +4,31 @@
 <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/layout.css"/>" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
+<style>
+.w3-bar{
+overflow: visible !important;
+min-width: 1170px;
+}
+
+#noticeBtn{
+position: relative;
+}
+
+.noticeBox{
+display:none;
+position: absolute;
+top: 70px;
+left: -200px;
+width: 300px;
+height: 500px;
+background: lightgray;
+}
+
+.noticeBox.on{
+display: block;
+}
+</style>
+
 <div class="w3-top">
 
   <div class="w3-bar w3-black w3-card">
@@ -27,7 +52,27 @@
      <a href="/main/qna/list.go" class="w3-bar-item w3-button w3-padding-large w3-hover-purple">Q&A </a>
     
      <a href="/main/mypage/profile.go?userIdx=${mem_idx}" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
-   	 <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-bell"></i></a>
+   	 <a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right" id="noticeBtn">
+   	 	<i class="fa fa-bell"></i>
+   	 	<span class="noticeBox">
+			<div>
+				notice
+			</div>
+			<div>
+				notice
+			</div>
+		</span>
+   	 </a>
    	 <a href="/main/member/login.go" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a>
   </div>
 </div>
+
+<script>
+$('#noticeBtn').on('click',function(){
+	$('.noticeBox').toggleClass('on');
+});
+</script>
+
+
+
+

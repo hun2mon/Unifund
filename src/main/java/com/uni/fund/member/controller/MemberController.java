@@ -59,6 +59,7 @@ public class MemberController {
 			session.setAttribute("mem_status", loginInfo.getMem_status());
 			session.setAttribute("mem_id", loginInfo.getMem_id());
 			session.setAttribute("mem_status", loginInfo.getMem_status());
+			logger.info("status:{}", loginInfo.getMem_status());
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
