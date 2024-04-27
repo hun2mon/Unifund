@@ -43,6 +43,16 @@ public class MemberController {
 		return "member/findId";
 	}
 	
+	@RequestMapping(value = "/member/logout.do")
+	public String logout(HttpSession session, Model model) {
+		session.removeAttribute("mem_idx");
+		session.removeAttribute("mem_status");
+		session.removeAttribute("mem_id");
+		session.removeAttribute("mem_status");
+		model.addAttribute("msg", "로그아웃 되었습니다.");
+		return "/main";
+	}
+	
 	
 	@RequestMapping(value="member/login.do")
 	public String login(Model model, HttpSession session, String id, String pw) {

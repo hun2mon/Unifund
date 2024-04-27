@@ -107,9 +107,17 @@
 		<span id="noticeBtn"></span>
 		<span class="noticeBox">
 		</span>
-		</a> <a href="/main/member/login.go"
-			class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i
-			class="fa fa-user"></i></a>
+		</a> 
+		<c:if test="${mem_id == null }">
+			<a href="/main/member/login.go" class="w3-padding-large w3-hover-purple w3-hide-small w3-right">
+				<i class="fa fa-user"></i>
+			</a>		
+		</c:if>
+		<c:if test="${mem_id != null }">
+			<a href="/main/member/logout.do" class="w3-padding-large w3-hover-purple w3-hide-small w3-right">
+				<i class="fa-solid fa-right-from-bracket"></i>
+			</a>		
+		</c:if>
 	</div>
 </div>
 

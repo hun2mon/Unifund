@@ -26,6 +26,9 @@ public class CrewDTO {
 	
 	private int crew_cool_idx;
 	private int crew_cool_cnt;
+	
+	private String mem_id;
+	
 
 	
 	public int getCrew_idx() {
@@ -159,6 +162,12 @@ public class CrewDTO {
 	}
 	public void setCrew_mem_cnt(int crew_mem_cnt) {
 		this.crew_mem_cnt = crew_mem_cnt;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
 	}
 	
 

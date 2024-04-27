@@ -183,7 +183,7 @@
 	function listCall() {
 		$.ajax({
 			type : 'get',
-			url : 'mainProList.ajax',
+			url : '/main/mainProList.ajax',
 			data : {},
 			dataType : 'json',
 			success : function(data) {
@@ -196,7 +196,7 @@
 		
 		$.ajax({
 			type : 'get',
-			url : 'mainCrewList.ajax',
+			url : '/main/mainCrewList.ajax',
 			data : {},
 			dataType : 'json',
 			success : function(data) {
@@ -266,7 +266,7 @@
 		if (division == 1) {
 			var form = document.createElement('form');
 			form.method = 'post';
-			form.action = './project/detail.go';
+			form.action = '/main/project/detail.go';
 
 			var input = document.createElement('input');
 			input.type = 'hidden';
@@ -279,7 +279,7 @@
 		} else {
 			var form = document.createElement('form');
 			form.method = 'post';
-			form.action = './crew/detail.go';
+			form.action = '/main/crew/detail.go';
 	
 			var input = document.createElement('input');
 			input.type = 'hidden';

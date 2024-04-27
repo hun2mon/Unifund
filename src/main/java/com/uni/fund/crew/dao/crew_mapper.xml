@@ -114,6 +114,30 @@
 		DELETE FROM popularity WHERE mem_idx=#{param1} AND crew_idx=#{param2}
 	</delete>
 	
+	<select id="appList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT
+			 *,
+			 (SELECT mem_id FROM member m WHERE m.mem_idx = ch.mem_idx) as mem_id
+		FROM crewMember_history ch
+			WHERE crew_idx = #{param1} and crew_mem_status = 'A' ORDER BY crew_mem_idx DESC LIMIT #{param2},#{param3}
+	</select>
+	
+	<select id="allCount" resultType="int">
+		SELECT CEIL(COUNT(mem_idx)/#{param1}) AS pages FROM crewMember_history WHERE crew_idx = #{param2} and crew_mem_status = 'A'
+	</select>
+	
+	<update id="approve">
+		UPDATE crewMember_history
+		SET crew_mem_status='B', crew_mem_rsn='승인'
+		WHERE mem_idx=#{param1} and crew_idx = #{param2}	
+	</update>
+	
+	<insert id="insertCrewMem">
+		insert into crewMember_list (crew_idx,mem_idx)
+			values (#{param2},#{param1})
+	</insert>
+	
+	
 	
 	
 	

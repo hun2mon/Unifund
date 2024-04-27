@@ -631,7 +631,7 @@ input[name=repContent] {
 			content += '<span class="spanMargin">평점 ' + item.rev_grade + '/5점</span>';
 			content += '<span class="spanMargin">작성자 : ' + item.mem_id + '</span>';
 			var date = new Date(item.rev_date);
-			var dateStr = date.toLocaleDateString("ko-KR");//en_US
+			var dateStr = date.toLocaleDateString("ko-KR");
 			content += '<span class="spanMargin">' + dateStr + '</span>';
 			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
 			content += '<div class="review_content">' + item.rev_content + '</div>';
@@ -727,23 +727,48 @@ input[name=repContent] {
 			alert('모집금액이 충족되어 신청이 마감되었습니다.');
 		}else
 		if ($('.funding_button').val() == '펀딩 신청하기') {
-			if (price > ${project.target_price}-${project.now_price}) {
-				alert('최대 구매 가능 개수를 초과했습니다.');
-				$('.quan').val(0);
-				$('.quan').focus();
-			} else if ($('.mileageCheck').prop('checked') == true) {
-				if ($('.use_mileage_value').val() < 500) {
-					alert('마일리지는 500이상부터 사용 가능합니다.');
-					$('.use_mileage_value').focus();
-				} else if ($('.use_mileage_value').val() > ${project.mileage}){
-					alert('보유한 마일리지보다 많습니다. 다시 입력해 주세요');
-					$('.use_mileage_value').val(0);
-					$('.use_mileage_value').focus();
-				} else if(price < $('.use_mileage_value').val()){
-					alert('마일리지 사용금액이 초과되었습니다. 다시 입력해 주세요');
-					$('.use_mileage_value').val(0);
-					$('.use_mileage_value').focus();
-				} else{
+			if(confirm("펀딩 하시겠습니까?")){
+				if (price > ${project.target_price}-${project.now_price}) {
+					alert('최대 구매 가능 개수를 초과했습니다.');
+					$('.quan').val(0);
+					$('.quan').focus();
+				} else if ($('.mileageCheck').prop('checked') == true) {
+					if ($('.use_mileage_value').val() < 500) {
+						alert('마일리지는 500이상부터 사용 가능합니다.');
+						$('.use_mileage_value').focus();
+					} else if ($('.use_mileage_value').val() > ${project.mileage}){
+						alert('보유한 마일리지보다 많습니다. 다시 입력해 주세요');
+						$('.use_mileage_value').val(0);
+						$('.use_mileage_value').focus();
+					} else if(price < $('.use_mileage_value').val()){
+						alert('마일리지 사용금액이 초과되었습니다. 다시 입력해 주세요');
+						$('.use_mileage_value').val(0);
+						$('.use_mileage_value').focus();
+					} else{
+						$.ajax({
+							type:'post'
+							,url:'./fund.do'
+							,data:{
+								pro_idx:'${project.pro_idx}',
+								mem_idx:'${mem_idx}',
+								rew_quantity:quantitys,
+								mileage:$('.use_mileage_value').val(),
+								total_price:price,
+								filter:'apply'
+							}
+							,dataType:'json'
+							,success:function(data){
+								alert('펀딩이 정상적으로 완료되었습니다.');
+								createForm();
+							}
+							,error:function(error){
+								console.log(error);
+							}
+						});
+					}
+				} else if (cash < price) {
+					alert('캐시+마일리지가 구매가격보다 낮습니다.');
+				} else {
 					$.ajax({
 						type:'post'
 						,url:'./fund.do'
@@ -765,23 +790,23 @@ input[name=repContent] {
 						}
 					});
 				}
-			} else if (cash < price) {
-				alert('캐시+마일리지가 구매가격보다 낮습니다.');
-			} else {
+			}
+		} 
+		if ($('.funding_button').val() == '펀딩 취소하기'){
+			if(confirm("펀딩 하시겠습니까?")){
 				$.ajax({
 					type:'post'
-					,url:'./fund.do'
+					,url:'./fund_cancle.do'
 					,data:{
 						pro_idx:'${project.pro_idx}',
 						mem_idx:'${mem_idx}',
 						rew_quantity:quantitys,
-						mileage:$('.use_mileage_value').val(),
 						total_price:price,
-						filter:'apply'
+						filter:'cancle'
 					}
 					,dataType:'json'
 					,success:function(data){
-						alert('펀딩이 정상적으로 완료되었습니다.');
+						alert('펀딩이 정상적으로 최소되었습니다.');
 						createForm();
 					}
 					,error:function(error){
@@ -789,27 +814,6 @@ input[name=repContent] {
 					}
 				});
 			}
-		} 
-		if ($('.funding_button').val() == '펀딩 취소하기'){
-			$.ajax({
-				type:'post'
-				,url:'./fund_cancle.do'
-				,data:{
-					pro_idx:'${project.pro_idx}',
-					mem_idx:'${mem_idx}',
-					rew_quantity:quantitys,
-					total_price:price,
-					filter:'cancle'
-				}
-				,dataType:'json'
-				,success:function(data){
-					alert('펀딩이 정상적으로 최소되었습니다.');
-					createForm();
-				}
-				,error:function(error){
-					console.log(error);
-				}
-			});
 		}
 	}
 	

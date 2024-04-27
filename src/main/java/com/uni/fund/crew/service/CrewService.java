@@ -183,6 +183,23 @@ public class CrewService {
 		return row;
 	}
 
+	public Map<String, Object> appList(String crew_idx, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		
+		List<CrewDTO> list = crewDAO.appList(crew_idx,start,pagePerCnt);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", crewDAO.allCount(pagePerCnt,crew_idx));
+		return result;
+	}
+
+	public void approve(String mem_idx, String crew_idx) {
+		crewDAO.approve(mem_idx,crew_idx);
+		crewDAO.insertCrewMem(mem_idx,crew_idx);
+	}
+
 
 
 
