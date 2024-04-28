@@ -311,6 +311,11 @@ input[name=repContent] {
 .category {
 	width: 70;
 }
+
+#repCon{
+	width: 600px;
+	height: 200px;
+}
 </style>
 </head>
 <body>
@@ -337,7 +342,7 @@ input[name=repContent] {
 										</td>
 									</tr>
 									<tr>
-										<td>사유<br> <input type="text" name="repContent"></td>
+										<td>사유<br><textarea style="background-color: #f2f2f2;" id="repCon" name="repContent" oninput="checkLength(this, 500)" placeholder="신고내용을 입력해주세요. 최대 500자까지 입력 가능합니다."></textarea></td>
 									</tr>
 									<tr>
 										<td class="button"><input type="button" value="신고"
@@ -345,7 +350,7 @@ input[name=repContent] {
 											<input type="button" onclick="repCancle()" value="취소"></td>
 									</tr>
 								</table>
-							</form>
+						</form>
 					</div>
 					
 					<div class="userID">${project.userId}</div>
@@ -839,20 +844,22 @@ input[name=repContent] {
 		alert(msg);
 	}
 	
+	function checkLength(textarea, maxLength) {
+	    if (textarea.value.length > maxLength) {
+	        textarea.value = textarea.value.substring(0, maxLength);
+	        alert("최대 글자수를 초과했습니다.");
+	    }  
+	}
+	
 	function report() {
-
-		var repContent = $('input[name="repContent"]').val(); // input 요소의 name 속성이 "repContent"인 것을 가져옵니다.
-	    var charLength = repContent.length;
-	    
-	    if (charLength > 750) {
-	        alert('내용은 750자 이내로 입력해 주세요!');
-	    } else if (repContent.trim() === '') {
+	    var repContent = document.getElementById('repCon').value.trim();
+	    if (repContent === '') {
 	        alert('내용을 입력해 주세요!');
 	    } else {
+	        // 여기에 신고 처리 로직 추가
 	        alert('신고되었습니다.');
-	        $('.report').submit();
+	        $('.report').submit(); // 폼 제출
 	    }
-		
 	}
 </script>
 </html>
