@@ -94,7 +94,7 @@ input[type="text"] {
 
 <body>
 
-	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="1">	<!--value값 바꿔줘야함 {crew.mem_idx} -->
+	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${crew.crew_idx}">	<!--value값 바꿔줘야함 {crew.mem_idx} -->
 	<div class="header">
 		<div class="btn-group" style="margin-right: 20px;">
 			<button class="btn" id="latestBtn">최신순</button>

@@ -30,6 +30,8 @@ public class CrewDTO {
 	private String crew_recruitment_information;
 	private String mem_status_manager;
 	private String crew_leader_count;
+	private String mem_id;
+	private String state;
 
 	
 	public int getCrew_idx() {
@@ -182,6 +184,18 @@ public class CrewDTO {
 	}
 	public void setMem_status_manager(String mem_status_manager) {
 		this.mem_status_manager = mem_status_manager;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 

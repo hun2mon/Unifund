@@ -246,6 +246,7 @@ function join(){
 		$crew_local.focus();
 	}else{
 		$('form').submit();
+		window.location.href='/main/crew/crewList.go';
 	}
 }
 

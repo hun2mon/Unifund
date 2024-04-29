@@ -132,13 +132,13 @@ public class CrewController {
 	
 	@RequestMapping(value="/crew/apply.ajax")
 	@ResponseBody
-	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx) {
-	    logger.info("memidx : {}", mem_idx); // 로그 출력 시 {}로 값을 대체합니다.
-	    String page="redirect:/crewList.go";
-	    
+	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx,HttpSession session) {
+		
 	    Map<String, Object> response = new HashMap<String, Object>();
+		int memIdx=(Integer)session.getAttribute("mem_idx");
+		logger.info("memidx : {}", memIdx);
 	    
-	    String result = crewService.applyCrew(mem_idx, crew_idx);
+	    String result = crewService.applyCrew(memIdx, crew_idx);
 	    
 	    if(result.equals("success")) {
 	        response.put("success", "신청이 완료되었습니다.");
@@ -153,17 +153,19 @@ public class CrewController {
 	
 	@RequestMapping(value="/crew/CoolCheck.ajax")
 	@ResponseBody
-	public Map<String, Object> crewCoolCheck(Integer mem_idx, Integer crew_idx){
-		logger.info("crewPopularityCheck");
-		
+	public Map<String, Object> crewCoolCheck(Integer crew_idx, HttpSession session){		
+		int memIdx=(Integer)session.getAttribute("mem_idx");
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		map.put("row", crewService.crewCoolCheck(mem_idx, crew_idx));
-		
+		logger.info("crewCoolCheck");
+		logger.info("mem_idx : {}",memIdx);
+
+		if(memIdx!=0) {
+			map.put("crewCool", crewService.crewCoolCheck(memIdx, crew_idx));
+		}		
 		return map;		
 	}
 	
-	@RequestMapping(value="/crew/detail.go",method = RequestMethod.GET)
+	@RequestMapping(value="/crew/detail.go",method = RequestMethod.GET)	
 	public String crewDetailGo(Model model, HttpSession session, String row, String crew_idx) {
 	    logger.info("crewDetail 들어간다.");
 	    String page="crew/detail";
@@ -192,18 +194,112 @@ public class CrewController {
 	    return page;
 	}
 	
+	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> detailCrewMemberPhoto(String crew_idx, HttpSession session,
+			String page, String cnt){
+		
+		int memIdx =(Integer)session.getAttribute("mem_idx");		
+		int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
+	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
+	    Map<String,Object> map = new HashMap<String, Object>();
+		
+		if(memIdx!=0) {
+			logger.info("detail.ajax들어간다");
+			logger.info("크루 번호 : "+crew_idx);
+			logger.info("페이지 당 보여줄 갯수 : "+cnt);
+			logger.info("요청 페이지 : " +page);
+			map=crewService.detailCrewMemberPhoto(currentPage, pagePerCnt,crew_idx);		    
+		}	
+		return map;
+	}
+	
+	
 	@RequestMapping(value="/crew/report.ajax",method = RequestMethod.POST)
 	@ResponseBody
-	public String report(String crew_idx,HttpSession session, String repContent) {
-		logger.info("report.do 들어간다.");
-		logger.info("신고사유 : "+repContent);
-		logger.info("크루번호 : "+crew_idx);
-		String memIdx=(String)session.getAttribute("mem_idx");
-		if(memIdx!=null) {
+	public Map<String,Object> report(String crew_idx,HttpSession session, String repContent) {
+		
+		Map<String,Object>map=new HashMap<String, Object>();		
+		int memIdx=(Integer)session.getAttribute("mem_idx");
+		
+		if(memIdx!=0 ) {
+			logger.info("report.do 들어간다.");
+			logger.info("신고사유 : "+repContent);
+			logger.info("크루번호 : "+crew_idx);
+			logger.info("memIdx : "+memIdx);
 			crewService.report(crew_idx,repContent,memIdx);
 		}
+		return map;
+	}
+	
+	@RequestMapping(value="/crew/delete.ajax",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> crewDel(HttpSession session,int crew_idx,String delContent) {
 		
-		return "redirect:/crew/detail.go?crew_idx="+crew_idx;
+		int memIdx=(Integer)session.getAttribute("mem_idx");
+		Map<String,Object>map=new HashMap<String, Object>();	
+		
+		if(memIdx!=0) {
+			logger.info("crewDel 드가자");
+			logger.info("삭제 사유 : "+delContent);
+			logger.info("크루번호 : "+crew_idx);
+			logger.info("memIdx : "+memIdx);
+			crewService.crewDelete(crew_idx,memIdx);
+			crewService.deleteReason(crew_idx,delContent,memIdx);
+		}
+		return map;
+	}
+	
+	@RequestMapping(value="/crew/out.do",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> crewOut(HttpSession session, int crew_idx) {
+		
+		int memIdx=(Integer)session.getAttribute("mem_idx");
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(memIdx!=0) {
+			logger.info("crewOut 시작");
+			logger.info("탈퇴할 크루 idx : "+crew_idx);
+			logger.info("memIdx : "+memIdx);
+			crewService.crewOut(crew_idx,memIdx);
+		}		
+		return map;
+	}
+	
+
+	@RequestMapping(value="/crew/deport.ajax",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> memberDeport(HttpSession session,String crewMem_idx,String crew_idx){
+		
+		int memIdx=(Integer)session.getAttribute("mem_idx");
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(memIdx!=0) {
+			logger.info("crew 추방 시작");
+			logger.info("추방할 멤버 idx : "+crewMem_idx);
+			logger.info("추방시키는 크루idx : "+crew_idx);
+			crewService.memberDeport(crew_idx,crewMem_idx);
+		}		
+		return map;
+	}
+
+	@RequestMapping(value="/crew/delegate.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> crewChiefDelegate(HttpSession session,String crewMem_idx, String crew_idx,
+			String delgateContent){
+		
+		int memIdx=(Integer)session.getAttribute("mem_idx");
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(memIdx!=0) {
+			logger.info("크루장 위임 시작");
+			logger.info("위임할 멤버 idx : "+crewMem_idx);
+			logger.info("위임시키는 크루idx : "+crew_idx);
+			logger.info("위임 사유 : "+delgateContent);
+			crewService.crewChiefDelegate(crew_idx,crewMem_idx,memIdx,delgateContent);
+		}
+		
+		return map;
 	}
 	
 	

@@ -117,9 +117,7 @@ public class CrewService {
 			crewRecruPhotoFileSave(Integer.parseInt(param.get("crew_idx")),crew_recru_photo,crewRecru);
 		}
 		
-	}
-
-	
+	}	
 
 	public Map<String, Object> crewList(String filterType, int currentPage, int pagePerCnt, Integer crew_idx) {
 		
@@ -149,26 +147,25 @@ public class CrewService {
 	    logger.info("searchKeyword,pagePerCnt"+crewDAO.searchCountPage(keyword,pagePerCnt)+"asdf");
 	    
 	    return map;
-	}
-	
+	}	
 
-	public String applyCrew(int mem_idx, int crew_idx) {
+	public String applyCrew(int memIdx, int crew_idx) {
 		
 		// 신청 중인크루 확인
-		int applyingCount = crewDAO.isApplying(mem_idx);
+		int applyingCount = crewDAO.isApplying(memIdx);
 		if(applyingCount>0) {
 			return "isApplying"; // 이미 크루 신청중이라면
 		}
 		
 		// 가입된 크루가 있는지 확인
-		int memberCount = crewDAO.isMember(mem_idx);
+		int memberCount = crewDAO.isMember(memIdx);
 		if(memberCount >0) {
 			return "memberCount";
 		}
 		
 		// 크루 신청 등록
 		Map<String, Object> param= new HashMap<String, Object>();
-		param.put("mem_idx",mem_idx);
+		param.put("mem_idx",memIdx);
 		param.put("crew_idx", crew_idx);
 		param.put("crew_mem_status","A");
 		crewDAO.applyCrew(param);
@@ -176,22 +173,18 @@ public class CrewService {
 		return "success";
 	}
 
-	public Object crewCoolCheck(Integer mem_idx, Integer crew_idx) {
+	public int crewCoolCheck(Integer memIdx, Integer crew_idx) {
 		
-		int row = crewDAO.crewCoolCheck(mem_idx,crew_idx);
-		
-		logger.info("crewPopularityCheck : ");
-		
-		if(row==1) {
-			crewDAO.crewUncool(mem_idx,crew_idx);
-			row = 0;
+		int crewCool = crewDAO.crewCoolCheck(memIdx,crew_idx);		
+		logger.info("crewPopularityCheck : {}"+crewCool);		
+		if(crewCool==1) {
+			crewDAO.crewUncool(memIdx,crew_idx);
+			crewCool = 0;
 		}else {
-			crewDAO.crewMakeCool(mem_idx, crew_idx);
-			row = 1;
-		}
-		
-		
-		return row;
+			crewDAO.crewMakeCool(memIdx, crew_idx);
+			crewCool = 1;
+		}		
+		return crewCool;
 	}
 	
 
@@ -208,9 +201,55 @@ public class CrewService {
 		return crewDAO.stateCheck(crew_idx);
 	}
 
-	public void report(String crew_idx, String repContent, String memIdx) {
-		crewDAO.report(crew_idx,repContent,memIdx);
+	public void report(String crew_idx, String repContent, int memIdx) {
+		crewDAO.report(crew_idx,repContent,memIdx);		
+	}
+
+	public void crewDelete(int crew_idx,int memIdx) {
+		crewDAO.crewDelete(crew_idx,memIdx);
+	}
+
+	public void deleteReason(int crew_idx, String delContent, int memIdx) {
+		crewDAO.deleteReason(crew_idx,delContent,memIdx);
+	}
+
+	public void crewOut(int crew_idx, int memIdx) {
+		crewDAO.crewMemberListDelete(crew_idx,memIdx);
+		crewDAO.crewOutMemberHistoryUpdate(crew_idx,memIdx);
+		logger.info("service부분 crewOut 완료");
+	}
+
+	public Map<String, Object> detailCrewMemberPhoto(int currentPage, int pagePerCnt, String crew_idx) {
+		int start = (currentPage - 1) * pagePerCnt;
+        Map<String, Object> map = new HashMap<String,Object>();
+        List<CrewDTO> list= crewDAO.detailCrewMember(start,pagePerCnt,crew_idx);
+        logger.info("list : "+list);
+        
+        map.put("list", list);        
+        map.put("currentPage", currentPage);
+        map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+        logger.info("totalPage = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+		return map;
+	}
+
+	public void memberDeport(String crew_idx, String crewMem_idx) {
+		logger.info("Service memberDeport");
+		crewDAO.crewMemberDeport(crew_idx, crewMem_idx);
+		crewDAO.crewMemberDeportHistoryInsert(crew_idx,crewMem_idx);
+	}
+
+
+	public void crewChiefDelegate(String crew_idx, String crewMem_idx, int memIdx, String delgateContent) {
+		logger.info("Service crewChiefDelegate");
+		// 크루장-> 일반 크루원 : crewMember_list update
+		crewDAO.crewChiefTomemberCrewMemberListUpdate(crew_idx,memIdx,crewMem_idx);
+		// 크루장 -> 일반크루원 : crewMember_history insert
+		crewDAO.crewChiefTomemberCrewMemberHistoryInsert(crew_idx,memIdx,crewMem_idx);
 		
+		//일반 크루원-> 크루장 : crewMember_list update
+		crewDAO.crewMemberToChiefCrewMemberListUpdate(crew_idx,crewMem_idx);	
+		// 일반 크루원-> 크루장 : crewMember_history insert / 위임사유도들어가야함
+		crewDAO.crewMemberToChiefCrewMemberHistoryInsert(crew_idx,crewMem_idx,delgateContent,memIdx);
 	}
 
 

@@ -22,9 +22,9 @@ public interface CrewDAO {
 
 	int crewUpdate(Map<String, String> param);	
 
-	int isApplying(int mem_idx);
+	int isApplying(int memIdx);
 
-	int isMember(int mem_idx);
+	int isMember(int memIdx);
 
 	void applyCrew(Map<String, Object> param);
 	
@@ -48,7 +48,34 @@ public interface CrewDAO {
 
 	CrewDTO detail(String memId, String crew_idx);
 
-	void report(String crew_idx, String repContent, String memIdx);
+	void report(String crew_idx, String repContent, int memIdx);
+
+	void crewDelete(int crew_idx, int memIdx);
+
+	void deleteReason(int crew_idx, String delContent, int memIdx);
+
+	void crewMemberListDelete(int crew_idx, int memIdx);
+
+	void crewOutMemberHistoryUpdate(int crew_idx, int memIdx);
+
+	List<CrewDTO> detailCrewMember(int start, int pagePerCnt, String crew_idx);
+
+	Object detailCrewMemberCountPage(int pagePerCnt, String crew_idx);
+
+	void crewMemberDeport(String crew_idx, String crewMem_idx);
+
+	void crewMemberDeportHistoryInsert(String crew_idx, String crewMem_idx);
+	
+
+	void crewChiefTomemberCrewMemberListUpdate(String crew_idx, int memIdx, String crewMem_idx);
+
+	void crewChiefTomemberCrewMemberHistoryInsert(String crew_idx, int memIdx, String crewMem_idx);
+
+	void crewMemberToChiefCrewMemberListUpdate(String crew_idx, String crewMem_idx);
+
+	void crewMemberToChiefCrewMemberHistoryInsert(String crew_idx, String crewMem_idx, String delgateContent, int memIdx);
+
+
 
 	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
 

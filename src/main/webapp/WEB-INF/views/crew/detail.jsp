@@ -149,12 +149,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .activity-buttons {
+.activity-buttons {
             margin-top: 20px;
             text-align: right;
         }
         
-        .modal {
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -193,6 +193,7 @@
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
     <input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
     <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${member.mem_idx}"/>
+    <input type="hidden" name="state" class="state" id="state" value="${crewMember_list.state}"/>
     <div class="container" id="crew-detail-container">
         <div class="crew-details">
             <img src="/photo/${crew.crew_logo}" class="logo"> 
@@ -201,9 +202,10 @@
                 <p>주 분야: ${crew.crew_exp}</p>
                 <p>활동지역: ${crew.crew_local}</p>
                 <p>소통링크: ${crew.crew_link}</p>
+                <p>인기도 : ${crew.crew_cool_cnt}</p>
             </div>
             <div class="buttons">
-                <button class="btn apply-btn" >크루 신청</button>
+                <button class="btn apply-btn" onclick="apply()" >크루 신청</button>
                 <button class="btn report-btn" onclick="openReportModal()">크루 신고</button>
 					<!-- 크루 신고 팝업 모달 -->
 					<div id="reportModal" class="modal">
@@ -216,11 +218,20 @@
     					</div>
 					</div>
                 <div class="thumb">
-                    <button class="btn like-btn">👍</button>
+                    <button class="btn like-btn" onclick="cool()">👍</button>
                 </div>
-                <button class="btn leave-btn">크루 탈퇴하기</button>
+                <button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
 				<button class="btn edit-btn" onclick="location.href='/main/crew/crewUpdateForm.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
-				<button class="btn delete-btn">크루 삭제</button>
+				<button class="btn delete-btn" onclick="openDeleteModal()">크루 삭제</button>
+					<div id="deleteModal" class="modal">
+    					<div class="modal-content">
+        					<span class="close" onclick="closeDeleteModal()">&times;</span>
+        					<h2>크루 삭제</h2>
+        					<textarea id="delContent" name="delContent" rows="4" placeholder="삭제 사유를 입력해주세요"></textarea>
+        					<button class="btn delete-submit-btn" onclick="submitDelete()">삭제</button>
+        					<button class="btn cancel-btn" onclick="closeDeleteModal()">취소</button>
+    					</div>
+					</div>
             </div>
         </div>
         <hr>
@@ -229,61 +240,164 @@
             <p>${crew.crew_con}</p>
             <img src="/photo/${crew.crew_recruitment_information}" class="recruitment_information"> 
             <hr>
+            <div id="delegateModal" class="modal" style="display: none;">
+    			<div class="modal-content">
+        			<span class="close" onclick="closeDelegateModal()">&times;</span>
+        			<h2>크루장 위임</h2>
+        			<textarea id="delegateReason" name="delegateReason" rows="4" placeholder="크루장 위임 사유를 입력해주세요"></textarea>
+        			<button class="btn delegate-submit-btn" onclick="delegateLeader()">위임</button>
+        			<input type="hidden" id="num1"/>
+        			<button class="btn cancel-btn" onclick="closeDelegateModal()">취소</button>
+    			</div>
+			</div>
             <table class="crew-table">
                 <thead>
                     <tr>
-                        <th>공백</th>
+                        <th></th>
                         <th>ID</th>
                         <th>비고</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
-                    </tr>
-                    <tr>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
-                    </tr>
-                    <tr>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
-                    </tr>
-                </tbody>
+                <tbody class="crew_member_list" id="list"></tbody>
+                <tr>
+      				<td colspan="3">
+      					<div class="container"> 
+      						<nav aria-label="Page navigation" style="text-align:center">
+                				<ul class="pagination" id="pagination"></ul>
+            				</nav>     
+        				</div>
+      				</td>
+     			 </tr>
             </table>
         </div>        
     </div>
 </body>
 
 <script>
+
+var showPage = 1;
+
+$(document).ready(function(){
+	listCall(showPage);
+	$('#pagination').twbsPagination('destroy');
+	
+    var userState = $("#state").val(); 
+    console.log(userState);
+
+    if (userState === "크루장") {
+        $(".crew-buttons").show(); // 크루장인 경우 버튼 보이기
+    } else {
+        $(".crew-buttons").hide(); // 일반 크루원인 경우 버튼 숨기기
+    }
+});
+
+function listCall(showPage){	
+	console.log(showPage);
+	var crew_idx= $("#crew_idx").val();
+    $.ajax({
+       type:'post',
+       url:'./detail.ajax',
+       data:{
+           'page':showPage,
+           'cnt':5,
+           'crew_idx':crew_idx
+       },
+       dataType:'json',
+       success:function(data){                 
+          console.log(data);          
+          drawList(data.list);   
+          $('#pagination').twbsPagination({
+          	startPage:1, // 시작페이지
+          	totalPages:data.totalPages, // 총 페이지 수
+          	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
+          	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+          		console.log(pg); // 클릭한 페이지 번호
+          		showPage = pg;
+          		listCall(pg);
+          	}
+          })
+       },
+       error:function(error){
+          console.log(error);
+       }
+    });
+}
+
+function drawList(list) {
+    var content = '';
+    var leaderFound = false; // 크루장이 이미 나왔는지 여부를 나타내는 변수
+
+    // 리스트의 각 항목에 대한 반복문
+    for (item of list) {
+        // 크루장인 경우 버튼추가 x
+        if (item.state === '크루장' && !leaderFound) {
+            content += '<tr>';
+            content += '<td>' + item.state + '</td>';
+            content += '<td>' + item.mem_id + '</td>';
+            content += '<td></td>';
+            content += '</tr>';
+            leaderFound = true; // 크루장이 나왔음을 표시
+        } else if (item.state !== '크루장') { // 크루장이 아닌 경우 옆에 버튼 추가
+        	content += '<tr>';
+        	content += '<input type="hidden" value="${crewMember_list.mem_idx}" name="crewMem_idx" class="crewMem_idx">';
+        	content += '<input type="hidden" value="${crewMember_list.crew_idx}" name="crew_idx" class="crew_idx">';
+        	content += '<td>' + item.state + '</td>';
+        	content += '<td>' + item.mem_id + '</td>';
+        	content += '<td class="crew-buttons">';
+        	content += '<button class="btn btn-danger" onclick="kickMember('+item.mem_idx+')">추방</button>';
+        	content += '<button class="btn btn-warning" onclick="openDelegateModal('+item.mem_idx+')">크루장 위임</button>';
+        	content += '</td>';
+        	content += '</tr>';
+        }        
+    }    
+    // 테이블에 내용 추가
+    $('#list').html(content);
+}
+
 //모달 열기
 function openReportModal() {
     document.getElementById("reportModal").style.display = "block";
 }
 
-// 모달 닫기
 function closeReportModal() {
     document.getElementById("reportModal").style.display = "none";
 }
+function openDeleteModal() {
+    document.getElementById("deleteModal").style.display = "block";
+}
 
-// 신고 제출
-function submitReport() {
+function closeDeleteModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+function openDelegateModal(num) {
+    // 모달 열기 전에 mem_idx 값을 받아온다.
+    console.log(num);
+    num1=num;
+    $('#num1').attr('value',num);
+    var ppp = $('#num1').val();
+    console.log(ppp);
+    document.getElementById("delegateModal").style.display = "block";
+}
+
+function closeDelegateModal() {
+    document.getElementById("delegateModal").style.display = "none";
+}
+
+
+function submitReport() { //크루신고
         var repContent = $("#repContent").val();
-        console.log(repContent);
+        var crew_idx= $("#crew_idx").val();
         $.ajax({
             type: 'post',
             url: './report.ajax',
             data: {
-            	'repContent': repContent
+            	'repContent':repContent,
+            	'crew_idx':crew_idx
             },
             dataType: 'json',
             success: function(response) {
                 alert("신고가 접수되었습니다.");
-                $("#reportModal").modal("hide"); // 팝업 닫기
             },
             error: function(xhr, status, error) {
                 // 오류 시 처리할 내용
@@ -291,6 +405,152 @@ function submitReport() {
             }
         });
 }
+
+function apply(){ //크루신청
+	var mem_idx = $('input[type="hidden"].mem_idx').val();
+    var crew_idx = $('input[type="hidden"].crew_idx').val();
+    var confirmation = confirm("크루에 신청하시겠습니까?");
+
+    if (confirmation) {
+        $.ajax({
+            type: 'post',
+            url: './apply.ajax',
+            data: {
+                mem_idx: mem_idx,
+                crew_idx: crew_idx
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.success);                    
+                } else if (response.error) {
+                    alert(response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+}
+
+function cool() { // 크루 인기도 
+	var mem_idx = $('input[type="hidden"].mem_idx').val();
+	var crew_idx= $('input[type="hidden"].crew_idx').val();
+	$.ajax({
+		type : 'get',
+		url : './CoolCheck.ajax',
+		data : {
+			'mem_idx' : mem_idx,
+			'crew_idx' : crew_idx
+		},
+		success : function(data) {
+			location.reload(); // 페이지 새로고침
+		},
+		error : function(error) {
+			console.log(error);
+		}
+	});	
+}
+
+function submitDelete(){ // 크루삭제(B 상태로 update)
+	var crew_idx= $('input[type="hidden"].crew_idx').val();
+	var delContent = $("#delContent").val();
+	$.ajax({
+		type : 'post',
+		url : './delete.ajax',
+		data : {
+			'crew_idx' : crew_idx,
+			'delContent':delContent
+		},
+		success : function(data) {
+			alert('삭제가 완료되었습니다.');
+			window.location.href='/main/crew/crewList.go';
+		},
+		error : function(error) {
+			console.log(error);
+		}
+	});	
+}
+
+function crewOut() {
+    var crew_idx = $('input[type="hidden"].crew_idx').val();
+    $.ajax({
+        type: 'post',
+        url: './out.do',
+        data: { 'crew_idx': crew_idx },
+        success: function(response) {
+            alert('크루 탈퇴가 완료되었습니다.');
+            window.location.href = '/main/crew/crewList.go'; // 크루 목록 페이지로 이동
+        },
+        error: function(xhr, status, error) {
+            console.log(error);
+            alert('크루 탈퇴 중 오류가 발생했습니다.');
+        }
+    });
+}
+
+function kickMember(num) {
+    var crew_idx = $('input[type="hidden"].crew_idx').val();
+    var num=num;
+   console.log(num);
+    
+    var confirmation = confirm("크루원을 추방하시겠습니까?");
+    if(confirmation){
+        $.ajax({
+            type: 'post',
+            url: './deport.ajax',
+            data: {
+                'crew_idx': crew_idx,
+                'crewMem_idx':num
+            },
+            success: function(data) {
+                alert('추방이 완료되었습니다.'); 
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+                alert('추방 중 오류가 발생했습니다.'); 
+            }
+        });
+    }
+}
+
+function delegateLeader() {
+	var ppp1 = $('#num1').val();
+	console.log("ppp1",ppp1);
+	var crew_idx = $('input[type="hidden"].crew_idx').val();
+	num1= $('input[name="num1"]').val();
+	console.log(num1);
+    var delegateReason= $("#delegateReason").val();
+    
+    if (delegateReason.length >= 10) {
+        alert('사유는 100자 이내로 적어주세요.');
+        $("#delegateReason").focus(); // 입력 필드에 포커스를 맞춥니다.
+        return; // 함수 실행을 중지합니다.
+    }
+    
+    var confirmation = confirm("크루장을 위임하시겠습니까?");
+    if(confirmation){
+        $.ajax({
+            type: 'post',
+            url: './delegate.ajax',
+            data: {
+                'crew_idx': crew_idx,
+                'crewMem_idx':ppp1,
+                'delgateContent':delegateReason
+            },
+            success: function(data) {
+                alert('위임이 완료되었습니다.'); 
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+                alert('위임 중 오류가 발생했습니다.'); 
+            }
+        });
+    }	    
+}
+
 
 
 </script>

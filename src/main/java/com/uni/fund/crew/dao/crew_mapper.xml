@@ -76,6 +76,7 @@
      	WHERE crew_idx = c.crew_idx
     	) AS crew_cool_cnt
 	FROM crew c 
+	WHERE c.crew_status='A'
 	<if test='param1 == "latest"'>
     	ORDER BY c.crew_idx DESC
 	</if>
@@ -129,7 +130,7 @@
             WHERE crew_idx = c.crew_idx
         	) AS crew_cool_cnt
     	FROM crew c
-    	WHERE c.crew_name LIKE CONCAT('%', #{param1}, '%')
+    	WHERE c.crew_name LIKE CONCAT('%', #{param1}, '%') AND c.crew_status='A'
     	ORDER BY c.crew_idx DESC 
     	LIMIT 10 OFFSET #{param2}
 	</select>
@@ -163,7 +164,7 @@
 	</select>
 	
 	<insert id="crewMakeCool">
-		INSERT INTO popularity VALUES(#{param1},#{param2})
+		INSERT INTO popularity(mem_idx,crew_idx) VALUES(#{param1},#{param2})
 	</insert>
 	
 	<delete id="crewUncool">
@@ -172,24 +173,27 @@
 	
 	<select id="detail" resultType="com.uni.fund.crew.dto.CrewDTO">
 		SELECT
-    		c.crew_idx,
-    		c.crew_name,
-    		c.crew_exp,
-    		c.crew_local,
-    		c.crew_con,
-    		c.crew_link,
-    		(SELECT pho_name FROM photo
+    		c.crew_idx
+    		,c.crew_name
+    		,c.crew_exp
+    		,c.crew_local
+    		,c.crew_con
+    		,c.crew_link
+    		,(SELECT pho_name FROM photo
      		WHERE pho_division ='모집설명'
      		AND ref_idx= c.crew_idx
-     		ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information,
-    		(SELECT pho_name FROM photo 
+     		ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information
+    		,(SELECT pho_name FROM photo 
      		WHERE pho_division ='크루로고'
      		AND ref_idx= c.crew_idx
      		ORDER BY pho_idx DESC LIMIT 1
-    		) AS crew_logo,
-    		(SELECT COUNT(*) FROM member WHERE mem_status='M') AS mem_status_manager,
-    		(SELECT COUNT(*) FROM crewMember_list WHERE state='크루장') AS crew_leader_count
-		FROM crew c 
+    		) AS crew_logo
+    		,(SELECT COUNT(*) FROM member WHERE mem_status='M') AS mem_status_manager
+    		,(SELECT COUNT(*) FROM crewMember_list WHERE state='크루장') AS crew_leader_count
+    		,(SELECT COUNT(*) FROM popularity 
+     		WHERE crew_idx = c.crew_idx
+    		) AS crew_cool_cnt
+		FROM crew c
 		WHERE crew_idx=#{param2}
 	</select>
 	
@@ -197,8 +201,67 @@
 		SELECT crew_status FROM crew WHERE crew_idx=#{param1}
 	</select>
 	
-	<select id="report" parameterType="String">
+	<insert id="report">
 		INSERT INTO report(mem_idx,ref_idx,rep_content,rep_division) VALUES(#{param3},#{param1},#{param2},'크루')
+	</insert>
+	
+	<update id="crewDelete">
+		UPDATE crew SET crew_status='B' WHERE crew_idx=#{param1}
+	</update>
+	
+	<insert id="deleteReason">
+		INSERT INTO crew_admin(crew_idx,mem_idx,crew_rsn) VALUES(#{param1},#{param3},#{param2})
+	</insert>
+	
+	<delete id="crewMemberListDelete">
+		DELETE FROM crewMember_list WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+	</delete>
+	
+	<update id="crewOutMemberHistoryUpdate">
+		UPDATE crewMember_history SET crew_mem_status='D' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+	</update>
+	
+	<select id="detailCrewMember" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+    		c.state,
+    		m.mem_id,
+    		c.crew_idx,
+    		c.mem_idx
+		FROM crewMember_list c
+		JOIN member m ON c.mem_idx = m.mem_idx
+		WHERE crew_idx=#{param3}
+		LIMIT 5 OFFSET #{param1} 
 	</select>
+	
+	<select id="detailCrewMemberCountPage" resultType="Object">
+    	SELECT CEIL(COUNT(crew_idx) / #{param1}) AS pages FROM crewMember_list
+	</select>
+	
+	<delete id="crewMemberDeport">
+		DELETE FROM crewMember_list WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+	</delete>
+	
+	<insert id="crewMemberDeportHistoryInsert">
+		UPDATE crewMember_history SET crew_mem_status='E' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+ß	</insert>
+	
+	<update id="crewChiefTomemberCrewMemberListUpdate">
+		UPDATE crewMember_list SET state='일반크루원' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+	</update>
+
+	<update id="crewMemberToChiefCrewMemberListUpdate">
+		UPDATE crewMember_list SET state='크루장' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+	</update>	
+	
+	<insert id="crewChiefTomemberCrewMemberHistoryInsert">
+		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status)
+		VALUES(#{param1},#{param2},'B')
+	</insert>
+	
+	<insert id="crewMemberToChiefCrewMemberHistoryInsert">
+		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status,crew_mem_rsn)
+		VALUES(#{param1},#{param2},'K',#{param3})
+	</insert>
+	
 	
 </mapper>
