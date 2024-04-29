@@ -188,7 +188,7 @@
                <div class="intro">주분야</div>
                   <input type="text" name="selfExp" placeholder="주분야를 입력해주세요."  value="${introDto.self_exp}">
                <div class="intro">자기소개</div>
-                  <textarea name="selfInt" placeholder="자기소개를 입력해주세요." >${introDto.self_introduce}</textarea>
+                  <textarea name="selfInt" id="selfIntro" oninput="checkLength(this, 500)" placeholder="자기소개를 입력해주세요. 최대 500자까지 입력 가능합니다." >${introDto.self_introduce}</textarea>
                <h2>활동사진</h2>
 		        <hr class="hr-13">
 		        <table>    
@@ -204,7 +204,7 @@
 		            </tr>
 		        </table> 
             <input type="file" name="photos" multiple="multiple">
-         <button type="submit" id="proBtn">자소서 수정</button>
+         <button type="submit" id="proBtn" onclick="introUp()">자소서 수정</button>
          </form>
       </div>
    </div>   
@@ -294,6 +294,13 @@
 		        }
 		    });
 		}
+	 
+	 function checkLength(textarea, maxLength) {
+		    if (textarea.value.length > maxLength) {
+		        textarea.value = textarea.value.substring(0, maxLength);
+		        alert("최대 글자수를 초과했습니다.");
+		    }  
+		}	 
 	 
 </script>
 </html>
