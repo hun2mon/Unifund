@@ -151,25 +151,53 @@ public class AnnouncementController {
 		String notiPhoto = annService.notiPhoto(noti_idx);
 		logger.info("PhoName :" + notiPhoto);
 		model.addAttribute("announcementDTO", announcementDTO);
+		model.addAttribute("noti_idx",noti_idx);
 		model.addAttribute("notiPhoto", notiPhoto);
 
 		return "announcement/annDetail";
 	}
 
-	
-	@RequestMapping(value = "/announcement/adminAnnUpdate.go")
-	public String adminAnnUpdate(HttpSession session) {
-		logger.info(":: annWriteForm IN ::");
-		String page = "redirect:/member/login.go";
+	@RequestMapping(value = "/announcement/update.go")
+	public String annUpdateForm(Model model, HttpSession session, Integer noti_idx) {
+	    logger.info(":: annUpdateForm IN ::");
 
-		if (session.getAttribute("mem_idx") != null) {
-			return "announcement/adminAnnUpdate";
-		}
-		return page;
+	    // 해당 공지사항의 정보를 가져오는 서비스 메서드 호출
+	    logger.info("noti_idx"+noti_idx);
+	    AnnouncementDTO announcementDTO = annService.annDetail(noti_idx);
+	    String notiPhoto = annService.notiPhoto(noti_idx);
+	    announcementDTO.setNoti_idx(noti_idx);
+	    // 모델에 공지사항 정보와 사진 정보를 추가하여 뷰로 전달
+	    model.addAttribute("announcementDTO", announcementDTO);
+	    model.addAttribute("notiPhoto", notiPhoto);
+
+	    return "announcement/adminAnnUpdate";
 	}
 	
-	
-	
+	@RequestMapping(value = "/announcement/update.do")
+	public String annUpdate(MultipartFile noti_photo, HttpSession session, @RequestParam Map<String, String> param, Model model) {
+	    logger.info(":: annUpdate CONTROLLER IN ::");
+	    logger.info("params ={}", param);
+	    String page = "announcement/adminAnnUpdate";
+	    String msg = "수정 실패";
+
+	    int mng_idx = session.getAttribute("mem_idx") == null ? 0 : (int) session.getAttribute("mem_idx");
+	    logger.info("mng_idx" + mng_idx);
+	    logger.info("noti_top" + param.get("noti_top"));
+	    param.put("mng_idx", Integer.toString(mng_idx));
+	    
+	    // 공지사항 수정을 위한 서비스 메서드 호출
+	    int row = annService.adminAnnUpdate(noti_photo, param, session);
+	    logger.info("row"+row);
+	    if (row == 1) {
+	        page = "redirect:/announcement/annDetail.go?noti_idx=" + param.get("noti_idx");
+	        msg = "수정 완료";
+	    }
+
+	    model.addAttribute("msg", msg);
+	    logger.info("annUpdate controller end");
+
+	    return page;
+	}
 	
 	
 	

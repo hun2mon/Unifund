@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.admin.dao.AnnouncementDAO;
 import com.uni.fund.admin.dto.AnnouncementDTO;
+import com.uni.fund.crew.dto.CrewDTO;
 
 @Service
 public class AnnouncementService {
@@ -73,7 +74,7 @@ public class AnnouncementService {
 		if (row > 0) {
 			int noti_idx = announcementDTO.getNoti_idx();
 			session.setAttribute("noti_idx", noti_idx);
-			
+
 			logger.info("adminAnnForm noti_idx = " + noti_idx);
 			String notiPhotoDiv = "공지사항사진";
 			annFileSave(noti_idx, noti_photo, notiPhotoDiv);
@@ -152,6 +153,63 @@ public class AnnouncementService {
 	public String notiPhoto(int noti_idx) {
 		logger.info("mng_idx : " + noti_idx);
 		return annDAO.notiPhoto(noti_idx);
+	}
+
+	public int adminAnnUpdate(MultipartFile noti_photo, Map<String, String> param, HttpSession session) {
+		logger.info("::: annUpdate Service IN :::");
+		int row = -1;
+		AnnouncementDTO announcementDTO = new AnnouncementDTO();
+		announcementDTO.setNoti_idx(Integer.parseInt(param.get("noti_idx")));
+		announcementDTO.setNoti_title(param.get("noti_title"));
+		announcementDTO.setNoti_content(param.get("noti_content"));
+		announcementDTO.setNoti_top(param.get("noti_top"));
+		announcementDTO.setMng_idx(Integer.parseInt(param.get("mng_idx")));
+		row = annDAO.adminAnnUpdate(announcementDTO); // 공지사항 정보 업데이트
+
+		logger.info("noti_title" + announcementDTO.getNoti_title() + "noti_content" + announcementDTO.getNoti_content()
+				+ "noti_top" + announcementDTO.getNoti_top() + "mng_idx" + announcementDTO.getMng_idx() + "noti_idx"
+				+ announcementDTO.getNoti_idx());
+
+		if (row > 0) {
+			String notiPhotoDiv = "공지사항사진";
+			annFileUpdate(announcementDTO.getNoti_idx(), noti_photo, notiPhotoDiv); // 사진 업데이트
+		}
+		logger.info("adminAnnUpdate service end");
+
+		return row;
+	}
+
+	private void annFileUpdate(int noti_idx, MultipartFile noti_photo, String notiPhotoDiv) {
+		if (noti_photo != null) {
+			logger.info("annFileUpdate IN:::::::");
+			// 파일이 업로드되었을 때만 처리
+			String oriName = noti_photo.getOriginalFilename();
+			String annPhoto = "";
+			if (oriName.isEmpty()) {
+				return;
+			}
+
+			annPhoto = oriName.substring(oriName.lastIndexOf("."));
+			String newAnnFileName = System.currentTimeMillis() + annPhoto;
+
+			Path AnnPath = Paths.get(file_root + newAnnFileName);
+			try {
+				byte[] annBytes = noti_photo.getBytes();
+				Files.write(AnnPath, annBytes);
+				if (annDAO.photoCount(noti_idx) > 0) {
+					annDAO.updateNotiPhoto(noti_idx, newAnnFileName, notiPhotoDiv); // 데이터베이스 업데이트
+
+				} else {
+					annDAO.createNotiPhoto(noti_idx, newAnnFileName, notiPhotoDiv);
+
+				}
+				logger.info("annFileUpdate 업데용");
+				Thread.sleep(1);
+			} catch (Exception e) {
+				logger.info("::: NotiFileUpdate Service FILE Exception :::");
+				e.printStackTrace();
+			}
+		}
 	}
 
 //	
