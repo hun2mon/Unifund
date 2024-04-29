@@ -85,6 +85,7 @@ public class MemberController {
 			if(row>0) {
 				page = "/member/joinForm";
 				
+				
 			}
 		return page;
 	}
@@ -99,6 +100,37 @@ public class MemberController {
 		
 		return map;
 	}
+	
+	//ID찾기 AJAX로 서버에 요청
+		@RequestMapping(value="member/findId.ajax")
+		@ResponseBody
+		public Map<String, Object> findId(String mem_name, String mem_number) {
+			logger.info("userId : "+mem_name);
+			logger.info("mem_number : "+ mem_number);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("use", memberService.findId(mem_name,mem_number));
+			
+			return map;
+		}
+		
+	//PW변경하기
+	@RequestMapping(value = "member/findPw.ajax", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> findPw(String mem_pw, String mem_id, String mem_number) {
+		logger.info("mem_id: {}, mem_number: {}", mem_id , mem_number);
+		logger.info("mem_pw : {}",  mem_pw);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("use", memberService.findPw(mem_pw,mem_id,mem_number));
+		
+		return map;
+	}
+	
+	
+		
+	
+	
+	
+	
 	
 	@RequestMapping(value = "/user/adminMemberList.go")
 	public String adminMemberList(HttpSession session, Model model) {

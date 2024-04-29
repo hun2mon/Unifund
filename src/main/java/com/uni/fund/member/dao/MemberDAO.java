@@ -17,7 +17,7 @@ public interface MemberDAO {
 
 	int write(MemberDTO dto);
 
-	void fileWrite(String fileName, int idx, String param3);
+	void fileWrite(String fileName, int idx, String photoType);
 	
 	List<MemberDTO> memberListAjax(Map<String, Object> param);
 
@@ -26,5 +26,9 @@ public interface MemberDAO {
 	List<MemberDTO> adminMemberJoinReqAjax(Map<String, Object> param);
 
 	int memberJoinCnt(Map<String, Object> param);
+
+	String findId(String mem_name, String mem_number);
+
+	int findPw(String mem_pw, String mem_id, String mem_number);
 
 }

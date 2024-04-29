@@ -7,7 +7,7 @@
 
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="resources/css/common.css" type="text/css">
+<link rel="stylesheet" href="/resources/css/common.css" type="text/css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
 <!--
@@ -90,17 +90,117 @@
 	text-align: left;
 }
 
-input[name="아이디"] {
-	width: 65%
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-input[name="연락처"] {
-	width: 65%
+body {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  background: #ededed;
 }
 
-input[name="연락처 인증"] {
-	width: 65%
+input, button {
+  border: none;
+  outline: none;
+  background: none;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
+
+/* Remaining styles from your CSS file */
+
+
+input[type="text"], input[type="password"],input[type="button"]  {
+	border: 1px solid #ccc; /* 윤곽선을 회색으로 지정 */
+	border-radius: 5px; /* 윤곽선의 모서리를 둥글게 만듦 */
+	padding: 10px; /* 입력창 내부 여백 설정 */
+	width: 100%; /* 입력창을 가득 채우도록 설정 */
+	box-sizing: border-box; /* 입력창의 너비에 padding과 border를 포함하도록 설정 */
+}
+
+
+input[type="submit"]:hover, input[type="button"]:hover {
+	background: #2e8b57; /* 마우스 호버 시 버튼 배경색 변경 */
+	
+	.button-container {
+  text-align: right; /* 오른쪽 정렬 */
+}
+}
+
+/* 버튼 스타일 */
+input[type="button"] {
+  background:  rgb(0, 196, 196); /* 배경색 */
+  color: white; /* 글자색 */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
+}
+
+/* 버튼 호버 효과 */
+input[type="button"]:hover {
+  background:  rgb(0, 156, 156); /* 호버 시 배경색 변경 */
+}
+
+/* 파일 첨부 버튼 스타일 */
+input[type="file"] {
+  background-color: #f0f0f0; /* 배경색 */
+  color: #333; /* 글자색 */
+  border: 1px solid #ccc; /* 테두리 */
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 인증 버튼 스타일 */
+input[type="button"][value="인증"] {
+  background-color: #ff9900; /* 배경색 */
+  color: white; /* 글자색 */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
+}
+
+/* 인증 버튼 호버 효과 */
+input[type="button"][value="인증"]:hover {
+  background-color: #e68a00; /* 호버 시 배경색 변경 */
+}
+
+
+/* 회원가입 버튼 스타일 */
+button[type="button"] {
+  background-color: #007bff; /* 배경색 */
+  color: white; /* 글자색 */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
+}
+
+/* 회원가입 버튼 호버 효과 */
+button[type="button"]:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변경 */
+  
+  
+} 
+
+  #profileImage {
+    display: block;
+    width: 150px;
+    height: 150px;
+    margin-right: 10px; /* 오른쪽 마진을 0으로 설정하여 이미지를 오른쪽으로 이동 */
+}
+
 </style>
 </head>
 <body>
@@ -111,15 +211,19 @@ input[name="연락처 인증"] {
 	<h3>UNIFUND 회원가입</h3>
 	<hr />
 	<form action="join.do" method="post" enctype="multipart/form-data">
+		<img id="profileImage" src= "/resources/images/chrome.png" alt="도라에몽헉헉헉" style="width: 100px; height: 100px; border-radius: 50%; display: block; margin-right: 50px; ">
+		
 		<table>
 			<tr>
 				<th>프로필 사진</th>
-				<td><input type="file" id="profilePhoto" name="profilePhoto"></td>
+				<td>
+				<input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" onchange="previewProfilePhoto(event)">
+				</td>
 			</tr>
 			<tr>
 				<th>아이디</th>
-				<td><input type="text" name="mem_id" placeholder="프로필 사진을 첨부하세요" />
-				 <input type="button" value="아이디체크" onclick="overlay()"/></td>
+				<td><input type="text" name="mem_id" placeholder="아이디를 입력해주세요" />
+				 <input type="button" value="아이디체크" onclick="overlay()" /></td>
 			</tr>
 			<tr>
 				<th>비밀번호</th>
@@ -129,7 +233,7 @@ input[name="연락처 인증"] {
 			<tr>
 				<th>비밀번호 확인</th>
 				<td><input type="password" id="mem_confirm"
-					placeholder="비밀번호를 입력하세요" /><span id="msg"></span></td>
+					placeholder="비밀번호를 한번 더 입력하세요" /><span id="msg"></span></td>
 			</tr>
 			<tr>
 				<th>이름</th>
@@ -232,6 +336,43 @@ input[name="연락처 인증"] {
 </body>
 <script>
 
+$(document).ready(function() {
+    var profileImage = $('#profileImage');
+    var defaultImageSrc = '/resources/images/chrome.png';
+    
+    // 이미지가 로드될 때 이벤트 핸들러 설정
+    profileImage.on('load', function() {
+        // 이미지가 로드되었을 때 처리할 내용
+        profileImage.css('display', 'block');
+    }).on('error', function() {
+        // 이미지 로드에 실패했을 때 처리할 내용
+        console.error("기본 이미지 로드 실패");
+    });
+
+    // 기본 이미지를 설정하고, 이미지가 로드될 때 이벤트 핸들러가 호출되도록 함
+    profileImage.attr('src', defaultImageSrc);
+});
+
+
+function previewProfilePhoto(event) {
+    var input = event.target;
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#profileImage').attr('src', e.target.result);
+            $('#profileImage').css('display', 'block');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$(document).ready(function() {
+    var profileImage = $('#profileImage');
+    if (!profileImage.attr('src') || profileImage.attr('src').endsWith('chrome.png')) {
+        profileImage.css('display', 'block');
+    }
+});
+
 function showFirstAlert() {
     alert("인증번호를 확인 해주세요!");
   }
@@ -260,6 +401,11 @@ $('#mem_confirm').on('keyup', function(){
         $('#msg').css({'color':'red'});
     }
 });
+	
+	
+	
+	var overChk;
+	
 	
 	
 	function join(){
