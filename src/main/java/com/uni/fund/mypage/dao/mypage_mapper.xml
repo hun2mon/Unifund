@@ -8,7 +8,8 @@
       SELECT mem_idx,mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
             mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
             mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
-            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name
+            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name,
+            (SELECT state FROM crewMember_list WHERE mem_idx = #{userId}) as crew_state
       FROM member WHERE mem_idx = #{userId}
    </select>
    <select id="profileUp" resultType="com.uni.fund.mypage.dto.MypageDTO">
@@ -136,5 +137,7 @@
 				(SELECT trans_content FROM rep_trans WHERE mem_idx = #{param2} AND rep_idx = #{param1}) as trans_content 
 			from report Where rep_idx = #{param1} AND mem_idx = #{param2}
    </select>
-     
+   <update id="outUnifundDO" parameterType="String">
+   		UPDATE member SET mem_status = 'N' WHERE mem_id = #{param1}
+   </update>
 </mapper>
