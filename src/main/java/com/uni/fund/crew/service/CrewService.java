@@ -32,11 +32,11 @@ public class CrewService {
 		return crewDAO.crewOverlay(crew_name);
 	}
 
-	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, Integer mem_idx, Map<String, String> param) {
+	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, int memIdx, Map<String, String> param) {
 		int row=-1;
 		logger.info("service crew create do 들어왔다");
 		CrewDTO crewDTO = new CrewDTO();
-		crewDTO.setMem_idx(mem_idx);
+		crewDTO.setMem_idx(memIdx);
 		crewDTO.setCrew_name(param.get("crew_name"));
 		crewDTO.setCrew_exp(param.get("crew_exp"));
 		crewDTO.setCrew_con(param.get("crew_con"));
@@ -50,12 +50,31 @@ public class CrewService {
 		String crewLogo="크루로고";
 		String crewRecru="모집설명";
 		
+		//crew를 memberList에 
+		crewDAO.memberListInsert(crew_idx,memIdx);
+		logger.info("Service에서 crew_idx : "+crew_idx);
+		logger.info("Service에서 memIdx : "+memIdx);
+		crewDAO.memberHistoryInsert(crew_idx,memIdx);
+		
 		if(row>0) {
 			crewLogoPhotoFileSave(crew_idx,crew_logo_photo,crewLogo);
 			crewRecruPhotoFileSave(crew_idx,crew_recru_photo,crewRecru);
 		}		
 		return row;
-	}	
+	}		
+
+	public int crewActivityWrite(MultipartFile crew_activity_photo,int crew_idx ,int memIdx, Map<String, Object> param) {
+		int row=-1;
+		logger.info("service crewActivityWrite");
+		CrewDTO crewDTO = new CrewDTO();
+		crewDTO.setActivity_content("activity_content");
+		String activityPhoto="활동사진";
+		if(row>0) {
+			//crewActivityFileSave(crew_idx,crew_activity_photo,activityPhoto);
+		}
+		
+		return row;
+	}
 
 	private void crewLogoPhotoFileSave(int crew_idx, MultipartFile crew_logo_photo, String crewLogo) {
 		String fileName = crew_logo_photo.getOriginalFilename();
@@ -132,6 +151,19 @@ public class CrewService {
         
         return map;
     }
+
+	public Map<String, Object> detailCrewMember(int currentPage, int pagePerCnt, String crew_idx) {
+		int start = (currentPage - 1) * pagePerCnt;
+        Map<String, Object> map = new HashMap<String,Object>();
+        List<CrewDTO> list= crewDAO.detailCrewMember(start,pagePerCnt,crew_idx);
+        logger.info("list : "+list);
+        
+        map.put("list", list);        
+        map.put("currentPage", currentPage);
+        map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+        logger.info("totalPage = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+		return map;
+	}
 	
 	public Map<String, Object> searchCrew(String keyword,int currentPage, int pagePerCnt) {
 	    	    
@@ -188,11 +220,12 @@ public class CrewService {
 	}
 	
 
-	public CrewDTO detail(String crew_idx, String memId) {
+	public CrewDTO detail(String crew_idx, String memId, int memIdx) {
 		logger.info("crew_idx : {}",crew_idx);
 		logger.info("memIdx : {}",memId);
 		
-		return crewDAO.detail(memId,crew_idx);
+		
+		return crewDAO.detail(memId,crew_idx,memIdx);
 	}
 
 
@@ -215,22 +248,10 @@ public class CrewService {
 
 	public void crewOut(int crew_idx, int memIdx) {
 		crewDAO.crewMemberListDelete(crew_idx,memIdx);
-		crewDAO.crewOutMemberHistoryUpdate(crew_idx,memIdx);
+		crewDAO.crewOutMemberHistoryInsert(crew_idx,memIdx);
 		logger.info("service부분 crewOut 완료");
 	}
 
-	public Map<String, Object> detailCrewMemberPhoto(int currentPage, int pagePerCnt, String crew_idx) {
-		int start = (currentPage - 1) * pagePerCnt;
-        Map<String, Object> map = new HashMap<String,Object>();
-        List<CrewDTO> list= crewDAO.detailCrewMember(start,pagePerCnt,crew_idx);
-        logger.info("list : "+list);
-        
-        map.put("list", list);        
-        map.put("currentPage", currentPage);
-        map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
-        logger.info("totalPage = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
-		return map;
-	}
 
 	public void memberDeport(String crew_idx, String crewMem_idx) {
 		logger.info("Service memberDeport");
@@ -268,6 +289,7 @@ public class CrewService {
 		crewDAO.approve(mem_idx,crew_idx);
 		crewDAO.insertCrewMem(mem_idx,crew_idx);
 	}
+
 
 
 

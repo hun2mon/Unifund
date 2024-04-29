@@ -33,8 +33,10 @@ public class CrewDTO {
 	private String crew_leader_count;
 	private String mem_id;
 	private String state;
-
-
+	
+	private String crew_leader;
+	private int manager_idx;
+	private String activity_content;
 
 	
 	public int getCrew_idx() {
@@ -207,6 +209,24 @@ public class CrewDTO {
 	}
 	public void setState(String state) {
 		this.state = state;
+	}
+	public String getCrew_leader() {
+		return crew_leader;
+	}
+	public void setCrew_leader(String crew_leader) {
+		this.crew_leader = crew_leader;
+	}
+	public int getManager_idx() {
+		return manager_idx;
+	}
+	public void setManager_idx(int manager_idx) {
+		this.manager_idx = manager_idx;
+	}
+	public String getActivity_content() {
+		return activity_content;
+	}
+	public void setActivity_content(String activity_content) {
+		this.activity_content = activity_content;
 	}
 
 }

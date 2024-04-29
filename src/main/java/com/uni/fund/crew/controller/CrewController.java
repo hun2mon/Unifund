@@ -34,23 +34,44 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crew/crewCreate.do", method = RequestMethod.POST)
-	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param, Integer mem_idx, Model model) {
+	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, 
+			@RequestParam Map<String, String>param, Integer mem_idx, Model model,HttpSession session) {
 		logger.info("create 들어왔다.");
 		logger.info("Create param:{}",param);
 		
 		String page="redirect:/";
 		String msg="크루 등록에 실패했습니다.";
-		mem_idx=3;
+		int memIdx=(int)session.getAttribute("mem_idx");
 		
-		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,mem_idx,param);
-		if(row == 1) {
-			page ="redirect:/";
-			msg="크루등록이 완료되었습니다!";
-		}
-		model.addAttribute("msg",msg);
-		
+		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,memIdx,param);
+		if(memIdx!=0) {
+			if(row == 1) {
+				page ="redirect:/";
+				msg="크루등록이 완료되었습니다!";
+			}
+			model.addAttribute("msg",msg);
+		}		
 		return page;
 	}
+	
+	@RequestMapping(value="/crew/activityWrite.do")
+	public String crewActivityWrite(MultipartFile crew_activity_photo, HttpSession session, 
+			@RequestParam Map<String,Object> param, int crew_idx, Model model) {
+		
+		String page="redirect:/crew/crewList.go";
+		String msg="활동 내용 등록에 실패했습니다.";
+		int memIdx =(int) session.getAttribute("mem_idx");
+		int row=crewService.crewActivityWrite(crew_activity_photo,crew_idx,memIdx,param);	;
+		if(memIdx!=0) {
+			if(row==1) {
+				page="redirect:/";
+				msg="활동 내용이 등록되었습니다!";
+			}
+			model.addAttribute("msg",msg);
+		}		
+		return page;
+	}
+	
 	
 	@RequestMapping(value="/crew/crewOverlay.do")
 	@ResponseBody
@@ -171,6 +192,7 @@ public class CrewController {
 	    logger.info("crewDetail 들어간다.");
 	    String page="crew/detail";
 	    String memId= (String) session.getAttribute("mem_id");
+	    int memIdx=(int)session.getAttribute("mem_idx");
 	    
 		model.addAttribute("mem_idx",memId);	    
 	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
@@ -183,7 +205,7 @@ public class CrewController {
 	    if(session.getAttribute("mem_idx")!=null) {
 	    	String crew_state= crewService.stateCheck(crew_idx);
 		    
-	    	crew= crewService.detail(crew_idx,memId);
+	    	crew= crewService.detail(crew_idx,memId,memIdx);
 		    	   model.addAttribute("crew",crew);
 		    	   logger.info("else session in, memIdx : " +memId);
 		    	   logger.info("else session in, row = "+row);
@@ -197,7 +219,7 @@ public class CrewController {
 	
 	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> detailCrewMemberPhoto(String crew_idx, HttpSession session,
+	public Map<String, Object> detailCrewMember(String crew_idx, HttpSession session,
 			String page, String cnt){
 		
 		int memIdx =(Integer)session.getAttribute("mem_idx");		
@@ -210,11 +232,27 @@ public class CrewController {
 			logger.info("크루 번호 : "+crew_idx);
 			logger.info("페이지 당 보여줄 갯수 : "+cnt);
 			logger.info("요청 페이지 : " +page);
-			map=crewService.detailCrewMemberPhoto(currentPage, pagePerCnt,crew_idx);		    
+			map=crewService.detailCrewMember(currentPage, pagePerCnt,crew_idx);		    
 		}	
 		return map;
 	}
 	
+	@RequestMapping(value="/crew/activityList.ajax",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> activityList(String crew_idx, HttpSession session, String page, String cnt){
+		int memIdx =(Integer)session.getAttribute("mem_idx");
+		int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
+	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
+	    Map<String,Object> map = new HashMap<String, Object>();
+	    
+	    if(memIdx!=0) {
+	    	logger.info("activityList.ajax 들어감");
+	    	logger.info("크루 번호 : "+crew_idx);
+	    	logger.info("페이지당 보여줄 개수 : "+cnt);
+	    	logger.info("요청페이지 : "+page);
+	    }	    
+	    return map;
+	}
 	
 	@RequestMapping(value="/crew/report.ajax",method = RequestMethod.POST)
 	@ResponseBody

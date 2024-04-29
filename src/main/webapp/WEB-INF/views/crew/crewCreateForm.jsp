@@ -123,8 +123,8 @@ img.icon{
 <body>
 	<h3>크루 등록</h3>
 	<hr/>
-	<form action="crewCreate.do" method = "post" enctype="multipart/form-data">
-	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="5" >
+	<form action="./crewCreate.do" method = "post" enctype="multipart/form-data">
+	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${mem_idx}">
 		<table>
 			<tr>
 				<th>크루명</th>
@@ -246,7 +246,7 @@ function join(){
 		$crew_local.focus();
 	}else{
 		$('form').submit();
-		window.location.href='/main/crew/crewList.go';
+		
 	}
 }
 

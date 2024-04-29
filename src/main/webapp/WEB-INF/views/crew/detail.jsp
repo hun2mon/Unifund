@@ -192,7 +192,7 @@
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
     <input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
-    <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${member.mem_idx}"/>
+    <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${mem_idx}"/>
     <input type="hidden" name="state" class="state" id="state" value="${crewMember_list.state}"/>
     <div class="container" id="crew-detail-container">
         <div class="crew-details">
@@ -221,8 +221,12 @@
                     <button class="btn like-btn" onclick="cool()">👍</button>
                 </div>
                 <button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
-				<button class="btn edit-btn" onclick="location.href='/main/crew/crewUpdateForm.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
-				<button class="btn delete-btn" onclick="openDeleteModal()">크루 삭제</button>
+                <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
+					<button class="btn edit-btn" onclick="location.href='/main/crew/crewUpdateForm.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
+				</c:if>
+				<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
+    				<button class="btn delete-btn" onclick="openDeleteModal()">크루 삭제</button>				
+				</c:if>
 					<div id="deleteModal" class="modal">
     					<div class="modal-content">
         					<span class="close" onclick="closeDeleteModal()">&times;</span>
@@ -250,6 +254,7 @@
         			<button class="btn cancel-btn" onclick="closeDelegateModal()">취소</button>
     			</div>
 			</div>
+			<div>
             <table class="crew-table">
                 <thead>
                     <tr>
@@ -271,6 +276,40 @@
             </table>
         </div>        
     </div>
+<hr> <!-- 여기에 줄을 추가합니다 -->
+<div class="activity-section">
+    <h2>활동 내역</h2>
+    <button class="btn add-activity-btn" onclick="openActivityModal()">활동내역 등록</button>
+    <div class="activity-images">
+        <!-- 활동 내역 및 사진을 감싸는 외부 div 추가 -->
+        <div class="activity-item">
+            <div class="activity-content">
+                <!-- 활동 내용을 표시할 곳 -->
+                <p>활동 내용 1</p>
+            </div>
+            <div class="activity-photo">
+                <!-- 활동 사진을 표시할 곳 -->
+                <img src="https://via.placeholder.com/200x150" alt="Activity Image">
+            </div>
+        </div>
+    </div>
+    <!-- 페이징 기능 추가 -->
+    <div class="activity-buttons">
+        <button class="btn prev-btn" onclick="prevActivity()">이전</button>
+        <button class="btn next-btn" onclick="nextActivity()">다음</button>
+    </div>
+</div>
+
+<!-- 활동 내역 등록 모달 -->
+<div id="activityModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeActivityModal()">&times;</span>
+        <h2>활동 내역 등록</h2>
+        <textarea id="activityContent" name="activityContent" rows="4" placeholder="활동 내용을 입력해주세요"></textarea>
+        <button class="btn activity-submit-btn" onclick="submitActivity()">등록</button>
+        <button class="btn cancel-btn" onclick="closeActivityModal()">취소</button>
+    </div>
+</div>
 </body>
 
 <script>
@@ -279,6 +318,7 @@ var showPage = 1;
 
 $(document).ready(function(){
 	listCall(showPage);
+	listCall1(showPage);
 	$('#pagination').twbsPagination('destroy');
 	
     var userState = $("#state").val(); 
@@ -292,6 +332,38 @@ $(document).ready(function(){
 });
 
 function listCall(showPage){	
+	console.log(showPage);
+	var crew_idx= $("#crew_idx").val();
+    $.ajax({
+       type:'post',
+       url:'./detail.ajax',
+       data:{
+           'page':showPage,
+           'cnt':5,
+           'crew_idx':crew_idx
+       },
+       dataType:'json',
+       success:function(data){                 
+          console.log(data);          
+          drawList(data.list);   
+          $('#pagination').twbsPagination({
+          	startPage:1, // 시작페이지
+          	totalPages:data.totalPages, // 총 페이지 수
+          	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
+          	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+          		console.log(pg); // 클릭한 페이지 번호
+          		showPage = pg;
+          		listCall(pg);
+          	}
+          })
+       },
+       error:function(error){
+          console.log(error);
+       }
+    });
+}
+
+function listCall1(showPage){	
 	console.log(showPage);
 	var crew_idx= $("#crew_idx").val();
     $.ajax({
@@ -344,8 +416,10 @@ function drawList(list) {
         	content += '<td>' + item.state + '</td>';
         	content += '<td>' + item.mem_id + '</td>';
         	content += '<td class="crew-buttons">';
+        	content += '<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">';
         	content += '<button class="btn btn-danger" onclick="kickMember('+item.mem_idx+')">추방</button>';
         	content += '<button class="btn btn-warning" onclick="openDelegateModal('+item.mem_idx+')">크루장 위임</button>';
+        	content += '</c:if>';
         	content += '</td>';
         	content += '</tr>';
         }        
