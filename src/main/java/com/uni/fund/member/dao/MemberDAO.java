@@ -50,4 +50,12 @@ public interface MemberDAO {
 
 	void updatStopeMemberStatus(Map<String, Object> param);
 
+	int stopMemberChange(Map<String, Object> param);
+
+	int deleteMemberChange(Map<String, Object> param);
+
+	void changeMemStoY(Map<String, Object> param);
+
+	List<MemberDTO> adminMemberUpdate(int memIdx);
+
 }

@@ -282,8 +282,17 @@ public class MemberController {
 			page = "./user/adminMemberDetail";
 			logger.info("adminMemberDetail="+adminMemberDetail);
 			
-			model.addAttribute("adminMemberDetail",adminMemberDetail);
-			model.addAttribute("memIdx",memIdx);
+			
+			if (!adminMemberDetail.isEmpty()) {
+	            MemberDTO memberDTO = adminMemberDetail.get(0);
+	            model.addAttribute("adminMemberDetail", adminMemberDetail);
+	            model.addAttribute("memIdx", memIdx);
+	            model.addAttribute("mng_rsndate", memberDTO.getMng_rsndate()); 
+	            model.addAttribute("mng_stopdate", memberDTO.getMng_stopdate()); 
+	            logger.info("mng_stopdate:{}",memberDTO.getMng_stopdate());
+	        }
+			
+			
 		}else {
 			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
 			 page= "redirect:/member/login.go";
@@ -341,6 +350,59 @@ public class MemberController {
 		return map;
 	}
 	
+	@RequestMapping(value = "/user/stopMemberChange.ajax")
+	@ResponseBody
+	public Map<String, Object> stopMemberChange(@RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		
+		String stopApply = (String) param.get("mng_stopdate");
+		logger.info("stopApply->>",stopApply);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (stopApply.equals("0")) {
+			map.put("deleteMemberChange",memberService.deleteMemberChange(param));
+		}else {
+			map.put("stopMemberChange",memberService.stopMemberChange(param));
+		}
+		
+		logger.info("#### stopMemberChange : {}", map.get("stopMemberChange"));
+		return map;
+	}
 	
+	@RequestMapping(value = "/user/adminMemberUpdate.go")
+	public String adminMemberUpdate(HttpSession session, Model model, @RequestParam(value="mem_idx") String mem_idx) {
+		String status = (String)session.getAttribute("mem_status"); 
+		String page= "";
+		
+		String adminId = (String)session.getAttribute("mem_id");
+		logger.info("##### adminId : {}", adminId);
+		
+		logger.info("mem_status="+status);
+		logger.info("status="+status);
+		if(status != null && status.equals("M")) {
+			int memIdx = Integer.parseInt(mem_idx);
+			logger.info("adminMemberUpdateadminMemberUpdate");
+			List<MemberDTO> adminMemberUpdate = memberService.adminMemberUpdate(memIdx);
+			page = "./user/adminMemberUpdate";
+			logger.info("adminMemberUpdate="+adminMemberUpdate);
+			
+			
+			if (!adminMemberUpdate.isEmpty()) {
+	            MemberDTO memberDTO = adminMemberUpdate.get(0);
+	            model.addAttribute("adminMemberUpdate", adminMemberUpdate);
+	            model.addAttribute("memIdx", memIdx);
+	            model.addAttribute("mng_rsndate", memberDTO.getMng_rsndate()); 
+	            model.addAttribute("mng_stopdate", memberDTO.getMng_stopdate()); 
+	            logger.info("mng_stopdate:{}",memberDTO.getMng_stopdate());
+	        }
+			
+			
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+			 page= "redirect:/member/login.go";
+		}
+		
+	    return page;
+	}
 	
 }

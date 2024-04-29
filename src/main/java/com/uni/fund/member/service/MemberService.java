@@ -148,4 +148,17 @@ public class MemberService {
 		return memberDAO.stopMemberApply(param);
 	}
 
+	public int stopMemberChange(Map<String, Object> param) {
+		return memberDAO.stopMemberChange(param);
+	}
+
+	public int deleteMemberChange(Map<String, Object> param) {
+		memberDAO.changeMemStoY(param);
+		return memberDAO.deleteMemberChange(param);
+	}
+
+	public List<MemberDTO> adminMemberUpdate(int memIdx) {
+		return memberDAO.adminMemberUpdate(memIdx);
+	}
+	
 }

@@ -17,23 +17,20 @@
 	color: #fff;
 	transition: background 0.3s ease, color 0.3s ease;
 	float: left;
-	height: 90%;
+	height: 85%;
 	border-radius: 20px;
 	padding: 10px;
 	width: 60%;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	margin-top: 20px;
 	transform: translate(-50%, -50%);
 }
 
 .form-container h1 {
-	color: gray;
+	color: #6286b8;
 	position: absolute;
-}
-
-.top-container {
-	
 }
 
 .top_content {

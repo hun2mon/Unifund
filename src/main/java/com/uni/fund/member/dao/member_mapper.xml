@@ -130,7 +130,7 @@
 	
 	<select id="adminMemberDetail" resultType="com.uni.fund.member.dto.MemberDTO">
 	 	SELECT 
-				m.*,i.*,mm.mng_rsndate,mm.mng_stopdate,count(rt.ref_idx) as ref_idx_cnt,COUNT(mm.mem_mng_idx) AS stop_mem_idx
+				m.*,i.*,count(rt.ref_idx) as ref_idx_cnt,COUNT(mm.mem_mng_idx) AS stop_mem_idx
 			    , (SELECT pho_name 
 			    	FROM photo
 				    WHERE pho_division = '재학증명서'
@@ -143,6 +143,12 @@
 				    AND ref_idx = m.mem_idx
 				    ORDER BY pho_idx DESC
 				    LIMIT 1) as profile_file
+				, (SELECT mng_stopdate
+					FROM mem_mng
+					WHERE mem_idx = m.mem_idx) as mng_stopdate
+				, (SELECT mng_rsndate
+					FROM mem_mng
+					WHERE mem_idx = m.mem_idx) as mng_rsndate
 			FROM member m
 			LEFT JOIN introduction i ON m.mem_idx = i.mem_idx
 			LEFT JOIN rep_trans rt ON m.mem_idx = rt.ref_idx
@@ -153,7 +159,7 @@
 	<select id="memActPhoList" resultType="com.uni.fund.member.dto.MemberDTO">
     	SELECT pho_name
     	FROM photo
-    	WHERE ref_idx = #{param3} AND pho_division = '프로젝트대표사진'
+    	WHERE ref_idx = #{param3} AND pho_division = '활동내역'
    	 	ORDER BY pho_idx ASC
     	LIMIT #{param1} OFFSET #{param2}
 	</select>
@@ -161,7 +167,7 @@
 	<select id="memActPhoListCnt" resultType="int">
     	SELECT CEIL(COUNT(*) / #{param1}) AS pages
     	FROM photo
-    	WHERE ref_idx = #{param2} AND pho_division = '프로젝트대표사진'
+    	WHERE ref_idx = #{param2} AND pho_division = '활동내역'
 	</select>
 	
 	<insert id="stopMemberApply">
@@ -172,5 +178,44 @@
 		UPDATE member SET mem_status='S' WHERE mem_idx=#{mem_idx}
 	</update>
 	
+	<update id="stopMemberChange" parameterType="map">
+		UPDATE mem_mng SET mng_stopdate = ${mng_stopdate}, mng_idx = ${admin_idx} WHERE mem_idx = ${mem_idx}
+	</update>
+	
+	<delete id="deleteMemberChange" parameterType="map">
+		DELETE FROM mem_mng WHERE mem_idx = #{mem_idx} and mng_div='정지'
+	</delete>
+	
+	<update id="changeMemStoY" parameterType="map">
+		UPDATE member SET mem_status='Y' WHERE mem_idx=#{mem_idx}
+	</update>
+	
+	<select id="adminMemberUpdate" resultType="com.uni.fund.member.dto.MemberDTO">
+	 	SELECT 
+				m.*,i.*,count(rt.ref_idx) as ref_idx_cnt,COUNT(mm.mem_mng_idx) AS stop_mem_idx
+			    , (SELECT pho_name 
+			    	FROM photo
+				    WHERE pho_division = '재학증명서'
+				    AND ref_idx = m.mem_idx
+				    ORDER BY pho_idx DESC
+				    LIMIT 1) as uni_file
+				 , (SELECT pho_name 
+			    	FROM photo
+				    WHERE pho_division = '프로필'
+				    AND ref_idx = m.mem_idx
+				    ORDER BY pho_idx DESC
+				    LIMIT 1) as profile_file
+				, (SELECT mng_stopdate
+					FROM mem_mng
+					WHERE mem_idx = m.mem_idx) as mng_stopdate
+				, (SELECT mng_rsndate
+					FROM mem_mng
+					WHERE mem_idx = m.mem_idx) as mng_rsndate
+			FROM member m
+			LEFT JOIN introduction i ON m.mem_idx = i.mem_idx
+			LEFT JOIN rep_trans rt ON m.mem_idx = rt.ref_idx
+			LEFT JOIN mem_mng mm ON mm.mng_div = m.mem_idx
+			where m.mem_idx = #{param1}
+	</select>
 	
 </mapper>
