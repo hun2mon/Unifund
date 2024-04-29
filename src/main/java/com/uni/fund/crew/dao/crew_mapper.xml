@@ -267,7 +267,7 @@
 	
 	<insert id="crewMemberDeportHistoryInsert">
 		UPDATE crewMember_history SET crew_mem_status='E' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
-ß	</insert>
+	</insert>
 	
 	<update id="crewChiefTomemberCrewMemberListUpdate">
 		UPDATE crewMember_list SET state='일반크루원' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
