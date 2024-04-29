@@ -6,9 +6,7 @@ import java.util.Map;
 import com.uni.fund.crew.dto.CrewDTO;
 
 public interface CrewDAO {
-
-	
-
+		
 	int crewOverlay(String crew_name);
 
 	int crewCreateDo(CrewDTO crewDTO);
@@ -22,16 +20,11 @@ public interface CrewDAO {
 
 	List<CrewDTO> crewPhoto(int crew_idx);
 
-	int crewUpdate(Map<String, String> param);
+	int crewUpdate(Map<String, String> param);	
 
-	List<CrewDTO> crewList(int pagePerCnt, int start);
+	int isApplying(int memIdx);
 
-	int allCountPage(int pagePerCnt);
-	
-
-	int isApplying(int mem_idx);
-
-	int isMember(int mem_idx);
+	int isMember(int memIdx);
 
 	void applyCrew(Map<String, Object> param);
 	
@@ -41,6 +34,56 @@ public interface CrewDAO {
 	void crewMakeCool(Integer mem_idx, Integer crew_idx);
 
 	void crewUncool(Integer mem_idx, Integer crew_idx);
+	
+	
+	List<CrewDTO> crewList(String filterType,int start, int pagePerCnt, Integer crew_idx);	
+	
+	Object allCountPage(String filterType, int pagePerCnt, Integer crew_idx);
+	
+	List<CrewDTO> searchCrew(String keyword, int start, int pagePerCnt);
+	
+	Object searchCountPage(String keyword, int pagePerCnt);
+
+	String stateCheck(String crew_idx);
+
+	CrewDTO detail(String memId, String crew_idx);
+
+	void report(String crew_idx, String repContent, int memIdx);
+
+	void crewDelete(int crew_idx, int memIdx);
+
+	void deleteReason(int crew_idx, String delContent, int memIdx);
+
+	void crewMemberListDelete(int crew_idx, int memIdx);
+
+	void crewOutMemberHistoryUpdate(int crew_idx, int memIdx);
+
+	List<CrewDTO> detailCrewMember(int start, int pagePerCnt, String crew_idx);
+
+	Object detailCrewMemberCountPage(int pagePerCnt, String crew_idx);
+
+	void crewMemberDeport(String crew_idx, String crewMem_idx);
+
+	void crewMemberDeportHistoryInsert(String crew_idx, String crewMem_idx);
+	
+
+	void crewChiefTomemberCrewMemberListUpdate(String crew_idx, int memIdx, String crewMem_idx);
+
+	void crewChiefTomemberCrewMemberHistoryInsert(String crew_idx, int memIdx, String crewMem_idx);
+
+	void crewMemberToChiefCrewMemberListUpdate(String crew_idx, String crewMem_idx);
+
+	void crewMemberToChiefCrewMemberHistoryInsert(String crew_idx, String crewMem_idx, String delgateContent, int memIdx);
+
+
+
+	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
+
+	//List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);
+
+	//int allCountPageBySearch(int pagePerCnt, String searchKeyword);
+	
+	
 
 	List<CrewDTO> appList(String crew_idx, int start, int pagePerCnt);
 

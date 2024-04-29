@@ -288,15 +288,6 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	display: none;
 }
 
-.proRep{
-	border-collapse: collapse;
-	position: fixed;
-	right:50;
-	background-color: white;
-	display: none;
-
-}
-
 th, td {
 	width: 600px;
 	height: 50px;
@@ -316,11 +307,6 @@ input[name=reportTitle] {
 }
 
 input[name=reportContent] {
-	width: 600;
-	height: 200;
-}
-
-input[name=repContent] {
 	width: 600;
 	height: 200;
 }
@@ -354,6 +340,8 @@ input[name=repContent] {
 					<div class="category">카테고리 >
 						${project.category}</div>
 					<div class="project_report" style="width: 100;">
+						<input type="button" class="pro_button" value="프로젝트 신고"
+							onclick="location.href='pro_report.go?pro_idx=${project.pro_idx }'">
 						<input type="button" clas	s="pro_button" value="프로젝트 신고" onclick="repForm()">
 						<form action="report.do" method="post" class="report">
 								<table align="center" class="proRep">
@@ -373,7 +361,6 @@ input[name=repContent] {
 								</table>
 						</form>
 					</div>
-					
 					<div class="userID">${project.userId}</div>
 					<div class="like_cnt">
 						${project.like_cnt}</div>
@@ -394,6 +381,7 @@ input[name=repContent] {
 										<th scope="col">삭제 사유 
 											<input type="text" class="category" name="pro_idx"
 											value="${project.pro_idx}" hidden>
+										</th>
 									</tr>
 									<tr>
 										<td>사유<br> <input type="text" name="reportContent"></td>
@@ -549,10 +537,6 @@ input[name=repContent] {
 		$('.proDel').css('display','none');
 	}
 	
-	function repCancle() {
-		$('.proRep').css('display','none');
-	}
-	
 	function appListCall() {
 		var url = "appList.go?pro_idx=" + ${project.pro_idx};
         var name = "appList";
@@ -562,10 +546,6 @@ input[name=repContent] {
 	
 	function delFrom() {
 		$('.proDel').css('display','block');
-	}
-	
-	function repForm() {
-		$('.proRep').css('display','block');
 	}
 	
 	function revWrite(){
@@ -930,7 +910,6 @@ input[name=repContent] {
 			alert('입력 가능 글자수를 초과하였습니다.');
 		}
 	}
-	
 	function report() {
 	    var repContent = document.getElementById('repCon').value.trim();
 	    if (repContent === '') {
