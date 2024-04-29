@@ -115,11 +115,30 @@ h2 {
 			<div class="col-md-6">
 				<c:choose>
 					<c:when test="${mem_status eq 'M'}">
-						<a href="adminAnnUpdate.go" class="btn btn-primary">수정</a>
+						<a href="update.go?noti_idx=${noti_idx}" class="btn btn-primary">수정</a>
 					</c:when>
 				</c:choose>
 			</div>
 		</div>
 	</div>
 </body>
+<script>
+
+var noti_idx = ${noti_idx};
+console.log(noti_idx);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 </html>

@@ -56,10 +56,58 @@
 			where qna_show = #{param1} AND qna_status = 'A'
 		</if>
 	</select>
+
    	<update id="allChangeStatusDO">
    		UPDATE qna SET qna_status = #{param2} WHERE qna_idx = #{param1}
    	</update>
    	<select id="passCheck" resultType="String">
    		SELECT qna_pass FROM qna WHERE qna_idx=#{param1}
    	</select>
+
+	
+	
+	<insert id="qnaForm" parameterType="Map">
+
+		INSERT INTO qna(qna_title,qna_content,qna_show,mem_idx)
+			VALUES(#{qna_title},#{qna_content},#{qna_show},#{mem_idx})
+			
+	</insert>
+	
+		
+	<insert id="qnaForm1" parameterType="Map">
+
+		INSERT INTO qna(qna_title,qna_content,qna_show,qna_pass,mem_idx)
+			VALUES(#{qna_title},#{qna_content},#{qna_show},#{qna_pass},#{mem_idx})
+			
+	</insert>
+	
+	
+	<select id="qnaDetail"
+		resultType="com.uni.fund.admin.dto.QnaDTO">
+		SELECT qna_title,qna_content,qna_show,qna_pass from qna
+		where qna_idx = #{parma1};
+
+
+	</select>
+	
+	
+	
+	<update id="qnaUpdate" parameterType="map">
+		UPDATE qna
+		SET qna_title = #{qna_title},
+		qna_content = #{qna_content},
+		qna_show = #{qna_show},
+		WHERE qna_idx =
+		#{qna_idx}
+
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+
 </mapper>

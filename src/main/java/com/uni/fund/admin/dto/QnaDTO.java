@@ -11,6 +11,7 @@ public class QnaDTO {
 	private Date qna_date;
 	private int qna_pass;
 	private String qna_status;
+	private String qna_content;
 	
 	
 	
@@ -61,6 +62,12 @@ public class QnaDTO {
 	}
 	public void setQna_status(String qna_status) {
 		this.qna_status = qna_status;
+	}
+	public String getQna_content() {
+		return qna_content;
+	}
+	public void setQna_content(String qna_content) {
+		this.qna_content = qna_content;
 	}
 	
 	
