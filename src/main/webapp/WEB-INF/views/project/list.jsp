@@ -20,7 +20,7 @@ body {
 }
 
 .container {
-	max-width: 100%;
+	min-width: 1170px;
 	background-color: #f2f2f2;
 	margin: 50px auto;
 	padding: 10px;
@@ -259,7 +259,7 @@ background: rgba(255, 255, 255, 0.15);
 </style>
 </head>
 <body>
-	<input type="hidden" value="1" name="mem_idx" class="mem_idx" />
+	<input type="hidden" value="${mem_idx}" name="mem_idx" class="mem_idx" />
 	<input type="hidden" value="${category}" name="category" class="category" />
 	<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
 	

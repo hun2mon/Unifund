@@ -163,13 +163,13 @@ label:hover {
 			<label class=" button cancel" for="check"></label>
 		</div>
 		<ul>
-			<li><a href="#"><i class="fas fa-qrcode"></i>회원관리</a></li>
-			<li><a href="#"><i class="fas fa-link"></i>프로젝트 관리</a></li>
-			<li><a href="#"><i class="fas fa-stream"></i>크루관리</a></li>
-			<li><a href="#"><i class="fas fa-calendar-week"></i>신고 관리</a></li>
-			<li><a href="#"><i class="fas fa-question-circle"></i>재화 관리</a></li>
-			<li><a href="#"><i class="fas fa-sliders-h"></i>공지사항</a></li>
-			<li><a href="#"><i class="fas fa-phone-volume"></i>Q&A 관리</a></li>
+			<li><a href="http://localhost:8080/main/member/adminList.go"><i class="fa-solid fa-user"></i>회원관리</a></li>
+			<li><a href="http://localhost:8080/main/project/adminList.go"><i class="fa-solid fa-diagram-project"></i>프로젝트 관리</a></li>
+			<li><a href="http://localhost:8080/main/crew/adminList.go"><i class="fa-solid fa-people-roof"></i>크루관리</a></li>
+			<li><a href="http://localhost:8080/main/report/reportList.go"><i class="fa-solid fa-circle-exclamation"></i>신고 관리</a></li>
+			<li><a href="http://localhost:8080/main/money/adminCashList.go"><i class="fa-solid fa-sack-dollar"></i>재화 관리</a></li>
+			<li><a href="http://localhost:8080/main/ann/adminList.go"><i class="fa-solid fa-chalkboard-user"></i>공지사항</a></li>
+			<li><a href="http://localhost:8080/main/qna/adminList.go"><i class="fa-solid fa-circle-question"></i>Q&A 관리</a></li>
 		</ul>
 	</div>
 </body>

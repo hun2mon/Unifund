@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +30,9 @@ public class ProjectService {
 	@Autowired
 	ProjectDAO projectDAO;
 
-	public String file_root = "/Users/hsg/upload/Unifund";
+	public String file_root = "/Users/jeounghun/upload/Unifund/";
 
-	public ProjectDTO detail(String pro_idx,String memIdx) {
+	public ProjectDTO detail(String pro_idx,int memIdx) {
 		logger.info("pro_idx : {}",pro_idx);
 		logger.info("memIdx : {}",memIdx);
 		return projectDAO.detail(memIdx,pro_idx);
@@ -243,12 +244,12 @@ public class ProjectService {
 		logger.info("projectCheckFavoritesRow : {}",projectCheckFavoritesRow);
 		if(projectCheckFavoritesRow == 1) {
 			String proIdx = pro_idx.toString();
-			String memIDx = mem_idx.toString();
+			int memIDx = mem_idx;
 			projectDAO.favoriteCancle(proIdx,memIDx);
 			projectCheckFavoritesRow = 0;
 		}else {
 			String proIdx = pro_idx.toString();
-			String memIDx = mem_idx.toString();
+			int memIDx = mem_idx;
 			projectDAO.favorite(proIdx,memIDx);
 			projectCheckFavoritesRow = 1;
 		}
@@ -272,12 +273,26 @@ public class ProjectService {
 	public void funding(Map<String, String> map) {
 		int cnt = projectDAO.funding(map);
 		projectDAO.moneyMng(map);
+//		int cash = Integer.parseInt(map.get("total_Price")) - Integer.parseInt(map.get("mileage")); 
+		projectDAO.cashHis(map);
+		if (Integer.parseInt(map.get("mileage"))  != 0) {
+			projectDAO.mileageHis(map);			
+		}
 		logger.info("성공여부 : {}", cnt);
 	}
 
 	public void fundingCancle(Map<String, String> map) {
-		projectDAO.moneyRefund(map);
-		int cnt = projectDAO.fundingCancle(map);
+		int mem_idx = Integer.parseInt(map.get("mem_idx")) ;
+		String pro_idx = map.get("pro_idx");
+		projectDAO.moneyRefund(mem_idx,pro_idx);
+		projectDAO.cashHis(map);
+		logger.info("mileage:{}", map.get("mileage"));
+		String mileage = String.valueOf(projectDAO.mileageSelect(map));
+		map.put("mileage", mileage);
+		if (Integer.parseInt(map.get("mileage"))  != 0) {
+			projectDAO.mileageHis(map);			
+		}		
+		int cnt = projectDAO.fundingCancle(mem_idx,pro_idx);
 		logger.info("성공여부 : {}", cnt);
 	}
 
@@ -341,7 +356,7 @@ public class ProjectService {
 		return result;
 	}
 
-	public void likeDo(String pro_idx, String msg, String mem_idx) {
+	public void likeDo(String pro_idx, String msg, int mem_idx) {
 		if (msg.equals("좋아요")) {
 			projectDAO.likeDo(pro_idx,mem_idx);
 		}
@@ -389,8 +404,31 @@ public class ProjectService {
 		
 	}
 
+	public void refuse(String pro_idx, String refuseContent) {
+		projectDAO.refuse(pro_idx);
+		projectDAO.refuseHis(pro_idx,refuseContent);
+	}
+
+	public void proDel(String pro_idx, String reportContent) {
+		projectDAO.proDel(pro_idx);
+		projectDAO.proDelHis(pro_idx, reportContent);
+		String[] appList = projectDAO.appList(pro_idx);
+		logger.info("appList : {}", Arrays.toString(appList));
+		for (String mem_idx :  appList) {
+			projectDAO.moneyRefund(Integer.parseInt(mem_idx), pro_idx);
+			projectDAO.delCashHis(Integer.parseInt(mem_idx), pro_idx);
+			projectDAO.delMileHis(Integer.parseInt(mem_idx), pro_idx);
+			projectDAO.fundingCancle(Integer.parseInt(mem_idx), pro_idx);
+		}
+	}
+
+	public void stateChange(String pro_idx, String state) {
+		projectDAO.stateChange(pro_idx, state);
+	}
+		
 	public void report(String pro_idx, String repContent, String mem_idx) {
 		projectDAO.report(pro_idx,repContent,mem_idx);
+		
 		
 	}
 

@@ -4,5 +4,108 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.money.dao.MoneyDAO">
+	<update id="chargeDo">
+		UPDATE member 
+			SET mem_cash = (select mem_cash from member where mem_idx = #{param2}) + #{param1} where mem_idx = #{param2}
+	</update>
+	
+	<insert id="chargeHis">
+		INSERT INTO cash(mem_idx,cash_content,cash_amount,ref_idx,cash_division)
+			VALUES (
+				#{param2},
+				'+',
+				#{param1},
+				'0',
+				'충전'
+				);
+	</insert>
+	
+	<select id="selectCash" resultType="int">
+		SELECT mem_cash FROM member WHERE mem_idx = #{param1}
+	</select>
+	
+	<select id="selectMileage" resultType="int">
+		SELECT mem_mileage FROM member WHERE mem_idx = #{param1}
+	</select>
+	
+	<select id="cashListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT * FROM cash WHERE mem_idx = #{param1}<if test="param2 == '전체'">order by cash_idx desc</if><if test="param2 != '전체'">and cash_date like '${param2}' order by cash_idx desc</if>
+		LIMIT #{param3},#{param4}
+	</select>
+	
+	<select id="mileageListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT * FROM mileage WHERE mem_idx = #{param1} and mile_amount != 0<if test="param2 == '전체'">order by mile_idx desc</if><if test="param2 != '전체'">and mile_date like '${param2}' order by mile_idx desc</if>
+		LIMIT #{param3},#{param4}
+	</select>
 
+	<select id="yearCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		select year(cash_date) as year from cash c group by  year(cash_date) order by cash_date desc
+	</select>
+	
+	<select id="mileYearCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		select year(mile_date) as year from mileage  group by  year(mile_date) order by mile_date desc
+	</select>
+	
+	<select id="allCount" resultType="int">
+		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash where mem_idx = #{param2}
+	</select>
+	
+	<select id="filterAllCount" resultType="int">
+		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash where mem_idx = #{param2} and cash_date like '${param3}'
+	</select>
+		
+	<select id="mileAllCount" resultType="int">
+		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage where mem_idx = #{param2} and mile_amount != 0
+	</select>
+	
+	<select id="mileFilterAllCount" resultType="int">
+		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage where mem_idx = #{param2} and mile_date like '${param3}' and mile_amount != 0
+	</select>
+	
+	<select id="allListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT 
+		*,
+		(select mem_id from member m where m.mem_idx = c.mem_idx) as mem_id 
+		FROM cash c 
+		<if test="param1 == '전체' and param4 == null">order by cash_idx desc</if>
+		<if test="param1 == '전체' and param4 != null"> where (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by cash_idx desc </if>
+		<if test="param1 != '전체' and param4 == null">where cash_date like '${param1}' order by cash_idx desc</if>
+		<if test="param1 != '전체' and param4 != null">where cash_date like '${param1}' and (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by cash_idx desc</if>
+		LIMIT #{param2},#{param3}
+	</select>
+	
+	<select id="allCashCount" resultType="int">
+		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash c
+		<if test="param2 != null">where (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param2}</if>
+	</select>
+	
+	<select id="allFilterAllCount" resultType="int">
+		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash c where cash_date like '${param2}'
+		<if test="param3 != null">and (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param3}</if>
+	</select>
+	
+		<select id="allMileListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
+		SELECT 
+		*,
+		(select mem_id from member m where m.mem_idx = c.mem_idx) as mem_id 
+		FROM mileage c 
+		<if test="param1 == '전체' and param4 == null">order by mile_idx desc</if>
+		<if test="param1 == '전체' and param4 != null"> where (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by mile_idx desc </if>
+		<if test="param1 != '전체' and param4 == null">where mile_date like '${param1}' order by mile_idx desc</if>
+		<if test="param1 != '전체' and param4 != null">where mile_date like '${param1}' and (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by mile_idx desc</if>
+		LIMIT #{param2},#{param3}
+	</select>
+	
+	<select id="allMileCount" resultType="int">
+		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage c
+		<if test="param2 != null">where (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param2}</if>
+	</select>
+	
+	<select id="allMileFilterAllCount" resultType="int">
+		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage c where mile_date like '${param2}'
+		<if test="param3 != null">and (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param3}</if>
+	</select>
+	
+	
+	
 </mapper>
