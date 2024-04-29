@@ -90,7 +90,7 @@ public interface ProjectDAO {
 
 	void proDelHis(String pro_idx, String reportContent);
 
-	String[] appList(String pro_idx);
+	int[] appList(String pro_idx);
 
 	void moneyRefund(int mem_idx, String pro_idx);
 
@@ -111,5 +111,19 @@ public interface ProjectDAO {
 	void report(String pro_idx, String repContent, String mem_idx);
 	
 	int projectFundingState(int pro_idx);
+
+	String checkRev(ProjectDTO proDTO);
+
+	List<ProjectDTO> checkList();
+
+	void fail(String pro_idx);
+
+	String[] appList(int pro_idx);
+
+	void moneyRefund(int parseInt, int pro_idx);
+
+	void proSuccess(String pro_idx);
+
+	void appSuccess(String pro_idx);
 
 }

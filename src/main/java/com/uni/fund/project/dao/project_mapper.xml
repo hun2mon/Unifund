@@ -29,6 +29,17 @@
 		from project where pro_idx = #{param2};
 	</select>
 	
+	<select id="checkList" resultType="com.uni.fund.project.dto.ProjectDTO">
+		SELECT 
+			*,
+			(SELECT round((sum(pa.total_price) / (p.rew_price * p.rew_max)) * 100)
+			    	FROM project_apply pa
+			    	WHERE pa.pro_idx = p.pro_idx and pa.fund_state='A' group by pa.pro_idx) as progress
+		FROM project p where p.pro_state = 'C'
+	</select>
+	
+	
+	
 	<insert id="projectCreate"
 		useGeneratedKeys="true" 
 		keyColumn="pro_idx" 
@@ -302,7 +313,7 @@
 		update project set pro_state = 'D' where pro_idx = #{param1}
 	</update>
 	
-	<select id="appList" resultType="String">
+	<select id="appList" resultType="int">
 		select mem_idx from project_apply where pro_idx = #{param1} and fund_state = 'A'
 	</select>
 	
@@ -380,4 +391,24 @@
 	<insert id="report" parameterType="String">
 		INSERT INTO report(mem_idx,ref_idx,rep_content,rep_division) VALUES(#{param3},#{param1},#{param2},'프로젝트')
 	</insert>
+	
+	<select id="checkRev" resultType="String" parameterType="map">
+		SELECT rev_content FROM project_review pr WHERE pro_idx = #{pro_idx} AND mem_idx = #{mem_idx}
+	</select>
+	
+	<update id="fail">
+		UPDATE project set pro_state='E' WHERE pro_idx=#{param1}
+	</update>
+	
+	<update id="proSuccess">
+		UPDATE project set pro_state='B' WHERE pro_idx=#{param1}
+	</update>
+	
+	<update id="appSuccess">
+		UPDATE project_apply SET fund_state='C' WHERE pro_idx = #{param1}
+	</update>
+	
+	
+	
+	
 </mapper>

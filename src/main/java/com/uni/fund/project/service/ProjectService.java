@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -193,8 +194,46 @@ public class ProjectService {
 	 * 작성자 : 허승경
 	 * 프로젝트 리스트 내용 불러오기
 	 * */
-	public List<ProjectDTO> projectList(Map<String, Object> param) {
+	public List<ProjectDTO> projectList(Map<String, Object> param){
+		List<ProjectDTO> list = projectDAO.checkList();
+		Date now = new Date();
+		
+		for (ProjectDTO pro : list) {
+			long sqlDate = pro.getPro_deadline().getTime();
+			Date deadline = new Date(sqlDate);
+			String pro_idx = ""+pro.getPro_idx();
+			
+			if (deadline.before(now) && pro.getProgress() == null) {
+				projectDAO.fail(pro_idx);
+				int[] appList = projectDAO.appList(pro_idx);
+				logger.info("appList : {}", Arrays.toString(appList));
+				
+				for (int mem_idx :  appList) {
+					projectDAO.moneyRefund(mem_idx, pro_idx);
+					projectDAO.delCashHis(mem_idx, pro_idx);
+					projectDAO.delMileHis(mem_idx, pro_idx);
+					projectDAO.fundingCancle(mem_idx, pro_idx);
+				} 
+				
+			} else if(deadline.before(now) && !pro.getProgress().equals("100")){
+				projectDAO.fail(pro_idx);
+				int[] appList = projectDAO.appList(pro_idx);
+				logger.info("appList : {}", Arrays.toString(appList));
+				
+				for (int mem_idx :  appList) {
+					projectDAO.moneyRefund(mem_idx, pro_idx);
+					projectDAO.delCashHis(mem_idx, pro_idx);
+					projectDAO.delMileHis(mem_idx, pro_idx);
+					projectDAO.fundingCancle(mem_idx, pro_idx);
+				} 
+			}else if (pro.getProgress() != null && pro.getProgress().equals("100") && deadline.equals(now)) {
+				projectDAO.proSuccess(pro_idx);
+				projectDAO.appSuccess(pro_idx);
+			}
+		}
+		
 		List<ProjectDTO> projectList = projectDAO.projectList(param);
+
 		return projectList;
 	}
 	
@@ -297,12 +336,17 @@ public class ProjectService {
 	}
 
 	public int reviewDo(MultipartFile photo, Map<String, String> param, int mem_idx) {
-		projectDAO.mileageSaveUp(mem_idx);
 		ProjectDTO proDTO = new ProjectDTO();
 		proDTO.setPro_idx(Integer.parseInt(param.get("pro_idx")));
 		proDTO.setMem_idx(mem_idx);
 		proDTO.setRev_content(param.get("revContent"));
 		proDTO.setRev_grade(Integer.parseInt(param.get("revNum")));
+		
+		String memId = projectDAO.checkRev(proDTO);
+		if (memId == null) {
+			projectDAO.mileageSaveUp(mem_idx);			
+		}
+		
 		int row = projectDAO.reviewDo(proDTO);
 		int rev_idx = proDTO.getRev_idx();
 		logger.info("rev_idx = " + rev_idx);
@@ -412,14 +456,15 @@ public class ProjectService {
 	public void proDel(String pro_idx, String reportContent) {
 		projectDAO.proDel(pro_idx);
 		projectDAO.proDelHis(pro_idx, reportContent);
-		String[] appList = projectDAO.appList(pro_idx);
+		int[] appList = projectDAO.appList(pro_idx);
 		logger.info("appList : {}", Arrays.toString(appList));
-		for (String mem_idx :  appList) {
-			projectDAO.moneyRefund(Integer.parseInt(mem_idx), pro_idx);
-			projectDAO.delCashHis(Integer.parseInt(mem_idx), pro_idx);
-			projectDAO.delMileHis(Integer.parseInt(mem_idx), pro_idx);
-			projectDAO.fundingCancle(Integer.parseInt(mem_idx), pro_idx);
-		}
+		
+		for (int mem_idx :  appList) {
+			projectDAO.moneyRefund(mem_idx, pro_idx);
+			projectDAO.delCashHis(mem_idx, pro_idx);
+			projectDAO.delMileHis(mem_idx, pro_idx);
+			projectDAO.fundingCancle(mem_idx, pro_idx);
+		} 
 	}
 
 	public void stateChange(String pro_idx, String state) {
@@ -428,8 +473,7 @@ public class ProjectService {
 		
 	public void report(String pro_idx, String repContent, String mem_idx) {
 		projectDAO.report(pro_idx,repContent,mem_idx);
-		
-		
 	}
+
 
 }

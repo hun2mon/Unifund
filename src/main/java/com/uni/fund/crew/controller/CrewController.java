@@ -334,7 +334,13 @@ public class CrewController {
 	}
 	
 	
-	
+	@RequestMapping(value = "/crew/refuse.ajax")
+	@ResponseBody
+	public void refuse(String mem_idx, String crew_idx) {
+		logger.info("mem_idx : {}", mem_idx);
+		logger.info("crew_idx : {}", crew_idx);
+		crewService.refuse(mem_idx, crew_idx);
+	}
 	
 	
 	

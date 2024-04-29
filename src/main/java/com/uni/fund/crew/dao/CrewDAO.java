@@ -93,6 +93,8 @@ public interface CrewDAO {
 
 	void insertCrewMem(String mem_idx, String crew_idx);
 
+	void refuse(String mem_idx, String crew_idx);
+
 
 
 
