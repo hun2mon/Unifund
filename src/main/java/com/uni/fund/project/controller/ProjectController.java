@@ -401,8 +401,8 @@ public class ProjectController {
 		logger.info("rep요청 들어옴");
 		logger.info("신고 사유 : " +repContent);
 		logger.info("프로젝트 번호 : " +pro_idx);
-		String mem_idx = (String) session.getAttribute("memIdx");
-		logger.info(mem_idx);
+		int mem_idx = (int)session.getAttribute("mem_idx");
+		logger.info("mem_idx",mem_idx);
 		projectService.report(pro_idx,repContent,mem_idx);
 	
 		return "redirect:/project/detail.go?pro_idx="+pro_idx;

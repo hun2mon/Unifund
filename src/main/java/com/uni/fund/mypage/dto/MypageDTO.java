@@ -40,8 +40,16 @@ public class MypageDTO {
    private int rep_idx;
    private String trans_content;
    private int pro_idx;
+   private String crew_state;
    
-   	public int getPro_idx() {
+   
+   	public String getCrew_state() {
+	return crew_state;
+}
+public void setCrew_state(String crew_state) {
+	this.crew_state = crew_state;
+}
+	public int getPro_idx() {
 	return pro_idx;
 }
 public void setPro_idx(int pro_idx) {

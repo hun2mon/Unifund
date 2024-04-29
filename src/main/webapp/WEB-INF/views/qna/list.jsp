@@ -244,14 +244,8 @@
 			} else {
 				content += '<td class="qnaTitle"><a href="#" onclick="modal(\'' + item.qna_pass + '\', \'' + item.qna_idx + '\')">' + shortenedContent + '</a></td>';
 
-				function modal(pass, idx) {
-				    console.log(pass);
-				    console.log(idx);
-				    
-				    // 이후에 모달을 열거나 pass와 idx를 이용하여 다른 작업을 수행합니다.
-				}
-	
 			}
+			
 			content += '<td class="qnaId">' + item.mem_id + '</td>';
 			content += '<td class="state">' + item.qna_show + '</td>';
 			
@@ -323,28 +317,43 @@
 	function modal(pass, qnaIdx) {
 	    const modal = document.querySelector('.modal');
 	    modal.style.display = "flex";
-	    // 비교할 비밀번호를 전역 변수로 설정
+	    // 모달 열 때 비교할 비밀번호와 qnaIdx를 함께 전달
 	    window.passToCompare = pass;
-	    window.qnaIdxTocompare = qnaIdx;
+	    window.qnaIdxToCompare = qnaIdx;
 	}
 
 	function checkPassword() {
 	    const password = document.getElementById('passwordInput').value;
 	    const pass = window.passToCompare; // 비교할 비밀번호를 전역 변수에서 가져옴
-		const qnaIdx = window.qnaIdxTocompare;
+		const qnaIdx = window.qnaIdxToCompare;
 	    console.log(pass);
-	    if (password === pass) {
-	        // 비밀번호가 일치하는 경우
-	        
-	        alert('비밀번호가 일치합니다.');
-	        closeModal();
-	        location.href = 'qnaDetail.go?qna_idx='+qnaIdx;
-	    } else {
-	        // 비밀번호가 일치하지 않는 경우	      
-	        alert('비밀번호가 일치하지 않습니다.')
-	        
-	        closeModal();
-	    }
+	    
+	    $.ajax({
+	    	type:'post',
+	    	url:'./passCheck.ajax',
+	    	data:{
+	    		qnaIdx:qnaIdx	    		
+	    	},
+	    	dataType:'json',
+	    	success:function(data){
+	    		console.log('pass',data.pass);
+	    		
+	    		if (password ===  data.pass) {
+	    	        // 비밀번호가 일치하는 경우
+	    	        
+	    	        alert('비밀번호가 일치합니다.');
+	    	        closeModal();
+	    	        location.href = 'qnaDetail.go?qna_idx='+qnaIdx;
+	    	    } else {
+	    	        // 비밀번호가 일치하지 않는 경우	      
+	    	        alert('비밀번호가 일치하지 않습니다.')
+	    	        
+	    	        closeModal();
+	    	    }
+	    	},error:function(error){
+	    		console.log(error);
+	    	}
+	    });
 	}
 
     function closeModal() {

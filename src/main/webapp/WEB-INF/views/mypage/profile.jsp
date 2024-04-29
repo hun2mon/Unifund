@@ -319,8 +319,9 @@ th, td {
         </table>
       </div>
       <br>
-      
-      <button>신청자목록</button>
+      <c:if test="${mem_idx eq info.mem_idx && info.crew_state eq '크루장'}">
+      	<button>신청자목록</button>
+      </c:if>
       <c:if test="${mem_idx eq info.mem_idx}">
     	  <button onclick="proUp()">프로필수정</button>
       </c:if>
@@ -436,6 +437,12 @@ th, td {
    </div>
 </body>
 <script>
+	var msg = '${msg}';
+	if (msg !='') {
+		alert(msg);	
+	}
+	
+	
    var showPage = 1;
    
    $(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라

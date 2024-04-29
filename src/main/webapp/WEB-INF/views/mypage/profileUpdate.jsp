@@ -192,13 +192,25 @@
           </table>
           <button type="button" class="proChn" onclick="proUpdate()">프로필수정</button>
          </form>
-          <button type="button" class="out">회원탈퇴</button>
+          <button type="button" class="out" onclick="outUnifund()">회원탈퇴</button>
       </div>
       
       
    </div>   
 </body>
 <script>
+	
+	function outUnifund() {
+	    var confirm = window.confirm("정말 탈퇴하시겠습니까?");
+	    if (confirm) {
+	    	location.href = "outUnifund.do";
+	        alert("회원 탈퇴되었습니다.");
+	    } else {
+	        // 사용자가 취소를 선택한 경우 처리할 내용을 여기에 추가합니다.
+	        alert("회원 탈퇴가 취소되었습니다.");
+	    }
+	}
+
 function proUpdate(){
     var $number = $('input[name="number"]');
     var $post = $('input[name="post"]');
@@ -251,6 +263,11 @@ function proUpdate(){
         $('form').submit();
     }
 }
+
+	var msg = '${msg}';
+	if (msg !='') {
+		alert(msg);	
+	}
 
 </script>
 </html>

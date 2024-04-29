@@ -203,30 +203,35 @@ public class MypageService {
       result.put("totalPages", mypageDAO.allCountPho(pagePerCnt,userId));
       return result;
    }
-
-public Map<String, Object> introPhoList(int currPage, int pagePerCnt, int userId) {
-	int start = (currPage-1) * pagePerCnt;
-    logger.info("[photo]내가 등록한 사진(자소서) list(service)");
-    logger.info("[photo]pagePerCnt: "+pagePerCnt);
-    logger.info("[photo]시작 위치 : " + start);
-    
-    Map<String, Object> result = new HashMap<String, Object>();
-    
-    List<MypageDTO> list = mypageDAO.photoList(pagePerCnt,start,userId);
-    logger.info( "[photo]list size : "+ list.size());
-    result.put("list", list);
-    result.put("currPage", currPage);
-    result.put("totalPages", mypageDAO.allCountPho(pagePerCnt,userId));
-    return result;
-}
-
-public void introPhoDel(String phoName, int userId) {
-	mypageDAO.introPhoDel(phoName,userId);
 	
-}
-
-public MypageDTO repComCall(String rep_idx, int userId) {
+	public Map<String, Object> introPhoList(int currPage, int pagePerCnt, int userId) {
+		int start = (currPage-1) * pagePerCnt;
+	    logger.info("[photo]내가 등록한 사진(자소서) list(service)");
+	    logger.info("[photo]pagePerCnt: "+pagePerCnt);
+	    logger.info("[photo]시작 위치 : " + start);
+	    
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    
+	    List<MypageDTO> list = mypageDAO.photoList(pagePerCnt,start,userId);
+	    logger.info( "[photo]list size : "+ list.size());
+	    result.put("list", list);
+	    result.put("currPage", currPage);
+	    result.put("totalPages", mypageDAO.allCountPho(pagePerCnt,userId));
+	    return result;
+	}
 	
-	return mypageDAO.repComCall(rep_idx,userId);
-}
+	public void introPhoDel(String phoName, int userId) {
+		mypageDAO.introPhoDel(phoName,userId);
+		
+	}
+	
+	public MypageDTO repComCall(String rep_idx, int userId) {
+		
+		return mypageDAO.repComCall(rep_idx,userId);
+	}
+	
+	public void outUnifundDO(String mem_id) {
+		 mypageDAO.outUnifundDO(mem_id);
+		
+	}
 }

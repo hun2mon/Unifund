@@ -323,6 +323,11 @@ input[name=reportContent] {
 	width: 100;
 }
 
+.proRep{
+	display: none;
+	position: fixed;
+    background-color: white
+}
 </style>
 </head>
 <body>
@@ -340,9 +345,7 @@ input[name=reportContent] {
 					<div class="category">카테고리 >
 						${project.category}</div>
 					<div class="project_report" style="width: 100;">
-						<input type="button" class="pro_button" value="프로젝트 신고"
-							onclick="location.href='pro_report.go?pro_idx=${project.pro_idx }'">
-						<input type="button" clas	s="pro_button" value="프로젝트 신고" onclick="repForm()">
+						<input type="button" class="pro_button" value="프로젝트 신고" onclick="repForm()">
 						<form action="report.do" method="post" class="report">
 								<table align="center" class="proRep">
 									<tr>
@@ -535,6 +538,10 @@ input[name=reportContent] {
 	
 	function delCancle() {
 		$('.proDel').css('display','none');
+	}
+	
+	function repCancle(){
+		$('.proRep').css('display','none');
 	}
 	
 	function appListCall() {
@@ -919,6 +926,10 @@ input[name=reportContent] {
 	        alert('신고되었습니다.');
 	        $('.report').submit(); // 폼 제출
 	    }
+	}
+	
+	function repForm() {
+	    $('.proRep').css('display', 'block');
 	}
 </script>
 </html>
