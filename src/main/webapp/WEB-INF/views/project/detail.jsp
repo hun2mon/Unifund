@@ -325,8 +325,9 @@ input[name=reportContent] {
 
 .proRep{
 	display: none;
+	position: fixed;
+    background-color: white
 }
-
 </style>
 </head>
 <body>
@@ -540,6 +541,10 @@ input[name=reportContent] {
 	
 	function delCancle() {
 		$('.proDel').css('display','none');
+	}
+	
+	function repCancle(){
+		$('.proRep').css('display','none');
 	}
 	
 	function appListCall() {
@@ -930,6 +935,10 @@ input[name=reportContent] {
 	        alert('신고되었습니다.');
 	        $('.report').submit(); // 폼 제출
 	    }
+	}
+	
+	function repForm() {
+	    $('.proRep').css('display', 'block');
 	}
 </script>
 </html>

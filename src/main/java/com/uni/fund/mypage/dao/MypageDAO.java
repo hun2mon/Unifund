@@ -55,4 +55,6 @@ public interface MypageDAO {
 	
 	MypageDTO repComCall(String rep_idx, int userId);
 
+	void outUnifundDO(String mem_id);
+
 }
