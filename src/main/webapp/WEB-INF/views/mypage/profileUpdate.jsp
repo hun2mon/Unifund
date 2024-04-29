@@ -79,9 +79,9 @@
    }
    
    .out{
-     margin-left: -48%;
-    margin-right: 105px;
-        margin-top: -12px;
+     	margin-left: -48%;
+    	margin-right: 105px;
+        margin-top: -25px;
    }
    
    input[readonly] {
