@@ -6,7 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-<style>
  /* 전체 스타일 */
         body {
             font-family: Arial, sans-serif;
@@ -85,7 +84,7 @@
                     <option value="크루">크루</option>
                 </select>
                 <input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-                <input type="button" value="검색" onclick="search()">
+                <input type="button" value="검색" onclick="search(1)">
             </span>
         </div>
         <table class="proList">
@@ -241,7 +240,5 @@
 		}
 		return len;
 	}
-
-	
 </script>
 </html>

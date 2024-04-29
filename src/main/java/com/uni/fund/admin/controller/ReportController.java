@@ -2,6 +2,8 @@ package com.uni.fund.admin.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,17 @@ public class ReportController {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ReportService reportService;
-	int mem_idx = 1;
+	
 	
 	@RequestMapping(value = "/report/adminList.go")
-	public String adminListGo() {
-		return "report/adminList";
+	public String adminListGo(HttpSession session) {
+		String memId = (String) session.getAttribute("mem_id");
+		String page = "redirect:/member/login.go";
+		if (memId != null) {
+			page = "report/adminList";
+		}
+		
+		return page;
 	}
 	
 	@RequestMapping(value = "/report/adminList.ajax")
@@ -56,21 +64,28 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/report/adminDetail.go")
-	public String adminDtailGo(String rep_idx,Model model) {
+	public String adminDtailGo(String rep_idx,Model model,HttpSession session) {
 		logger.info("adminDetailGo 요청");
 		logger.info("rep_idx : ",rep_idx);
-		ReportDTO detail = reportService.adminDetail(rep_idx);
-		model.addAttribute("detail",detail);
-		return "report/adminDetail";
+		String memId = (String) session.getAttribute("mem_id");
+		String page = "redirect:/member/login.go";
+		if (memId != null) {
+			page = "report/adminDetail";
+			ReportDTO detail = reportService.adminDetail(rep_idx);
+			model.addAttribute("detail",detail);
+		}
+		return page;
 	}
 	
 	@RequestMapping(value = "/report/transContent" ,method = RequestMethod.POST)
-	public String transContent(String transContent, int refIdx, int cateRefIdx, String cate,String state,Model model ) {
+	public String transContent(String transContent, int refIdx, int cateRefIdx, String cate,String state,Model model,HttpSession session) {
 		logger.info("refIdx : " +refIdx);
 		logger.info("transContent : " +transContent);
 		logger.info("cateRefIdx : " +cateRefIdx);
 		logger.info("cate : " +cate);
 		logger.info("state : " +state);
+		
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		
 		if (state.equals("미처리")) {
 			reportService.transContent(refIdx,mem_idx,transContent,cateRefIdx,cate);			
