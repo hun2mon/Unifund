@@ -25,6 +25,15 @@ public class MemberDTO {
     private int ref_idx_cnt;
     private int stop_mem_idx;
     private Date create_date;
+    private String mng_div;
+    private String uni_file;
+    private String profile_file;
+    private String self_introduce;
+    private String self_exp;
+    private int pages;
+    private String pho_name;
+    private Date mng_rsndate;
+    private int mng_stopdate;
     
 	public int getMem_idx() {
 		return mem_idx;
@@ -157,6 +166,60 @@ public class MemberDTO {
 	}
 	public void setCreate_date(Date create_date) {
 		this.create_date = create_date;
+	}
+	public String getMng_div() {
+		return mng_div;
+	}
+	public void setMng_div(String mng_div) {
+		this.mng_div = mng_div;
+	}
+	public String getUni_file() {
+		return uni_file;
+	}
+	public void setUni_file(String uni_file) {
+		this.uni_file = uni_file;
+	}
+	public String getProfile_file() {
+		return profile_file;
+	}
+	public void setProfile_file(String profile_file) {
+		this.profile_file = profile_file;
+	}
+	public String getSelf_introduce() {
+		return self_introduce;
+	}
+	public void setSelf_introduce(String self_introduce) {
+		this.self_introduce = self_introduce;
+	}
+	public String getSelf_exp() {
+		return self_exp;
+	}
+	public void setSelf_exp(String self_exp) {
+		this.self_exp = self_exp;
+	}
+	public int getPages() {
+		return pages;
+	}
+	public void setPages(int pages) {
+		this.pages = pages;
+	}
+	public String getPho_name() {
+		return pho_name;
+	}
+	public void setPho_name(String pho_name) {
+		this.pho_name = pho_name;
+	}
+	public Date getMng_rsndate() {
+		return mng_rsndate;
+	}
+	public void setMng_rsndate(Date mng_rsndate) {
+		this.mng_rsndate = mng_rsndate;
+	}
+	public int getMng_stopdate() {
+		return mng_stopdate;
+	}
+	public void setMng_stopdate(int mng_stopdate) {
+		this.mng_stopdate = mng_stopdate;
 	}
 	
 }

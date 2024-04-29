@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.uni.fund.member.dto.MemberDTO;
+import com.uni.fund.project.dto.ProjectDTO;
 
 public interface MemberDAO {
 
@@ -30,5 +31,23 @@ public interface MemberDAO {
 	String findId(String mem_name, String mem_number);
 
 	int findPw(String mem_pw, String mem_id, String mem_number);
+	
+	int adminMemberSubmitStatus(Map<String, Object> param);
+
+	int adminMemberRefuseStatus(Map<String, Object> param);
+
+	void adminAddRefuseStatusTable(Map<String, Object> param);
+
+	void adminAddSubmitStatusTable(Map<String, Object> param);
+
+	List<MemberDTO> adminMemberDetail(Integer mem_idx);
+
+	List<MemberDTO> memActPhoList(int pagePerCnt, int start, int memIdx);
+
+	int memActPhoListCnt(int pagePerCnt, int memIdx);
+
+	int stopMemberApply(Map<String, Object> param);
+
+	void updatStopeMemberStatus(Map<String, Object> param);
 
 }

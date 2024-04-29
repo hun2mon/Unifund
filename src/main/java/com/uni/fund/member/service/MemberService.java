@@ -1,5 +1,6 @@
 package com.uni.fund.member.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,13 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dao.MemberDAO;
 import com.uni.fund.member.dto.MemberDTO;
+import com.uni.fund.mypage.dto.MypageDTO;
+import com.uni.fund.project.dto.ProjectDTO;
 
 @Service
 public class MemberService {
 		@Autowired MemberDAO memberDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public String file_root = "C:/upload/";
+	public String file_root = "/Users/hsg/upload/Unifund";
 	
 	
 	public MemberDTO login(String id, String pw) {
@@ -111,6 +114,38 @@ public class MemberService {
 
 	public Object findPw(String mem_pw, String mem_id, String mem_number) {
 		return memberDAO.findPw(mem_pw, mem_id,mem_number);
+	}
+	
+	public int adminMemberSubmitStatus(Map<String, Object> param) {
+		memberDAO.adminAddSubmitStatusTable(param);
+		return memberDAO.adminMemberSubmitStatus(param);
+	}
+
+	public int adminMemberRefuseStatus(Map<String, Object> param) {
+		memberDAO.adminAddRefuseStatusTable(param);
+		return memberDAO.adminMemberRefuseStatus(param);
+	}
+
+	public List<MemberDTO> adminMemberDetail(Integer mem_idx) {
+		return memberDAO.adminMemberDetail(mem_idx);
+	}
+
+	public Map<String, Object> memActPhoList(int currPage, int pagePerCnt, int memIdx) {
+		int start = (currPage-1) * pagePerCnt;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<MemberDTO> memActPhoList = memberDAO.memActPhoList(pagePerCnt,start,memIdx);
+		map.put("list",memActPhoList);
+		map.put("currPage", currPage);
+		map.put("totalPages", memberDAO.memActPhoListCnt(pagePerCnt,memIdx));
+		
+		return map;
+	}
+
+	public int stopMemberApply(Map<String, Object> param) {
+		memberDAO.updatStopeMemberStatus(param);
+		return memberDAO.stopMemberApply(param);
 	}
 
 }

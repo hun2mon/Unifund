@@ -32,7 +32,7 @@ body {
 	color: #fff;
 	transition: background 0.3s ease, color 0.3s ease;
 	float: left;
-	height: 90%;
+	height: 100%;
 	border-radius: 20px;
 	padding: 10px;
 	width: 60%;
@@ -266,6 +266,7 @@ td {
 						<option value="Y">활동중</option>
 						<option value="N">탈퇴</option>
 						<option value="S">정지</option>
+						<option value="R">거절</option>
 					</select>
 				</div>
 				<div class="search_container">
@@ -354,9 +355,15 @@ function pageNlist(page) {
  	            }
 	            
 	            $.each(data.memberList, function(i, member) {
+	            	var url = './adminMemberDetail.go?mem_idx=' + member.mem_idx;
 	            	console.log(data.memberList)
-	                content += '<tr style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'./memDetail.go?mem_idx=' + member.mem_idx + '\'">';
-	                content += '<td>' + member.mem_id + '</td>';
+	                content += '<tr style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'' + url + '\'">';
+	                if(member.mem_id === 'REFUSE'){
+	              		content += '<td style="color:red">' + member.mem_id + '</td>';
+	 	               
+	                } else{
+	                	content += '<td>' + member.mem_id + '</td>';
+	                }
 	                content += '<td>' + member.mem_name + '</td>';
 	                content += '<td>'
 	                if(member.mem_status  == 'M') {
@@ -368,7 +375,9 @@ function pageNlist(page) {
 	                }else if(member.mem_status  == 'N'){
 	                	content += '탈퇴';	
 	                }else if(member.mem_status  == 'S'){
-	                	content += '정지';
+	                	content += '<span style="color:red">정지</span>';
+	                }else if(member.mem_status  == 'R'){
+	                	content += '가입거절';
 	                }else {
 	                    content += '전체선택';
 	                }

@@ -1,8 +1,18 @@
 package com.uni.fund.member.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -10,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dto.MemberDTO;
 import com.uni.fund.member.service.MemberService;
+import com.uni.fund.project.dto.ProjectDTO;
 
 @Controller
 public class MemberController {	
@@ -170,7 +182,7 @@ public class MemberController {
 		logger.info("searchType::"+searchType);
 		logger.info("keyword::"+keyword);
 		
-		int showList = 20;
+		int showList = 10;
 		int spaceBlock = 5;
 		param.put("start", (pg-1) * showList);
 		int total = memberService.memberTotalCnt(param);
@@ -212,7 +224,7 @@ public class MemberController {
 		logger.info("pg::"+pg);
 		logger.info("keyword::"+keyword);
 		
-		int showList = 20;
+		int showList = 10;
 		int spaceBlock = 5;
 		param.put("start", (pg-1) * showList);
 		int total = memberService.memberJoinCnt(param);
@@ -232,6 +244,100 @@ public class MemberController {
 		model.addAttribute("blockScale", spaceBlock);
 		model.addAttribute("keyword", keyword);
 
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/adminMemberSubmitStatus.ajax")
+	@ResponseBody
+	public Map<String, Object> adminMemberSubmitStatus(@RequestParam Map<String,Object> param,Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("submitStatus",memberService.adminMemberSubmitStatus(param));
+		logger.info("#### submitStatus : {}", map.get("submitStatus"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/adminMemberRefuseStatus.ajax")
+	@ResponseBody
+	public Map<String, Object> adminMemberRefuseStatus(@RequestParam Map<String,Object> param,Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("refuseStatus",memberService.adminMemberRefuseStatus(param));
+		logger.info("#### refuseStatus : {}", map.get("refuseStatus"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/adminMemberDetail.go")
+	public String adminMemberDetail(HttpSession session, Model model, @RequestParam(value="mem_idx") String mem_idx) {
+		String status = (String)session.getAttribute("mem_status"); 
+		String page= "";
+		
+		String adminId = (String)session.getAttribute("mem_id");
+		logger.info("##### adminId : {}", adminId);
+		
+		logger.info("mem_status="+status);
+		logger.info("status="+status);
+		if(status != null && status.equals("M")) {
+			int memIdx = Integer.parseInt(mem_idx);
+			logger.info("inininininin");
+			List<MemberDTO> adminMemberDetail = memberService.adminMemberDetail(memIdx);
+			page = "./user/adminMemberDetail";
+			logger.info("adminMemberDetail="+adminMemberDetail);
+			
+			model.addAttribute("adminMemberDetail",adminMemberDetail);
+			model.addAttribute("memIdx",memIdx);
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+			 page= "redirect:/member/login.go";
+		}
+		
+	    return page;
+	}
+	
+	@RequestMapping(value = "/user/memActPhoList.ajax")
+	@ResponseBody
+	public Map<String, Object> memActPhoList(String page, String cnt, Model model, String mem_idx) {
+		int memIdx = Integer.parseInt(mem_idx);
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		logger.info("::::mem_idx::"+mem_idx);
+		Map<String, Object> map = memberService.memActPhoList(currPage,pagePerCnt,memIdx);
+		logger.info("#### memActPhoList : {}", map);
+		return map;
+	}
+	
+	@RequestMapping(value="/user/fileRead/{file_read}")
+	public void download(@PathVariable String file_read, HttpServletResponse response) {
+		String file_root = "/Users/hsg/upload/Unifund/"+file_read;
+		 
+		File file = new File(file_root);
+		
+		if(file.exists()) {
+			response.setHeader("Content-Disposition", "attachment; file_read=\"" + file_read + "\"");
+			 response.setContentType("application/octet-stream");
+			 try (FileInputStream fis = new FileInputStream(file);
+		            BufferedInputStream bis = new BufferedInputStream(fis);
+		             OutputStream out = response.getOutputStream()) {
+
+		            byte[] buffer = new byte[1024];
+		            int bytesRead;
+
+		            while ((bytesRead = bis.read(buffer)) != -1) {
+		                out.write(buffer, 0, bytesRead);
+		            }
+		            
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		    } else {
+		    	logger.info("그만..");
+		    }
+	}
+	
+	@RequestMapping(value = "/user/stopMemberApply.ajax")
+	@ResponseBody
+	public Map<String, Object> stopMemberApply(@RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("stopMemberApply",memberService.stopMemberApply(param));
+		logger.info("#### stopMemberApply : {}", map.get("stopMemberApply"));
 		return map;
 	}
 	

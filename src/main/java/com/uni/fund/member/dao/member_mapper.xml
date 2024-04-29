@@ -77,7 +77,7 @@
         AND mem_id LIKE CONCAT('%', #{keyword}, '%')
     	</if>
 		GROUP BY m.mem_idx
-		ORDER BY m.mem_joindate DESC
+		ORDER BY m.mem_joindate DESC,  m.mem_idx DESC
        	LIMIT #{start}, 10
     </select>
 
@@ -93,7 +93,9 @@
     </select>
     
     <select id="adminMemberJoinReqAjax" parameterType="map" resultType="com.uni.fund.member.dto.MemberDTO">
-      	SELECT * FROM member WHERE mem_status = 'Y'
+      	SELECT m.*,mn.mng_div FROM member m
+		LEFT JOIN mem_mng mn ON m.mem_idx = mn.mem_idx
+		WHERE mem_status = 'B'
 		<if test="keyword != null and keyword != ''">
         AND mem_id LIKE CONCAT('%', #{keyword}, '%')
     	</if>
@@ -104,10 +106,71 @@
 
     <select id="memberJoinCnt" parameterType="map" resultType="int">
         SELECT COUNT(*) FROM member
-        WHERE mem_status = 'Y'
+        WHERE mem_status = 'B'
 		<if test="keyword != null and keyword != ''">
         AND mem_id LIKE CONCAT('%', #{keyword}, '%')
     	</if>
     </select>
+    
+    <update id="adminMemberSubmitStatus" parameterType="map">
+        UPDATE member SET mem_status='Y' WHERE mem_idx = #{mem_idx}
+    </update>
 
+	<update id="adminMemberRefuseStatus" parameterType="map">
+		UPDATE member SET mem_status='R',mem_id='REFUSE' WHERE mem_idx = #{mem_idx}
+	</update>
+	
+	<insert id="adminAddRefuseStatusTable" parameterType="map">
+		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn, mng_div)VALUES(#{mem_idx},1,'가입심사결과 부적합','거절')
+	</insert>
+	
+	<insert id="adminAddSubmitStatusTable" parameterType="map">
+		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn, mng_div)VALUES(#{mem_idx},1,'회원가입 승인','승인')
+	</insert>
+	
+	<select id="adminMemberDetail" resultType="com.uni.fund.member.dto.MemberDTO">
+	 	SELECT 
+				m.*,i.*,mm.mng_rsndate,mm.mng_stopdate,count(rt.ref_idx) as ref_idx_cnt,COUNT(mm.mem_mng_idx) AS stop_mem_idx
+			    , (SELECT pho_name 
+			    	FROM photo
+				    WHERE pho_division = '재학증명서'
+				    AND ref_idx = m.mem_idx
+				    ORDER BY pho_idx DESC
+				    LIMIT 1) as uni_file
+				 , (SELECT pho_name 
+			    	FROM photo
+				    WHERE pho_division = '프로필'
+				    AND ref_idx = m.mem_idx
+				    ORDER BY pho_idx DESC
+				    LIMIT 1) as profile_file
+			FROM member m
+			LEFT JOIN introduction i ON m.mem_idx = i.mem_idx
+			LEFT JOIN rep_trans rt ON m.mem_idx = rt.ref_idx
+			LEFT JOIN mem_mng mm ON mm.mng_div = m.mem_idx
+			where m.mem_idx = #{param1}
+	</select>
+
+	<select id="memActPhoList" resultType="com.uni.fund.member.dto.MemberDTO">
+    	SELECT pho_name
+    	FROM photo
+    	WHERE ref_idx = #{param3} AND pho_division = '프로젝트대표사진'
+   	 	ORDER BY pho_idx ASC
+    	LIMIT #{param1} OFFSET #{param2}
+	</select>
+	
+	<select id="memActPhoListCnt" resultType="int">
+    	SELECT CEIL(COUNT(*) / #{param1}) AS pages
+    	FROM photo
+    	WHERE ref_idx = #{param2} AND pho_division = '프로젝트대표사진'
+	</select>
+	
+	<insert id="stopMemberApply">
+		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn,mng_stopdate,mng_div,mng_rsndate) VALUES(#{mem_idx},#{admin_idx},#{mng_rsn},#{mng_stopdate},'정지',now());
+	</insert>
+	
+	<update id="updatStopeMemberStatus" parameterType="map">
+		UPDATE member SET mem_status='S' WHERE mem_idx=#{mem_idx}
+	</update>
+	
+	
 </mapper>
