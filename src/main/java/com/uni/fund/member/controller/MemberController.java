@@ -55,6 +55,13 @@ public class MemberController {
 		return "member/findId";
 	}
 	
+	
+	//비밀번호찾기 페이지 이동
+	@RequestMapping(value = "/member/findPw.go")
+	public String findPw() {
+		logger.info("비밀번호찾기 페이지 이동");
+		return "member/findPw";
+	}
 	@RequestMapping(value = "/member/logout.do")
 	public String logout(HttpSession session, Model model) {
 		session.removeAttribute("mem_idx");
@@ -85,7 +92,7 @@ public class MemberController {
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
-		
+	
 		return page;
 	}
 	
@@ -98,12 +105,12 @@ public class MemberController {
 		
 		String page = "redirect:/main";
 		
-		if(session.getAttribute("mem_idx")!=null) {
 			int row = memberService.write(profilePhoto,mem_cor,param);
 			if(row>0) {
-				page = "writeForm";
+				page = "/member/joinForm";
+				
+				
 			}
-		}
 		return page;
 	}
 	
@@ -117,6 +124,37 @@ public class MemberController {
 		
 		return map;
 	}
+	
+	//ID찾기 AJAX로 서버에 요청
+		@RequestMapping(value="member/findId.ajax")
+		@ResponseBody
+		public Map<String, Object> findId(String mem_name, String mem_number) {
+			logger.info("userId : "+mem_name);
+			logger.info("mem_number : "+ mem_number);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("use", memberService.findId(mem_name,mem_number));
+			
+			return map;
+		}
+		
+	//PW변경하기
+	@RequestMapping(value = "member/findPw.ajax", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> findPw(String mem_pw, String mem_id, String mem_number) {
+		logger.info("mem_id: {}, mem_number: {}", mem_id , mem_number);
+		logger.info("mem_pw : {}",  mem_pw);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("use", memberService.findPw(mem_pw,mem_id,mem_number));
+		
+		return map;
+	}
+	
+	
+		
+	
+	
+	
+	
 	
 	@RequestMapping(value = "/user/adminMemberList.go")
 	public String adminMemberList(HttpSession session, Model model) {
@@ -302,6 +340,7 @@ public class MemberController {
 		logger.info("#### stopMemberApply : {}", map.get("stopMemberApply"));
 		return map;
 	}
+	
 	
 	
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -63,14 +62,14 @@ public class MemberService {
 		int idx = dto.getMem_idx();
 		logger.info("idx=" + idx);
 		if (row > 0) {
-			fileSave(idx,profilePhoto); 
-			fileSave(idx,mem_cor); 
+			fileSave(idx,profilePhoto,"A"); 
+			fileSave(idx,mem_cor,"B"); 
 		}
 		return row;
 	}
 
 
-	private void fileSave(int idx, MultipartFile mem_cor) {
+	private void fileSave(int idx, MultipartFile mem_cor, String cate) {
 		String fileName = mem_cor.getOriginalFilename();
 		logger.info("upload file name : " + fileName);
 		if (!fileName.equals("")) {
@@ -81,7 +80,10 @@ public class MemberService {
 				byte[] bytes = mem_cor.getBytes(); // MultipartFile 로 부터 바이너리 추출
 				Path path = Paths.get(file_root + newFileName);// 저장경로지정
 				Files.write(path, bytes);// 저장
-				memberDAO.fileWrite(fileName, newFileName, idx);
+				
+				  // DAO를 통해 파일 이름을 데이터베이스에 저장
+	            memberDAO.fileWrite(newFileName, idx, cate);
+
 				Thread.sleep(1);// 파일명을 위해 강제 휴식 부여
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -106,6 +108,14 @@ public class MemberService {
 		return memberDAO.memberJoinCnt(param);
 	}
 
+	public Object findId(String mem_name, String mem_number) {
+		return memberDAO.findId(mem_name,mem_number);
+	}
+
+	public Object findPw(String mem_pw, String mem_id, String mem_number) {
+		return memberDAO.findPw(mem_pw, mem_id,mem_number);
+	}
+	
 	public int adminMemberSubmitStatus(Map<String, Object> param) {
 		memberDAO.adminAddSubmitStatusTable(param);
 		return memberDAO.adminMemberSubmitStatus(param);
