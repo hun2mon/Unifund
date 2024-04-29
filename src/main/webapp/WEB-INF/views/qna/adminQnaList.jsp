@@ -76,6 +76,8 @@
 	 <div class="container">
         <div class="searchContainer">
             <span>
+                <button name="show" onclick="allChangeStatus('A')">show</button>
+				<button name="blind" onclick="allChangeStatus('B')">blind</button>
                 <select name="revNum" class="selectNum">
                     <option value="전체">전체</option>
                     <option value="공개">공개</option>
@@ -88,7 +90,7 @@
         <table class="proList">
             <thead>
                 <tr>
-                	<!-- <th><input type="checkbox" id="all"/></th>  -->
+                	<th><input type="checkbox" id="all"/></th>
                     <th class="qnaIdx">번호</th>
                     <th class="qnaTitle">제목</th>
                     <th class="qnaId">작성자</th>
@@ -170,7 +172,7 @@
 		for (item of list) {
 			 var shortenedContent = (item.qna_title && typeof item.qna_title === 'string') ? (getByteLength(item.qna_title) > 30 ? item.qna_title.substring(0, 20) + '...' : item.qna_title) : '';
 			content += '<tr>';
-			//content += '<td><input type="checkbox" name="del" value="' + item.qna_idx+'"/></td>';
+			content += '<td><input type="checkbox" name="del" value="' + item.qna_idx+'"/></td>';
 			content += '<td class="qnaIdx">' + item.qna_idx + '</td>';
 			content += '<td class="qnaTitle"><a href="qnaDetail.go?qna_idx=' + item.qna_idx + '">' + shortenedContent + '</a></td>';
 			content += '<td class="qnaId">' + item.mem_id + '</td>';
@@ -180,11 +182,12 @@
 			var dateStr = date.toLocaleDateString("ko-KR");//en_US
 			content += '<td class="qndDate">' + dateStr  + '</td>';
 			
-			if (item.qna_status == 'show') {
-			    content += '<td class="qnaStatus"><input style="color:green" name="status" onclick="changeStatus(' + item.qna_idx + ', \'' + item.qna_status + '\')" type="button" value="' + item.qna_status+'"/></td>';	
+			if (item.qna_status == 'A') {
+			    content += '<td class="qnaStatus"><input style="color:green" name="status" onclick="changeStatus(' + item.qna_idx + ', \'show\')" type="button" value="show"/></td>';   
 			} else {
-			    content += '<td class="qnaStatus"><input style="color:red" name="status" onclick="changeStatus(' + item.qna_idx + ', \'' + item.qna_status + '\')" type="button" value="' + item.qna_status+'"/></td>';
+			    content += '<td class="qnaStatus"><input style="color:red" name="status" onclick="changeStatus(' + item.qna_idx + ', \'blind\')" type="button" value="blind"/></td>';
 			}
+
 
 
 
@@ -252,6 +255,38 @@
 	
 	function changeStatus(qna_idx, status) {
 	    location.href = 'statusUpdate.do?qna_idx=' + qna_idx + '&status=' + status;	  
+	}
+	
+	$(document).ready(function() {
+	    // 전체 선택 체크박스의 변경 이벤트 처리
+	    $('#all').change(function() {
+	        // 전체 선택 체크박스의 상태 가져오기
+	        var isChecked = $(this).prop('checked');
+	        
+	        // 다른 모든 체크박스의 상태 변경
+	        $('input[name="del"]').prop('checked', isChecked);
+	    });
+	});
+	
+	function allChangeStatus(status) {
+
+	    var checkedQnaIdx = [];
+
+	    $('input[name="del"]:checked').each(function() {
+	        checkedQnaIdx.push($(this).val());
+	    });
+
+	    if (checkedQnaIdx.length === 0) {
+	        alert("체크된 항목이 없습니다.");
+	        return;
+	    }
+
+	    var queryString = "status=" + status + "&qna_idx=" + checkedQnaIdx.join("&qna_idx=");
+	    var url = "allChangeStatus.do?" + queryString;
+	    
+	    // URL로 이동합니다.
+	    location.href = url;
+	    
 	}
 
 </script>

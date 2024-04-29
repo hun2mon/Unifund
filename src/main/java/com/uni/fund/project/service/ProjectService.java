@@ -426,7 +426,7 @@ public class ProjectService {
 		projectDAO.stateChange(pro_idx, state);
 	}
 		
-	public void report(String pro_idx, String repContent, String mem_idx) {
+	public void report(String pro_idx, String repContent, int mem_idx) {
 		projectDAO.report(pro_idx,repContent,mem_idx);
 		
 		

@@ -20,29 +20,30 @@
 		</if>
 	</select>
 	<select id="search" resultType="com.uni.fund.admin.dto.QnaDTO">
-		SELECT q.qna_idx ,q.qna_title ,q.qna_show ,q.qna_date ,m.mem_id,q.qna_status
-		FROM qna q left join member m on q.mem_idx = m.mem_idx 
-		WHERE m.mem_id like concat('%',#{param1},'%') OR qna_title like concat('%',#{param1},'%')
-		ORDER BY qna_idx desc LIMIT #{param2},#{param3}
+	    SELECT q.qna_idx, q.qna_title, q.qna_show, q.qna_date, m.mem_id, q.qna_status
+	    FROM qna q LEFT JOIN member m ON q.mem_idx = m.mem_idx 
+	    WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE CONCAT('%', #{param1}, '%'))
+	        AND q.qna_status = 'A'
+	    ORDER BY q.qna_idx DESC LIMIT #{param2}, #{param3}
 	</select>
 	<select id="searchAllCount" resultType="int">
 		SELECT CEIL(COUNT(qna_idx)/#{param2}) AS pages 
 		FROM qna q left join member m on q.mem_idx = m.mem_idx 
-		WHERE m.mem_id like concat('%',#{param1},'%') OR qna_title like concat('%',#{param1},'%')
+		WHERE m.mem_id like concat('%',#{param1},'%') OR qna_title like concat('%',#{param1},'%') AND q.qna_status = 'A'
 	</select>
 	<update id="statusUpdate">
 		UPDATE qna
 		SET qna_status = 
 		    CASE 
-		        WHEN #{param2} = 'show' THEN 'blind'
-		        ELSE 'show'
+		        WHEN #{param2} = 'show' THEN 'B'
+		        ELSE 'A'
 		    END
 		WHERE qna_idx = #{param1}
 	</update>
 	<select id="userQnaList" resultType="com.uni.fund.admin.dto.QnaDTO">
 		SELECT q.qna_idx ,q.qna_title ,q.qna_show ,q.qna_date ,m.mem_id,q.qna_status,q.qna_pass
 		FROM qna q  left join member m on q.mem_idx = m.mem_idx  	
-		WHERE qna_status = 'show' 
+		WHERE qna_status = 'A' 
 		<if test='param1 != " " and param1 != "전체"'>
 			 ANd qna_show = #{param1} 
 		</if>
@@ -52,7 +53,13 @@
 	<select id="userQnaAllCount" resultType="int">
 		SELECT CEIL(COUNT(qna_idx)/#{param2}) AS pages FROM qna
 		<if test='param1 != " " and param1 != "전체"'>
-			where qna_show = #{param1} AND qna_status = 'show'
+			where qna_show = #{param1} AND qna_status = 'A'
 		</if>
 	</select>
+   	<update id="allChangeStatusDO">
+   		UPDATE qna SET qna_status = #{param2} WHERE qna_idx = #{param1}
+   	</update>
+   	<select id="passCheck" resultType="String">
+   		SELECT qna_pass FROM qna WHERE qna_idx=#{param1}
+   	</select>
 </mapper>

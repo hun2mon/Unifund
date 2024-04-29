@@ -20,4 +20,10 @@ public interface QnaDAO {
 
 	Object userQnaAllCount(String category, int pagePerCnt);
 
+	void allChangeStatusDO(int qna_idx, String status);
+
+	String passCheck(int qna_idx);
+
+	
+
 }

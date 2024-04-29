@@ -1,5 +1,6 @@
 package com.uni.fund.admin.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uni.fund.admin.service.QnaService;
@@ -90,6 +92,27 @@ public class QnaController {
 		int pagePerCnt = Integer.parseInt(cnt);
 		
 		Map<String, Object> map = qnaService.userQnaList(category,currPage,pagePerCnt);
+		
+		return map;
+	}
+	
+	@RequestMapping(value= "/qna/allChangeStatus.do")
+	public String allChangeStatusDO(@RequestParam("qna_idx") List<String> qnaIdxList,String status) {
+		logger.info("qna_idx List : {}",qnaIdxList);
+		logger.info("status : " + status);
+		qnaService.allChangeStatusDO(qnaIdxList,status);
+		
+		return "redirect:/qna/adminQnaList.go";
+		       
+	}
+	
+	@RequestMapping(value="/qna/passCheck.ajax")
+	@ResponseBody
+	public Map<String, Object> passCheck(String qnaIdx){
+		logger.info(qnaIdx);
+		int qna_idx = Integer.parseInt(qnaIdx);
+		
+		Map<String,Object> map = qnaService.passCheck(qna_idx);
 		
 		return map;
 	}
