@@ -1,6 +1,7 @@
 package com.uni.fund.admin.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,23 @@ public class QnaService {
 		result.put("totalPages", qnaDAO.userQnaAllCount(category,pagePerCnt));
 		return result;
 	}
+
+	public void allChangeStatusDO(List<String> qnaIdxList, String status) {
+		for (String qnaIdx : qnaIdxList) {
+			int qna_idx = Integer.parseInt(qnaIdx);
+			qnaDAO.allChangeStatusDO(qna_idx,status);
+		}
+		
+		
+	}
+	public Map<String, Object> passCheck(int qna_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		String pass = qnaDAO.passCheck(qna_idx);
+		result.put("pass", pass);
+		
+		return result;
+	}
+
 	public int qnaForm(Map<String, String> param, String mem_idx) {
 		int row =-1;
 		logger.info("[service]param : {}",param);
@@ -120,5 +138,6 @@ public class QnaService {
 	
 	
 	
+
 	
 }

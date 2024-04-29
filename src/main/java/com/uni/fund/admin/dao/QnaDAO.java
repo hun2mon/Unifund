@@ -21,6 +21,11 @@ public interface QnaDAO {
 
 	Object userQnaAllCount(String category, int pagePerCnt);
 
+
+	void allChangeStatusDO(int qna_idx, String status);
+
+	String passCheck(int qna_idx);
+
 	int qnaForm(Map<String, String> param);
 
 	int qnaForm1(Map<String, String> param);
@@ -28,6 +33,7 @@ public interface QnaDAO {
 	QnaDTO qnaDetail(int qna_idx);
 
 	int qnaUpdate(QnaDTO qnaDTO);
+
 
 	
 

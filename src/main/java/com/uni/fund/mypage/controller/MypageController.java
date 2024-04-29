@@ -203,4 +203,15 @@ public class MypageController {
 	  
 	  return "mypage/repComCall";
   }
+  
+  @RequestMapping(value="/mypage/outUnifund.do")
+  public String outUnifundDO(HttpSession session,Model model){
+	  logger.info("outUnifundDo 요청");
+	  String mem_id = (String) session.getAttribute("mem_id");
+	  mypageService.outUnifundDO(mem_id);
+	  model.addAttribute("msg","회원 탈퇴가 완료되었습니다.");
+	  
+	  return "redirect:/member/login.go";
+  }
+  
 }
