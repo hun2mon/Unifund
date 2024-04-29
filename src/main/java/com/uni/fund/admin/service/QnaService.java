@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +52,73 @@ public class QnaService {
 		result.put("totalPages", qnaDAO.userQnaAllCount(category,pagePerCnt));
 		return result;
 	}
+	public int qnaForm(Map<String, String> param, String mem_idx) {
+		int row =-1;
+		logger.info("[service]param : {}",param);
+		param.put("mem_idx", mem_idx);
+		if (param.get("qna_pass").equals("")) {
+			row = qnaDAO.qnaForm(param);
+		}else {
+			row = qnaDAO.qnaForm1(param);
+		}
+		
+		logger.info("insert count: "+row);
+		return row;
+	}
+	public QnaDTO qnaDetail(String qna_idx) {
+		logger.info("qna_idx : " + qna_idx);
+		int qnaIdx= Integer.parseInt(qna_idx);
+		return qnaDAO.qnaDetail(qnaIdx);
+	}
+	public int qnaUpdate(Map<String, String> param, HttpSession session) {
+		logger.info("::: qnaUpdate Service IN :::");
+		int row = -1;
+		QnaDTO qnaDTO = new QnaDTO();
+		qnaDTO.setQna_idx(Integer.parseInt(param.get("qna_idx")));
+		qnaDTO.setQna_title(param.get("qna_title"));
+		qnaDTO.setQna_content(param.get("qna_content"));
+		qnaDTO.setQna_show(param.get("qna_show"));
+		qnaDTO.setQna_pass(Integer.parseInt(param.get("qna_pass")));
+		row = qnaDAO.qnaUpdate(qnaDTO);
+		logger.info("qnaUpdate service end");
+		
+		return row;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
