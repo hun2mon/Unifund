@@ -314,10 +314,14 @@ input[name=reportContent] {
 .category {
 	width: 210;
 }
+
+#repCon{
+	width: 600px;
+	height: 200px;
+}
 .project_report{
 	width: 100;
 }
-
 
 </style>
 </head>
@@ -338,6 +342,24 @@ input[name=reportContent] {
 					<div class="project_report" style="width: 100;">
 						<input type="button" class="pro_button" value="프로젝트 신고"
 							onclick="location.href='pro_report.go?pro_idx=${project.pro_idx }'">
+						<input type="button" clas	s="pro_button" value="프로젝트 신고" onclick="repForm()">
+						<form action="report.do" method="post" class="report">
+								<table align="center" class="proRep">
+									<tr>
+										<th scope="col">신고 사유 <input type="text" class="category"
+											value="${project.pro_idx}" name="pro_idx" hidden>
+										</td>
+									</tr>
+									<tr>
+										<td>사유<br><textarea style="background-color: #f2f2f2;" id="repCon" name="repContent" oninput="checkLength(this, 500)" placeholder="신고내용을 입력해주세요. 최대 500자까지 입력 가능합니다."></textarea></td>
+									</tr>
+									<tr>
+										<td class="button"><input type="button" value="신고"
+											onclick="report()">
+											<input type="button" onclick="repCancle()" value="취소"></td>
+									</tr>
+								</table>
+						</form>
 					</div>
 					<div class="userID">${project.userId}</div>
 					<div class="like_cnt">
@@ -875,15 +897,28 @@ input[name=reportContent] {
 		alert(msg);
 	}
 	
+	function checkLength(textarea, maxLength) {
+	    if (textarea.value.length > maxLength) {
+	        textarea.value = textarea.value.substring(0, maxLength);
+	        alert("최대 글자수를 초과했습니다.");
+	    }  
+	}
+	
 	function lengthCheck(text){
 		var content = $(text).val();
 		if (content.length >= 500) {
 			alert('입력 가능 글자수를 초과하였습니다.');
 		}
-		
 	}
-	
-
-
+	function report() {
+	    var repContent = document.getElementById('repCon').value.trim();
+	    if (repContent === '') {
+	        alert('내용을 입력해 주세요!');
+	    } else {
+	        // 여기에 신고 처리 로직 추가
+	        alert('신고되었습니다.');
+	        $('.report').submit(); // 폼 제출
+	    }
+	}
 </script>
 </html>
