@@ -23,15 +23,18 @@ public class CrewDTO {
 	private String crew_mem_rsn;	
 	private String crew_list_logo;	
 	private int pages;
+
+	private int crew_mem_cnt;
 	
 	private int crew_cool_idx;
 	private int crew_cool_cnt;
-	
 	private String crew_recruitment_information;
 	private String mem_status_manager;
 	private String crew_leader_count;
 	private String mem_id;
 	private String state;
+
+
 
 	
 	public int getCrew_idx() {
@@ -160,6 +163,7 @@ public class CrewDTO {
 	public void setCrew_cool_cnt(int crew_cool_cnt) {
 		this.crew_cool_cnt = crew_cool_cnt;
 	}
+
 	public int getPages() {
 		return pages;
 	}
@@ -185,6 +189,13 @@ public class CrewDTO {
 	public void setMem_status_manager(String mem_status_manager) {
 		this.mem_status_manager = mem_status_manager;
 	}
+	
+	public int getCrew_mem_cnt() {
+		return crew_mem_cnt;
+	}
+	public void setCrew_mem_cnt(int crew_mem_cnt) {
+		this.crew_mem_cnt = crew_mem_cnt;
+	}
 	public String getMem_id() {
 		return mem_id;
 	}
@@ -197,6 +208,5 @@ public class CrewDTO {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
 
 }

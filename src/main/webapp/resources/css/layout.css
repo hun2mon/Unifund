@@ -181,7 +181,6 @@ textarea {
 html,body {
     font-family: Verdana,sans-serif;
     font-size: 15px;
-    line-height: 1.5
 }
 
 html {
@@ -240,8 +239,7 @@ h1,h2,h3,h4,h5,h6 {
 
 hr {
     border: 0;
-    border-top: 1px solid #eee;
-    margin: 20px 0
+    border-top: 1px solid black;
 }
 
 .w3-image {

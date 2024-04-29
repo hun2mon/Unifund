@@ -85,6 +85,14 @@ public interface CrewDAO {
 	
 	
 
+	List<CrewDTO> appList(String crew_idx, int start, int pagePerCnt);
+
+	int allCount(int pagePerCnt, String crew_idx);
+
+	void approve(String mem_idx, String crew_idx);
+
+	void insertCrewMem(String mem_idx, String crew_idx);
+
 
 
 

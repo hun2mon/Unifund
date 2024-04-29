@@ -67,7 +67,7 @@ th, td {
 	
 	function listCall(showPage){
 		$.ajax({
-			type:'get'
+			type:'post'
 			,url:'./appList.ajax'
 			,data:{
 				page:showPage,
@@ -84,7 +84,6 @@ th, td {
 	            	visiblePages:5,
 	            	onPageClick:function(evt,pg){
 	            		console.log(pg);
-	            		num = pg;
 	            		listCall(pg);
 	            	}
 	            })
