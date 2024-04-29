@@ -146,9 +146,8 @@ input[type="checkbox"] {
 </style>
 </head>
 <body>
-<<<<<<< HEAD
 	<h2>UNIFUND</h2>
-	<form action="login.do" method="post">
+	<form action="/main/member/login.do" method="post">
 		<table>
 			<tr>
 				<th>ID</th>
