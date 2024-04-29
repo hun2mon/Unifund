@@ -332,6 +332,7 @@
 	    const password = document.getElementById('passwordInput').value;
 	    const pass = window.passToCompare; // 비교할 비밀번호를 전역 변수에서 가져옴
 		const qnaIdx = window.qnaIdxTocompare;
+	    console.log(pass);
 	    if (password === pass) {
 	        // 비밀번호가 일치하는 경우
 	        

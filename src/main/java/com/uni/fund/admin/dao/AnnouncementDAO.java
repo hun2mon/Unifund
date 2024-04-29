@@ -31,6 +31,16 @@ public interface AnnouncementDAO {
 
 	String notiPhoto(int noti_idx);
 
+	int adminAnnUpdate(AnnouncementDTO announcementDTO);
+
+	void updateNotiPhoto(int noti_idx, String newAnnFileName, String notiPhotoDiv);
+
+	int photoCount(int noti_idx);
+
+	
+
+	
+
 
 
 
