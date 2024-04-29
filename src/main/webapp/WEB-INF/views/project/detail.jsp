@@ -25,8 +25,9 @@ div.div_main {
 .div_right {
 	width: 510px;
 	height: 900px;
-	background-color: FFFFCC;
-	margin-top: 10;
+	background-color: rgba(255, 255, 255, 0.15);
+	margin-top: 50;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 div.div_left {
@@ -58,21 +59,26 @@ div.div_left {
 }
 
 .project_bookmark {
-	margin-left: 60;
-	right: 0;
+    width: 220;
+    margin: 0 280;
 }
 
 .project_good {
 	margin-left: 5;
 }
 
+.project_delete{
+    width: 210;
+    display: flex;
+}
+
 .project_title {
 	font-size: 20px;
 	font-weight: 600;
-	width: 220;
+	width: 500;
 }
 
-.middle_top, .middle_middle, .middle_bottom, .money, .buy_reword,
+ .middle_middle, .middle_bottom, .money, .buy_reword,
 	.total_price, .mileage {
 	display: flex;
 }
@@ -94,13 +100,19 @@ div.div_left {
 }
 
 hr {
+    border: 1px solid;
 	margin: 0;
 	margin-top: 5;
 }
 
 .quantity {
-	margin-left: 300;
+	width: 0;
 }
+
+.quan{
+	margin-left: 315;
+}
+
 
 input[type=number] {
 	width: 50;
@@ -130,6 +142,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .mileage_form>div {
 	padding: 7;
+	width: 500;
 }
 
 .mileage_value, .use_mileage_value {
@@ -198,6 +211,10 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	text-align: center;
 }
 
+.use_mileage_value{
+	margin-left:  410;
+}
+
 .div_review {
 	width: 1060;
 	margin-left: 300;
@@ -216,7 +233,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .reviewFrom, .review_content {
 	width: 1000;
-	height: 100;
+	height: 170;
 }
 
 .sub_review {
@@ -309,13 +326,17 @@ input[name=repContent] {
 }
 
 .category {
-	width: 70;
+	width: 210;
 }
 
 #repCon{
 	width: 600px;
 	height: 200px;
 }
+.project_report{
+	width: 100;
+}
+
 </style>
 </head>
 <body>
@@ -330,7 +351,7 @@ input[name=repContent] {
 		<div class="div_right">
 			<div>
 				<div class="top">
-					<div class="category" style="width: 210;">카테고리 >
+					<div class="category">카테고리 >
 						${project.category}</div>
 					<div class="project_report" style="width: 100;">
 						<input type="button" clas	s="pro_button" value="프로젝트 신고" onclick="repForm()">
@@ -354,7 +375,7 @@ input[name=repContent] {
 					</div>
 					
 					<div class="userID">${project.userId}</div>
-					<div class="lisk_cnt" style="width: 30px;">
+					<div class="like_cnt">
 						${project.like_cnt}</div>
 				</div>
 				<div>
@@ -363,15 +384,16 @@ input[name=repContent] {
 				<div class="top_middle">
 					<div class="middle_top">
 						<div class="project_title">${project.pro_title}</div>
+						<c:if test="${mem_idx == project.mem_idx || mem_status == 'M'}">
 						<div class="project_delete">
 							<input type="button" class="pro_button" value="프로젝트 삭제"
 								onclick="delFrom()">
-							<form action="delete.do" method="post">
+							<form action="delete.do" method="post" class="proDelete">
 								<table align="center" class="proDel">
 									<tr>
-										<th scope="col">삭제 사유 <input type="text" class="category"
+										<th scope="col">삭제 사유 
+											<input type="text" class="category" name="pro_idx"
 											value="${project.pro_idx}" hidden>
-										</td>
 									</tr>
 									<tr>
 										<td>사유<br> <input type="text" name="reportContent"></td>
@@ -383,10 +405,10 @@ input[name=repContent] {
 									</tr>
 								</table>
 							</form>
-						</div>
-						<div class="buy_list">
 							<button class="buy_but" onclick="appListCall()">구매자 리스트</button>
 						</div>
+						</c:if>
+							
 						<div class="project_bookmark">
 							<button onclick="proFavorite()" class="favorites">즐겨찾기</button>
 							<button onclick="proLike(this)" class="like">좋아요</button>
@@ -417,9 +439,9 @@ input[name=repContent] {
 				</div>
 				<div class="bottom_top">
 					<div class="reword_name">${project.rew_name}</div>
-					<div class="ori_price" style="text-decoration: line-through">${project.ori_price}</div>
+					<div class="ori_price" style="text-decoration: line-through">${project.ori_price}원</div>
 					<div class="buy_reword">
-						<div class="reword_price">>> ${project.rew_price}</div>
+						<div class="reword_price">>> ${project.rew_price}원</div>
 						<div class="quantity">
 							<input type="number" value="1" class="quan"
 								onclick="click_price()" onkeyup="click_price()" min="1">
@@ -432,7 +454,7 @@ input[name=repContent] {
 				<div class="bottom">
 					<div class="total_price">
 						<div>총 리워드 금액</div>
-						<div class="final_price">${project.rew_price}</div>
+						<div class="final_price">${project.rew_price}원</div>
 					</div>
 					<div>
 						마일리지 사용 <input type="checkbox" class="mileageCheck"
@@ -463,15 +485,19 @@ input[name=repContent] {
 					<div>
 						<input type="text" class="path" value="${project.mem_detail}">
 					</div>
-					<div>
-						<input type="button" value="펀딩 신청하기" class="funding_button"
-							id="fund_apply" onclick="apply()">
-					</div>
-					<div>
-						<input type="button" value="펀딩 수정하기" class="funding_button"
-							id="fund_update"
-							onclick="location.href='./update.go?pro_idx=${project.pro_idx }'">
-					</div>
+					<c:if test="${mem_idx != project.mem_idx}">
+						<div>
+							<input type="button" value="펀딩 신청하기" class="funding_button"
+								id="fund_apply" onclick="applyPro()">
+						</div>
+					</c:if>
+					<c:if test="${mem_idx == project.mem_idx}">
+						<div>
+							<input type="button" value="펀딩 수정하기" class="funding_button"
+								id="fund_update"
+								onclick="location.href='./update.go?pro_idx=${project.pro_idx }'">
+						</div>
+					</c:if>
 				</div>
 			</div>
 		</div>
@@ -496,9 +522,8 @@ input[name=repContent] {
 				</div>
 				<div>
 					<div>
-						<input type="hidden" class="reviewFrom" name="pro_idx"
-							value="${project.pro_idx }"> <input type="text"
-							class="reviewFrom" name="revContent">
+						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }"> 
+						<input type="text" class="reviewFrom" name="revContent" min="5" maxlength="500" onkeyup="lengthCheck(this)">
 					</div>
 					<div>
 						<input type="file" class="file_select" name="photo"> <input
@@ -610,12 +635,12 @@ input[name=repContent] {
 			content += '<span class="spanMargin">평점 ' + item.rev_grade + '/5점</span>';
 			content += '<span class="spanMargin">작성자 : ' + item.mem_id + '</span>';
 			var date = new Date(item.rev_date);
-			var dateStr = date.toLocaleDateString("ko-KR");//en_US
+			var dateStr = date.toLocaleDateString("ko-KR");
 			content += '<span class="spanMargin">' + dateStr + '</span>';
 			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
 			content += '<div class="review_content">' + item.rev_content + '</div>';
 			content += '<div>';
-			if (item.mem_id == '${loginId}') {
+			if (item.mem_id == '${mem_id}') {
 				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '&pro_idx=' + item.pro_idx +'">리뷰삭제 </a>';	
 				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
 				$('input[name="revContent"]').attr('readonly',true);
@@ -627,14 +652,14 @@ input[name=repContent] {
 		$('#list').html(content);
 	};
 	
-	if ('${project.like_mem_idx}' == ${memIdx}) {
+	if ('${project.like_mem_idx}' == ${mem_idx}) {
 		$('.like').html('좋아요 취소');
 	}
 	
-	if ('${project.favorite_mem_idx}' == ${memIdx}) {
+	if ('${project.favorite_mem_idx}' == ${mem_idx}) {
 		$('.favorites').html('즐겨찾기 취소');
 	}
-	
+
 	if ('${project.fund_state}' == 'A') {
 		$('#fund_apply').val('펀딩 취소하기');
 	} else {
@@ -646,7 +671,7 @@ input[name=repContent] {
 	function click_price(){
 		var quantitys = $('.quan').val();
 		var price = ${project.rew_price} * quantitys;
-		$('.final_price').html(price);
+		$('.final_price').html(price + '원');
 	}
 	
 	var cnt = 0;
@@ -661,40 +686,103 @@ input[name=repContent] {
 		}
 	}
 	
-	function apply() {
+	if (${project.now_price} == ${project.target_price}){
+		$.ajax({
+			type:'post'
+			,url:'./stateChange.ajax'
+			,data:{
+				pro_idx:'${project.pro_idx}',
+				state:'A'
+			}
+			,dataType:'json'
+			,success:function(data){
+				if ('${project.fund_state}' != 'A') {
+					$('#fund_apply').val('펀딩마감');
+					$('#fund_apply').attr('readonly', true);
+				}
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}else{
+		$.ajax({
+			type:'post'
+			,url:'./stateChange.ajax'
+			,data:{
+				pro_idx:'${project.pro_idx}',
+				state:'B'
+			}
+			,dataType:'json'
+			,success:function(data){
+			
+			}
+			,error:function(error){
+				console.log(error);
+			}
+		});
+	}
+	
+	function applyPro() {
+		var quantitys = $('.quan').val();
+		var cash = '${project.cash}' + $('.use_mileage_value').val();
+		var price = ${project.rew_price} *quantitys;
 		if (${project.now_price} == ${project.target_price} && $('.funding_button').val() == '펀딩 신청하기') {
 			alert('모집금액이 충족되어 신청이 마감되었습니다.');
 		}else
 		if ($('.funding_button').val() == '펀딩 신청하기') {
-			var quantitys = $('.quan').val();
-			var cash = '${project.cash}' + $('.use_mileage_value').val();
-			var price = ${project.rew_price} *quantitys;
-			if (price > ${project.target_price}-${project.now_price}) {
-				alert('최대 구매 가능 개수를 초과했습니다.');
-				$('.quan').val(0);
-				$('.quan').focus();
-			} else if ($('.mileageCheck').prop('checked') == true) {
-				if ($('.use_mileage_value').val() < 500) {
-					alert('마일리지는 500이상부터 사용 가능합니다.');
-					$('.use_mileage_value').focus();
-				} else if ($('.use_mileage_value').val() > ${project.mileage}){
-					alert('보유한 마일리지보다 많습니다. 다시 입력해 주세요');
-					$('.use_mileage_value').val(0);
-					$('.use_mileage_value').focus();
-				} else if(price < $('.use_mileage_value').val()){
-					alert('마일리지 사용금액이 초과되었습니다. 다시 입력해 주세요');
-					$('.use_mileage_value').val(0);
-					$('.use_mileage_value').focus();
-				} else{
+			if(confirm("펀딩 하시겠습니까?")){
+				if (price > ${project.target_price}-${project.now_price}) {
+					alert('최대 구매 가능 개수를 초과했습니다.');
+					$('.quan').val(0);
+					$('.quan').focus();
+				} else if ($('.mileageCheck').prop('checked') == true) {
+					if ($('.use_mileage_value').val() < 500) {
+						alert('마일리지는 500이상부터 사용 가능합니다.');
+						$('.use_mileage_value').focus();
+					} else if ($('.use_mileage_value').val() > ${project.mileage}){
+						alert('보유한 마일리지보다 많습니다. 다시 입력해 주세요');
+						$('.use_mileage_value').val(0);
+						$('.use_mileage_value').focus();
+					} else if(price < $('.use_mileage_value').val()){
+						alert('마일리지 사용금액이 초과되었습니다. 다시 입력해 주세요');
+						$('.use_mileage_value').val(0);
+						$('.use_mileage_value').focus();
+					} else{
+						$.ajax({
+							type:'post'
+							,url:'./fund.do'
+							,data:{
+								pro_idx:'${project.pro_idx}',
+								mem_idx:'${mem_idx}',
+								rew_quantity:quantitys,
+								mileage:$('.use_mileage_value').val(),
+								total_price:price,
+								filter:'apply'
+							}
+							,dataType:'json'
+							,success:function(data){
+								alert('펀딩이 정상적으로 완료되었습니다.');
+								createForm();
+							}
+							,error:function(error){
+								console.log(error);
+							}
+						});
+					}
+				} else if (cash < price) {
+					alert('캐시+마일리지가 구매가격보다 낮습니다.');
+				} else {
 					$.ajax({
 						type:'post'
 						,url:'./fund.do'
 						,data:{
 							pro_idx:'${project.pro_idx}',
-							mem_idx:'1',
+							mem_idx:'${mem_idx}',
 							rew_quantity:quantitys,
 							mileage:$('.use_mileage_value').val(),
-							total_price:price
+							total_price:price,
+							filter:'apply'
 						}
 						,dataType:'json'
 						,success:function(data){
@@ -706,22 +794,23 @@ input[name=repContent] {
 						}
 					});
 				}
-			} else if (cash < price) {
-				alert('캐시+마일리지가 구매가격보다 낮습니다.');
-			} else {
+			}
+		} 
+		if ($('.funding_button').val() == '펀딩 취소하기'){
+			if(confirm("펀딩 하시겠습니까?")){
 				$.ajax({
 					type:'post'
-					,url:'./fund.do'
+					,url:'./fund_cancle.do'
 					,data:{
 						pro_idx:'${project.pro_idx}',
-						mem_idx:'1',
+						mem_idx:'${mem_idx}',
 						rew_quantity:quantitys,
-						mileage:$('.use_mileage_value').val(),
-						total_price:price
+						total_price:price,
+						filter:'cancle'
 					}
 					,dataType:'json'
 					,success:function(data){
-						alert('펀딩이 정상적으로 완료되었습니다.');
+						alert('펀딩이 정상적으로 최소되었습니다.');
 						createForm();
 					}
 					,error:function(error){
@@ -729,27 +818,6 @@ input[name=repContent] {
 					}
 				});
 			}
-		} 
-		if ($('.funding_button').val() == '펀딩 취소하기'){
-			$.ajax({
-				type:'post'
-				,url:'./fund_cancle.do'
-				,data:{
-					pro_idx:'${project.pro_idx}',
-					mem_idx:'1',
-					rew_quantity:quantitys,
-					mileage:$('.use_mileage_value').val(),
-					total_price:price
-				}
-				,dataType:'json'
-				,success:function(data){
-					alert('펀딩이 정상적으로 최소되었습니다.');
-					createForm();
-				}
-				,error:function(error){
-					console.log(error);
-				}
-			});
 		}
 	}
 	
@@ -839,6 +907,11 @@ input[name=repContent] {
 		location.href='./detail.go?pro_idx=' + ${project.pro_idx};
 	}
 	
+	function proDelete() {
+		alert('삭제되었습니다.');
+		$('.proDelete').submit();
+	}
+	
 	var msg = '${msg}';
 	if (msg != '') {
 		alert(msg);
@@ -849,6 +922,13 @@ input[name=repContent] {
 	        textarea.value = textarea.value.substring(0, maxLength);
 	        alert("최대 글자수를 초과했습니다.");
 	    }  
+	}
+	
+	function lengthCheck(text){
+		var content = $(text).val();
+		if (content.length >= 500) {
+			alert('입력 가능 글자수를 초과하였습니다.');
+		}
 	}
 	
 	function report() {

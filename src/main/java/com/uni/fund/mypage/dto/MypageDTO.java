@@ -36,6 +36,7 @@ public class MypageDTO {
    private String rep_content;
    private Date rep_date;
    private String pho_name;
+   private String rsn_content;
    private int rep_idx;
    private String trans_content;
    private int pro_idx;
@@ -249,6 +250,12 @@ public String getPho_name() {
 }
 public void setPho_name(String pho_name) {
    this.pho_name = pho_name;
+}
+public String getRsn_content() {
+	return rsn_content;
+}
+public void setRsn_content(String rsn_content) {
+	this.rsn_content = rsn_content;
 }
    
    

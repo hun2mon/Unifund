@@ -5,4 +5,12 @@
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.main.dao.NotiDAO">
 
+	<select id="notiList" resultType="com.uni.fund.main.dto.NotiDTO">
+		SELECT * FROM notification WHERE mng_idx = #{param1} AND noti_status = 'A' ORDER BY noti_idx DESC
+	</select>
+	
+	<update id="blindNoti">
+		UPDATE notification SET noti_status='B' WHERE noti_idx=#{param1}
+	</update>
+
 </mapper>

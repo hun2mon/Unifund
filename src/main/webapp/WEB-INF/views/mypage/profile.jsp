@@ -241,7 +241,7 @@ th, td {
    }
    .container {
     width: 100%;
-    text-align: center; /* 컨테이너 안의 내용을 가운데 정렬합니다. */
+    text-align: center;
    
 }
    
@@ -270,11 +270,8 @@ th, td {
 </style>
 </head>
 <body>
-<%@ include file = "/WEB-INF/views/common/mainHeader.jsp" %>
+	<%@ include file = "/WEB-INF/views/common/header.jsp" %>
    <hr class="hr-13">
-   
-   
-   
    <br>
    <div id="box">
       <div id="profile">
@@ -459,16 +456,19 @@ th, td {
    }
    
    function cashCharge() {
-      location.href = 'cashCharge.go';
+	   var url = "../money/charge.go"
+       var name = "charge";
+       var option = "width = 1000, height = 500, top = 100, left = 200, location = no"
+       window.open(url, name, option);
    }
    
    function cashList() {
-      location.href = 'cashList.go';
+      location.href = '/main/money/cashList.go?mem_idx=${mem_idx}';
    }
    
    function mileageList() {
-      location.href = 'mileageList.go';
-   }  
+      location.href = '/main/money/mileageList.go?mem_idx=${mem_idx}';
+   }
    
    function listCall(page) {
    $.ajax({
@@ -582,7 +582,7 @@ th, td {
       } else {
          for(item of list){
             content += '<tr>';
-            
+
             var startdate = new Date(item.pro_startdate);
             var startdateStr = startdate.toLocaleDateString("ko-KR");
             var pro_deadline = new Date(item.pro_deadline);
@@ -610,13 +610,11 @@ th, td {
                 content += '<td style="color: red;"><b>거절</b></td>';
                 
             }
-            
 
             content += '<td>' + startdateStr + '</td>';
             content += '<td>' + pro_deadlineStr + '</td>';
             content += '</tr>'; 
 
-            
          } 
       }
       $('#createList').html(content);
@@ -739,12 +737,15 @@ th, td {
     	
       }
       
+      function refuseReason(rsn_reason){
+    	  alert(rsn_reason);
+      }
+      
       function repComCall(rep_idx) {
     	  var url = "repComCall.go?rep_idx=" + rep_idx;
           var name = "repComCall";
           var option = "width = 600, height = 700, top = 100, left = 200, location = no"
           window.open(url, name, option);
 	 }
-
 </script>
 </html>
