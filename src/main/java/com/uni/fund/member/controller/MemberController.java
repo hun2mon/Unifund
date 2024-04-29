@@ -55,6 +55,16 @@ public class MemberController {
 		return "member/findId";
 	}
 	
+	@RequestMapping(value = "/member/logout.do")
+	public String logout(HttpSession session, Model model) {
+		session.removeAttribute("mem_idx");
+		session.removeAttribute("mem_status");
+		session.removeAttribute("mem_id");
+		session.removeAttribute("mem_status");
+		model.addAttribute("msg", "로그아웃 되었습니다.");
+		return "/main";
+	}
+	
 	
 	@RequestMapping(value="member/login.do")
 	public String login(Model model, HttpSession session, String id, String pw) {
@@ -63,6 +73,7 @@ public class MemberController {
 		
 		MemberDTO loginInfo = memberService.login(id, pw);
 		logger.info("login :" + loginInfo);
+
 		
 		if(loginInfo != null) {
 			page = "main";
@@ -70,6 +81,7 @@ public class MemberController {
 			session.setAttribute("mem_status", loginInfo.getMem_status());
 			session.setAttribute("mem_id", loginInfo.getMem_id());
 			session.setAttribute("mem_status", loginInfo.getMem_status());
+			logger.info("status:{}", loginInfo.getMem_status());
 		}else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
