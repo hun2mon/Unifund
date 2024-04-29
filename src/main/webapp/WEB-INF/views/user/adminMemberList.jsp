@@ -375,7 +375,7 @@ function pageNlist(page) {
 	                }else if(member.mem_status  == 'N'){
 	                	content += '탈퇴';	
 	                }else if(member.mem_status  == 'S'){
-	                	content += '정지';
+	                	content += '<span style="color:red">정지</span>';
 	                }else if(member.mem_status  == 'R'){
 	                	content += '가입거절';
 	                }else {

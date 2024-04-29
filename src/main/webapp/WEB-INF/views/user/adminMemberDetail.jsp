@@ -394,7 +394,7 @@ th.align {
 								<c:if test="${adminMemberDetail.mem_status == 'B' }">가입심사중</c:if>
 								<c:if test="${adminMemberDetail.mem_status == 'Y' }">활동중</c:if>
 								<c:if test="${adminMemberDetail.mem_status == 'N' }">탈퇴</c:if>
-								<c:if test="${adminMemberDetail.mem_status == 'S' }">정지</c:if>
+								<c:if test="${adminMemberDetail.mem_status == 'S' }"><span style="color:red">정지</span></c:if>
 								<c:if test="${adminMemberDetail.mem_status == 'R' }">가입거절</c:if>
 							</div>
 						</td>
