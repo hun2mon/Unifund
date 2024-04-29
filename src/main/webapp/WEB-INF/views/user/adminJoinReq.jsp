@@ -5,8 +5,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>:: UNIFUND 회원가입심사::</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 <style>
 .form-container {
@@ -59,15 +60,14 @@
 
 .submit_btn, .refuse_btn{
 	cursor:pointer;
-	height: 24px;
+	height: 35px;
     border-radius: 35px;
     border: none;
     color: white;
     font-weight: bold;
     background: #3b3b3b;
     position: relative;
-    padding-left: 20px;
-    padding-right: 20px;
+ 	width:80%;
 }
 
 hr {
@@ -146,8 +146,7 @@ td {
 }
 
 .search_container {
-	margin-left: 20px;
-	width: 230px;
+	width: 214px;
 	height: 43px;
 	align-items: center;
 	background: rgba(255, 255, 255, 0.15);
@@ -160,18 +159,20 @@ td {
 }
 
 #search_btn {
-	width: 85px;
+	width: 50px;
 	position: absolute;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	box-sizing: border-box;
 	font-size: 16px;
+	color: black;
+    margin-right: 43px;
+    margin-top: 14px;
 }
 
 #keyword {
-	width: 150px;
+	width: 130px;
 	position: relative;
-	padding: 10px;
 	border-radius: 5px;
 	box-sizing: border-box;
 	font-size: 16px;
@@ -331,8 +332,8 @@ td {
 		</div>
 			<div class="top_content" style="height:8%;">
 				<div class="search_container">
-					<i id="search_button" class="fa fa-search"></i> <input type="text"
-						id="keyword" value="${keyword}"
+					<i id="search_button" class="fa fa-search" style="color: black;margin-right: 43px; margin-top: 14px;"></i> 
+					<input type="text" id="keyword" value="${keyword}"
 						onKeyPress="if(event.keyCode==13) { $('#search_button').click();}" />
 				</div>
 			</div>
@@ -352,8 +353,8 @@ td {
 					<th>이름</th>
 					<th>회원상태</th>
 					<th>가입날짜</th>
-					<th>승인처리</th>
-					<th>거절처리</th>
+					<th>승인</th>
+					<th>거절</th>
 					</tr>
 				</thead>
 				<tbody id="dataList" style="text-align:center">
@@ -364,7 +365,6 @@ td {
 		</div>
 	</div>
 	<input type="hidden" id="searchIn" value="" />
-	<input type="hidden" id="searchType" value="M" />
 	<div class="modal-container"></div>
 </body>
 <script>
@@ -377,141 +377,151 @@ $('#search_button').click(function(){
 	var keyword = $('#keyword').val();
 	
 	$('#searchIn').val(keyword);
-	pageNlist();
-});
-
-$('#keywordType').change(function(){
-	var keyword = $('#keyword').val();
-	
-	$('#searchIn').val(keyword);
-	pageNlist();
+	pageNlist(1);
 });
 
 function pageNlist(page) {
-	var searchType = $('#keywordType').val();
     var keyword = $('#searchIn').val();
 
     $.ajax({
         type: 'get',
         url: './adminMemberJoinReq.ajax',
         data:{
-			pg:page,
-			keyword:keyword		
-		},
-		 success: function(data) {
-	            var content = '';
-	            var a = '';
-	            var none = '';
-	            var modal = '';
-	            var pg = data.pg;
-	            var startPage = data.startPage;
-	            var endPage = data.endPage;
-	            var totalP = data.totalP;
-				
-	            if(data.joinMemList.length == 0){
-	            	none += '<h1>결과가 존재하지 않습니다.</h1>';
- 	            }
-	            
-	            $.each(data.joinMemList, function(i, member) {
-	            	console.log(data.memberList)
-	                content += '<tr>';
-	                content += '<td style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'./memDetail.go?mem_idx=' + member.mem_idx + '\'">' + member.mem_id + '</td>';
-	                content += '<td>' + member.mem_name + '</td>';
-	                content += '<td>'
-	                if(member.mem_status  == 'M') {
-	                	content += '관리자';	
-	                }else if(member.mem_status  == 'B'){
-	                	content += '가입심사중';	
-	                }else if(member.mem_status  == 'Y'){
-	                	content += '활동중';	
-	                }else if(member.mem_status  == 'N'){
-	                	content += '탈퇴';	
-	                }else if(member.mem_status  == 'S'){
-	                	content += '정지';
-	                }else{
-	                	content += '알수없음';
-	                }
-	                content += '</td>';
-	                
-	                var date = new Date(member.mem_joindate);
-	    			var dateStr = date.toLocaleDateString("ko-KR");//en_US지
-	                content += '<td>' + dateStr + '</td>';
-	                
-	                content += '<td><button id="submit" class="submit_btn" style="background: #77ce11;" data-mem="'+ member.mem_idx +'">승인</button></td>';
-	    			content += '<td><button class="refuse_btn" style="background: #ee2a2a;" onclick="refuse()">거절 </button></td>';
-	    			
-	                content += '</tr>';
-	                
-	                modal += '<div class="modal">'; 
-		        	modal += '<div class="modal-content">'; 
-		        	modal += '<span class="close-button"><h2>X</h2></span>'; 
-		        	modal += '<h3 class="title"> </h3> ';
-		        	modal += '<p><div class="box">';
-		        	modal += '<h2>가입을 승인하시겠습니까?</h2>';
-		        	modal += '</div></p>';
-		        	modal += '<input type="button" id="cancel" class="cancelc" value="취소"> ';
-		        	modal += '<input type="button" id="ok" class="ok" value="동의"> ';
-		        	modal += '</div> ';
-		        	modal += '</div>';
-	                
-	            });
-	            
-	            if (startPage > 5) {
-	                a += '<a class="paging" href="#" onclick="pageNlist(' + (startPage - 1) + '); return false;">이전</a>';
-	            }
-	            for (var i = startPage; i <= endPage; i++) {
-	                if (pg !== i) {
-	                    a += '<a class="paging" href="#" onclick="pageNlist(' + i + '); return false;">' + i + '</a>';
-	                } else {
-	                    a += '<a class="paging currentPaging" href="#" onclick="pageNlist(' + i + '); return false;">' + i + '</a>';
-	                }
-	            }
-	            if (endPage < totalP) {
-	                a += '<a class="paging" href="#" onclick="pageNlist(' + (endPage + 1) + '); return false;">다음</a>';
-	            }
-	            
-	           	
-	            $("#dataList").html(content);
-	            $('.paging_container').html(a);
-	            $('.empty-container').html(none);
-	            $('.modal-container').html(modal)
-	            
-	            var modal = document.querySelector(".modal"); 
-	            var submit_btn = document.querySelector(".submit_btn"); 
-	            var close = document.querySelector(".close-button"); 
-	            var cancel = document.querySelector(".cancelc");
+            pg:page,
+            keyword:keyword        
+        },
+        success: function(data) {
+            var content = '';
+            var none = '';
+            var a = '';
+            var modal = '';
 
-	            function openModal() { 
-	                modal.classList.toggle("show-modal"); 
-	            }
+            var pg = data.pg;
+            var startPage = data.startPage;
+            var endPage = data.endPage;
+            var totalP = data.totalP;
+            
+            if(data.joinMemList.length == 0){
+                none += '<h1>결과가 존재하지 않습니다.</h1>';
+            }
 
-	            function onClick(event) { 
-	                if (event.target == modal) { 
-	                	openModal(); 
-	                } 
-	            }
+            $.each(data.joinMemList, function(i, member) {
+                content += '<tr>';
+                content += '<td style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'./memDetail.go?mem_idx=' + member.mem_idx + '\'">' + member.mem_id + '</td>';
+                content += '<td>' + member.mem_name + '</td>';
+                content += '<td>'
+                if(member.mem_status  == 'M') {
+                    content += '관리자';    
+                }else if(member.mem_status  == 'B'){
+                    content += '가입심사중';    
+                }else if(member.mem_status  == 'Y'){
+                    content += '활동중';    
+                }else if(member.mem_status  == 'N'){
+                    content += '탈퇴';    
+                }else if(member.mem_status  == 'S'){
+                    content += '정지';
+                }else if(member.mem_status  == 'R'){
+                    content += '거절';
+                }else{
+                    content += '알수없음';
+                }
+                content += '</td>';
+                
+                var date = new Date(member.mem_joindate);
+                var dateStr = date.toLocaleDateString("ko-KR");//en_US지
+                content += '<td>' + dateStr + '</td>';
+                
+               	content += '<td><button class="submit_btn" style="background: #77ce11;" data-mem="'+ member.mem_idx +'">승인</button></td>';
+               	content += '<td><button class="refuse_btn" style="background: #ee2a2a;" data-mem="'+ member.mem_idx +'">거절 </button></td>';
+                
+                content += '</tr>';
+            });
+            
+            if (startPage > 5) {
+                a += '<a class="paging" href="#" onclick="pageNlist(' + (startPage - 1) + '); return false;">이전</a>';
+            }
+            for (var i = startPage; i <= endPage; i++) {
+                if (pg !== i) {
+                    a += '<a class="paging" href="#" onclick="pageNlist(' + i + '); return false;">' + i + '</a>';
+                } else {
+                    a += '<a class="paging currentPaging" href="#" onclick="pageNlist(' + i + '); return false;">' + i + '</a>';
+                }
+            }
+            if (endPage < totalP) {
+                a += '<a class="paging" href="#" onclick="pageNlist(' + (endPage + 1) + '); return false;">다음</a>';
+            }
+            
+            $("#dataList").html(content);
+            $('.paging_container').html(a);
+            $('.empty-container').html(none);
 
-	            submit_btn.addEventListener("click", openModal); 
-	            close.addEventListener("click", openModal); 
-	            cancel.addEventListener("click", openModal); 
-	            window.addEventListener("click", onClick); 
-	            
-	        },
-	        error: function(xhr, status, error) {
-	            console.error(xhr.responseText);
-	        }
+            function openModal(memIdx,btn) {
+                var modal = '<div class="modal">'; 
+                modal += '<div class="modal-content">'; 
+                modal += '<span class="close-button"><h2>X</h2></span>'; 
+                modal += '<h3 class="title"> </h3> ';
+                modal += '<p><div class="box">';
+                if(btn === 'submit'){
+                	modal += '<h2>가입을 승인하시겠습니까?</h2>';
+                } else if(btn === 'refuse'){
+                	modal += '<h2>가입을 거절하시겠습니까?</h2>';
+                }
+                modal += '</div></p>';
+                modal += '<input type="button" id="cancelc" class="cancelc" value="취소"> ';
+                modal += '<input type="button" id="ok" class="ok" value="동의"> ';
+                modal += '</div> ';
+                modal += '</div>';
+
+                $('.modal-container').html(modal);
+                $('.modal').addClass("show-modal");
+
+                $('.ok').click(function(){
+                    console.log(memIdx);
+                   	var urlInfo = '';
+                   	if(btn === 'submit'){
+                   		urlInfo = './adminMemberSubmitStatus.ajax';
+                   	}else if(btn === 'refuse'){
+                   		urlInfo = './adminMemberRefuseStatus.ajax';
+                   	}
+                    $.ajax({
+                        type:'get',
+                        url: urlInfo,
+                        data: {
+                            mem_idx : memIdx
+                        },
+                        success: function(data) {
+                            console.log("inininin");
+                            	pageNlist(pg);
+                            	closeModal();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+                
+                $('.close-button, .cancelc').click(closeModal);
+            }
+            
+            function closeModal() {
+                $('.modal').removeClass("show-modal");
+            }
+
+            $(document).on('click','.submit_btn',function(){
+                var memIdx = $(this).attr('data-mem');
+                openModal(memIdx,'submit');
+            });
+            
+            $(document).on('click','.refuse_btn',function(){
+                var memIdx = $(this).attr('data-mem');
+                openModal(memIdx,'refuse');
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
     });
 }
-
-
-$(document).on('click','#submit',function(){
-	alert("dddddㅣ");
-	var memIdx = $(this).attr('data-mem');
-	openModal();
-	console.log("memIdx::"+ memIdx);
-	
-});
-
 
 </script>
 </html>
