@@ -325,7 +325,6 @@
 	function checkPassword() {
 	    const password = document.getElementById('passwordInput').value;
 	    const pass = window.passToCompare; // 비교할 비밀번호를 전역 변수에서 가져옴
-<<<<<<< HEAD
 		const qnaIdx = window.qnaIdxToCompare;
 	    console.log(pass);
 	    
@@ -355,23 +354,6 @@
 	    		console.log(error);
 	    	}
 	    });
-	   
-=======
-		const qnaIdx = window.qnaIdxTocompare;
-	    console.log(pass);
-	    if (password === pass) {
-	        // 비밀번호가 일치하는 경우
-	        
-	        alert('비밀번호가 일치합니다.');
-	        closeModal();
-	        location.href = 'qnaDetail.go?qna_idx='+qnaIdx;
-	    } else {
-	        // 비밀번호가 일치하지 않는 경우	      
-	        alert('비밀번호가 일치하지 않습니다.')
-	        
-	        closeModal();
-	    }
->>>>>>> origin/master
 	}
 
     function closeModal() {
