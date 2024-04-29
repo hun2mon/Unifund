@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.uni.fund.member.dto.MemberDTO;
-import com.uni.fund.project.dto.ProjectDTO;
 
 public interface MemberDAO {
 

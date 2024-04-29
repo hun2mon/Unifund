@@ -3,11 +3,8 @@ package com.uni.fund.member.controller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dto.MemberDTO;
 import com.uni.fund.member.service.MemberService;
-import com.uni.fund.project.dto.ProjectDTO;
+
 
 @Controller
 public class MemberController {	
@@ -54,7 +51,6 @@ public class MemberController {
 		logger.info("아이디찾기 페이지 이동");
 		return "member/findId";
 	}
-	
 	
 	//비밀번호찾기 페이지 이동
 	@RequestMapping(value = "/member/findPw.go")

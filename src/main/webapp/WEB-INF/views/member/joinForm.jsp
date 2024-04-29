@@ -90,29 +90,26 @@
 	text-align: left;
 }
 
-
 *, *:before, *:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  background: #ededed;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+	background: #ededed;
 }
 
 input, button {
-  border: none;
-  outline: none;
-  background: none;
-  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+	border: none;
+	outline: none;
+	background: none;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 
 /* Remaining styles from your CSS file */
-
-
-input[type="text"], input[type="password"],input[type="button"]  {
+input[type="text"], input[type="password"], input[type="button"] {
 	border: 1px solid #ccc; /* 윤곽선을 회색으로 지정 */
 	border-radius: 5px; /* 윤곽선의 모서리를 둥글게 만듦 */
 	padding: 10px; /* 입력창 내부 여백 설정 */
@@ -120,87 +117,94 @@ input[type="text"], input[type="password"],input[type="button"]  {
 	box-sizing: border-box; /* 입력창의 너비에 padding과 border를 포함하도록 설정 */
 }
 
-
 input[type="submit"]:hover, input[type="button"]:hover {
 	background: #2e8b57; /* 마우스 호버 시 버튼 배경색 변경 */
-	
-	.button-container {
-  text-align: right; /* 오른쪽 정렬 */
+	.
+	button-container
+	{
+	text-align
+	:
+	right; /* 오른쪽 정렬 */
 }
+
 }
 
 /* 버튼 스타일 */
 input[type="button"] {
-  background:  rgb(0, 196, 196); /* 배경색 */
-  color: white; /* 글자색 */
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
+	background: rgb(0, 196, 196); /* 배경색 */
+	color: white; /* 글자색 */
+	border: none;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
 }
 
 /* 버튼 호버 효과 */
 input[type="button"]:hover {
-  background:  rgb(0, 156, 156); /* 호버 시 배경색 변경 */
+	background: rgb(0, 156, 156); /* 호버 시 배경색 변경 */
 }
 
 /* 파일 첨부 버튼 스타일 */
 input[type="file"] {
-  background-color: #f0f0f0; /* 배경색 */
-  color: #333; /* 글자색 */
-  border: 1px solid #ccc; /* 테두리 */
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
+	background-color: #f0f0f0; /* 배경색 */
+	color: #333; /* 글자색 */
+	border: 1px solid #ccc; /* 테두리 */
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
 }
 
 /* 인증 버튼 스타일 */
 input[type="button"][value="인증"] {
-  background-color: #ff9900; /* 배경색 */
-  color: white; /* 글자색 */
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
+	background-color: #ff9900; /* 배경색 */
+	color: white; /* 글자색 */
+	border: none;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
 }
 
 /* 인증 버튼 호버 효과 */
 input[type="button"][value="인증"]:hover {
-  background-color: #e68a00; /* 호버 시 배경색 변경 */
+	background-color: #e68a00; /* 호버 시 배경색 변경 */
 }
-
 
 /* 회원가입 버튼 스타일 */
 button[type="button"] {
-  background-color: #007bff; /* 배경색 */
-  color: white; /* 글자색 */
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
+	background-color: #007bff; /* 배경색 */
+	color: white; /* 글자색 */
+	border: none;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
 }
 
 /* 회원가입 버튼 호버 효과 */
 button[type="button"]:hover {
-  background-color: #0056b3; /* 호버 시 배경색 변경 */
-  
-  
-} 
-
-  #profileImage {
-    display: block;
-    width: 150px;
-    height: 150px;
-    margin-right: 10px; /* 오른쪽 마진을 0으로 설정하여 이미지를 오른쪽으로 이동 */
+	background-color: #0056b3; /* 호버 시 배경색 변경 */
 }
 
+#profileImage {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-left: 200px;
+	margin-top: 25px;
+	margin-bottom: 20px;
+}
+
+form {
+	margin-left: 677px;
+}
+}
 </style>
 </head>
 <body>
@@ -208,22 +212,20 @@ button[type="button"]:hover {
 
 	<!--end 모달 팝업-->
 
-	<h3>UNIFUND 회원가입</h3>
+	<h2>▶UNIFUND 회원가입</h2>
 	<hr />
 	<form action="join.do" method="post" enctype="multipart/form-data">
-		<img id="profileImage" src= "/resources/images/chrome.png" alt="도라에몽헉헉헉" style="width: 100px; height: 100px; border-radius: 50%; display: block; margin-right: 50px; ">
-		
+		<img id="profileImage" src="../resources/images/default_image.png">
 		<table>
 			<tr>
 				<th>프로필 사진</th>
-				<td>
-				<input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" onchange="previewProfilePhoto(event)">
-				</td>
+				<td><input type="file" id="profilePhoto" name="profilePhoto"
+					accept="image/*" onchange="previewProfilePhoto(event)"></td>
 			</tr>
 			<tr>
 				<th>아이디</th>
 				<td><input type="text" name="mem_id" placeholder="아이디를 입력해주세요" />
-				 <input type="button" value="아이디체크" onclick="overlay()" /></td>
+					<input type="button" value="아이디체크" onclick="overlay()" /></td>
 			</tr>
 			<tr>
 				<th>비밀번호</th>
@@ -337,8 +339,9 @@ button[type="button"]:hover {
 <script>
 
 $(document).ready(function() {
+	
     var profileImage = $('#profileImage');
-    var defaultImageSrc = '/resources/images/chrome.png';
+    var defaultImageSrc = "../resources/images/default_image.png";
     
     // 이미지가 로드될 때 이벤트 핸들러 설정
     profileImage.on('load', function() {
@@ -355,7 +358,7 @@ $(document).ready(function() {
 
 
 function previewProfilePhoto(event) {
-    var input = event.target;
+	var input = event.target; //파일 선택(input) 엘리먼트
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -363,15 +366,18 @@ function previewProfilePhoto(event) {
             $('#profileImage').css('display', 'block');
         };
         reader.readAsDataURL(input.files[0]);
+    }else{
+    	 // 파일을 선택하지 않은 경우 기본 이미지로 설정
+        $('#profileImage').attr('src', 'resources/images/default_image.png');
+        $('#profileImage').css('display', 'block');
+  
     }
 }
 
-$(document).ready(function() {
-    var profileImage = $('#profileImage');
-    if (!profileImage.attr('src') || profileImage.attr('src').endsWith('chrome.png')) {
-        profileImage.css('display', 'block');
-    }
-});
+
+
+
+
 
 function showFirstAlert() {
     alert("인증번호를 확인 해주세요!");
@@ -409,8 +415,6 @@ $('#mem_confirm').on('keyup', function(){
 	
 	
 	function join(){
-		
-		
 		
 		var $id = $('input[name="mem_id"]');
 		var $pw = $('input[name="mem_pw"]');

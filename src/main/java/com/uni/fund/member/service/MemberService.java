@@ -15,15 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dao.MemberDAO;
 import com.uni.fund.member.dto.MemberDTO;
-import com.uni.fund.mypage.dto.MypageDTO;
-import com.uni.fund.project.dto.ProjectDTO;
+
+
 
 @Service
 public class MemberService {
 		@Autowired MemberDAO memberDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public String file_root = "/Users/hsg/upload/Unifund";
+	public String file_root = "C:/upload/";
 	
 	
 	public MemberDTO login(String id, String pw) {

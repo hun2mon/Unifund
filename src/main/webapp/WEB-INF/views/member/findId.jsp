@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
@@ -8,84 +8,86 @@
 <link rel="stylesheet" href="/resources/css/common.css" type="text/css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
+input[value="인증번호 받기"] {
+	margin-left: -46px; /* 왼쪽 여백을 10px로 설정 */
+}
+
 #submit, #cancel {
-   background-color: #f0f0f0;
-   border: none;
-   padding: 15px 30px;
-   font-size: 16px;
-   width: 100px;
-   margin-top: 20px;
-   width: 210px;
-   margin-right: 10px;
-   border-radius: 20px;
-   box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
-   transition: all 0.3s ease;
+	background-color: #f0f0f0;
+	border: none;
+	padding: 15px 30px;
+	font-size: 16px;
+	width: 100px;
+	margin-top: 20px;
+	width: 210px;
+	margin-right: 10px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
 }
 
 #submit:hover, #cancel:hover {
-   box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .modal {
-   text-align: center;
-   position: fixed;
-   left: 0;
-   top: 0;
-   width: 100%;
-   height: 100%;
-   background-color: rgba(0, 0, 0, 0.5);
-   opacity: 0;
-   visibility: hidden;
-   transform: scale(1.1);
-   transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform
-      0.25s;
+	text-align: center;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(1.1);
+	transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform
+		0.25s;
 }
 
 .box {
-   width: 450px;
-   height: 280px;
-   overflow: auto;
-   border: 1px solid gray;
-   padding: 0 0.5em;
-   background-color: #fcfcfc;
+	width: 450px;
+	height: 280px;
+	overflow: auto;
+	border: 1px solid gray;
+	padding: 0 0.5em;
+	background-color: #fcfcfc;
 }
 
 .modal-content {
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-   background-color: #e6e6e6;
-   padding: 1rem 1.5rem;
-   width: 500px;
-   height: 450px;
-   border-radius: 0.5rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #e6e6e6;
+	padding: 1rem 1.5rem;
+	width: 500px;
+	height: 450px;
+	border-radius: 0.5rem;
 }
 
 .close-button {
-   float: right;
-   width: 35px;
-   line-height: 0.5rem;
-   height: 35px;
-   text-align: center;
-   cursor: pointer;
-   border-radius: 0.25rem;
+	float: right;
+	width: 35px;
+	line-height: 0.5rem;
+	height: 35px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 0.25rem;
 }
 
 .close-button:hover {
-   box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
 .show-modal {
-   opacity: 1;
-   visibility: visible;
-   transform: scale(1.0);
-   transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-   
-input="submit"] {
-	border: none;
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+	input ="submit"] { border : none;
 	outline: none;
-	background:  rgb(0, 196, 196); /* 버튼 배경색 변경 */
+	background: rgb(0, 196, 196); /* 버튼 배경색 변경 */
 	color: #fff; /* 버튼 글자색 변경 */
 	padding: 10px 80px; /* 버튼 내부 여백 조정 */
 	font-size: 16px; /* 버튼 폰트 사이즈 조정 */
@@ -94,77 +96,115 @@ input="submit"] {
 	transition: background-color 0.3s; /* 배경색 변경 시 부드러운 전환 효과 */
 	margin-top: 10px; /* 버튼 위쪽 여백 추가 */
 }
-
-
-
-
 </style>
 </head>
 <body>
-   <h2>▶UNIFUND ID찾기 페이지</h2>
-   <hr />
-   <form action="findId.go" method="post"></form>
+	<h2>▶UNIFUND ID찾기 페이지</h2>
+	<hr />
+	<form action="findId.go" method="post"></form>
 
-   <table>
-      <tr>
-         <th colspan="2">회원정보에 등록한 휴대전화로 인증</th>
-      </tr>
-      <tr>
-         <td colspan="2"><br></td>
-         <!-- 빈 줄 -->
-      </tr>
-      <tr>
-         <th>이름</th>
-         <td><input type="text" id="name" name="mem_name" placeholder="내용을 입력해주세요"></td>
-      </tr>
-      <tr>
-         <th>휴대전화</th>
-      	<td><input type="text" id="mem_number" name="mem_number" placeholder="전화번호를 입력하세요" class="custom-input"></td>
-         <td><input type="button"  value="인증번호 받기" onclick="showFirstAlert()"></td>
-      </tr>
-      <tr>
-         <th>인증번호</th>
-         <td><input type="text" name="mem_auth" placeholder="인증번호 숫자 입력 ">
-         <input type="button" value="인증" onclick= "showSecondAlert()"></td>
-      </tr>
-      <tr>
-         <td colspan="2"><br></td>
-      </tr>
-      
-      <tr>
-      <td colspan="2" style="text-align: center;">
-         <input type="button" value="취소"onclick="cancelVerification()">
-         <input type="button" id="nextButton" class="agreement" value="다음" onclick="openModalIfAuthCorrect()" >      
-      </td>
-       </tr>
-       
-       
-   </table>
-   		
-      <div class="modal">
-      <div class="modal-content">
-         <span class="close-button" onclick="closeModal()"><h2>X</h2></span>
-         <h3 class="title">아이디 찾기창</h3>
-         <div class="box">
-            <p>
-               고객님의 정보와 일치하는 아이디 입니다.
-            </p>
-            
-            <p class="pikachyu">
-                userid1111
-            </p>
-                
-         </div>
-         <input type="button" id="submit" class="submit" value="로그인하러가기"> 
-        
-      </div>
-   </div>
-   <br>
-   <br> ${msg}
+	<table>
+		<tr>
+			<th colspan="2">회원정보에 등록한 휴대전화로 인증</th>
+		</tr>
+		<tr>
+			<td colspan="2"><br></td>
+			<!-- 빈 줄 -->
+		</tr>
+		<tr>
+			<th>이름</th>
+			<td><input type="text" id="name" name="mem_name"
+				placeholder="내용을 입력해주세요"></td>
+		</tr>
+		<tr>
+			<th>휴대전화</th>
+			<td><input type="text" id="mem_number" name="mem_number"
+				placeholder="전화번호를 입력하세요" class="custom-input"></td>
+			<td><input type="button" value="인증번호 받기"
+				onclick="showFirstAlert()"></td>
+		</tr>
+		<tr>
+			<th>인증번호</th>
+			<td><input type="text" name="mem_auth" placeholder="인증번호 숫자 입력 ">
+				<input type="button" value="인증" onclick="showSecondAlert()"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><br></td>
+		</tr>
+
+		<tr>
+			<td colspan="2" style="text-align: center;"><input type="button"
+				value="취소" onclick="cancelVerification()"> <input
+				type="button" id="nextButton" class="agreement" value="다음"
+				onclick="validateInputs()"></td>
+		</tr>
+
+
+	</table>
+
+	<div class="modal">
+		<div class="modal-content">
+			<span class="close-button" onclick="closeModal()">X</span>
+			<h3 class="title">아이디 찾기창</h3>
+			<div class="box">
+				<p>고객님의 정보와 일치하는 아이디 입니다.</p>
+
+				<p class="pikachyu">userid1111</p>
+
+			</div>
+			<input type="button" id="submit" class="submit" value="로그인하러가기">
+
+		</div>
+	</div>
+	<br>
+	<br> ${msg}
 
 
 </body>
 <script>
+
+
+function validateName() {
+    var name = document.getElementById('name').value;
+    var regex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]+$/; // 한글, 영문 대소문자만 허용
+
+    if (name === "") {
+        alert("이름을 입력하세요.");
+        return false;
+    } else if (!regex.test(name)) {
+        alert("이름은 한글 또는 영문 대소문자만 입력 가능합니다.");
+        return false;
+    }
+
+    return true;
+}
+
+function validatePhoneNumber() {
+    var phoneNumber = document.getElementById('mem_number').value;
+    var regex = /^[0-9-]+$/; // 숫자와 하이픈만 허용
+
+    if (phoneNumber === "") {
+        alert("휴대전화 번호를 입력하세요.");
+        return false;
+    } else if (!regex.test(phoneNumber)) {
+        alert("휴대전화 번호는 숫자와 하이픈(-)만 입력 가능합니다.");
+        return false;
+    }
+
+    return true;
+}
+
+
+function validateInputs() {
+    if (!validateName() || !validatePhoneNumber()) {
+        // 유효성 검사 실패
+        return;
+    }
+
+    // 유효성 검사 통과 시 다음 동작 수행
+    openModalIfAuthCorrect();
+}
+
 
    function showFirstAlert() {
       alert("인증번호가 발송되었습니다!");
@@ -181,7 +221,9 @@ input="submit"] {
    }
    
    
-   function openModalIfAuthCorrect() {
+   
+   
+  function openModalIfAuthCorrect() {
        var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
        if (inputAuthNumber === "0000") {
            openModal();
@@ -189,7 +231,8 @@ input="submit"] {
         console.log(mem_name);
    	    var phoneNumber = $('#mem_number').val();
    	 console.log(phoneNumber);
-   	    
+   	 
+   	 
    	    // AJAX 요청 보내기
    	    $.ajax({
    	        url: 'findId.ajax', // 실제 요청을 처리할 서버의 URL
