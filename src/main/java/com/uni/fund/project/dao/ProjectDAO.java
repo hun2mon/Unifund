@@ -8,7 +8,7 @@ import com.uni.fund.project.dto.ReviewDTO;
 
 public interface ProjectDAO {
 
-	ProjectDTO detail(String memIdx, String pro_idx);
+	ProjectDTO detail(int memIdx, String pro_idx);
 
 	int projectCreate(ProjectDTO projectDTO);
 
@@ -23,10 +23,6 @@ public interface ProjectDAO {
 	int funding(Map<String, String> map);
 
 	void moneyMng(Map<String, String> map);
-
-	int fundingCancle(Map<String, String> map);
-
-	void moneyRefund(Map<String, String> map);
 
 	int reviewDo(ProjectDTO proDTO);
 
@@ -44,13 +40,13 @@ public interface ProjectDAO {
 
 	Object allCount(int pagePerCnt, String pro_idx);
 
-	void likeDo(String pro_idx, String mem_idx);
+	void likeDo(String pro_idx, int mem_idx);
 
-	void likeCancle(String pro_idx, String mem_idx);
+	void likeCancle(String pro_idx, int mem_idx);
 
-	void favorite(String pro_idx, String mem_idx);
+	void favorite(String pro_idx, int mem_idx);
 
-	void favoriteCancle(String pro_idx, String mem_idx);
+	void favoriteCancle(String pro_idx, int mem_idx);
 
 	List<ProjectDTO> adminList(String category, int start, int pagePerCnt);
 	
@@ -85,6 +81,32 @@ public interface ProjectDAO {
 	void agree(String pro_idx);
 
 	void agreeHis(String pro_idx);
+
+	void refuse(String pro_idx);
+
+	void refuseHis(String pro_idx, String refuseContent);
+
+	void proDel(String pro_idx);
+
+	void proDelHis(String pro_idx, String reportContent);
+
+	String[] appList(String pro_idx);
+
+	void moneyRefund(int mem_idx, String pro_idx);
+
+	int fundingCancle(int mem_idx, String pro_idx);
+
+	void cashHis(Map<String, String> map);
+
+	void delCashHis(int parseInt, String pro_idx);
+
+	void mileageHis(Map<String, String> map);
+
+	void delMileHis(int parseInt, String pro_idx);
+
+	void stateChange(String pro_idx, String state);
+
+	int mileageSelect(Map<String, String> map);
 
 	void report(String pro_idx, String repContent, String mem_idx);
 	

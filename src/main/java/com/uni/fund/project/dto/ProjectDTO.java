@@ -43,6 +43,7 @@ public class ProjectDTO {
 	private String like_mem_idx;
 	private String favorite_mem_idx;
 	private String keyWord;
+	private String mile_use; 
 	
 	
 	public int getPro_idx() {
@@ -278,6 +279,12 @@ public class ProjectDTO {
 	}
 	public void setKeyWord(String keyWord) {
 		this.keyWord = keyWord;
+	}
+	public String getMile_use() {
+		return mile_use;
+	}
+	public void setMile_use(String mile_use) {
+		this.mile_use = mile_use;
 	}
 	
 }

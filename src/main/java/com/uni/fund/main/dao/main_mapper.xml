@@ -4,5 +4,26 @@
 >
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.main.dao.MainDAO">
+	<select id="mainProList" resultType="com.uni.fund.project.dto.ProjectDTO">
+		SELECT 
+			*,
+			(SELECT COUNT(mem_idx) FROM project_like pl  WHERE pl.pro_idx = p.pro_idx GROUP BY pro_idx) AS like_cnt,
+			(SELECT pho_name FROM photo ph WHERE ph.ref_idx = p.pro_idx AND pho_division = '프로젝트대표사진') AS pro_img_name,
+			(SELECT ROUND((SUM(pa.total_price) / (p.rew_price * p.rew_max)) * 100)
+			FROM project_apply pa
+			WHERE pa.pro_idx = p.pro_idx AND pa.fund_state='A' GROUP BY pa.pro_idx) AS progress,
+			(SELECT cate_name FROM category c WHERE c.cate_idx = p.cate_idx) AS category,
+			(SELECT mem_id FROM member m WHERE m.mem_idx = p.mem_idx) AS mem_id
+		FROM project p WHERE pro_state = 'C' ORDER BY like_cnt DESC, p.pro_idx DESC LIMIT 4;
+	</select>
+	
+	<select id="mainCrewList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+			*,
+			(SELECT COUNT(mem_idx) FROM crewMember_list cml WHERE cml.crew_idx = c.crew_idx) AS crew_mem_cnt,
+			(SELECT COUNT(crew_idx) FROM popularity p2 WHERE p2.crew_idx = c.crew_idx) AS crew_cool_cnt,
+			(SELECT pho_name FROM photo p3 WHERE p3.ref_idx = c.crew_idx AND p3.pho_division = '크루로고') AS pho_name
+		FROM crew c WHERE crew_status = 'A' ORDER BY crew_cool_cnt DESC, c.crew_idx DESC LIMIT 4; 
+	</select>
 
 </mapper>

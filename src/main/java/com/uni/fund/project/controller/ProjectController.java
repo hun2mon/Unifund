@@ -28,32 +28,36 @@ public class ProjectController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ProjectService projectService;
 
-
 	@RequestMapping(value = "/project/detail.go")
 	public String detail(Model model, HttpSession session, String row, String pro_idx) {
 		String page = "project/detail";
 		
-		session.setAttribute("loginId", "admin");
-		session.setAttribute("memIdx", "1");
-		model.addAttribute("mem_idx",1);
-		
-		String pro_idxState= projectService.stateCheck(pro_idx);
-		if (pro_idxState.equals("A")) {
-			String memIdx = (String) session.getAttribute("memIdx");
-			page = "project/adminJudge";
-			ProjectDTO project = projectService.detail(pro_idx,memIdx);
-			model.addAttribute("project", project);
-		}else {
-			String memIdx = (String) session.getAttribute("memIdx");
-			ProjectDTO project = projectService.detail(pro_idx,memIdx);
-			model.addAttribute("project", project);
-			logger.info("memIdx : " + memIdx);
-			logger.info("row = " + row);
-			logger.info("pro_idx = " + pro_idx);
-			if (row != null) {
-				model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
-			}			
+		if (session.getAttribute("mem_id") != null) {
+			logger.info("loginId : {}", session.getAttribute("mem_id"));
+			logger.info("mem_idx : {}", session.getAttribute("mem_idx"));
+			
+			String pro_idxState= projectService.stateCheck(pro_idx);
+			if (pro_idxState.equals("A")) {
+				int memIdx = (int) session.getAttribute("mem_idx");
+				page = "project/adminJudge";
+				ProjectDTO project = projectService.detail(pro_idx,memIdx);
+				model.addAttribute("project", project);
+			}else {
+				int memIdx = (int) session.getAttribute("mem_idx");
+				ProjectDTO project = projectService.detail(pro_idx,memIdx);
+				model.addAttribute("project", project);
+				logger.info("memIdx : " + memIdx);
+				logger.info("row = " + row);
+				logger.info("pro_idx = " + pro_idx);
+				if (row != null) {
+					model.addAttribute("msg", "리뷰가 정상적으로 삭제되었습니다.");
+				}			
+			}
+		} else {
+			page = "member/login";
+			model.addAttribute("msg", "로그인이 필요한 서비스 입니다.");
 		}
+		
 		return page;
 	}
 	
@@ -71,7 +75,7 @@ public class ProjectController {
 		return "project/adminList";
 	}
 	
-	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.GET)
+	@RequestMapping(value = "/project/appList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> appListCall(String page, String cnt, String pro_idx){
 		logger.info("appListCall요청 들어옴");
@@ -325,12 +329,12 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/project/review/write.do", method = RequestMethod.POST)
-	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model) {
+	public String reviewWrite(MultipartFile photo, @RequestParam Map<String,String> param, Model model,HttpSession session) {
 		String page = "redirect:/";
 		logger.info("photo : {}", photo);
 		logger.info("param : {}", param);
 		logger.info("param_pro_idx : {}",param.get("pro_idx"));
-		int mem_idx = 1;
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		int row = projectService.reviewDo(photo,param,mem_idx);
 		logger.info("row : {}",row);
 		return "redirect:/project/detail.go?pro_idx=" + param.get("pro_idx");
@@ -366,22 +370,30 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		logger.info("msg : {}", msg);
 		logger.info("pro_idx : {}", pro_idx);
-		logger.info("session : {}", session.getAttribute("memIdx"));
-		String mem_idx = (String) session.getAttribute("memIdx");
+		logger.info("session : {}", session.getAttribute("mem_idx"));
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		projectService.likeDo(pro_idx,msg,mem_idx);
-		logger.info("session : {}", session.getAttribute("memIdx"));
+		logger.info("session : {}", session.getAttribute("mem_idx"));
 		return map;
 	}
 	
 	@RequestMapping(value = "/project/delForm.go")
-	public String delFormGo() {
-		return "project/delForm";
+	public String delFormGo(HttpSession session) {
+		String page = "member/login";
+		if (session.getAttribute("mem_id") != null) {
+			page = "project/delForm";
+		}
+		return page;
 	}
 	
 	@RequestMapping(value = "/project/delete.do", method = RequestMethod.POST)
-	public String proDel() {
+	public String proDel(String pro_idx, String reportContent) {
 		logger.info("del요청 들어옴");
-		return "redirect:/project/detail.go";
+		logger.info("pro_idx :{}", pro_idx);
+		logger.info("reportContent :{}", reportContent);
+		projectService.proDel(pro_idx, reportContent);
+		
+		return "redirect:/project/list.go";
 	}
 	
 	@RequestMapping(value = "/project/report.do", method = RequestMethod.POST)
@@ -434,7 +446,23 @@ public class ProjectController {
 		return "redirect:/project/adminList.go";
 	}
 	
+	@RequestMapping(value = "/project/refuse.do", method = RequestMethod.POST)
+	public String refuse(String pro_idx, String refuseContent) {
+		logger.info("pro_idx : {}", pro_idx);
+		logger.info("refuseContent : {}", refuseContent);
+		projectService.refuse(pro_idx,refuseContent);
+		return "redirect:/project/adminList.go";
+	}
 	
+	@RequestMapping(value = "/project/stateChange.ajax")
+	@ResponseBody
+	public Map<String, Object> stateChange(String pro_idx, String state){
+		Map<String, Object> map = new HashMap<String, Object>();
+		logger.info("stateChange : {}",pro_idx);
+		logger.info("stateChange : {}",state);
+		projectService.stateChange(pro_idx,state);
+		return map;
+	}
 	
 	
 	

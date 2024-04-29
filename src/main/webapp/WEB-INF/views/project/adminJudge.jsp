@@ -289,7 +289,7 @@ input[name=reportTitle] {
 	width: 550;
 }
 
-input[name=reportContent] {
+input[name=refuseContent] {
 	width: 600;
 	height: 200;
 }
@@ -353,8 +353,27 @@ input[name=reportContent] {
 					<div>
 						<input type="button" value="거절" class="funding_button"
 							id="fund_update"
-							onclick="location.href='pro_update.go?pro_idx=${project.pro_idx }'">
+							onclick="delFrom()">
 					</div>
+					<div class="project_delete">
+							<form action="refuse.do" method="post">
+								<table align="center" class="proDel">
+									<tr>
+										<th scope="col">거절사유 
+										<input type="text" name="pro_idx" value="${project.pro_idx}" hidden>
+										</td>
+									</tr>
+									<tr>
+										<td>사유<br> <input type="text" name="refuseContent"></td>
+									</tr>
+									<tr>
+										<td class="button"><input type="button" value="확인"
+											onclick="proRefuse()">
+											<input type="button" onclick="delCancle()" value="취소"></td>
+									</tr>
+								</table>
+							</form>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -364,5 +383,20 @@ input[name=reportContent] {
 	function agree(){
 		location.href='./agree.do?pro_idx=' + ${project.pro_idx};
 	}
+	
+	function delCancle() {
+		$('.proDel').css('display','none');
+	}
+	function delFrom() {
+		$('.proDel').css('display','block');
+		$('.proDel').css('position','relative');
+	}
+	function proRefuse(){
+		alert('거절되었습니다');
+		$('.proDel').css('display','none');
+		$('form').submit();
+	}
+	
+	
 </script>
 </html>

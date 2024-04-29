@@ -1,6 +1,7 @@
 package com.uni.fund.crew.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uni.fund.crew.dto.CrewDTO;
 import com.uni.fund.crew.service.CrewService;
 
 @Controller
@@ -139,6 +141,35 @@ public class CrewController {
 		
 	}
 	
+	@RequestMapping(value = "/crew/judgeList.go")
+	public String judgeListGo(HttpSession session, String crew_idx, Model model) {
+		String page = "member/login";
+		crew_idx = "1";
+		if (session.getAttribute("mem_id") != null) {
+			model.addAttribute("crew_idx", crew_idx);
+			page = "crew/judgeList";
+		}
+		return page; 
+	}
+	
+	@RequestMapping(value = "/crew/appList.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> crewAppList(String crew_idx,String cnt, String page){
+		logger.info("crew_idx : {}", crew_idx);
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		Map<String, Object> map =  crewService.appList(crew_idx,currPage, pagePerCnt);
+		return map;
+	}
+	
+	@RequestMapping(value = "/crew/approve.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public void approve(String mem_idx, String crew_idx) {
+		crewService.approve(mem_idx,crew_idx);
+	}
 	
 	
 	

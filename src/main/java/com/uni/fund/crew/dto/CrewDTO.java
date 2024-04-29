@@ -22,9 +22,13 @@ public class CrewDTO {
 	private Date crew_mem_date;
 	private String crew_mem_rsn;	
 	private String crew_list_logo;	
+	private int crew_mem_cnt;
 	
 	private int crew_cool_idx;
 	private int crew_cool_cnt;
+	
+	private String mem_id;
+	
 
 	
 	public int getCrew_idx() {
@@ -152,6 +156,18 @@ public class CrewDTO {
 	}
 	public void setCrew_cool_cnt(int crew_cool_cnt) {
 		this.crew_cool_cnt = crew_cool_cnt;
+	}
+	public int getCrew_mem_cnt() {
+		return crew_mem_cnt;
+	}
+	public void setCrew_mem_cnt(int crew_mem_cnt) {
+		this.crew_mem_cnt = crew_mem_cnt;
+	}
+	public String getMem_id() {
+		return mem_id;
+	}
+	public void setMem_id(String mem_id) {
+		this.mem_id = mem_id;
 	}
 	
 

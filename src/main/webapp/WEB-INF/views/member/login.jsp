@@ -146,6 +146,7 @@ input[type="checkbox"] {
 </style>
 </head>
 <body>
+<<<<<<< HEAD
 	<h2>UNIFUND</h2>
 	<form action="login.do" method="post">
 		<table>
@@ -170,7 +171,6 @@ input[type="checkbox"] {
 	<h4><a href="findId.go" style="color: rgb(0, 196, 196);">아이디찾기</a></h4>
 	<br>
 	<h5><a href="findPw.go" style="color: rgb(0, 196, 196);">비밀번호 변경</a></h5>
-	${msg}
 </body>
 <script>
 
