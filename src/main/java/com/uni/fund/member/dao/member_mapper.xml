@@ -45,6 +45,12 @@
 	</select>
 
 
+   <update id = "findPw">
+     UPDATE member 
+      SET mem_pw = #{param2}
+      WHERE mem_id = #{param1}
+   </update>
+   
  <insert id="fileWrite">
         <if test='param3 == "A"'>
             insert into photo (pho_name, ref_idx, pho_division)
@@ -56,12 +62,6 @@
         </if>
    </insert>
    
-   
-   <update id = "findPw">
-     UPDATE member 
-      SET mem_pw = #{param1}
-      WHERE mem_id = #{param2} AND mem_number=#{param3}
-   </update>
    
    
    <select id="memberListAjax" parameterType="map" resultType="com.uni.fund.member.dto.MemberDTO">

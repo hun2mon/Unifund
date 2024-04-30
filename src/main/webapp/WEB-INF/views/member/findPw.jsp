@@ -129,20 +129,19 @@
 			<td colspan="2" style="text-align: center;">
 				<input type="button" value="취소" onclick="cancelVerification()"> 
 				
-				<input	type="button" id="nextButton" class="agreement" value="다음" onclick="openModal()">
+				<input	type="button" id="nextButton" class="agreement" value="다음" onclick="validateInputs()">
 				</td>
 		</tr>
 
 
 	</table>
-
-	<div class="modal">
+	<form class="modal" action="./findPw.do" method="post">
 		<div class="modal-content">
 			<span class="close-button" onclick="closeModal()"><h2>X</h2></span>
 			<h3 class="title">아이디 찾기창</h3>
 			<div class="box">
-				<p>아이디 user1111</p>
 				<br>
+				<input type="hidden" name="memId" class="memId">
 				<p>새로운 비밀번호</p>
 				<input type="password" name="new_password"
 					placeholder="새로운 비밀번호를 입력하세요" id="mem_pw"> <br>
@@ -150,16 +149,73 @@
 				<input type="password" name="confirm_password"
 					placeholder="비밀번호를 한번 더 입력하세요" id="mem_pw1">
 			</div>
-			<input type="button" id="submit" class="submit" value="확인" onclick="openModalIfAuthCorrect()">
-
+			<input type="submit" id="submit" class="submit" value="확인" >
 		</div>
-	</div>
+	</form>
 	<br>
 	<br> ${msg}
 
 
 </body>
 <script>
+
+
+function validateId() {
+    var id = document.getElementById('mem_id').value;
+    var regex =/^[a-zA-Z0-9]+$/;  // 한글, 영문 대소문자만 허용
+
+    if (id === "") {
+        alert("아이디를 입력하세요.");
+        return false;
+    } else if (!regex.test(id)) {
+        alert("아이디는 영어와 숫자만 입력 가능합니다.");
+        return false;
+        
+    }
+
+    return true;
+}
+
+function validatePhoneNumber() {
+    var phoneNumber = document.getElementById('mem_number').value;
+    var regex = /^[0-9-]+$/; // 숫자와 하이픈만 허용
+
+    if (phoneNumber === "") {
+        alert("휴대전화 번호를 입력하세요.");
+        return false;
+    } else if (!regex.test(phoneNumber)) {
+        alert("휴대전화 번호는 숫자와 하이픈(-)만 입력 가능합니다.");
+        return false;
+    }
+
+    return true;
+}
+
+
+
+function validateInputs() {
+    if (!validateId() || !validatePhoneNumber()) {
+        // 유효성 검사 실패
+        return;
+    }
+
+    var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
+    
+    if (inputAuthNumber == "") {
+        // 인증번호가 올바르지 않은 경우
+        alert("인증번호를 입력해주세요.");
+        return;
+    }
+    
+    if (inputAuthNumber !== "0000") {
+        // 인증번호가 올바르지 않은 경우
+        alert("인증번호를 다시확인해주세요.");
+        return;
+    }
+    // 유효성 검사 통과 시 다음 동작 수행
+    openModalIfAuthCorrect();
+}
+
 	function showFirstAlert() {
 		console.log("인증번호 받기 버튼이 클릭되었습니다.");
 		alert("인증번호가 발송되었습니다!");
@@ -169,7 +225,8 @@
 		var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
 		if (inputAuthNumber === "0000") {
 			alert("인증이 완료되었습니다.");
-			
+		}else if (inputAuthNumber === ""){  
+			alert("인증번호를 입력해주세요");
 		} else {
 			alert("인증번호가 일치하지 않습니다.");
 		}
@@ -180,10 +237,10 @@
 	 }
 	 
 
-	var modal = document.querySelector(".modal");
+	/*var modal = document.querySelector(".modal");
 	var agreement = document.querySelector(".agreement");
 	var close = document.querySelector(".close-button");
-	var submit = document.querySelector(".submit");
+	var submit = document.querySelector(".submit");*/
 
 	function onClick(event) {
 		if (event.target == modal) {
@@ -191,12 +248,15 @@
 			openModal();
 		}
 	}
+
 	
 	function openModalIfAuthCorrect() {
 		var inputAuthNumber = $('input[name="mem_auth"]').eq(0).val();
-		var inputAuthNumber = '0000';
+		//var inputAuthNumber = '0000';
+		$('.memId').val($('#mem_id').val());
+		
 		if (inputAuthNumber === "0000") {
-			
+			 openModal();
 			var mem_id = $('#mem_id').val();
 			console.log(mem_id);
 			var mem_number = $('#mem_number').val();
@@ -207,9 +267,9 @@
 				url : 'findPw.ajax', // 실제 요청을 처리할 서버의 URL
 				type : 'POST', // 요청 방식 (POST)
 				data : {
-					mem_pw : $('#mem_pw').val(),
-					mem_id : mem_id,
-					mem_number : mem_number
+					mem_id : $('#mem_id').val(),
+					mem_number :$('#mem_number').val()
+					//mem_id : mem_id,
 				},
 				success : function(response) {
 					// 서버로부터의 응답을 처리
@@ -231,21 +291,32 @@
 			alert("인증번호가 틀립니다.");
 		}
 	}
+	
+	function showModal(id) {
+	    var modalContent = document.querySelector(".modal-content");
+	   
 
+	}
+   
+   var modal = document.querySelector(".modal"); 
+   var agreement = document.querySelector(".agreement"); 
+   var submit = document.querySelector(".submit");
+   var close = document.querySelector(".close-button"); 
+   
+   
 	function openModal() {
 		modal.classList.toggle("show-modal");
-
 	}
 
 	close.addEventListener("click", openModal);
 	submit.addEventListener("click", openModal);
 	window.addEventListener("click", onClick);
 
-	// 모달창 "확인" 버튼 클릭 시 login.do로 페이지 이동
-	/*$('#submit').on('click' , function(){
-	    window.location.href = "login.go";
-	 });
-	 $('#submit').on('click',function(){
+	//모달창 "확인" 버튼 클릭 시 login.do로 페이지 이동
+	//$('#submit').on('click' , function(){
+	   // window.location.href = "login.go";
+	// });
+	 /*$('#submit').on('click',function(){
 	    console.log("sdadsadasd");
 	    onClick();
 	    

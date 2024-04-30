@@ -133,10 +133,10 @@ input[value="인증번호 받기"] {
 		</tr>
 
 		<tr>
-			<td colspan="2" style="text-align: center;"><input type="button"
-				value="취소" onclick="cancelVerification()"> <input
-				type="button" id="nextButton" class="agreement" value="다음"
-				onclick="validateInputs()"></td>
+			<td colspan="2" style="text-align: center;">
+			<input type="button" value="취소" onclick="cancelVerification()">
+			 <input 	type="button" id="nextButton" class="agreement" value="다음" onclick="validateInputs()">
+				</td>
 		</tr>
 
 
@@ -144,10 +144,13 @@ input[value="인증번호 받기"] {
 
 	<div class="modal">
 		<div class="modal-content">
-			<span class="close-button" onclick="closeModal()">X</span>
+			<span class="close-button" onclick="closeModal()"><h2>X</h2></span>
 			<h3 class="title">아이디 찾기창</h3>
 			<div class="box">
-				<p>고객님의 정보와 일치하는 아이디 입니다.</p>
+			
+			
+			<!--  아이디가 존재할 때에만 표시 -->
+				<p class="found-id-message">고객님의 정보와 일치하는 아이디 입니다.</p>
 
 				<p class="pikachyu">userid1111</p>
 
@@ -163,7 +166,6 @@ input[value="인증번호 받기"] {
 </body>
 <script>
 
-
 function validateName() {
     var name = document.getElementById('name').value;
     var regex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]+$/; // 한글, 영문 대소문자만 허용
@@ -174,6 +176,7 @@ function validateName() {
     } else if (!regex.test(name)) {
         alert("이름은 한글 또는 영문 대소문자만 입력 가능합니다.");
         return false;
+        
     }
 
     return true;
@@ -201,6 +204,18 @@ function validateInputs() {
         return;
     }
 
+    var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
+	
+    if (inputAuthNumber == "") {
+        // 인증번호가 올바르지 않은 경우
+        alert("인증번호를 입력해주세요.");
+        return;
+    }
+    if (inputAuthNumber !== "0000") {
+        // 인증번호가 올바르지 않은 경우
+        alert("인증번호를 다시확인해주세요.");
+        return;
+    }
     // 유효성 검사 통과 시 다음 동작 수행
     openModalIfAuthCorrect();
 }
@@ -215,12 +230,17 @@ function validateInputs() {
        var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
        if (inputAuthNumber === "0000") {
            alert("인증이 완료되었습니다.");
+       }else if (inputAuthNumber === ""){
+    	   alert("인증번호를 입력해주세요.");
        } else {
            alert("인증번호가 일치하지 않습니다.");
        }
    }
    
    
+   function cancelVerification() {
+       window.location.href = "login.do"; // 로그인 페이지로 이동
+   }
    
    
   function openModalIfAuthCorrect() {
@@ -244,12 +264,14 @@ function validateInputs() {
    	        success: function(response) {
    	            // 서버로부터의 응답을 처리
    	               console.log("서버 응답:", response.use); // 응답 값 콘솔에 출력
-   	            if (response !== "") {
+   	            if (response.use !== "" && response.use !==null) {
    	                // 아이디를 찾은 경우 모달에 표시
-   	                showModal(response.use);
+   	                showModal(response.use);  	
+   	             $('.found-id-message').show();
    	            } else {
    	                // 아이디를 찾지 못한 경우 메시지 표시
-   	                showModal("가입한 ID가 없습니다.");
+   	                showModal("고객님의 가입한 ID가 없습니다.");
+   	             $('.found-id-message').hide();
    	            }
    	        },
    	        error: function() {
@@ -258,7 +280,8 @@ function validateInputs() {
    	        }
    	    });
        } else {
-           alert("인증번호가 틀립니다.");
+           alert("인증번호를 입력해주세요.");
+     
        }
    }
 
@@ -267,19 +290,11 @@ function validateInputs() {
 	    var pikachyu = modalContent.querySelector(".pikachyu");
 	    pikachyu.textContent = id;
 
-	    openModal();
+	 
 	}
    
    
-   
-   
-   
-   
-   
-   function cancelVerification() {
-        window.location.href = "login.do"; // 로그인 페이지로 이동
-    }
-
+  
    
    var modal = document.querySelector(".modal"); 
    var agreement = document.querySelector(".agreement"); 

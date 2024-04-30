@@ -112,10 +112,10 @@ public class MemberService {
 		return memberDAO.findId(mem_name,mem_number);
 	}
 
-	public Object findPw(String mem_pw, String mem_id, String mem_number) {
-		return memberDAO.findPw(mem_pw, mem_id,mem_number);
-	}
 	
+	public int findPw(String memId, String new_password) {
+		return memberDAO.findPw(memId, new_password);
+	}
 	public int adminMemberSubmitStatus(Map<String, Object> param) {
 		memberDAO.adminAddSubmitStatusTable(param);
 		return memberDAO.adminMemberSubmitStatus(param);
@@ -147,5 +147,7 @@ public class MemberService {
 		memberDAO.updatStopeMemberStatus(param);
 		return memberDAO.stopMemberApply(param);
 	}
+
+
 
 }

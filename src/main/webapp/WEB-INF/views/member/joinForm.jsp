@@ -202,7 +202,7 @@ button[type="button"]:hover {
 }
 
 form {
-	margin-left: 677px;
+	margin-left: 550px;
 }
 }
 </style>

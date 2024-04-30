@@ -29,7 +29,7 @@ public interface MemberDAO {
 
 	String findId(String mem_name, String mem_number);
 
-	int findPw(String mem_pw, String mem_id, String mem_number);
+	int findPw(String memId, String new_password);
 	
 	int adminMemberSubmitStatus(Map<String, Object> param);
 
@@ -48,5 +48,8 @@ public interface MemberDAO {
 	int stopMemberApply(Map<String, Object> param);
 
 	void updatStopeMemberStatus(Map<String, Object> param);
+
+
+
 
 }
