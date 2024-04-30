@@ -13,7 +13,7 @@
 			,(select mem_id from member where mem_idx = (select mem_idx from project where pro_idx = #{param2})) as userId
 			,(select COUNT(pro_idx) from project_like where pro_idx = #{param2} group by pro_idx) as like_cnt
 			,(select SUM(a.total) from 
-				(select total_price as total from project_apply where pro_idx = #{param2} and fund_state = 'A' order by mem_idx,fund_idx desc) a) as now_price
+				(select total_price as total from project_apply where pro_idx = #{param2} and fund_state IN ('A','C') order by mem_idx,fund_idx desc) a) as now_price
 			,(select (rew_price * rew_max) from project p where pro_idx = #{param2}) as target_price
 			,(select mem_mileage from member where mem_idx = #{param1}) as mileage
 			,(select mem_cash from member where mem_idx = #{param1}) as cash
@@ -34,7 +34,7 @@
 			*,
 			(SELECT round((sum(pa.total_price) / (p.rew_price * p.rew_max)) * 100)
 			    	FROM project_apply pa
-			    	WHERE pa.pro_idx = p.pro_idx and pa.fund_state='A' group by pa.pro_idx) as progress
+			    	WHERE pa.pro_idx = p.pro_idx and pa.fund_state IN ('A','C') group by pa.pro_idx) as progress
 		FROM project p where p.pro_state = 'C'
 	</select>
 	
@@ -405,7 +405,7 @@
 	</update>
 	
 	<update id="appSuccess">
-		UPDATE project_apply SET fund_state='C' WHERE pro_idx = #{param1}
+		UPDATE project_apply SET fund_state='C' WHERE pro_idx = #{param1} and fund_state = 'A'
 	</update>
 	
 	

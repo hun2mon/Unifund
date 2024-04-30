@@ -93,7 +93,7 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewList.go", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/list.go", method = RequestMethod.GET)
 	public String crewListGo() {
 		logger.info("crewList 진입");
 		String page= "crew/crewList";

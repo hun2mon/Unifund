@@ -649,7 +649,7 @@ input[name=reportContent] {
 		$('.favorites').html('즐겨찾기 취소');
 	}
 
-	if ('${project.fund_state}' == 'A') {
+	if ('${project.fund_state}' == 'A' || '${project.fund_state}' == 'C') {
 		if (today < deadline) {
 			$('input[name="revContent"]').val('펀딩 성사 후 작성 가능합니다.');
 			$('input[name="revContent"]').attr('readonly',true);

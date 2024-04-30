@@ -31,7 +31,7 @@ public class MainController {
 	
 	@RequestMapping(value = "/mainProList.ajax")
 	@ResponseBody
-	public Map<String, Object> mainproList() {
+	public Map<String, Object> mainProList() {
 		List<ProjectDTO> list = mainService.mainProList();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);

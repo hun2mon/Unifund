@@ -161,7 +161,7 @@
 	}
 	
 	function drawNoti(list){
-		content = '';
+		console.log("noti : " + list);
 		for(noti of list){
 			content += '<div class="noticeMain">';
 			content += '<div class="notiTop">';
