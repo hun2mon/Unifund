@@ -187,7 +187,7 @@
     text-decoration: none;
     cursor: pointer;
 }
-    </style>
+</style>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -268,57 +268,67 @@
       				<td colspan="3">
       					<div class="container"> 
       						<nav aria-label="Page navigation" style="text-align:center">
-                				<ul class="pagination" id="pagination"></ul>
+                				<ul class="pagination" id="pagination1"></ul>
             				</nav>     
         				</div>
       				</td>
      			 </tr>
             </table>
+            <div class="activity-section">
+            	<table class="activity-table">
+            		<thead>
+            			<tr>
+            				<th>활동 사진</th>
+            				<th>활동 내용</th>
+            			</tr>
+            		</thead>
+            		<tbody class="activity_list" id="activity_list"></tbody>
+            		<tr>
+            			<td colspan="2">
+            				<div class="container">
+            					<nav aria-label="Page navigation" style="text-align:center">
+                					<ul class="pagination" id="pagination"></ul>
+            					</nav>     
+            				</div>
+            			</td>
+            		</tr>
+            	</table>
+            	<div class="activity-buttons">
+            		<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
+            		<button class="btn btn-primary" onclick="openActivityModal()">활동내역 등록</button>
+            		</c:if>
+            	</div>
+            </div>
+            <!-- 활동 내역 등록 모달 -->
+			<div id="activityModal" class="modal">
+    			<div class="modal-content">
+        			<span class="close" onclick="closeActivityModal()">&times;</span>
+        			<h2>활동내역 등록</h2>
+        			<form action="activity/write.do" method="post" enctype="multipart/form-data">
+        				<input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
+            			<textarea id="activity_details" name="activity_details" rows="6" placeholder="활동 내용(1000자 이내)을 입력해주세요"></textarea>
+            			<input type="file" id="crew_activity_photo" name="crew_activity_photo">        			
+        			<button class="btn btn-primary" onclick="submitActivity()">등록</button>
+        			<button class="btn btn-secondary" onclick="closeActivityModal()">취소</button>
+        			</form>
+    			</div>
+			</div>
         </div>        
     </div>
-<hr> <!-- 여기에 줄을 추가합니다 -->
-<div class="activity-section">
-    <h2>활동 내역</h2>
-    <button class="btn add-activity-btn" onclick="openActivityModal()">활동내역 등록</button>
-    <div class="activity-images">
-        <!-- 활동 내역 및 사진을 감싸는 외부 div 추가 -->
-        <div class="activity-item">
-            <div class="activity-content">
-                <!-- 활동 내용을 표시할 곳 -->
-                <p>활동 내용 1</p>
-            </div>
-            <div class="activity-photo">
-                <!-- 활동 사진을 표시할 곳 -->
-                <img src="https://via.placeholder.com/200x150" alt="Activity Image">
-            </div>
-        </div>
-    </div>
-    <!-- 페이징 기능 추가 -->
-    <div class="activity-buttons">
-        <button class="btn prev-btn" onclick="prevActivity()">이전</button>
-        <button class="btn next-btn" onclick="nextActivity()">다음</button>
-    </div>
-</div>
+   
 
-<!-- 활동 내역 등록 모달 -->
-<div id="activityModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeActivityModal()">&times;</span>
-        <h2>활동 내역 등록</h2>
-        <textarea id="activityContent" name="activityContent" rows="4" placeholder="활동 내용을 입력해주세요"></textarea>
-        <button class="btn activity-submit-btn" onclick="submitActivity()">등록</button>
-        <button class="btn cancel-btn" onclick="closeActivityModal()">취소</button>
-    </div>
-</div>
 </body>
 
 <script>
+
+
 
 var showPage = 1;
 
 $(document).ready(function(){
 	listCall(showPage);
 	listCall1(showPage);
+	$('#pagination').twbsPagination('destroy');
 	$('#pagination').twbsPagination('destroy');
 	
     var userState = $("#state").val(); 
@@ -364,20 +374,21 @@ function listCall(showPage){
 }
 
 function listCall1(showPage){	
-	console.log(showPage);
 	var crew_idx= $("#crew_idx").val();
+	var crew_activity_details_idx= $("#crew_activity_details").val();
     $.ajax({
-       type:'post',
-       url:'./detail.ajax',
+       type:'get',
+       url:'./activityList.ajax',
        data:{
            'page':showPage,
-           'cnt':5,
-           'crew_idx':crew_idx
+           'cnt':1,
+           'crew_idx':crew_idx,
+           'crew_activity_details_idx':crew_activity_details_idx
        },
        dataType:'json',
        success:function(data){                 
           console.log(data);          
-          drawList(data.list);   
+          drawList1(data.activity_list);   
           $('#pagination').twbsPagination({
           	startPage:1, // 시작페이지
           	totalPages:data.totalPages, // 총 페이지 수
@@ -385,7 +396,7 @@ function listCall1(showPage){
           	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
           		console.log(pg); // 클릭한 페이지 번호
           		showPage = pg;
-          		listCall(pg);
+          		listCall1(pg);
           	}
           })
        },
@@ -395,11 +406,48 @@ function listCall1(showPage){
     });
 }
 
+function drawList1(activity_list) {
+	var content='';
+	
+	for(item of activity_list){
+		content += '<tr>';
+		content += '<input type="hidden" value="${crew_activity_details.crew_activity_details_idx}" name="crew_activity_details_idx" class="crew_activity_details_idx">';
+		content += '<td><img src="/photo/'+item.activity_photo+'"class="activity_photo_img"></td>';
+		content += '<td>' + item.activity_details + '</td>';
+		content += '</tr>';
+		content += '<tr>';
+		content += '<td colspan=2><input type="button" value="삭제" onclick="activityDel('+item.crew_activity_details_idx+')"></td>';		
+		content += '</tr>';
+	}
+	$('#activity_list').html(content);
+	
+}
+
+function activityDel(idx) {
+	console.log(idx);
+	$.ajax({
+	       type:'post',
+	       url:'./activityDel.ajax',
+	       data:{
+	           'crew_activity_details_idx':idx
+	       },
+	       success:function(data){
+	          console.log(data);  
+	          alert('삭제가 완료되었습니다.');
+	          location.reload();
+	       },
+	       error:function(error){
+	          console.log(error);
+	          alert('삭제에 실패했습니다.');
+	       }
+	    });
+	
+}
+
 function drawList(list) {
     var content = '';
-    var leaderFound = false; // 크루장이 이미 나왔는지 여부를 나타내는 변수
+    var leaderFound = false; 
 
-    // 리스트의 각 항목에 대한 반복문
     for (item of list) {
         // 크루장인 경우 버튼추가 x
         if (item.state === '크루장' && !leaderFound) {
@@ -427,6 +475,8 @@ function drawList(list) {
     // 테이블에 내용 추가
     $('#list').html(content);
 }
+
+
 
 //모달 열기
 function openReportModal() {
@@ -456,6 +506,14 @@ function openDelegateModal(num) {
 
 function closeDelegateModal() {
     document.getElementById("delegateModal").style.display = "none";
+}
+
+function openActivityModal() {
+    document.getElementById("activityModal").style.display = "block";
+}
+
+function closeActivityModal() {
+    document.getElementById("activityModal").style.display = "none";
 }
 
 
@@ -623,6 +681,24 @@ function delegateLeader() {
             }
         });
     }	    
+}
+
+function submitActivity() {
+	var $activity_details=$('input[name="activity_details"]');
+	var $crew_activity_photo =$('input[name="crew_activity_photo"]');
+	
+	if(activity_details.val()==''){
+		alert('활동 내용을 입력해주세요.');
+		$activity_details.focus();
+	}else if($activity_details.val().length>1000){
+		alert('활동내용은 1000자 이내로 적어주세요.');
+		$activity_details.focus();
+	}else if($crew_activity_photo.val()=''){
+		alert('사진을 첨부해 주세요.');
+		$crew_activity_photo.focus();
+	}else {
+		$('form').submit();
+	}
 }
 
 

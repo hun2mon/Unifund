@@ -3,6 +3,7 @@ package com.uni.fund.crew.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.uni.fund.crew.dto.ActivityDTO;
 import com.uni.fund.crew.dto.CrewDTO;
 
 public interface CrewDAO {
@@ -14,6 +15,13 @@ public interface CrewDAO {
 	void createCrewLogoPhoto(int crew_idx, String newCrewLogoPhoto, String crewLogo);
 
 	void createCrewRecruPhoto(int crew_idx, String newCrewRecruPhoto, String crewRecru);
+	
+	
+	int crewActivityWrite(CrewDTO crewDTO);
+	
+	void crewActivityPhoto(int crew_activity_details_idx, String newCrewActivityPhoto, String crewActivity);
+
+	void crewActicityDescribe(String crew_idx, String activity_content);
 	
 
 	CrewDTO crewUpdateForm(int crew_idx);
@@ -96,6 +104,24 @@ public interface CrewDAO {
 	void memberListInsert(int crew_idx, Integer memIdx);
 
 	void memberHistoryInsert(int crew_idx, Integer memIdx);
+
+	List<CrewDTO> activityList(String crew_idx, int start, int pagePerCnt);
+
+	Object activityListCount(int pagePerCnt, String crew_idx);
+
+	void activityDel(int crew_activity_details_idx);
+
+	void activityPhotoDel(int crew_activity_details_idx);
+
+
+	
+
+
+
+	
+
+	
+
 
 
 

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.crew.dao.CrewDAO;
+import com.uni.fund.crew.dto.ActivityDTO;
 import com.uni.fund.crew.dto.CrewDTO;
 
 @Service
@@ -63,17 +64,41 @@ public class CrewService {
 		return row;
 	}		
 
-	public int crewActivityWrite(MultipartFile crew_activity_photo,int crew_idx ,int memIdx, Map<String, Object> param) {
-		int row=-1;
-		logger.info("service crewActivityWrite");
+	public int crewActivityWrite(MultipartFile crew_activity_photo, int memIdx, Map<String, Object> param, int crew_idx) {
 		CrewDTO crewDTO = new CrewDTO();
-		crewDTO.setActivity_content("activity_content");
-		String activityPhoto="활동사진";
-		if(row>0) {
-			//crewActivityFileSave(crew_idx,crew_activity_photo,activityPhoto);
+		crewDTO.setCrew_idx(crew_idx);
+		crewDTO.setMem_idx(memIdx);
+		crewDTO.setActivity_details((String) param.get("activity_details"));
+		int row=crewDAO.crewActivityWrite(crewDTO);
+		int crew_activity_details_idx=crewDTO.getCrew_activity_details_idx();
+		String crewActivity="활동내역";
+		logger.info("crew_activity_details_idx : "+crew_activity_details_idx);
+		
+		if (row>0) {
+			crewActivityFileSave(crew_activity_details_idx,crew_activity_photo,crewActivity);
 		}
 		
-		return row;
+		return 0;
+	}
+	
+	private void crewActivityFileSave(int crew_activity_details_idx, MultipartFile crew_activity_photo, String crewActivity) {
+		String fileName=crew_activity_photo.getOriginalFilename();
+		if(!fileName.equals("")) {
+			String crewActivityPhoto = fileName.substring(fileName.lastIndexOf("."));
+			String newCrewActivityPhoto = System.currentTimeMillis()+crewActivityPhoto;
+			
+			try {
+				byte[] crewActivityPhotoBytes = crew_activity_photo.getBytes();
+				Path crewActivityPath = Paths.get(file_root+newCrewActivityPhoto);
+				Files.write(crewActivityPath, crewActivityPhotoBytes);				
+				crewDAO.crewActivityPhoto(crew_activity_details_idx, newCrewActivityPhoto, crewActivity);
+			} catch (IOException e) {
+				logger.info("file exception");
+				e.printStackTrace();
+			}
+			
+		}
+		
 	}
 
 	private void crewLogoPhotoFileSave(int crew_idx, MultipartFile crew_logo_photo, String crewLogo) {
@@ -163,7 +188,21 @@ public class CrewService {
         map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
         logger.info("totalPage = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
 		return map;
+	}	
+
+	public Map<String, Object> activityList(int currentPage, int pagePerCnt, String crew_idx) {
+		int start = (currentPage-1) * pagePerCnt;
+		Map<String, Object> result = new HashMap<String, Object>();
+	    List<CrewDTO>activity_list= crewDAO.activityList(crew_idx,start,pagePerCnt);
+	    logger.info("activity_list"+activity_list);
+	    
+	    result.put("activity_list", activity_list);
+	    result.put("currentPage", currentPage);
+	    result.put("totalPages", crewDAO.activityListCount(pagePerCnt,crew_idx));
+
+		return result;
 	}
+	
 	
 	public Map<String, Object> searchCrew(String keyword,int currentPage, int pagePerCnt) {
 	    	    
@@ -290,31 +329,12 @@ public class CrewService {
 		crewDAO.insertCrewMem(mem_idx,crew_idx);
 	}
 
-
-
-
-
-	
-
-
-
-
+	public void activityDel(int crew_activity_details_idx) {
+		crewDAO.activityDel(crew_activity_details_idx);
+		crewDAO.activityPhotoDel(crew_activity_details_idx);
+	}
 
 	
-
-
-	
-
-
-	
-
-
-
-
-
-
-
-
 
 
 

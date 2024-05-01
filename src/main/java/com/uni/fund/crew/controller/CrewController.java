@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uni.fund.crew.dto.ActivityDTO;
 import com.uni.fund.crew.dto.CrewDTO;
 import com.uni.fund.crew.service.CrewService;
 
@@ -54,22 +55,27 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/activityWrite.do")
+
+	@RequestMapping(value="/crew/activity/write.do", method = RequestMethod.POST)
 	public String crewActivityWrite(MultipartFile crew_activity_photo, HttpSession session, 
-			@RequestParam Map<String,Object> param, int crew_idx, Model model) {
+			@RequestParam Map<String,Object> param, int crew_idx, Model model) {		
 		
-		String page="redirect:/crew/crewList.go";
-		String msg="활동 내용 등록에 실패했습니다.";
 		int memIdx =(int) session.getAttribute("mem_idx");
-		int row=crewService.crewActivityWrite(crew_activity_photo,crew_idx,memIdx,param);	;
-		if(memIdx!=0) {
-			if(row==1) {
-				page="redirect:/";
-				msg="활동 내용이 등록되었습니다!";
-			}
+		String page="redirect:/";
+		String msg = "크루 등록에실패했습니다.";		
+		
+		if(memIdx!=0) {	
+				crewService.crewActivityWrite(crew_activity_photo,memIdx,param,crew_idx);
+			
+				logger.info("crewActivityWrite 시작");
+				logger.info("활동등록하는 크루 idx"+crew_idx);
+				logger.info("crew_activity_photo : {}"+ crew_activity_photo);
+				logger.info("param_crew_idx : {}"+param.get("crew_idx"));
+				msg="크루 등록이 완료되었습니다.";
+				
 			model.addAttribute("msg",msg);
 		}		
-		return page;
+		return "redirect:/crew/detail.go?crew_idx="+param.get("crew_idx");
 	}
 	
 	
@@ -232,25 +238,24 @@ public class CrewController {
 			logger.info("크루 번호 : "+crew_idx);
 			logger.info("페이지 당 보여줄 갯수 : "+cnt);
 			logger.info("요청 페이지 : " +page);
-			map=crewService.detailCrewMember(currentPage, pagePerCnt,crew_idx);		    
-		}	
+			map=crewService.detailCrewMember(currentPage, pagePerCnt,crew_idx);
+		}
 		return map;
 	}
 	
-	@RequestMapping(value="/crew/activityList.ajax",method = RequestMethod.POST)
+	@RequestMapping(value="/crew/activityList.ajax",method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> activityList(String crew_idx, HttpSession session, String page, String cnt){
+	public Map<String,Object> activityList(String crew_idx, HttpSession session, String page, String cnt,String crew_activity_details_idx){
+		logger.info("activityList 들어왔다.");
+		logger.info("크루 번호 : "+crew_idx);
+    	logger.info("페이지당 보여줄 개수 : "+cnt);
+    	logger.info("요청페이지 : "+page);
+		
 		int memIdx =(Integer)session.getAttribute("mem_idx");
 		int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
 	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
-	    Map<String,Object> map = new HashMap<String, Object>();
-	    
-	    if(memIdx!=0) {
-	    	logger.info("activityList.ajax 들어감");
-	    	logger.info("크루 번호 : "+crew_idx);
-	    	logger.info("페이지당 보여줄 개수 : "+cnt);
-	    	logger.info("요청페이지 : "+page);
-	    }	    
+	    Map<String,Object> map =crewService.activityList(currentPage, pagePerCnt,crew_idx);
+	    	    
 	    return map;
 	}
 	
@@ -336,8 +341,7 @@ public class CrewController {
 			logger.info("위임시키는 크루idx : "+crew_idx);
 			logger.info("위임 사유 : "+delgateContent);
 			crewService.crewChiefDelegate(crew_idx,crewMem_idx,memIdx,delgateContent);
-		}
-		
+		}		
 		return map;
 	}
 	
@@ -369,6 +373,13 @@ public class CrewController {
 	@ResponseBody
 	public void approve(String mem_idx, String crew_idx) {
 		crewService.approve(mem_idx,crew_idx);
+	}
+	
+	@RequestMapping(value="/crew/activityDel.ajax",method = RequestMethod.POST)
+	@ResponseBody
+	public void activityDel(int crew_activity_details_idx) {
+		logger.info("crew_activity_details_idx : {} "+crew_activity_details_idx);
+		crewService.activityDel(crew_activity_details_idx);
 	}
 	
 	

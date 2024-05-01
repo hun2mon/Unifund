@@ -36,7 +36,9 @@ public class CrewDTO {
 	
 	private String crew_leader;
 	private int manager_idx;
-	private String activity_content;
+	private String activity_details;
+	private int crew_activity_details_idx;
+	private String activity_photo;
 
 	
 	public int getCrew_idx() {
@@ -222,11 +224,22 @@ public class CrewDTO {
 	public void setManager_idx(int manager_idx) {
 		this.manager_idx = manager_idx;
 	}
-	public String getActivity_content() {
-		return activity_content;
+	public int getCrew_activity_details_idx() {
+		return crew_activity_details_idx;
 	}
-	public void setActivity_content(String activity_content) {
-		this.activity_content = activity_content;
+	public void setCrew_activity_details_idx(int crew_activity_details_idx) {
+		this.crew_activity_details_idx = crew_activity_details_idx;
 	}
-
+	public String getActivity_photo() {
+		return activity_photo;
+	}
+	public void setActivity_photo(String activity_photo) {
+		this.activity_photo = activity_photo;
+	}
+	public String getActivity_details() {
+		return activity_details;
+	}
+	public void setActivity_details(String activity_details) {
+		this.activity_details = activity_details;
+	}
 }

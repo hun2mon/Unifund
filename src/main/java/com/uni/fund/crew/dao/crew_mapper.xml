@@ -16,6 +16,15 @@
 		INSERT INTO crew (mem_idx,crew_name,crew_exp,crew_con,crew_num,crew_link,crew_local)
 			VALUES(#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_link},#{crew_local})
 	</insert>
+	
+ 	<insert id="crewActivityWrite"	
+		useGeneratedKeys="true" 
+		keyColumn="crew_activity_details_idx" 
+		keyProperty="crew_activity_details_idx"
+		 parameterType="com.uni.fund.crew.dto.CrewDTO">
+		INSERT crew_activity_details(crew_idx,activity_details)
+		VALUES(#{crew_idx},#{activity_details})
+	</insert> 	
 
  	<insert id="memberListInsert">
 		INSERT INTO crewMember_list (crew_idx,mem_idx,state)
@@ -35,6 +44,16 @@
 	<insert id="createCrewRecruPhoto">
 		INSERT INTO photo(ref_idx, pho_name, pho_division)
 		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="crewActivityPhoto">
+		INSERT INTO photo(ref_idx,pho_name,pho_division)
+		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="crewActicityDescribe">
+		INSERT INTO crew_activity_details(crew_idx,activity_details)
+		VALUES (#{param1},#{param2})
 	</insert>
 	
 	<select id="crewUpdateForm" resultType="com.uni.fund.crew.dto.CrewDTO">
@@ -63,6 +82,18 @@
 		WHERE crew_idx=	#{crew_idx}
 	</update>
 	
+	<select id="activityList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT
+			crew_activity_details_idx
+ 			,activity_details
+  			,(SELECT pho_name FROM photo
+  			WHERE pho_division ='활동내역'
+  			AND ref_idx=cad.crew_activity_details_idx
+  			ORDER BY pho_idx) AS activity_photo
+		FROM crew_activity_details cad
+		WHERE crew_idx=#{param1} LIMIT #{param2},#{param3}
+	</select>
+	
 	<select id="crewList" resultType="com.uni.fund.crew.dto.CrewDTO">
 	SELECT 
     	(
@@ -85,7 +116,7 @@
     	(SELECT COUNT(*) FROM popularity 
      	WHERE crew_idx = c.crew_idx
     	) AS crew_cool_cnt
-	FROM crew c 
+	FROM crew c
 	WHERE c.crew_status='A'
 	<if test='param1 == "latest"'>
     	ORDER BY c.crew_idx DESC
@@ -119,8 +150,12 @@
 	</select>
 	
 	<select id="detailCrewMemberCountPage" resultType="Object">
-    	SELECT CEIL(COUNT(crew_idx) / #{param1}) AS pages FROM crewMember_list WHERE crew_idx=#{param2}
-	</select>	
+    	SELECT CEIL(COUNT(crew_activity_details_idx) / #{param1}) AS pages FROM crew_activity_details WHERE crew_activity_details_idx=#{param2}
+	</select>
+	
+	<select id="activityListCount" resultType="Object">
+		SELECT CEIL(COUNT(crew_activity_details_idx) / #{param1}) AS pages FROM crew_activity_details WHERE crew_idx=#{param2}
+	</select>
 	
 	<select id="searchCrew" resultType="com.uni.fund.crew.dto.CrewDTO">
     	SELECT 
@@ -161,10 +196,9 @@
 	<select id="isMember" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*) 
 		FROM crewMember_history 
-		WHERE mem_idx= 1 AND 
+		WHERE mem_idx= #{param1} AND 
 			(crew_mem_status='B' 
-			OR crew_mem_status='C' 
-			OR crew_mem_status='D' 
+			OR crew_mem_status='C'
 			OR crew_mem_status='E' 
 			OR crew_mem_status='K')
 	</select>
@@ -258,6 +292,14 @@
 		DELETE FROM crewMember_list WHERE crew_idx=#{param1} AND mem_idx=#{param2}
 	</delete>
 	
+	<delete id="activityDel">
+		DELETE FROM crew_activity_details WHERE crew_activity_details_idx=#{param1}
+	</delete>
+	
+	<delete id="activityPhotoDel">
+		DELETE FROM photo WHERE ref_idx=#{param1} AND pho_division='활동내역'
+	</delete>
+	
 	<insert id="crewOutMemberHistoryInsert">
 		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status)
 		VALUES(#{param1},#{param2},'D')
@@ -301,6 +343,7 @@
 		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status,crew_mem_rsn)
 		VALUES(#{param1},#{param2},'K',#{param3})
 	</insert>
+	
 	
 	
 </mapper>

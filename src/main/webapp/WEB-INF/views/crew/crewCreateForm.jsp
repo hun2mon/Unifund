@@ -211,7 +211,7 @@ function join(){
 	}else if($crew_name.val()==''){
 		alert('크루명을 입력 해 주세요!');			
 		$crew_exp.focus();
-	}else if($crew_name.val().length >=8){
+	}else if($crew_name.val().length >8){
 		alert('크루명은 8자 이하로 적어주세요.');			
 		$crew_exp.focus();
 	}else if($crew_exp.val()==''){
