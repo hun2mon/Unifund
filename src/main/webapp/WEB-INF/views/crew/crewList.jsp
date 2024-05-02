@@ -5,15 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
-<link
-	href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script
-	src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script	src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="../resources/js/jquery.twbsPagination.js"
-	type="text/javascript"></script>
+<script src="../resources/js/jquery.twbsPagination.js"	type="text/javascript"></script>
 
 <style>
 .header {
@@ -106,7 +102,6 @@ input[type="text"] {
 		<button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button>
 		<button class="register-btn"
 			onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button>
-		<!-- 수정된 부분 -->
 	</div>
 
 	<div class="crew_list" id="list"></div>

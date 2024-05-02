@@ -39,6 +39,7 @@ public class CrewDTO {
 	private String activity_details;
 	private int crew_activity_details_idx;
 	private String activity_photo;
+	private String crew_leader_name;
 
 	
 	public int getCrew_idx() {
@@ -241,5 +242,11 @@ public class CrewDTO {
 	}
 	public void setActivity_details(String activity_details) {
 		this.activity_details = activity_details;
+	}
+	public String getCrew_leader_name() {
+		return crew_leader_name;
+	}
+	public void setCrew_leader_name(String crew_leader_name) {
+		this.crew_leader_name = crew_leader_name;
 	}
 }

@@ -382,6 +382,42 @@ public class CrewController {
 		crewService.activityDel(crew_activity_details_idx);
 	}
 	
+	@RequestMapping(value="/crew/adminList.go")
+	public String adminListGo() {
+		return "crew/adminList";
+	}
+	
+	@RequestMapping(value="/crew/adminList.ajax")
+	@ResponseBody
+	public Map<String, Object> adminList(String page, String cnt){
+		logger.info("페이지당 보여줄 갯수 : "+cnt);
+		logger.info("요청 페이지 : "+page);
+		
+		int currPage = Integer.parseInt(page);	// 현재 보여지는 페이지
+		int pagePerCnt = Integer.parseInt(cnt); // 페이지당 보여줄 개수
+		
+		Map<String, Object> map = crewService.adminList(currPage,pagePerCnt);
+		
+		return map;		
+	}
+	
+	@RequestMapping(value="/crew/search.ajax")
+	@ResponseBody
+	public Map<String, Object> search(String keyWord, String Page, String cnt){
+		
+		logger.info("search 진입 ");
+		logger.info("페이지당 보여줄 갯수 : "+cnt);
+		logger.info("요청 페이지 : "+Page);
+		logger.info("keyWord : "+keyWord);
+		
+		int currPage = Integer.parseInt(Page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String,Object> map = crewService.adminSearch(keyWord,currPage,pagePerCnt);
+		
+		return map;
+	}
+	
 	
 	
 	

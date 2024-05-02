@@ -334,6 +334,32 @@ public class CrewService {
 		crewDAO.activityPhotoDel(crew_activity_details_idx);
 	}
 
+	public Map<String, Object> adminList(int currPage, int pagePerCnt) {
+		int start = (currPage-1)*pagePerCnt;
+		List<CrewDTO>list = crewDAO.adminList(start,pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", crewDAO.adminAllCount(pagePerCnt));
+		logger.info("totalPages : "+crewDAO.adminAllCount(pagePerCnt));
+		
+		return result;
+	}
+
+	public Map<String, Object> adminSearch(String keyWord, int currPage, int pagePerCnt) {
+		
+		int start = (currPage - 1)* pagePerCnt;
+		List<CrewDTO>list = crewDAO.adminSearch(keyWord,start,pagePerCnt);
+		Map<String, Object>result = new HashMap<String, Object>();
+		
+		result.put("list",list);
+		result.put("currPage",currPage);
+		result.put("totalPages",crewDAO.adminSearchAllCount(keyWord,pagePerCnt));
+		logger.info("totalPages : "+crewDAO.adminSearchAllCount(keyWord,pagePerCnt));
+		
+		return result;
+	}
+
 	
 
 

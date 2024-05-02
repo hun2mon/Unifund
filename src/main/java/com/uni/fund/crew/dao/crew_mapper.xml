@@ -129,6 +129,28 @@
     	ORDER BY c.crew_idx DESC
 	</if>
 		LIMIT 10 OFFSET #{param2}          
+	</select>	
+	
+	<select id="adminList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+    		crew_idx
+    		,crew_num
+    		,crew_name
+    		,(SELECT mem_name 
+     		FROM member 
+     		WHERE mem_idx = (
+         		SELECT mem_idx 
+         		FROM crewMember_list 
+        		WHERE state = '크루장' AND crew_idx = c.crew_idx
+     		)) AS crew_leader_name
+    		,crew_num
+    		,crew_date
+    		,(SELECT COUNT(*) 
+     		FROM popularity 
+     		WHERE crew_idx = c.crew_idx) AS crew_cool_cnt
+		FROM crew c
+		ORDER BY c.crew_idx DESC
+		LIMIT 10 OFFSET #{param1};
 	</select>
 
 	<select id="allCountPage" resultType="Object">
@@ -155,6 +177,33 @@
 	
 	<select id="activityListCount" resultType="Object">
 		SELECT CEIL(COUNT(crew_activity_details_idx) / #{param1}) AS pages FROM crew_activity_details WHERE crew_idx=#{param2}
+	</select>
+	
+	<select id="adminAllCount" resultType="Object">
+		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
+	</select>
+	
+	<select id="adminSearch" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+    		crew_idx
+    		,crew_num
+    		,crew_name
+    		,(SELECT mem_name 
+     		FROM member 
+     		WHERE mem_idx = (
+         		SELECT mem_idx 
+         		FROM crewMember_list 
+        		WHERE state = '크루장' AND crew_idx = c.crew_idx
+     		)) AS crew_leader_name
+    		,crew_num
+    		,crew_date
+    		,(SELECT COUNT(*) 
+     		FROM popularity 
+     		WHERE crew_idx = c.crew_idx) AS crew_cool_cnt
+		FROM crew c
+		WHERE c.crew_name LIKE CONCAT('%', #{param1}, '%')
+		ORDER BY c.crew_idx DESC
+		LIMIT 10 OFFSET #{param2};
 	</select>
 	
 	<select id="searchCrew" resultType="com.uni.fund.crew.dto.CrewDTO">
@@ -186,6 +235,11 @@
 
 	<select id="searchCountPage" resultType="int">
     	SELECT CEIL(COUNT(crew_idx) / #{param2}) AS pages FROM crew
+    	WHERE crew_name LIKE CONCAT('%',#{param1},'%')
+	</select>
+	
+	<select id="adminSearchAllCount" resultType="Object">
+		SELECT CEIL(COUNT(crew_idx) / #{param2}) AS pages FROM crew
     	WHERE crew_name LIKE CONCAT('%',#{param1},'%')
 	</select>
 	
@@ -343,6 +397,7 @@
 		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status,crew_mem_rsn)
 		VALUES(#{param1},#{param2},'K',#{param3})
 	</insert>
+	
 	
 	
 	

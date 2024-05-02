@@ -84,15 +84,6 @@ public interface CrewDAO {
 	void crewMemberToChiefCrewMemberHistoryInsert(String crew_idx, String crewMem_idx, String delgateContent, int memIdx);
 
 
-
-	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
-
-	//List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);
-
-	//int allCountPageBySearch(int pagePerCnt, String searchKeyword);
-	
-	
-
 	List<CrewDTO> appList(String crew_idx, int start, int pagePerCnt);
 
 	int allCount(int pagePerCnt, String crew_idx);
@@ -112,6 +103,16 @@ public interface CrewDAO {
 	void activityDel(int crew_activity_details_idx);
 
 	void activityPhotoDel(int crew_activity_details_idx);
+	
+
+	List<CrewDTO> adminList(int start, int pagePerCnt);
+
+	Object adminAllCount(int pagePerCnt);
+	
+
+	List<CrewDTO> adminSearch(String keyWord, int start, int pagePerCnt);
+
+	Object adminSearchAllCount(String keyWord, int pagePerCnt);
 
 
 	
