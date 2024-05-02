@@ -24,7 +24,7 @@ public class MoneyController {
 	@RequestMapping(value = "/money/charge.go")
 	public String chargeGo(HttpSession session, Model model) {
 		String page = "./member/login";
-		if (session.getAttribute("mem_idx") != null) {
+		if (session.getAttribute("mem_id") != null) {
 			page = "money/cashCharge";
 		} else {
 			model.addAttribute("msg", "로그인이 필요한 서비스 입니다.");
@@ -36,7 +36,7 @@ public class MoneyController {
 	public String chargeDo(String cashCharge, HttpSession session) {
 		logger.info("charge요청 들어옴");
 		logger.info("cashCharge : {}", cashCharge);
-		String mem_idx = (String) session.getAttribute("memIdx");
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		logger.info("mem_idx : {}", mem_idx);
 		moneyService.chargeDo(cashCharge, mem_idx);
 		return "mypage/profile";

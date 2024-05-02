@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -226,9 +227,14 @@ public class ProjectService {
 					projectDAO.delMileHis(mem_idx, pro_idx);
 					projectDAO.fundingCancle(mem_idx, pro_idx);
 				} 
-			}else if (pro.getProgress() != null && pro.getProgress().equals("100") && deadline.equals(now)) {
+			}else if (pro.getProgress() != null && pro.getProgress().equals("100") && deadline.before(now)) {
 				projectDAO.proSuccess(pro_idx);
 				projectDAO.appSuccess(pro_idx);
+				int[] appList = projectDAO.appList(pro_idx);
+				logger.info("appListasdfad :{}", appList);
+				for (int mem_idx : appList) {
+					projectDAO.notiSend(mem_idx);
+				}
 			}
 		}
 		
@@ -336,6 +342,7 @@ public class ProjectService {
 	}
 
 	public int reviewDo(MultipartFile photo, Map<String, String> param, int mem_idx) {
+		logger.info("price:{}", param.get("price"));
 		ProjectDTO proDTO = new ProjectDTO();
 		proDTO.setPro_idx(Integer.parseInt(param.get("pro_idx")));
 		proDTO.setMem_idx(mem_idx);
@@ -343,13 +350,22 @@ public class ProjectService {
 		proDTO.setRev_grade(Integer.parseInt(param.get("revNum")));
 		
 		String memId = projectDAO.checkRev(proDTO);
-		if (memId == null) {
-			projectDAO.mileageSaveUp(mem_idx);			
-		}
 		
 		int row = projectDAO.reviewDo(proDTO);
 		int rev_idx = proDTO.getRev_idx();
 		logger.info("rev_idx = " + rev_idx);
+		
+
+		logger.info("memId = {}", memId);
+		if (memId == null) {
+			param.put("rev_idx", String.valueOf(rev_idx));;
+			param.put("filter", "rev");
+			param.put("mem_idx", String.valueOf(mem_idx));
+			projectDAO.mileageSaveUp(mem_idx);	
+			projectDAO.mileageHis(param);
+		}
+		
+		
 
 		if (row > 0) {
 			revFileSave(photo, rev_idx);
@@ -467,10 +483,6 @@ public class ProjectService {
 		} 
 	}
 
-	public void stateChange(String pro_idx, String state) {
-		projectDAO.stateChange(pro_idx, state);
-	}
-		
 	public void report(String pro_idx, String repContent, int mem_idx) {
 		projectDAO.report(pro_idx,repContent,mem_idx);
 	}

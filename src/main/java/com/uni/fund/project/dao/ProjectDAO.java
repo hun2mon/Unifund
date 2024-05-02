@@ -104,8 +104,6 @@ public interface ProjectDAO {
 
 	void delMileHis(int parseInt, String pro_idx);
 
-	void stateChange(String pro_idx, String state);
-
 	int mileageSelect(Map<String, String> map);
 
 	void report(String pro_idx, String repContent, int mem_idx);
@@ -125,5 +123,7 @@ public interface ProjectDAO {
 	void proSuccess(String pro_idx);
 
 	void appSuccess(String pro_idx);
+
+	void notiSend(int mem_idx);
 
 }

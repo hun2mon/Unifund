@@ -246,7 +246,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .review_content {
 	border-radius: 5px 5px;
-	background-color: FFFFCC;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+	background-color: rgba(255, 255, 255, 0.15);
 }
 
 .profile_img {
@@ -257,7 +258,6 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 .spanMargin {
 	margin-left: 10;
 	border-radius: 5px 5px;
-	background-color: FFFFCC;
 }
 
 .rev_img {
@@ -514,6 +514,7 @@ input[name=reportContent] {
 				<div>
 					<div>
 						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }"> 
+						<input type="hidden" id="total" name="price">
 						<input type="text" class="reviewFrom" name="revContent" min="5" maxlength="500" onkeyup="lengthCheck(this)">
 					</div>
 					<div>
@@ -682,42 +683,13 @@ input[name=reportContent] {
 		}
 	}
 	
-	if (${project.now_price} == ${project.target_price}){
-		$.ajax({
-			type:'post'
-			,url:'./stateChange.ajax'
-			,data:{
-				pro_idx:'${project.pro_idx}',
-				state:'A'
-			}
-			,dataType:'json'
-			,success:function(data){
-				if ('${project.fund_state}' != 'A') {
-					$('#fund_apply').val('펀딩마감');
-					$('#fund_apply').attr('readonly', true);
-				}
-			}
-			,error:function(error){
-				console.log(error);
-			}
-		});
-	}else{
-		$.ajax({
-			type:'post'
-			,url:'./stateChange.ajax'
-			,data:{
-				pro_idx:'${project.pro_idx}',
-				state:'B'
-			}
-			,dataType:'json'
-			,success:function(data){
-			
-			}
-			,error:function(error){
-				console.log(error);
-			}
-		});
+	if ('${project.fund_state}' != 'A'){
+		if (${project.now_price} == ${project.target_price}){
+			$('#fund_apply').val('펀딩마감');
+			$('#fund_apply').attr('readonly', true);
+		}	
 	}
+	
 	
 	function applyPro() {
 		var quantitys = $('.quan').val();
@@ -745,6 +717,7 @@ input[name=reportContent] {
 						$('.use_mileage_value').val(0);
 						$('.use_mileage_value').focus();
 					} else{
+						$('#total').val('price');
 						$.ajax({
 							type:'post'
 							,url:'./fund.do'

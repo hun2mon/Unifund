@@ -34,12 +34,14 @@ public class NotiController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/blindNoti.ajax")
+	@RequestMapping(value = "/blindNoti.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> blindNorti(String noti_idx) {
 		logger.info("noti_idx : {}", noti_idx);
-		notiService.blindNoti(noti_idx);
+		int row = notiService.blindNoti(noti_idx);
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("row", row);
+		logger.info("row : {}", row);
 		return map;
 	}
 	

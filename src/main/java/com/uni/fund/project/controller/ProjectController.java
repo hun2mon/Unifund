@@ -454,16 +454,6 @@ public class ProjectController {
 		return "redirect:/project/adminList.go";
 	}
 	
-	@RequestMapping(value = "/project/stateChange.ajax")
-	@ResponseBody
-	public Map<String, Object> stateChange(String pro_idx, String state){
-		Map<String, Object> map = new HashMap<String, Object>();
-		logger.info("stateChange : {}",pro_idx);
-		logger.info("stateChange : {}",state);
-		projectService.stateChange(pro_idx,state);
-		return map;
-	}
-	
 	
 	
 	
