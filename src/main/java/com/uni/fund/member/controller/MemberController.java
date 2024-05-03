@@ -3,11 +3,8 @@ package com.uni.fund.member.controller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,169 +26,192 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dto.MemberDTO;
 import com.uni.fund.member.service.MemberService;
-import com.uni.fund.project.dto.ProjectDTO;
 
 @Controller
-public class MemberController {	
+public class MemberController {
 	Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired MemberService memberService;
-	
-	//로그인 페이지 이동
+	@Autowired
+	MemberService memberService;
+
+	// 로그인 페이지 이동
 	@RequestMapping(value = "/member/login.go")
 	public String home() {
 		logger.info("최초 로그인 페이지 요청");
 		return "member/login";
 	}
-	//회원가입 페이지 이동
+
+	// 회원가입 페이지 이동
 	@RequestMapping(value = "/member/join.go")
 	public String joinForm() {
 		logger.info("회원가입 페이지 이동");
 		return "member/joinForm";
 	}
-	//id찾기 페이지 이동
+
+	// id찾기 페이지 이동
 	@RequestMapping(value = "/member/findId.go")
 	public String findId() {
 		logger.info("아이디찾기 페이지 이동");
 		return "member/findId";
 	}
-	
-	
-	//비밀번호찾기 페이지 이동
+
+	// 비밀번호찾기 페이지 이동
 	@RequestMapping(value = "/member/findPw.go")
 	public String findPw() {
 		logger.info("비밀번호찾기 페이지 이동");
 		return "member/findPw";
 	}
+
 	@RequestMapping(value = "/member/logout.do")
 	public String logout(HttpSession session, Model model) {
 		session.removeAttribute("mem_idx");
 		session.removeAttribute("mem_status");
-		session.removeAttribute("mem_id");
+		// session.removeAttribute("mem_id");
 		session.removeAttribute("mem_status");
 		model.addAttribute("msg", "로그아웃 되었습니다.");
 		return "/main";
 	}
-	
-	
-	@RequestMapping(value="member/login.do")
-	public String login(Model model, HttpSession session, String id, String pw) {
+
+	@RequestMapping(value = "member/login.do")
+	public String login(Model model, HttpSession session, String id, String pw,
+			@RequestParam(value = "remember", required = false) String remember) {
 		String page = "member/login";
 		logger.info("id : {} / pw : {}", id, pw);
-		
+
 		MemberDTO loginInfo = memberService.login(id, pw);
 		logger.info("login :" + loginInfo);
 
-		
-		if(loginInfo != null) {
-			page = "main";
-			session.setAttribute("mem_idx", loginInfo.getMem_idx());
-			session.setAttribute("mem_status", loginInfo.getMem_status());
-			session.setAttribute("mem_id", loginInfo.getMem_id());
-			session.setAttribute("mem_status", loginInfo.getMem_status());
-			logger.info("status:{}", loginInfo.getMem_status());
-		}else {
+		if (loginInfo != null) {
+			if (loginInfo.getMem_status().equals("M") || loginInfo.getMem_status().equals("Y")) {
+				page = "main";
+				session.setAttribute("mem_idx", loginInfo.getMem_idx());
+				session.setAttribute("mem_status", loginInfo.getMem_status());
+				session.setAttribute("mem_id", loginInfo.getMem_id());
+				session.setAttribute("mem_status", loginInfo.getMem_status());
+				logger.info("status:{}", loginInfo.getMem_status());
+			} else {
+				model.addAttribute("msg", "로그인이 불가능한 상태입니다.");
+			}
+		} else {
 			model.addAttribute("msg", "아이디 또는 비밀번호 확인해주세요");
 		}
-	
+
 		return page;
 	}
-	
+
 	@RequestMapping(value = "/member/join.do", method = RequestMethod.POST)
-	public String write(MultipartFile profilePhoto, MultipartFile mem_cor, HttpSession session,@RequestParam Map<String,String>param) {
+	public String write(MultipartFile profilePhoto, MultipartFile mem_cor, HttpSession session,
+			@RequestParam Map<String, String> param) {
 		logger.info("글 작성 요청");
-		logger.info("param : {}" , param);
+		logger.info("param : {}", param);
 		logger.info("profilePhoto : {}", profilePhoto);
 		logger.info("mem_cor : {}", mem_cor);
-		
+
 		String page = "redirect:/main";
-		
-			int row = memberService.write(profilePhoto,mem_cor,param);
-			if(row>0) {
-				page = "/member/joinForm";
-				
-				
-			}
+
+		int row = memberService.write(profilePhoto, mem_cor, param);
+		if (row > 0) {
+			page = "/member/joinForm";
+
+		}
 		return page;
 	}
-	
-	//회원가입 아이디 유효성 검사
-	@RequestMapping(value="member/overlay.do")
+
+	// 회원가입 아이디 유효성 검사
+	@RequestMapping(value = "member/overlay.do")
 	@ResponseBody
 	public Map<String, Object> overlay(String id) {
-		logger.info("id="+id);
+		logger.info("id=" + id);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("use", memberService.overlay(id));
-		
-		return map;
-	}
-	
-	//ID찾기 AJAX로 서버에 요청
-		@RequestMapping(value="member/findId.ajax")
-		@ResponseBody
-		public Map<String, Object> findId(String mem_name, String mem_number) {
-			logger.info("userId : "+mem_name);
-			logger.info("mem_number : "+ mem_number);
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("use", memberService.findId(mem_name,mem_number));
-			
-			return map;
-		}
-		
-	//PW변경하기
-	@RequestMapping(value = "member/findPw.ajax", method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> findPw(String mem_pw, String mem_id, String mem_number) {
-		logger.info("mem_id: {}, mem_number: {}", mem_id , mem_number);
-		logger.info("mem_pw : {}",  mem_pw);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("use", memberService.findPw(mem_pw,mem_id,mem_number));
-		
+
 		return map;
 	}
 
-	
-	
+	// ID찾기 AJAX로 서버에 요청
+	@RequestMapping(value = "member/findId.ajax")
+	@ResponseBody
+	public Map<String, Object> findId(String mem_name, String mem_number) {
+		logger.info("userId : " + mem_name);
+		logger.info("mem_number : " + mem_number);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("use", memberService.findId(mem_name, mem_number));
+
+		return map;
+	}
+
+	// PW변경하기
+	@RequestMapping(value = "member/findPw.do", method = RequestMethod.POST)
+	public String findPw(String memId, String new_password) {
+		String page = "member/findPw";
+		logger.info("mem_id: {}", memId);
+		logger.info("mem_pw: {}", new_password);
+		int row = memberService.findPw(memId, new_password);
+		if (row > 0) {
+			page = "member/login";
+		}
+		return page;
+	}
+
+	// 인증번호 받기
+	@RequestMapping(value = "member/memCheck.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> memCheck(String mem_id, String mem_number) {
+		String page = "member/findPw";
+		logger.info("mem_Id: {}", mem_id);
+		logger.info("mem_number: {}", mem_number);
+		Map<String, Object> map = new HashMap<String, Object>();
+		int row = memberService.memCheck(mem_id, mem_number);
+		if (row > 0) {
+			map.put("check", row);
+		} else {
+			map.put("check", 0);
+		}
+
+		return map;
+	}
+
 	@RequestMapping(value = "/user/adminMemberList.go")
 	public String adminMemberList(HttpSession session, Model model) {
-		String status = (String)session.getAttribute("mem_status"); 
-		String page= "redirect:/member/login.go";
-		logger.info("mem_status="+status);
-		logger.info("status="+status);
-		
-		if(status != null && status.equals("M")) {
+		String status = (String) session.getAttribute("mem_status");
+		String page = "redirect:/member/login.go";
+		logger.info("mem_status=" + status);
+		logger.info("status=" + status);
+
+		if (status != null && status.equals("M")) {
 			page = "./user/adminMemberList";
-		}else {
-			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+		} else {
+			model.addAttribute("msg", "로그인이 필요한 서비스입니다.");
 		}
-		
-	    return page;
+
+		return page;
 	}
-	
+
 	@RequestMapping(value = "/user/adminMemberList.ajax")
 	@ResponseBody
-	public Map<String, Object> adminMemberListAjax(@RequestParam Map<String,Object> param,Model model) {
+	public Map<String, Object> adminMemberListAjax(@RequestParam Map<String, Object> param, Model model) {
 		int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
-		String searchType = (String)param.get("searchType");
-		String keyword = (String)param.get("keyword");
-		logger.info("pg::"+pg);
-		logger.info("searchType::"+searchType);
-		logger.info("keyword::"+keyword);
-		
+		String searchType = (String) param.get("searchType");
+		String keyword = (String) param.get("keyword");
+		logger.info("pg::" + pg);
+		logger.info("searchType::" + searchType);
+		logger.info("keyword::" + keyword);
+
 		int showList = 10;
 		int spaceBlock = 5;
-		param.put("start", (pg-1) * showList);
+		param.put("start", (pg - 1) * showList);
 		int total = memberService.memberTotalCnt(param);
-		int totalP = (total + (showList-1)) / showList;	
-		int startPage = (pg-1) / spaceBlock*spaceBlock + 1;	
-		int endPage= startPage + (spaceBlock-1);
-		if(endPage > totalP) endPage = totalP;
-		
+		int totalP = (total + (showList - 1)) / showList;
+		int startPage = (pg - 1) / spaceBlock * spaceBlock + 1;
+		int endPage = startPage + (spaceBlock - 1);
+		if (endPage > totalP)
+			endPage = totalP;
+
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("memberList",memberService.memberListAjax(param));
+		map.put("memberList", memberService.memberListAjax(param));
 		map.put("startPage", startPage);
 		map.put("endPage", endPage);
 		map.put("totalP", totalP);
-		
+
 		logger.info("#### memberList : {}", map.get("memberList"));
 
 		model.addAttribute("total", total);
@@ -202,11 +222,10 @@ public class MemberController {
 
 		return map;
 	}
-	
+
+	// 회원가입 페이지 이동
 	@RequestMapping(value = "/user/adminJoinReq.go")
 	public String adminJoinReq(HttpSession session,Model model) {
-		logger.info("adminJoinReq 페이지 이동");
-		
 		String status = (String)session.getAttribute("mem_status"); 
 		String page= "redirect:/member/login.go";
 		logger.info("mem_status="+status);
@@ -220,30 +239,31 @@ public class MemberController {
 		
 		return page;
 	}
-	
+
 	@RequestMapping(value = "/user/adminMemberJoinReq.ajax")
 	@ResponseBody
-	public Map<String, Object> adminMemberJoinReq(@RequestParam Map<String,Object> param,Model model) {
+	public Map<String, Object> adminMemberJoinReq(@RequestParam Map<String, Object> param, Model model) {
 		int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
-		String keyword = (String)param.get("keyword");
-		logger.info("pg::"+pg);
-		logger.info("keyword::"+keyword);
-		
+		String keyword = (String) param.get("keyword");
+		logger.info("pg::" + pg);
+		logger.info("keyword::" + keyword);
+
 		int showList = 10;
 		int spaceBlock = 5;
-		param.put("start", (pg-1) * showList);
+		param.put("start", (pg - 1) * showList);
 		int total = memberService.memberJoinCnt(param);
-		int totalP = (total + (showList-1)) / showList;	
-		int startPage = (pg-1) / spaceBlock*spaceBlock + 1;	
-		int endPage= startPage + (spaceBlock-1);
-		if(endPage > totalP) endPage = totalP;
-		
+		int totalP = (total + (showList - 1)) / showList;
+		int startPage = (pg - 1) / spaceBlock * spaceBlock + 1;
+		int endPage = startPage + (spaceBlock - 1);
+		if (endPage > totalP)
+			endPage = totalP;
+
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("joinMemList",memberService.adminMemberJoinReqAjax(param));
+		map.put("joinMemList", memberService.adminMemberJoinReqAjax(param));
 		map.put("startPage", startPage);
 		map.put("endPage", endPage);
 		map.put("totalP", totalP);
-		
+
 		model.addAttribute("total", total);
 		model.addAttribute("pg", pg);
 		model.addAttribute("blockScale", spaceBlock);
@@ -251,43 +271,42 @@ public class MemberController {
 
 		return map;
 	}
-	
+
 	@RequestMapping(value = "/user/adminMemberSubmitStatus.ajax")
 	@ResponseBody
-	public Map<String, Object> adminMemberSubmitStatus(@RequestParam Map<String,Object> param,Model model) {
+	public Map<String, Object> adminMemberSubmitStatus(@RequestParam Map<String, Object> param, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("submitStatus",memberService.adminMemberSubmitStatus(param));
+		map.put("submitStatus", memberService.adminMemberSubmitStatus(param));
 		logger.info("#### submitStatus : {}", map.get("submitStatus"));
 		return map;
 	}
-	
+
 	@RequestMapping(value = "/user/adminMemberRefuseStatus.ajax")
 	@ResponseBody
-	public Map<String, Object> adminMemberRefuseStatus(@RequestParam Map<String,Object> param,Model model) {
+	public Map<String, Object> adminMemberRefuseStatus(@RequestParam Map<String, Object> param, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("refuseStatus",memberService.adminMemberRefuseStatus(param));
+		map.put("refuseStatus", memberService.adminMemberRefuseStatus(param));
 		logger.info("#### refuseStatus : {}", map.get("refuseStatus"));
 		return map;
 	}
-	
+
 	@RequestMapping(value = "/user/adminMemberDetail.go")
-	public String adminMemberDetail(HttpSession session, Model model, @RequestParam(value="mem_idx") String mem_idx) {
-		String status = (String)session.getAttribute("mem_status"); 
-		String page= "";
-		
-		String adminId = (String)session.getAttribute("mem_id");
+	public String adminMemberDetail(HttpSession session, Model model, @RequestParam(value = "mem_idx") String mem_idx) {
+		String status = (String) session.getAttribute("mem_status");
+		String page = "";
+
+		String adminId = (String) session.getAttribute("mem_id");
 		logger.info("##### adminId : {}", adminId);
-		
-		logger.info("mem_status="+status);
-		logger.info("status="+status);
-		if(status != null && status.equals("M")) {
+
+		logger.info("mem_status=" + status);
+		logger.info("status=" + status);
+		if (status != null && status.equals("M")) {
 			int memIdx = Integer.parseInt(mem_idx);
 			logger.info("inininininin");
 			List<MemberDTO> adminMemberDetail = memberService.adminMemberDetail(memIdx);
 			page = "./user/adminMemberDetail";
-			logger.info("adminMemberDetail="+adminMemberDetail);
-			
-			
+			logger.info("adminMemberDetail=" + adminMemberDetail);
+
 			if (!adminMemberDetail.isEmpty()) {
 	            MemberDTO memberDTO = adminMemberDetail.get(0);
 	            model.addAttribute("adminMemberDetail", adminMemberDetail);
@@ -302,55 +321,56 @@ public class MemberController {
 			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
 			 page= "redirect:/member/login.go";
 		}
-		
-	    return page;
+
+		return page;
 	}
-	
+
 	@RequestMapping(value = "/user/memActPhoList.ajax")
 	@ResponseBody
 	public Map<String, Object> memActPhoList(String page, String cnt, Model model, String mem_idx) {
 		int memIdx = Integer.parseInt(mem_idx);
 		int currPage = Integer.parseInt(page);
 		int pagePerCnt = Integer.parseInt(cnt);
-		logger.info("::::mem_idx::"+mem_idx);
-		Map<String, Object> map = memberService.memActPhoList(currPage,pagePerCnt,memIdx);
+		logger.info("::::mem_idx::" + mem_idx);
+		Map<String, Object> map = memberService.memActPhoList(currPage, pagePerCnt, memIdx);
 		logger.info("#### memActPhoList : {}", map);
 		return map;
 	}
-	
-	@RequestMapping(value="/user/fileRead/{file_read}")
+
+	@RequestMapping(value = "/user/fileRead/{file_read}")
 	public void download(@PathVariable String file_read, HttpServletResponse response) {
-		String file_root = "/Users/hsg/upload/Unifund/"+file_read;
-		 
+		String file_root = "/Users/hsg/upload/Unifund/" + file_read;
+
 		File file = new File(file_root);
-		
-		if(file.exists()) {
+
+		if (file.exists()) {
 			response.setHeader("Content-Disposition", "attachment; file_read=\"" + file_read + "\"");
-			 response.setContentType("application/octet-stream");
-			 try (FileInputStream fis = new FileInputStream(file);
-		            BufferedInputStream bis = new BufferedInputStream(fis);
-		             OutputStream out = response.getOutputStream()) {
+			response.setContentType("application/octet-stream");
+			try (FileInputStream fis = new FileInputStream(file);
+					BufferedInputStream bis = new BufferedInputStream(fis);
+					OutputStream out = response.getOutputStream()) {
 
-		            byte[] buffer = new byte[1024];
-		            int bytesRead;
+				byte[] buffer = new byte[1024];
+				int bytesRead;
 
-		            while ((bytesRead = bis.read(buffer)) != -1) {
-		                out.write(buffer, 0, bytesRead);
-		            }
-		            
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		    } else {
-		    	logger.info("그만..");
-		    }
+				while ((bytesRead = bis.read(buffer)) != -1) {
+					out.write(buffer, 0, bytesRead);
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			logger.info("그만..");
+		}
 	}
-	
+
 	@RequestMapping(value = "/user/stopMemberApply.ajax")
 	@ResponseBody
-	public Map<String, Object> stopMemberApply(@RequestParam Map<String,Object> param,Model model,HttpSession session) {
+	public Map<String, Object> stopMemberApply(@RequestParam Map<String, Object> param, Model model,
+			HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("stopMemberApply",memberService.stopMemberApply(param));
+		map.put("stopMemberApply", memberService.stopMemberApply(param));
 		logger.info("#### stopMemberApply : {}", map.get("stopMemberApply"));
 		return map;
 	}

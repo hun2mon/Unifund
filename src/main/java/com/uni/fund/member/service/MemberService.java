@@ -15,15 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.member.dao.MemberDAO;
 import com.uni.fund.member.dto.MemberDTO;
-import com.uni.fund.mypage.dto.MypageDTO;
-import com.uni.fund.project.dto.ProjectDTO;
+
+
 
 @Service
 public class MemberService {
 		@Autowired MemberDAO memberDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public String file_root = "/Users/hsg/upload/Unifund";
+	public String file_root = "C:/upload/";
 	
 	
 	public MemberDTO login(String id, String pw) {
@@ -112,10 +112,10 @@ public class MemberService {
 		return memberDAO.findId(mem_name,mem_number);
 	}
 
-	public Object findPw(String mem_pw, String mem_id, String mem_number) {
-		return memberDAO.findPw(mem_pw, mem_id,mem_number);
-	}
 	
+	public int findPw(String memId, String new_password) {
+		return memberDAO.findPw(memId, new_password);
+	}
 	public int adminMemberSubmitStatus(Map<String, Object> param) {
 		memberDAO.adminAddSubmitStatusTable(param);
 		return memberDAO.adminMemberSubmitStatus(param);
@@ -146,6 +146,10 @@ public class MemberService {
 	public int stopMemberApply(Map<String, Object> param) {
 		memberDAO.updatStopeMemberStatus(param);
 		return memberDAO.stopMemberApply(param);
+	}
+
+	public int memCheck(String mem_id, String mem_number) {
+		return memberDAO.memCheck(mem_id,mem_number);
 	}
 
 	public int stopMemberChange(Map<String, Object> param) {
