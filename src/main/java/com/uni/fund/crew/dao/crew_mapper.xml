@@ -116,6 +116,7 @@
     	(SELECT COUNT(*) FROM popularity 
      	WHERE crew_idx = c.crew_idx
     	) AS crew_cool_cnt
+    	,(SELECT COUNT(*) FROM crewMember_list WHERE c.crew_idx= #{param4} ) AS crew_current_number
 	FROM crew c
 	WHERE c.crew_status='A'
 	<if test='param1 == "latest"'>
@@ -150,7 +151,7 @@
      		WHERE crew_idx = c.crew_idx) AS crew_cool_cnt
 		FROM crew c
 		ORDER BY c.crew_idx DESC
-		LIMIT 10 OFFSET #{param1};
+		LIMIT 10 OFFSET #{param1}
 	</select>
 
 	<select id="allCountPage" resultType="Object">
