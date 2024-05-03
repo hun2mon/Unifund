@@ -126,21 +126,22 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/list.go", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/list.go")
 	public String crewListGo(HttpSession session) {
 		logger.info("list 진입");
 		String page= "crew/list";
 
-		int memIdx=(int)session.getAttribute("mem_idx");
-		if (memIdx!=0) {
+		String memId = (String)session.getAttribute("mem_id");
+		if (memId!=null) {
 			page= "crew/list";
-
+		}else {
+			return "member/login";
 		}
 		return page;
 	}
 	
 	
-	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/crewList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> crewListCall(String filterType,String page, String cnt,Integer crew_idx) {
 	    logger.info("crewList.ajax");
@@ -156,7 +157,7 @@ public class CrewController {
 	    return map;
 	}
 	
-	@RequestMapping(value="/crew/searchCrew.ajax", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/searchCrew.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> searchCrew(String Page, String cnt,String keyword) {
 	    int currentPage = Integer.parseInt(Page);
@@ -195,7 +196,7 @@ public class CrewController {
 	    return response;        
 	}
 	
-	@RequestMapping(value="/crew/CoolCheck.ajax")
+	@RequestMapping(value="/crew/CoolCheck.ajax",method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> crewCoolCheck(Integer crew_idx, HttpSession session){		
 		int memIdx=(Integer)session.getAttribute("mem_idx");
@@ -209,7 +210,7 @@ public class CrewController {
 		return map;		
 	}
 	
-	@RequestMapping(value="/crew/detail.go",method = RequestMethod.GET)	
+	@RequestMapping(value="/crew/detail.go")	
 	public String crewDetailGo(Model model, HttpSession session, String row, String crew_idx) {
 	    logger.info("crewDetail 들어간다.");
 	    String page="crew/detail";
@@ -239,7 +240,7 @@ public class CrewController {
 	    return page;
 	}
 	
-	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.GET)
+	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> detailCrewMember(String crew_idx, HttpSession session,
 			String page, String cnt){
@@ -259,7 +260,7 @@ public class CrewController {
 		return map;
 	}
 	
-	@RequestMapping(value="/crew/activityList.ajax",method = RequestMethod.GET)
+	@RequestMapping(value="/crew/activityList.ajax",method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> activityList(String crew_idx, HttpSession session, String page, String cnt,String crew_activity_details_idx){
 		logger.info("activityList 들어왔다.");

@@ -41,6 +41,7 @@ public class CrewDTO {
 	private String activity_photo;
 	private String crew_leader_name;
 	private String crew_member;
+	private int crew_current_number;
 
 	
 	public int getCrew_idx() {
@@ -255,5 +256,11 @@ public class CrewDTO {
 	}
 	public void setCrew_member(String crew_member) {
 		this.crew_member = crew_member;
+	}
+	public int getCrew_current_number() {
+		return crew_current_number;
+	}
+	public void setCrew_current_number(int crew_current_number) {
+		this.crew_current_number = crew_current_number;
 	}
 }
