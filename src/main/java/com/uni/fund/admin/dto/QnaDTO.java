@@ -12,7 +12,9 @@ public class QnaDTO {
 	private int qna_pass;
 	private String qna_status;
 	private String qna_content;
-	
+	private String comm_content;
+	private Date comm_date;
+	private String mem_status;
 	
 	
 	public String getMem_id() {
@@ -68,6 +70,24 @@ public class QnaDTO {
 	}
 	public void setQna_content(String qna_content) {
 		this.qna_content = qna_content;
+	}
+	public String getComm_content() {
+		return comm_content;
+	}
+	public void setComm_content(String comm_content) {
+		this.comm_content = comm_content;
+	}
+	public Date getComm_date() {
+		return comm_date;
+	}
+	public void setComm_date(Date comm_date) {
+		this.comm_date = comm_date;
+	}
+	public String getMem_status() {
+		return mem_status;
+	}
+	public void setMem_status(String mem_status) {
+		this.mem_status = mem_status;
 	}
 	
 	
