@@ -106,12 +106,12 @@ public class ProjectController {
 	 * 프로젝트 등록하기
 	 * */
 	@RequestMapping(value="/project/create.do", method=RequestMethod.POST)
-	public String projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo,@RequestParam Map<String, String> param, Integer mem_idx,Model model) {
+	public String projectCreate(MultipartFile pro_main_photo, MultipartFile pro_photo,@RequestParam Map<String, String> param,Model model,HttpSession session) {
 		logger.info(":: projectCreate CONTROLLER IN ::");
 		logger.info(":: Create param:{}",param);
 		String page = "redirect:/project/list.go";
 		String msg = "등록실패";
-		mem_idx = 1;
+		int mem_idx = (int) session.getAttribute("mem_idx");
 		
 		int row = projectService.projectCreate(pro_main_photo,pro_photo,param,mem_idx);
 		if(row == 1) {
@@ -453,19 +453,6 @@ public class ProjectController {
 		projectService.refuse(pro_idx,refuseContent);
 		return "redirect:/project/adminList.go";
 	}
-	
-	@RequestMapping(value = "/project/stateChange.ajax")
-	@ResponseBody
-	public Map<String, Object> stateChange(String pro_idx, String state){
-		Map<String, Object> map = new HashMap<String, Object>();
-		logger.info("stateChange : {}",pro_idx);
-		logger.info("stateChange : {}",state);
-		projectService.stateChange(pro_idx,state);
-		return map;
-	}
-	
-	
-	
 	
 	
 	
