@@ -27,6 +27,8 @@
         }
 
         .crew-details {
+        	margin-left:-50px;
+        	width:963px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -79,6 +81,8 @@
         }
 
         .crew-con {
+        	margin-left:-50px;
+        	width:963px;
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -240,7 +244,7 @@
 					</div>
             </div>
         </div>
-        <hr>
+        
         <div class="crew-con">
             <p>크루 설명 및 모집 정보</p>
             <p>${crew.crew_con}</p>
@@ -348,7 +352,7 @@ function listCall(showPage){
 	console.log(showPage);
 	var crew_idx= $("#crew_idx").val();
     $.ajax({
-       type:'get',
+       type:'post',
        url:'./detail.ajax',
        data:{
            'page':showPage,
@@ -385,7 +389,7 @@ function listCall1(showPage1){
 	var crew_idx= $("#crew_idx").val();
 	var crew_activity_details_idx= $("#crew_activity_details").val();
     $.ajax({
-       type:'get',
+       type:'post',
        url:'./activityList.ajax',
        data:{
            'page':showPage1,
@@ -581,7 +585,7 @@ function cool() { // 크루 인기도
 	var mem_idx = $('input[type="hidden"].mem_idx').val();
 	var crew_idx= $('input[type="hidden"].crew_idx').val();
 	$.ajax({
-		type : 'get',
+		type : 'post',
 		url : './CoolCheck.ajax',
 		data : {
 			'mem_idx' : mem_idx,
@@ -596,7 +600,7 @@ function cool() { // 크루 인기도
 	});	
 }
 
-function submitDelete(){ // 크루삭제(B 상태로 update)
+function submitDelete(){ 
 	var crew_idx= $('input[type="hidden"].crew_idx').val();
 	var delContent = $("#delContent").val();
 	$.ajax({
@@ -608,7 +612,7 @@ function submitDelete(){ // 크루삭제(B 상태로 update)
 		},
 		success : function(data) {
 			alert('삭제가 완료되었습니다.');
-			window.location.href='/main/crew/crewList.go';
+			window.location.href='/main/crew/list.go';
 		},
 		error : function(error) {
 			console.log(error);
@@ -624,7 +628,7 @@ function crewOut() {
         data: { 'crew_idx': crew_idx },
         success: function(response) {
             alert('크루 탈퇴가 완료되었습니다.');
-            window.location.href = '/main/crew/crewList.go'; // 크루 목록 페이지로 이동
+            window.location.href='/main/crew/list.go';
         },
         error: function(xhr, status, error) {
             console.log(error);
@@ -669,8 +673,8 @@ function delegateLeader() {
     
     if (delegateReason.length >= 10) {
         alert('사유는 100자 이내로 적어주세요.');
-        $("#delegateReason").focus(); // 입력 필드에 포커스를 맞춥니다.
-        return; // 함수 실행을 중지합니다.
+        $("#delegateReason").focus(); 
+        return; 
     }
     
     var confirmation = confirm("크루장을 위임하시겠습니까?");

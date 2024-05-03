@@ -39,6 +39,19 @@
 	background-color: #0056b3;
 }
 
+.btn-apply {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	background-color: #007bff;
+	color: #fff;
+	cursor: pointer;
+}
+
+.btn-apply:hover {
+	background-color: #0056b3;
+}
+
 input[type="text"] {
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -141,7 +154,7 @@ function listCall(showPage,filterType){
 	
 	console.log(filterType);
     $.ajax({
-       type:'get',
+       type:'post',
        url:'./crewList.ajax',
        data:{
            'page':showPage,
@@ -169,7 +182,6 @@ function listCall(showPage,filterType){
     });
 }
 
-
 function drawList(list){
     
 var content = '';
@@ -178,11 +190,11 @@ for(item of list){
    content += '<div class="crew-item">';
    // content += '<img src="/Users/ku-ilseung/Desktop/C/upload/crew_logo" path="/photo">';
    content += '<img src="/photo/'+item.crew_logo+'"class="listLogo_img">';
-   content += '<h2>' + item.crew_name + '</h2>';
+   content += '<h2>크루명 : ' + item.crew_name + '</h2>';
    content += '<input type="hidden" value="${crew.crew_idx}" name="crew_idx" class="crew_idx">';
-   content += '<p>' + item.crew_exp + '</p>';
-   content += '<p>' + item.crew_num + '</p>';
-   content += '<p>' + item.crew_cool_cnt + '</p>';
+   content += '<p>주 분야 :' + item.crew_exp + '</p>';
+   content += '<p>크루원 수 : '+item.crew_current_number+'/' + item.crew_num + '</p>';
+   content += '<p>인기도 : '  +item.crew_cool_cnt + '</p>';
    content += '<button class="btn" onclick=\'location.href="/main/crew/detail.go?crew_idx=' +item.crew_idx + '"\'>크루 정보</button>';
    content += '<button class="btn-apply" data-crew_idx="' + item.crew_idx + '">신청하기</button>';
    content += '</div>';
@@ -195,7 +207,7 @@ function searchAndPaginate(showPage) {
 	console.log($('#searchInput').val());
 	console.log(showPage);
     $.ajax({
-       type: 'get',
+       type: 'post',
        url: './searchCrew.ajax', 
        data:{
     	   'keyword':$('#searchInput').val(),
