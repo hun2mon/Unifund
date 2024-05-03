@@ -51,6 +51,14 @@
       WHERE mem_id = #{param1}
    </update>
    
+   <select id="memCheck" resultType="int">
+   	select count(mem_id) from member where mem_id = #{param1} and mem_number = #{param2}
+   </select>
+   
+   
+   
+   
+   
  <insert id="fileWrite">
         <if test='param3 == "A"'>
             insert into photo (pho_name, ref_idx, pho_division)

@@ -49,6 +49,8 @@ public interface MemberDAO {
 
 	void updatStopeMemberStatus(Map<String, Object> param);
 
+	int memCheck(String mem_id, String mem_number);
+
 
 
 

@@ -148,6 +148,10 @@ public class MemberService {
 		return memberDAO.stopMemberApply(param);
 	}
 
+	public int memCheck(String mem_id, String mem_number) {
+		return memberDAO.memCheck(mem_id,mem_number);
+	}
+
 
 
 }

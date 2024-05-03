@@ -204,7 +204,7 @@ button[type="button"]:hover {
 form {
 	margin-left: 550px;
 }
-}
+
 </style>
 </head>
 <body>
