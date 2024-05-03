@@ -65,8 +65,7 @@ public class MemberController {
 	public String logout(HttpSession session, Model model) {
 		session.removeAttribute("mem_idx");
 		session.removeAttribute("mem_status");
-		// session.removeAttribute("mem_id");
-		session.removeAttribute("mem_status");
+		session.removeAttribute("mem_id");
 		model.addAttribute("msg", "로그아웃 되었습니다.");
 		return "/main";
 	}
@@ -86,7 +85,6 @@ public class MemberController {
 				session.setAttribute("mem_idx", loginInfo.getMem_idx());
 				session.setAttribute("mem_status", loginInfo.getMem_status());
 				session.setAttribute("mem_id", loginInfo.getMem_id());
-				session.setAttribute("mem_status", loginInfo.getMem_status());
 				logger.info("status:{}", loginInfo.getMem_status());
 			} else {
 				model.addAttribute("msg", "로그인이 불가능한 상태입니다.");
