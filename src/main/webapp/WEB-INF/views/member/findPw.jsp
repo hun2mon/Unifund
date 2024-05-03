@@ -27,7 +27,7 @@ input, button {
 }
 
 /* Remaining styles from your CSS file */
-input[type="text"],input[type="button"] {
+input[type="text"], input[type="button"] {
 	border: 1px solid #ccc; /* 윤곽선을 회색으로 지정 */
 	border-radius: 5px; /* 윤곽선의 모서리를 둥글게 만듦 */
 	padding: 10px; /* 입력창 내부 여백 설정 */
@@ -36,19 +36,19 @@ input[type="text"],input[type="button"] {
 }
 
 input[type="text"][id="mem_id"] {
-    margin-left: 15px;
-    width: 300px;
+	margin-left: 15px;
+	width: 300px;
 }
+
 input[type="text"][id="mem_number"] {
-     margin-left: 15px;
-    width: 300px;
+	margin-left: 15px;
+	width: 300px;
 }
+
 input[type="text"][name="mem_auth"] {
-    margin-left: 15px;
-    width: 300px;
+	margin-left: 15px;
+	width: 300px;
 }
-
-
 
 /* 버튼 스타일 */
 input[type="button"][value="인증번호 받기"] {
@@ -61,8 +61,6 @@ input[type="button"][value="인증번호 받기"] {
 	cursor: pointer;
 	transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
 }
-
-
 
 /* 인증 버튼 스타일 */
 input[type="button"][value="인증"] {
@@ -81,19 +79,19 @@ input[type="button"][value="인증"]:hover {
 	background-color: #e68a00; /* 호버 시 배경색 변경 */
 }
 
-input[type="button"][value="취소"]{
-	margin-left:40px;
+input[type="button"][value="취소"] {
+	margin-left: 40px;
 	margin-top: 15;
-	width:120px;
+	width: 120px;
 	background-color: #007bff; /* 배경색 */
 	color: white; /* 글자색 */
 	padding: 10px 20px;
 	transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 */
 }
 
-input[type="button"][value="다음"]{
-	margin-left:1px;
-	width:120px;
+input[type="button"][value="다음"] {
+	margin-left: 1px;
+	width: 120px;
 	background-color: #007bff; /* 배경색 */
 	color: white; /* 글자색 */
 	padding: 10px 20px;
@@ -117,45 +115,46 @@ form {
 }
 
 .modal {
-	margin-top:-75px;
-	margin-left:55px;
-    text-align: center;
-    position: fixed;
-    left: 50%; /* 모달의 왼쪽을 화면의 중앙에 위치시킵니다. */
-    top: 50%;
-    transform: translate(-50%, -50%); /* 모달을 가운데로 정렬합니다. */
-    width: 500px; /* 모달의 너비를 조절합니다. */
-    height: 450px;
-    background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 효과를 줍니다. */
-    opacity: 0;
-    visibility: hidden;
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s; /* 변경된 속성에 대한 전환 효과 추가 */
-    z-index: 9999; /* 다른 요소보다 위에 위치하도록 z-index 설정 */
+	margin-top: -75px;
+	margin-left: 55px;
+	text-align: center;
+	position: fixed;
+	left: 50%; /* 모달의 왼쪽을 화면의 중앙에 위치시킵니다. */
+	top: 50%;
+	transform: translate(-50%, -50%); /* 모달을 가운데로 정렬합니다. */
+	width: 500px; /* 모달의 너비를 조절합니다. */
+	height: 450px;
+	background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 효과를 줍니다. */
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform
+		0.25s; /* 변경된 속성에 대한 전환 효과 추가 */
+	z-index: 9999; /* 다른 요소보다 위에 위치하도록 z-index 설정 */
 }
 
 .modal-content {
-    position: relative;
-    background-color: #e6e6e6;
-    padding: 1rem 1.5rem;
-    width: 100%;
-    height: 100%;
-    border-radius: 0.5rem;
-    z-index: 10000; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
+	position: relative;
+	background-color: #e6e6e6;
+	padding: 1rem 1.5rem;
+	width: 100%;
+	height: 100%;
+	border-radius: 0.5rem;
+	z-index: 10000; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
 }
 
 .show-modal {
-    opacity: 1;
-    visibility: visible;
+	opacity: 1;
+	visibility: visible;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 효과를 줍니다. */
-    z-index: 9998; /* 모달보다 아래에 위치하도록 z-index 설정 */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 효과를 줍니다. */
+	z-index: 9998; /* 모달보다 아래에 위치하도록 z-index 설정 */
 }
 
 .box {
@@ -170,11 +169,11 @@ form {
 .modal-content {
 	position: relative;
 	background-color: #e6e6e6;
-    padding: 1rem 1.5rem;
-    width: 100%;
-    height: 100%;
-    border-radius: 0.5rem;
-    z-index: 10000; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
+	padding: 1rem 1.5rem;
+	width: 100%;
+	height: 100%;
+	border-radius: 0.5rem;
+	z-index: 10000; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
 }
 
 .close-button {
@@ -192,21 +191,19 @@ form {
 }
 
 .submit {
-    color: #007bff; /* 버튼 텍스트 색상을 파란색(#007bff)으로 설정 */
-    font-weight: bold; /* 텍스트 굵기를 더 굵게 설정 */
-     border: 1px solid transparent; /* 버튼 테두리를 1픽셀의 투명한 선으로 설정 */
+	color: #007bff; /* 버튼 텍스트 색상을 파란색(#007bff)으로 설정 */
+	font-weight: bold; /* 텍스트 굵기를 더 굵게 설정 */
+	border: 1px solid transparent; /* 버튼 테두리를 1픽셀의 투명한 선으로 설정 */
 }
 
 .submit:hover {
-    background-color: #7fa6e0; /* 호버 시 배경색 변경 */
+	background-color: #7fa6e0; /* 호버 시 배경색 변경 */
 }
 
 .show-modal {
 	opacity: 1;
 	visibility: visible;
-		
-	}
-	
+}
 </style>
 </head>
 <body>
@@ -245,10 +242,10 @@ form {
 			</tr>
 
 			<tr>
-				<td colspan="2">
-				<input type="button" value="취소" onclick="cancelVerification()">
-				 <input type="button" id="nextButton" class="agreement" value="다음" onclick="validateInputs()">
-				 </td>
+				<td colspan="2"><input type="button" value="취소"
+					onclick="cancelVerification()"> <input type="button"
+					id="nextButton" class="agreement" value="다음"
+					onclick="validateInputs()"></td>
 			</tr>
 		</table>
 	</form>
@@ -264,9 +261,9 @@ form {
 					placeholder="새로운 비밀번호를 입력" id="mem_pw"> <br>
 				<p>비밀번호 확인</p>
 				<input type="password" name="confirm_password"
-					placeholder="비밀번호를 한번 더 입력" id="mem_pw1">
+					placeholder="비밀번호를 한번 더 입력" id="mem_pwCheck">
 			</div>
-			<input type="submit" id="submit" class="submit" value="확인 후 로그인화면">
+			<input type="button" value="확인 후 로그인화면" onclick="pwCheck()">
 		</div>
 	</form>
 	<br>
@@ -276,6 +273,14 @@ form {
 </body>
 <script>
 	var check = 0;
+	
+	function pwCheck() {
+		if ($('#mem_pw').val() != $('#mem_pwCheck').val()) {
+			alert('비밀번호를 확인해 주세요');
+		} else {
+			$('form').submit();
+		}
+	}
 
 	function validateId() {
 		var id = document.getElementById('mem_id').value;
@@ -427,10 +432,11 @@ form {
 	var submit = document.querySelector(".submit");
 	var close = document.querySelector(".close-button");
 
+	
 	function openModal() {
 		modal.classList.toggle("show-modal");
 	}
-
+	
 	
 	
 	close.addEventListener("click", openModal);

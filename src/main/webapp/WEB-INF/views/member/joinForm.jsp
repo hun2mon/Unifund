@@ -11,7 +11,8 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
 <!--
-개인정보 동의 모달창 css -->#submit, #cancel {
+개인정보 동의 모달창 css -->
+	.submit, cancel {
 	background-color: #f0f0f0;
 	border: none;
 	padding: 15px 30px;
@@ -25,7 +26,7 @@
 	transition: all 0.3s ease;
 }
 
-#submit:hover, #cancel:hover {
+.submit:hover, cancel:hover {
 	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
 
@@ -306,7 +307,7 @@ form {
 			</tr>
 			<tr>
 				<!-- button 태그에 type="button" 을 넣으면 submit 기능이 사라진다. -->
-				<th colspan="2"><button type="button" onclick="join()">회원가입</button></th>
+				<th colspan="2"><button type="button" onclick="register()">회원가입</button></th>
 			</tr>
 
 		</table>
@@ -337,6 +338,22 @@ form {
 	</div>
 </body>
 <script>
+
+
+function register() {
+	var pw = $('#mem_pw').val();
+    var confirm = $('#mem_confirm').val();
+
+    // 비밀번호와 비밀번호 확인 필드가 모두 값이 있을 때만 회원가입 처리
+    if (pw && confirmPw && pw === confirmPw) {
+        // 비밀번호 일치하는 경우 회원가입 처리
+        $('#Form').submit();
+    } else {
+        // 비밀번호가 일치하지 않는 경우
+        alert('입력하신 비밀번호를 확인해 주세요');
+    }
+}
+
 
 $(document).ready(function() {
 	
@@ -414,7 +431,7 @@ $('#mem_confirm').on('keyup', function(){
 	
 	
 	
-	function join(){
+	function register(){
 		
 		var $id = $('input[name="mem_id"]');
 		var $pw = $('input[name="mem_pw"]');
