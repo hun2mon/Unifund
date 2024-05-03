@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="resources/css/common.css" type="text/css">
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
@@ -179,12 +178,12 @@
 </head>
 <body>
    <%@ include file = "/WEB-INF/views/common/header.jsp" %>
-   <hr class="hr-13">
    <br>
    <div id="box">
       <div id="minibox">
-         <form action="introUpdate.do?mem_idx=${introDto.mem_idx}" method="post" enctype="multipart/form-data">
+         <form action="introUpdate.do?mem_idx=${memIdx}" method="post" enctype="multipart/form-data">
          <h1>자기소개서</h1>
+         	   <input id="phoMem_idx" value="${memIdx}" hidden>
                <div class="intro">주분야</div>
                   <input type="text" name="selfExp" placeholder="주분야를 입력해주세요."  value="${introDto.self_exp}">
                <div class="intro">자기소개</div>
@@ -216,23 +215,26 @@
 	   photoList(showPage);
 	});
 	
+	var $mem_idx = $('#phoMem_idx').val()
+	
 	function photoList(page) {
 	    $.ajax({
 	       type:'get',
 	       url:'./photoList.ajax',
 	       data:{
 	          'page':page,
-	          'cnt':1
+	          'cnt':1,
+	          'mem_idx':$mem_idx
 	       },
 	       dataType:'json',
 	       success:function(data){
-	               console.log(data);
+	               console.log('data',data);
 	               drawPhoList(data.list);
 	               
 	               var startPage = data.currPage  > data.totalPages ? data.totalPages : data.currPage;
 	               
 	               $('#pagination_pho').twbsPagination({
-	                   startPage:startPage, // 시작페이지
+	                   startPage:1, // 시작페이지
 	                   totalPages:data.totalPages, // 총 페이지 갯수
 	                   visiblePages:5, // 보여줄 페이지 수[1][2][3][4][5]
 	                   onPageClick:function(evt, pg){
@@ -251,18 +253,19 @@
 	 
 	 function drawPhoList(list) {
 	    var content = '';
+	    
 	    if (list.length === 0) {
 	        content += '<tr>';
-	        content += '<td><img class ="imgList" src="/photo/no_image.jpg"  style="width: 300px; height: 300px;"></td>';
+	        content += '<td><img class ="imgList" src="../resources/profile_img/no_image.jpg"  style="width: 300px; height: 300px;"></td>';
 	        content += '</tr>';  
 	    } else {
 	        for (item of list) {
 	            content += '<tr>';
 	            content += '<td style="width: 300px;"><img class="imgList" src="/photo/' + item.pho_name + '" style="width: 300px; height: 300px;"></td>';	            
-	            content += '<tr>';
+	            content += '</tr>';
 	            content += '<tr>';
 	            content += "<td><a href='#' class='deleteButton' data-pho-name='" + item.pho_name + "'>삭제</a></td>";
-	            content += '<tr>';
+	            content += '</tr>';
 	        }   
 	    } 
 	    $('#photoList').html(content);

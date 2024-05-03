@@ -100,7 +100,7 @@ public class MypageService {
        int row = 0;  
        
        String isSelfEmpty = mypageDAO.isSelfEmpty(userId);
-       
+       logger.info("isSelfEmpty"+isSelfEmpty);
        if (isSelfEmpty != null) {
           row = mypageDAO.introUpDo(selfExp,selfInt,userId);
       }else {
