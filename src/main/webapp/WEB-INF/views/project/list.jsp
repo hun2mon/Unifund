@@ -523,5 +523,8 @@ background: rgba(255, 255, 255, 0.15);
 		var pro_idx = $(this).closest('.form-container').find('input[type="hidden"].pro_idx').val();
 		location.href = './detail.go?pro_idx='+ pro_idx
 	});
+	
+
+	
 </script>
 </html>

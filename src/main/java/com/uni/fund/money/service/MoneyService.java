@@ -19,7 +19,7 @@ public class MoneyService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired MoneyDAO moneyDAO;
 	
-	public void chargeDo(String cashCharge, String mem_idx) {
+	public void chargeDo(String cashCharge, int mem_idx) {
 		int row = moneyDAO.chargeDo(cashCharge, mem_idx);
 		if (row > 0) {
 			moneyDAO.chargeHis(cashCharge, mem_idx);			

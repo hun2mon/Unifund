@@ -287,5 +287,9 @@
 		VALUES(#{param1},#{param2},'K',#{param3})
 	</insert>
 	
+	<update id="refuse">
+		UPDATE crewMember_history SET crew_mem_status='C', crew_mem_rsn='거절' WHERE mem_idx=#{param1} and crew_idx=#{param2}
+	</update>
+	
 	
 </mapper>

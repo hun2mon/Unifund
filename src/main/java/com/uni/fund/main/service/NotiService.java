@@ -18,8 +18,9 @@ public class NotiService {
 	public List<NotiDTO> notiList(int mem_idx) {
 		return notiDAO.notiList(mem_idx);
 	}
-	public void blindNoti(String noti_idx) {
-		notiDAO.blindNoti(noti_idx);
+	public int blindNoti(String noti_idx) {
+		int row = notiDAO.blindNoti(noti_idx);
+		return row;
 	}
 	
 }
