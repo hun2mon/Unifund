@@ -86,7 +86,12 @@ public class AnnouncementService {
 	private void annFileSave(int noti_idx, MultipartFile noti_photo, String notiPhotoDiv) {
 		if (noti_photo != null) {
 			String oriName = noti_photo.getOriginalFilename();
-			String annPhoto = oriName.substring(oriName.lastIndexOf("."));
+			String annPhoto = "";
+			if(oriName.isEmpty()) {
+				return;
+			}
+			annPhoto = oriName.substring(oriName.lastIndexOf("."));
+					
 			String newAnnFileName = System.currentTimeMillis() + annPhoto;
 
 			Path AnnPath = Paths.get(file_root + newAnnFileName);

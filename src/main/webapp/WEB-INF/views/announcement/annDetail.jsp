@@ -84,7 +84,7 @@ h2 {
 				<c:choose>
 					<c:when test="${not empty notiPhoto}">
 						<img src="/photo/${notiPhoto}" class="img-responsive"
-							alt="공지사항 이미지">
+							alt="">
 					</c:when>
 					<c:otherwise>
 						<p>${announcementDTO.noti_content}</p>
