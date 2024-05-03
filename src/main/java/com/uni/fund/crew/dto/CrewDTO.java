@@ -33,8 +33,14 @@ public class CrewDTO {
 	private String crew_leader_count;
 	private String mem_id;
 	private String state;
-
-
+	
+	private String crew_leader;
+	private int manager_idx;
+	private String activity_details;
+	private int crew_activity_details_idx;
+	private String activity_photo;
+	private String crew_leader_name;
+	private String crew_member;
 
 	
 	public int getCrew_idx() {
@@ -208,5 +214,46 @@ public class CrewDTO {
 	public void setState(String state) {
 		this.state = state;
 	}
-
+	public String getCrew_leader() {
+		return crew_leader;
+	}
+	public void setCrew_leader(String crew_leader) {
+		this.crew_leader = crew_leader;
+	}
+	public int getManager_idx() {
+		return manager_idx;
+	}
+	public void setManager_idx(int manager_idx) {
+		this.manager_idx = manager_idx;
+	}
+	public int getCrew_activity_details_idx() {
+		return crew_activity_details_idx;
+	}
+	public void setCrew_activity_details_idx(int crew_activity_details_idx) {
+		this.crew_activity_details_idx = crew_activity_details_idx;
+	}
+	public String getActivity_photo() {
+		return activity_photo;
+	}
+	public void setActivity_photo(String activity_photo) {
+		this.activity_photo = activity_photo;
+	}
+	public String getActivity_details() {
+		return activity_details;
+	}
+	public void setActivity_details(String activity_details) {
+		this.activity_details = activity_details;
+	}
+	public String getCrew_leader_name() {
+		return crew_leader_name;
+	}
+	public void setCrew_leader_name(String crew_leader_name) {
+		this.crew_leader_name = crew_leader_name;
+	}
+	public String getCrew_member() {
+		return crew_member;
+	}
+	public void setCrew_member(String crew_member) {
+		this.crew_member = crew_member;
+	}
 }

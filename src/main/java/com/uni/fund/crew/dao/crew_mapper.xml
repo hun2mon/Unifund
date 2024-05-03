@@ -17,6 +17,25 @@
 			VALUES(#{mem_idx},#{crew_name},#{crew_exp},#{crew_con},#{crew_num},#{crew_link},#{crew_local})
 	</insert>
 	
+ 	<insert id="crewActivityWrite"	
+		useGeneratedKeys="true" 
+		keyColumn="crew_activity_details_idx" 
+		keyProperty="crew_activity_details_idx"
+		 parameterType="com.uni.fund.crew.dto.CrewDTO">
+		INSERT crew_activity_details(crew_idx,activity_details)
+		VALUES(#{crew_idx},#{activity_details})
+	</insert> 	
+
+ 	<insert id="memberListInsert">
+		INSERT INTO crewMember_list (crew_idx,mem_idx,state)
+		VALUES(#{param1},#{param2},'크루장')
+	</insert>
+	
+	<insert id="memberHistoryInsert">
+		INSERT INTO crewMember_history (crew_idx,mem_idx,crew_mem_status)
+		VALUES(#{param1},#{param2},'K')
+	</insert> 
+	
 	<insert id="createCrewLogoPhoto">
 		INSERT INTO photo(ref_idx, pho_name, pho_division)
 		VALUES(#{param1},#{param2},#{param3})
@@ -25,6 +44,16 @@
 	<insert id="createCrewRecruPhoto">
 		INSERT INTO photo(ref_idx, pho_name, pho_division)
 		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="crewActivityPhoto">
+		INSERT INTO photo(ref_idx,pho_name,pho_division)
+		VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="crewActicityDescribe">
+		INSERT INTO crew_activity_details(crew_idx,activity_details)
+		VALUES (#{param1},#{param2})
 	</insert>
 	
 	<select id="crewUpdateForm" resultType="com.uni.fund.crew.dto.CrewDTO">
@@ -53,6 +82,18 @@
 		WHERE crew_idx=	#{crew_idx}
 	</update>
 	
+	<select id="activityList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT
+			crew_activity_details_idx
+ 			,activity_details
+  			,(SELECT pho_name FROM photo
+  			WHERE pho_division ='활동내역'
+  			AND ref_idx=cad.crew_activity_details_idx
+  			ORDER BY pho_idx) AS activity_photo
+		FROM crew_activity_details cad
+		WHERE crew_idx=#{param1} LIMIT #{param2},#{param3}
+	</select>
+	
 	<select id="crewList" resultType="com.uni.fund.crew.dto.CrewDTO">
 	SELECT 
     	(
@@ -75,7 +116,7 @@
     	(SELECT COUNT(*) FROM popularity 
      	WHERE crew_idx = c.crew_idx
     	) AS crew_cool_cnt
-	FROM crew c 
+	FROM crew c
 	WHERE c.crew_status='A'
 	<if test='param1 == "latest"'>
     	ORDER BY c.crew_idx DESC
@@ -88,6 +129,28 @@
     	ORDER BY c.crew_idx DESC
 	</if>
 		LIMIT 10 OFFSET #{param2}          
+	</select>	
+	
+	<select id="adminList" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+    		crew_idx
+    		,crew_num
+    		,crew_name
+    		,(SELECT mem_name 
+     		FROM member 
+     		WHERE mem_idx = (
+         		SELECT mem_idx 
+         		FROM crewMember_list 
+        		WHERE state = '크루장' AND crew_idx = c.crew_idx
+     		)) AS crew_leader_name
+    		,crew_num
+    		,crew_date
+    		,(SELECT COUNT(*) 
+     		FROM popularity 
+     		WHERE crew_idx = c.crew_idx) AS crew_cool_cnt
+		FROM crew c
+		ORDER BY c.crew_idx DESC
+		LIMIT 10 OFFSET #{param1};
 	</select>
 
 	<select id="allCountPage" resultType="Object">
@@ -106,6 +169,41 @@
     	<if test='param1 != "latest" and param1 != "popularity"'>
         	ORDER BY c.crew_idx DESC
     	</if>	
+	</select>
+	
+	<select id="detailCrewMemberCountPage" resultType="Object">
+    	SELECT CEIL(COUNT(crewMember_list_idx) / #{param1}) AS pages FROM crewMember_list WHERE crew_idx=#{param2}
+	</select>
+	
+	<select id="activityListCount" resultType="Object">
+		SELECT CEIL(COUNT(crew_activity_details_idx) / #{param1}) AS pages FROM crew_activity_details WHERE crew_idx=#{param2}
+	</select>
+	
+	<select id="adminAllCount" resultType="Object">
+		SELECT CEIL(COUNT(crew_idx)/#{param1}) AS pages FROM crew
+	</select>
+	
+	<select id="adminSearch" resultType="com.uni.fund.crew.dto.CrewDTO">
+		SELECT 
+    		crew_idx
+    		,crew_num
+    		,crew_name
+    		,(SELECT mem_name 
+     		FROM member 
+     		WHERE mem_idx = (
+         		SELECT mem_idx 
+         		FROM crewMember_list 
+        		WHERE state = '크루장' AND crew_idx = c.crew_idx
+     		)) AS crew_leader_name
+    		,crew_num
+    		,crew_date
+    		,(SELECT COUNT(*) 
+     		FROM popularity 
+     		WHERE crew_idx = c.crew_idx) AS crew_cool_cnt
+		FROM crew c
+		WHERE c.crew_name LIKE CONCAT('%', #{param1}, '%')
+		ORDER BY c.crew_idx DESC
+		LIMIT 10 OFFSET #{param2};
 	</select>
 	
 	<select id="searchCrew" resultType="com.uni.fund.crew.dto.CrewDTO">
@@ -140,19 +238,38 @@
     	WHERE crew_name LIKE CONCAT('%',#{param1},'%')
 	</select>
 	
+	<select id="adminSearchAllCount" resultType="Object">
+		SELECT CEIL(COUNT(crew_idx) / #{param2}) AS pages FROM crew
+    	WHERE crew_name LIKE CONCAT('%',#{param1},'%')
+	</select>
+	
 	<select id="isApplying" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(*) FROM crewMember_history WHERE mem_idx =#{mem_idx} AND crew_mem_status ='A'
+		SELECT COUNT(*)
+		FROM crewMember_history 
+		WHERE mem_idx = #{param1} AND crew_mem_status ='A'
+		ORDER BY crew_mem_idx  DESC
+		LIMIT 1;
 	</select>
 	
 	<select id="isMember" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*) 
 		FROM crewMember_history 
-		WHERE mem_idx= 1 AND 
+		WHERE mem_idx= #{param1} AND 
 			(crew_mem_status='B' 
-			OR crew_mem_status='C' 
-			OR crew_mem_status='D' 
-			OR crew_mem_status='E' 
+			OR crew_mem_status='C'
 			OR crew_mem_status='K')
+	</select>
+	
+	<select id="isOutOrKick" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*)
+		FROM crewMember_history 
+		WHERE 
+			mem_idx = #{param1} 
+			AND crew_idx=#{param2}
+			AND (crew_mem_status='D'
+				OR crew_mem_status='E')		
+		ORDER BY crew_mem_idx  DESC
+		LIMIT 1
 	</select>
 	
 	<insert id="applyCrew" parameterType="map">
@@ -179,6 +296,7 @@
     		,c.crew_local
     		,c.crew_con
     		,c.crew_link
+    		,c.mem_idx
     		,(SELECT pho_name FROM photo
      		WHERE pho_division ='모집설명'
      		AND ref_idx= c.crew_idx
@@ -193,6 +311,9 @@
     		,(SELECT COUNT(*) FROM popularity 
      		WHERE crew_idx = c.crew_idx
     		) AS crew_cool_cnt
+    		,(SELECT mem_idx FROM crewMember_list WHERE state='크루장' AND crew_idx=#{param2}) AS crew_leader
+<!--     		,(SELECT mem_idx FROM crewMember_list WHERE state='일반크루원' AND crew_idx=#{param2}) AS crew_member
+ -->    		,(SELECT mem_idx from member WHERE mem_status='M' AND mem_idx=#{param3}) AS manager_idx
 		FROM crew c
 		WHERE crew_idx=#{param2}
 	</select>
@@ -207,7 +328,7 @@
 	
 	<select id="allCount" resultType="int">
 		SELECT CEIL(COUNT(mem_idx)/#{param1}) AS pages FROM crewMember_history WHERE crew_idx = #{param2} and crew_mem_status = 'A'
-	</select>
+	</select>	
 	
 	<update id="approve">
 		UPDATE crewMember_history
@@ -241,9 +362,18 @@
 		DELETE FROM crewMember_list WHERE crew_idx=#{param1} AND mem_idx=#{param2}
 	</delete>
 	
-	<update id="crewOutMemberHistoryUpdate">
-		UPDATE crewMember_history SET crew_mem_status='D' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
-	</update>
+	<delete id="activityDel">
+		DELETE FROM crew_activity_details WHERE crew_activity_details_idx=#{param1}
+	</delete>
+	
+	<delete id="activityPhotoDel">
+		DELETE FROM photo WHERE ref_idx=#{param1} AND pho_division='활동내역'
+	</delete>
+	
+	<insert id="crewOutMemberHistoryInsert">
+		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status)
+		VALUES(#{param1},#{param2},'D')
+	</insert>
 	
 	<select id="detailCrewMember" resultType="com.uni.fund.crew.dto.CrewDTO">
 		SELECT 
@@ -256,17 +386,14 @@
 		WHERE crew_idx=#{param3}
 		LIMIT 5 OFFSET #{param1} 
 	</select>
-	
-	<select id="detailCrewMemberCountPage" resultType="Object">
-    	SELECT CEIL(COUNT(crew_idx) / #{param1}) AS pages FROM crewMember_list
-	</select>
-	
+		
 	<delete id="crewMemberDeport">
 		DELETE FROM crewMember_list WHERE crew_idx=#{param1} AND mem_idx=#{param2}
 	</delete>
 	
 	<insert id="crewMemberDeportHistoryInsert">
-		UPDATE crewMember_history SET crew_mem_status='E' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
+		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status)
+		VALUES(#{param1},#{param2},'E')
 	</insert>
 	
 	<update id="crewChiefTomemberCrewMemberListUpdate">
@@ -290,6 +417,8 @@
 	<update id="refuse">
 		UPDATE crewMember_history SET crew_mem_status='C', crew_mem_rsn='거절' WHERE mem_idx=#{param1} and crew_idx=#{param2}
 	</update>
+	
+	
 	
 	
 </mapper>

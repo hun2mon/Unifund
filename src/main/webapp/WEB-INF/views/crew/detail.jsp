@@ -187,12 +187,12 @@
     text-decoration: none;
     cursor: pointer;
 }
-    </style>
+</style>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
     <input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
-    <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${member.mem_idx}"/>
+    <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${mem_idx}"/>
     <input type="hidden" name="state" class="state" id="state" value="${crewMember_list.state}"/>
     <div class="container" id="crew-detail-container">
         <div class="crew-details">
@@ -220,9 +220,15 @@
                 <div class="thumb">
                     <button class="btn like-btn" onclick="cool()">👍</button>
                 </div>
-                <button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
-				<button class="btn edit-btn" onclick="location.href='/main/crew/crewUpdateForm.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
-				<button class="btn delete-btn" onclick="openDeleteModal()">크루 삭제</button>
+                <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.crew_member}">
+                	<button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
+                </c:if>
+                <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
+					<button class="btn edit-btn" onclick="location.href='/main/crew/update.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
+				</c:if>
+				<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
+    				<button class="btn delete-btn" onclick="openDeleteModal()">크루 삭제</button>				
+				</c:if>
 					<div id="deleteModal" class="modal">
     					<div class="modal-content">
         					<span class="close" onclick="closeDeleteModal()">&times;</span>
@@ -250,6 +256,7 @@
         			<button class="btn cancel-btn" onclick="closeDelegateModal()">취소</button>
     			</div>
 			</div>
+			<div>
             <table class="crew-table">
                 <thead>
                     <tr>
@@ -262,24 +269,70 @@
                 <tr>
       				<td colspan="3">
       					<div class="container"> 
-      						<nav aria-label="Page navigation" style="text-align:center">
-                				<ul class="pagination" id="pagination"></ul>
+      						<nav aria-label="Page navigation">
+                				<ul class="pagination" id="pagination_member"></ul>
             				</nav>     
         				</div>
       				</td>
      			 </tr>
             </table>
+            <div class="activity-section">
+            	<table class="activity-table">
+            		<thead>
+            			<tr>
+            				<th>활동 사진</th>
+            				<th>활동 내용</th>
+            			</tr>
+            		</thead>
+            		<tbody class="activity_list" id="activity_list"></tbody>
+            		<tr>
+            			<td colspan="2">
+            				<div class="container">
+            					<nav aria-label="Page navigation" style="text-align:center">
+                					<ul class="pagination" id="pagination"></ul>
+            					</nav>     
+            				</div>
+            			</td>
+            		</tr>
+            	</table>
+            	<div class="activity-buttons">
+            		<c:if test="${sessionScope.mem_idx == crew.crew_leader}">
+            			<button class="btn btn-primary" onclick="openActivityModal()">활동내역 등록</button>
+            		</c:if>
+            	</div>
+            </div>
+            <!-- 활동 내역 등록 모달 -->
+			<div id="activityModal" class="modal">
+    			<div class="modal-content">
+        			<span class="close" onclick="closeActivityModal()">&times;</span>
+        			<h2>활동내역 등록</h2>
+        			<form action="activity/write.do" method="post" enctype="multipart/form-data">
+        				<input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
+            			<textarea id="activity_details" name="activity_details" rows="6" placeholder="활동 내용(1000자 이내)을 입력해주세요"></textarea>
+            			<input type="file" id="crew_activity_photo" name="crew_activity_photo">        			
+        			<button class="btn btn-primary" onclick="submitActivity()">등록</button>
+        			<button class="btn btn-secondary" onclick="closeActivityModal()">취소</button>
+        			</form>
+    			</div>
+			</div>
         </div>        
     </div>
+   
+
 </body>
 
 <script>
 
+
+
 var showPage = 1;
+var showPage1 = 1;
 
 $(document).ready(function(){
 	listCall(showPage);
-	$('#pagination').twbsPagination('destroy');
+	listCall1(showPage1);
+/* 	$('#pagination_member').twbsPagination('destroy');
+	$('#pagination').twbsPagination('destroy'); 	 */
 	
     var userState = $("#state").val(); 
     console.log(userState);
@@ -295,7 +348,7 @@ function listCall(showPage){
 	console.log(showPage);
 	var crew_idx= $("#crew_idx").val();
     $.ajax({
-       type:'post',
+       type:'get',
        url:'./detail.ajax',
        data:{
            'page':showPage,
@@ -305,29 +358,108 @@ function listCall(showPage){
        dataType:'json',
        success:function(data){                 
           console.log(data);          
-          drawList(data.list);   
-          $('#pagination').twbsPagination({
-          	startPage:1, // 시작페이지
+          drawList(data.list); 
+          var startPage = 1;
+
+          $('#pagination_member').twbsPagination({
+          	startPage:startPage, // 시작페이지
           	totalPages:data.totalPages, // 총 페이지 수
           	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
           	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
           		console.log(pg); // 클릭한 페이지 번호
           		showPage = pg;
           		listCall(pg);
+          		
           	}
           })
        },
-       error:function(error){
-          console.log(error);
+       error:function(request, status, error){
+    	   console.log("code: " + request.status)
+           console.log("message: " + request.responseText)
+           console.log("error: " + error);
        }
     });
 }
 
+function listCall1(showPage1){	
+	var crew_idx= $("#crew_idx").val();
+	var crew_activity_details_idx= $("#crew_activity_details").val();
+    $.ajax({
+       type:'get',
+       url:'./activityList.ajax',
+       data:{
+           'page':showPage1,
+           'cnt':1,
+           'crew_idx':crew_idx,
+           'crew_activity_details_idx':crew_activity_details_idx
+       },
+       dataType:'json',
+       success:function(data){                 
+          console.log(data);          
+          drawList1(data.activity_list);   
+          var startPage = 1;
+
+          $('#pagination').twbsPagination({
+          	startPage:startPage, // 시작페이지
+          	totalPages:data.totalPages, // 총 페이지 수
+          	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
+          	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+          		console.log(pg); // 클릭한 페이지 번호
+          		showPage1 = pg;
+          		listCall1(pg);
+          	}
+          })
+       },
+       error:function(request, status, error){
+    	   console.log("code: " + request.status)
+           console.log("message: " + request.responseText)
+           console.log("error: " + error);
+       }
+    });
+}
+
+function drawList1(activity_list) {
+	var content='';
+	
+	for(item of activity_list){
+		content += '<tr>';
+		content += '<input type="hidden" value="${crew_activity_details.crew_activity_details_idx}" name="crew_activity_details_idx" class="crew_activity_details_idx">';
+		content += '<td><img src="/photo/'+item.activity_photo+'"class="activity_photo_img"></td>';
+		content += '<td>' + item.activity_details + '</td>';
+		content += '</tr>';
+		content += '<tr>';
+		content += '<td colspan=2><input type="button" value="삭제" onclick="activityDel('+item.crew_activity_details_idx+')"></td>';		
+		content += '</tr>';
+	}
+	$('#activity_list').html(content);
+	
+}
+
+function activityDel(idx) {
+	console.log(idx);
+	$.ajax({
+	       type:'post',
+	       url:'./activityDel.ajax',
+	       data:{
+	           'crew_activity_details_idx':idx
+	       },
+	       success:function(data){
+	          console.log(data);  
+	          alert('삭제가 완료되었습니다.');
+	          location.reload();
+	       },
+	       error:function(error){
+	          console.log(error);
+	          alert('삭제에 실패했습니다.');
+	       }
+	    });
+	
+}
+
 function drawList(list) {
     var content = '';
-    var leaderFound = false; // 크루장이 이미 나왔는지 여부를 나타내는 변수
+    var leaderFound = false; 
 
-    // 리스트의 각 항목에 대한 반복문
     for (item of list) {
         // 크루장인 경우 버튼추가 x
         if (item.state === '크루장' && !leaderFound) {
@@ -344,8 +476,10 @@ function drawList(list) {
         	content += '<td>' + item.state + '</td>';
         	content += '<td>' + item.mem_id + '</td>';
         	content += '<td class="crew-buttons">';
+        	content += '<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">';
         	content += '<button class="btn btn-danger" onclick="kickMember('+item.mem_idx+')">추방</button>';
         	content += '<button class="btn btn-warning" onclick="openDelegateModal('+item.mem_idx+')">크루장 위임</button>';
+        	content += '</c:if>';
         	content += '</td>';
         	content += '</tr>';
         }        
@@ -353,6 +487,8 @@ function drawList(list) {
     // 테이블에 내용 추가
     $('#list').html(content);
 }
+
+
 
 //모달 열기
 function openReportModal() {
@@ -382,6 +518,14 @@ function openDelegateModal(num) {
 
 function closeDelegateModal() {
     document.getElementById("delegateModal").style.display = "none";
+}
+
+function openActivityModal() {
+    document.getElementById("activityModal").style.display = "block";
+}
+
+function closeActivityModal() {
+    document.getElementById("activityModal").style.display = "none";
 }
 
 
@@ -549,6 +693,24 @@ function delegateLeader() {
             }
         });
     }	    
+}
+
+function submitActivity() {
+	var $activity_details=$('input[name="activity_details"]');
+	var $crew_activity_photo =$('input[name="crew_activity_photo"]');
+	
+	if(activity_details.val()==''){
+		alert('활동 내용을 입력해주세요.');
+		$activity_details.focus();
+	}else if($activity_details.val().length>1000){
+		alert('활동내용은 1000자 이내로 적어주세요.');
+		$activity_details.focus();
+	}else if($crew_activity_photo.val()=''){
+		alert('사진을 첨부해 주세요.');
+		$crew_activity_photo.focus();
+	}else {
+		$('form').submit();
+	}
 }
 
 
