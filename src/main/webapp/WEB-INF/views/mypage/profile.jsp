@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="resources/css/common.css" type="text/css">
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
@@ -106,8 +105,7 @@
       
    }
    
-   
-   
+
    #profile{
       
       width: 150px;
@@ -332,6 +330,7 @@ th, td {
          <div id="selfExp">${introDto.self_exp}</div>
          <div class="intro">자기소개</div>
          <div id="selfInt">${introDto.self_introduce}</div>
+         <input id="phoMem_idx" value="${info.mem_idx}" hidden>
         <h2>활동사진</h2>
         <hr class="hr-13">
         <table>    
@@ -350,7 +349,7 @@ th, td {
          	<button onclick="introBtn()" id="proBtn">자소서 수정</button>
       	</c:if>
       </div>
-       <c:if test="${mem_idx eq info.mem_idx}">
+       <c:if test="${(mem_idx eq info.mem_idx) or (mem_status eq 'M')}">
          <h2>신청한 펀딩 목록</h2>
         <hr class="hr-13">
         <table>
@@ -487,7 +486,8 @@ th, td {
       url:'./appList.ajax',
       data:{
          'page':page,
-         'cnt':5
+         'cnt':5,
+         'mem_idx':${info.mem_idx}
       },
       dataType:'json',
       success:function(data){
@@ -557,7 +557,8 @@ th, td {
          url:'./createList.ajax',
          data:{
             'page':page,
-            'cnt':5
+            'cnt':5,
+            'mem_idx':${info.mem_idx}
          },
          dataType:'json',
          success:function(data){
@@ -636,7 +637,8 @@ th, td {
          url:'./repList.ajax',
          data:{
             'page':page,
-            'cnt':5
+            'cnt':5,
+            'mem_idx':${info.mem_idx}
          },
          dataType:'json',
          success:function(data){
@@ -695,14 +697,15 @@ th, td {
       }
       $('#repList').html(content);
    }
-   
+   var $mem_idx = $('#phoMem_idx').val()
    function photoList(page) {
          $.ajax({
             type:'get',
             url:'./photoList.ajax',
             data:{
                'page':page,
-               'cnt':1
+               'cnt':1,
+               'mem_idx':$mem_idx
             },
             dataType:'json',
             success:function(data){
@@ -733,7 +736,7 @@ th, td {
          var content = '';
          if (list.length === 0) {
              content += '<tr>';
-             content += '<td><img src="../resources/project_img/noImg.png" style="width: 300px; height: 300px;"></td>';
+             content += '<td><img src="../resources/profile_img/no_image.jpg" style="width: 300px; height: 300px;"></td>';
              content += '</tr>';  
          } else {
              for (item of list) {
