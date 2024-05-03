@@ -78,8 +78,8 @@
 	 <div class="container">
         <div class="searchContainer">
             <span>
-                <input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-                <input type="button" value="검색" onclick="search(1)">
+                <input type="text" placeholder="검색어를 입력하세요" class="keyWord" id="inputField" >
+                <input type="button" id ="searchBtn" value="검색" >
             </span>
         </div>
         <table class="adminCrewList">
@@ -174,13 +174,13 @@ $('#searchBtn').click(function() {
 	search(showPage);
 })
 
-function enterKey() {
-		if (event.keyCode==13) {
-			var showPage = 1;
-			$('#pagination').twbsPagination('destroy');
-			search(showPage);
-		}
-	}
+$('#inputField').keypress(function(event) {
+    if (event.which === 13) { 
+        var showPage = 1;
+        $('#pagination').twbsPagination('destroy');
+        search(showPage);
+    }
+});
 
 function search(showPage) {	
 	console.log($('.keyWord').val());

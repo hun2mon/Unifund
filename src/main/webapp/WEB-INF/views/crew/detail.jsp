@@ -220,9 +220,11 @@
                 <div class="thumb">
                     <button class="btn like-btn" onclick="cool()">👍</button>
                 </div>
-                <button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
+                <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.crew_member}">
+                	<button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
+                </c:if>
                 <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
-					<button class="btn edit-btn" onclick="location.href='/main/crew/crewUpdateForm.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
+					<button class="btn edit-btn" onclick="location.href='/main/crew/update.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
 				</c:if>
 				<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
     				<button class="btn delete-btn" onclick="openDeleteModal()">크루 삭제</button>				
@@ -267,8 +269,8 @@
                 <tr>
       				<td colspan="3">
       					<div class="container"> 
-      						<nav aria-label="Page navigation" style="text-align:center">
-                				<ul class="pagination" id="pagination1"></ul>
+      						<nav aria-label="Page navigation">
+                				<ul class="pagination" id="pagination_member"></ul>
             				</nav>     
         				</div>
       				</td>
@@ -294,8 +296,8 @@
             		</tr>
             	</table>
             	<div class="activity-buttons">
-            		<c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
-            		<button class="btn btn-primary" onclick="openActivityModal()">활동내역 등록</button>
+            		<c:if test="${sessionScope.mem_idx == crew.crew_leader}">
+            			<button class="btn btn-primary" onclick="openActivityModal()">활동내역 등록</button>
             		</c:if>
             	</div>
             </div>
@@ -324,12 +326,13 @@
 
 
 var showPage = 1;
+var showPage1 = 1;
 
 $(document).ready(function(){
 	listCall(showPage);
-	listCall1(showPage);
-	$('#pagination').twbsPagination('destroy');
-	$('#pagination').twbsPagination('destroy');
+	listCall1(showPage1);
+/* 	$('#pagination_member').twbsPagination('destroy');
+	$('#pagination').twbsPagination('destroy'); 	 */
 	
     var userState = $("#state").val(); 
     console.log(userState);
@@ -345,7 +348,7 @@ function listCall(showPage){
 	console.log(showPage);
 	var crew_idx= $("#crew_idx").val();
     $.ajax({
-       type:'post',
+       type:'get',
        url:'./detail.ajax',
        data:{
            'page':showPage,
@@ -355,32 +358,37 @@ function listCall(showPage){
        dataType:'json',
        success:function(data){                 
           console.log(data);          
-          drawList(data.list);   
-          $('#pagination').twbsPagination({
-          	startPage:1, // 시작페이지
+          drawList(data.list); 
+          var startPage = 1;
+
+          $('#pagination_member').twbsPagination({
+          	startPage:startPage, // 시작페이지
           	totalPages:data.totalPages, // 총 페이지 수
           	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
           	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
           		console.log(pg); // 클릭한 페이지 번호
           		showPage = pg;
           		listCall(pg);
+          		
           	}
           })
        },
-       error:function(error){
-          console.log(error);
+       error:function(request, status, error){
+    	   console.log("code: " + request.status)
+           console.log("message: " + request.responseText)
+           console.log("error: " + error);
        }
     });
 }
 
-function listCall1(showPage){	
+function listCall1(showPage1){	
 	var crew_idx= $("#crew_idx").val();
 	var crew_activity_details_idx= $("#crew_activity_details").val();
     $.ajax({
        type:'get',
        url:'./activityList.ajax',
        data:{
-           'page':showPage,
+           'page':showPage1,
            'cnt':1,
            'crew_idx':crew_idx,
            'crew_activity_details_idx':crew_activity_details_idx
@@ -389,19 +397,23 @@ function listCall1(showPage){
        success:function(data){                 
           console.log(data);          
           drawList1(data.activity_list);   
+          var startPage = 1;
+
           $('#pagination').twbsPagination({
-          	startPage:1, // 시작페이지
+          	startPage:startPage, // 시작페이지
           	totalPages:data.totalPages, // 총 페이지 수
           	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
           	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
           		console.log(pg); // 클릭한 페이지 번호
-          		showPage = pg;
+          		showPage1 = pg;
           		listCall1(pg);
           	}
           })
        },
-       error:function(error){
-          console.log(error);
+       error:function(request, status, error){
+    	   console.log("code: " + request.status)
+           console.log("message: " + request.responseText)
+           console.log("error: " + error);
        }
     });
 }

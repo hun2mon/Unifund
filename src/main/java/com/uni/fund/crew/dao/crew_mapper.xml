@@ -172,7 +172,7 @@
 	</select>
 	
 	<select id="detailCrewMemberCountPage" resultType="Object">
-    	SELECT CEIL(COUNT(crew_activity_details_idx) / #{param1}) AS pages FROM crew_activity_details WHERE crew_activity_details_idx=#{param2}
+    	SELECT CEIL(COUNT(crewMember_list_idx) / #{param1}) AS pages FROM crewMember_list WHERE crew_idx=#{param2}
 	</select>
 	
 	<select id="activityListCount" resultType="Object">
@@ -244,7 +244,11 @@
 	</select>
 	
 	<select id="isApplying" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(*) FROM crewMember_history WHERE mem_idx =#{mem_idx} AND crew_mem_status ='A'
+		SELECT COUNT(*)
+		FROM crewMember_history 
+		WHERE mem_idx = #{param1} AND crew_mem_status ='A'
+		ORDER BY crew_mem_idx  DESC
+		LIMIT 1;
 	</select>
 	
 	<select id="isMember" parameterType="Integer" resultType="Integer">
@@ -253,8 +257,19 @@
 		WHERE mem_idx= #{param1} AND 
 			(crew_mem_status='B' 
 			OR crew_mem_status='C'
-			OR crew_mem_status='E' 
 			OR crew_mem_status='K')
+	</select>
+	
+	<select id="isOutOrKick" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*)
+		FROM crewMember_history 
+		WHERE 
+			mem_idx = #{param1} 
+			AND crew_idx=#{param2}
+			AND (crew_mem_status='D'
+				OR crew_mem_status='E')		
+		ORDER BY crew_mem_idx  DESC
+		LIMIT 1
 	</select>
 	
 	<insert id="applyCrew" parameterType="map">
@@ -297,7 +312,8 @@
      		WHERE crew_idx = c.crew_idx
     		) AS crew_cool_cnt
     		,(SELECT mem_idx FROM crewMember_list WHERE state='크루장' AND crew_idx=#{param2}) AS crew_leader
-    		,(SELECT mem_idx from member WHERE mem_status='M' AND mem_idx=#{param3}) AS manager_idx
+<!--     		,(SELECT mem_idx FROM crewMember_list WHERE state='일반크루원' AND crew_idx=#{param2}) AS crew_member
+ -->    		,(SELECT mem_idx from member WHERE mem_status='M' AND mem_idx=#{param3}) AS manager_idx
 		FROM crew c
 		WHERE crew_idx=#{param2}
 	</select>

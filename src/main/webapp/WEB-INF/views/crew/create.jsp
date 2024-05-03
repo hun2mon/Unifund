@@ -123,7 +123,7 @@ img.icon{
 <body>
 	<h3>크루 등록</h3>
 	<hr/>
-	<form action="./crewCreate.do" method = "post" enctype="multipart/form-data">
+	<form action="./create.do" method = "post" enctype="multipart/form-data">
 	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${mem_idx}">
 		<table>
 			<tr>
@@ -262,7 +262,7 @@ function overlay() {
 	
 	$.ajax({
 		type:'post', 
-		url:'crewOverlay.do', 
+		url:'overlay.do', 
 		data:{'crew_name':id}, 
 		success:function(data){ 
 			console.log(data);

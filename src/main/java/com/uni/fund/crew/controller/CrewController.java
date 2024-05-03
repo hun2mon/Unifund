@@ -28,13 +28,19 @@ public class CrewController {
 	@Autowired CrewService crewService;
 	
 	
-	@RequestMapping(value="/crew/crewCreate.go")
-	public String crewCreateGo() {
-		logger.info("crewCreate 들어왔다.");
-		return "crew/crewCreateForm";
+	@RequestMapping(value="/crew/create.go")
+	public String crewCreateGo(HttpSession session) {
+		int memIdx=(int)session.getAttribute("mem_idx");
+		String page="redirect:/";
+		logger.info("create 들어왔다.");
+		
+		if(memIdx!=0) {
+			page="crew/create";
+		}
+		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewCreate.do", method = RequestMethod.POST)
+	@RequestMapping(value="/crew/create.do", method = RequestMethod.POST)
 	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, 
 			@RequestParam Map<String, String>param, Integer mem_idx, Model model,HttpSession session) {
 		logger.info("create 들어왔다.");
@@ -79,7 +85,7 @@ public class CrewController {
 	}
 	
 	
-	@RequestMapping(value="/crew/crewOverlay.do")
+	@RequestMapping(value="/crew/overlay.do")
 	@ResponseBody
 	public Map<String, Object> crewOverlay(String crew_name){
 		logger.info("crew_name =  "+crew_name);
@@ -88,30 +94,30 @@ public class CrewController {
 		return map;
 	}
 	
-	@RequestMapping(value="/crew/crewUpdateForm.go")
+	@RequestMapping(value="/crew/update.go")
 	public String crewUpdateFormGo(Model model, HttpSession session, int crew_idx) {
-		String page="redirect:/crewDetail";
+		String page="redirect:/detail.go";
 		logger.info("update form idx = "+crew_idx);
-		crewService.crewUpdateForm(crew_idx,model);
-		page="crew/crewUpdateForm";		
+		crewService.crewUpdateForm(crew_idx,model);	
 
 	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
 	    logger.info("memIdx : "+session.getAttribute("mem_idx"));
 		
-		String memId= (String) session.getAttribute("mem_id");
-		if(memId!=null) {
-			page="crew/crewUpdateForm";
+		int memIdx=(int)session.getAttribute("mem_idx");
+
+	    if(memIdx!=0) {
+			page="crew/update";
 		}
 	    
 		
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewUpdate.do",method = RequestMethod.POST)
+	@RequestMapping(value="/crew/update.do",method = RequestMethod.POST)
 	public String crewUpdateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param){
 		logger.info("param : {}",param);
 		//int crew_idx=1;
-		String page="redirect:/crewDetail";
+		String page="redirect:/detail.go";
 		
 		crewService.crewUpdate(param,crew_logo_photo,crew_recru_photo);
 		page="redirect:/detail?crew_idx="+param.get("crew_idx");
@@ -120,10 +126,16 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewList.go", method = RequestMethod.GET)
-	public String crewListGo() {
-		logger.info("crewList 진입");
-		String page= "crew/crewList";
+	@RequestMapping(value="/crew/list.go", method = RequestMethod.GET)
+	public String crewListGo(HttpSession session) {
+		logger.info("list 진입");
+		String page= "crew/list";
+
+		int memIdx=(int)session.getAttribute("mem_idx");
+		if (memIdx!=0) {
+			page= "crew/list";
+
+		}
 		return page;
 	}
 	
@@ -158,13 +170,14 @@ public class CrewController {
 	    return map;
 	}
 	
-	@RequestMapping(value="/crew/apply.ajax")
+	@RequestMapping(value="/crew/apply.ajax",method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx,HttpSession session) {
 		
 	    Map<String, Object> response = new HashMap<String, Object>();
 		int memIdx=(Integer)session.getAttribute("mem_idx");
-		logger.info("memidx : {}", memIdx);
+		
+	    logger.info("memidx : {}", memIdx);
 	    
 	    String result = crewService.applyCrew(memIdx, crew_idx);
 	    
@@ -172,7 +185,10 @@ public class CrewController {
 	        response.put("success", "신청이 완료되었습니다.");
 	    } else if(result.equals("isApplying")) {
 	        response.put("error", "이미 신청 중 크루가 있습니다.");
-	    } else {
+	    } else if(result.equals("outOrKick")) {
+	    	response.put("error", "탈퇴했거나 추방당한 크루입니다.");
+	    }
+	    else {
 	        response.put("error", "현재 가입된 크루가 있습니다.");
 	    }
 	    
@@ -223,7 +239,7 @@ public class CrewController {
 	    return page;
 	}
 	
-	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.POST)
+	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> detailCrewMember(String crew_idx, HttpSession session,
 			String page, String cnt){

@@ -114,6 +114,8 @@ public interface CrewDAO {
 
 	Object adminSearchAllCount(String keyWord, int pagePerCnt);
 
+	int isOutOrKick(int memIdx, int crew_idx);
+
 
 	
 

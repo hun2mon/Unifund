@@ -21,8 +21,9 @@
 }
 
 .listLogo_img {
-	width: 100%;
-	height: auto;
+	width: 500px;
+    height: 300px;
+    object-fit: cover;
 }
 
 .btn {
@@ -89,6 +90,7 @@ input[type="text"] {
 </head>
 
 <body>
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
 	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${crew.crew_idx}">	<!--value값 바꿔줘야함 {crew.mem_idx} -->
 	<div class="header">
@@ -101,7 +103,7 @@ input[type="text"] {
 			style="margin-right: 10px;">
 		<button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button>
 		<button class="register-btn"
-			onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button>
+			onclick="location.href='/main/crew/create.go'">크루 등록</button>
 	</div>
 
 	<div class="crew_list" id="list"></div>
@@ -230,6 +232,13 @@ $('#searchBtn').click(function() {
     searchAndPaginate(showPage);
 })
 
+$('#searchInput').keypress(function(event) {
+    if (event.which === 13) { 
+        var showPage = 1;
+        $('#pagination').twbsPagination('destroy');
+        searchAndPaginate(showPage);
+    }
+});
 
 
 $(document).on('click', '.btn-apply', function() {

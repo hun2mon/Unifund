@@ -178,6 +178,7 @@ public class CrewService {
     }
 
 	public Map<String, Object> detailCrewMember(int currentPage, int pagePerCnt, String crew_idx) {
+		logger.info("service detail CrewMember");
 		int start = (currentPage - 1) * pagePerCnt;
         Map<String, Object> map = new HashMap<String,Object>();
         List<CrewDTO> list= crewDAO.detailCrewMember(start,pagePerCnt,crew_idx);
@@ -186,7 +187,7 @@ public class CrewService {
         map.put("list", list);        
         map.put("currentPage", currentPage);
         map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
-        logger.info("totalPage = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+        logger.info("totalPags = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
 		return map;
 	}	
 
@@ -234,6 +235,12 @@ public class CrewService {
 			return "memberCount";
 		}
 		
+		// 탈퇴했거나 추방당했는지 확인
+		int outOrKick = crewDAO.isOutOrKick(memIdx,crew_idx);
+		if(outOrKick>0) {
+			return "outOrKick";
+		}
+		
 		// 크루 신청 등록
 		Map<String, Object> param= new HashMap<String, Object>();
 		param.put("mem_idx",memIdx);
@@ -262,7 +269,6 @@ public class CrewService {
 	public CrewDTO detail(String crew_idx, String memId, int memIdx) {
 		logger.info("crew_idx : {}",crew_idx);
 		logger.info("memIdx : {}",memId);
-		
 		
 		return crewDAO.detail(memId,crew_idx,memIdx);
 	}
