@@ -102,15 +102,16 @@ public class MypageController {
    }
    
    @RequestMapping(value = "/mypage/introUpdate.do", method = RequestMethod.POST)
-   public String introUpdateDo(MultipartFile[] photos, HttpSession session, String selfExp, String selfInt ) {
+   public String introUpdateDo(MultipartFile[] photos, HttpSession session, String selfExp, String selfInt, String mem_idx) {
       logger.info("photos : {}",Arrays.toString(photos));
       logger.info("selfExp : "+selfExp+" / selfInt : " + selfInt);
-     
-      int mem_idx =  (int) session.getAttribute("mem_idx");
-      int row = mypageService.introCreDo(photos,selfExp,selfInt,mem_idx);
+      logger.info("mem_idx : "+mem_idx);
+      int memIdx = Integer.parseInt(mem_idx);
+      
+      int row = mypageService.introCreDo(photos,selfExp,selfInt,memIdx);
       
       
-      return "redirect:/mypage/profile.go?userIdx="+mem_idx;
+      return "redirect:/mypage/profile.go?userIdx="+memIdx;
    }
    
    @RequestMapping(value = "/mypage/appList.ajax")

@@ -23,7 +23,6 @@ public interface QnaDAO {
 
 	Object userQnaAllCount(String category, int pagePerCnt);
 
-
 	void allChangeStatusDO(int qna_idx, String status);
 
 	String passCheck(int qna_idx);
@@ -35,6 +34,10 @@ public interface QnaDAO {
 	QnaDTO qnaDetail(Integer qna_idx);
 
 	int qnaUpdate(QnaDTO qnaDTO);
+
+	List<QnaDTO> userSearch(String keyWord, int start, int pagePerCnt);
+
+	Object userSearchAllCount(String keyWord, int pagePerCnt);
 
 
 

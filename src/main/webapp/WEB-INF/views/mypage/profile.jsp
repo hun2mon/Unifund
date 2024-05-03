@@ -246,7 +246,7 @@ th, td {
 }
    
    #mile{
-      margin-left: 3;
+      margin-left: 0;
    }
    
  	.clickable-text {
@@ -271,7 +271,7 @@ th, td {
 </head>
 <body>
 	<%@ include file = "/WEB-INF/views/common/header.jsp" %>
-   <hr class="hr-13">
+   
    <br>
    <div id="box">
       <div id="profile">
@@ -320,7 +320,7 @@ th, td {
       </div>
       <br>
       <c:if test="${mem_idx eq info.mem_idx && info.crew_state eq '크루장'}">
-      	<button>신청자목록</button>
+      	<button onclick="judgeList()">신청자목록</button>
       </c:if>
       <c:if test="${mem_idx eq info.mem_idx}">
     	  <button onclick="proUp()">프로필수정</button>
@@ -477,6 +477,10 @@ th, td {
       location.href = '/main/money/mileageList.go?mem_idx=${mem_idx}';
    }
    
+   function judgeList(){
+	   location.href = '/main/crew/judgeList.go?crew_idx='+${info.crew_idx};
+   }
+   
    function listCall(page) {
    $.ajax({
       type:'get',
@@ -602,8 +606,7 @@ th, td {
             } else if (item.pro_state == 'B') {
             	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></a></td>';
             	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + '펀딩완료' + '</span></a></td>';
-            	 content += '<td><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + startdateStr + '</span></td>';
-                 content += '<td><span style="color:#6C757D; font-size: 16px; font-weight: bold;">' + pro_deadlineStr + '</span></td>';
+    
             } else if (item.pro_state == 'C') {
             	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></a></td>';
             	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">' + '펀딩중' + '</span></a></td>';

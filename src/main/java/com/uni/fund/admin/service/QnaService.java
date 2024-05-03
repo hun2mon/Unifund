@@ -106,10 +106,24 @@ public class QnaService {
 		return row;
 	}
 
+
 	public void qnaDel(Integer qnaDel) {
 		qnaDAO.qnaDel(qnaDel, 'B');
 		
 	}
+
+	public Map<String, Object> userSearch(String keyWord, int currPage, int pagePerCnt) {
+		int start = (currPage-1) * pagePerCnt;
+		List<QnaDTO> list = qnaDAO.userSearch(keyWord, start, pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("userTotalPages", qnaDAO.userSearchAllCount(keyWord, pagePerCnt));
+		logger.info(qnaDAO.userSearchAllCount(keyWord, pagePerCnt) + "asdfasd");
+		return result;
+	}
+	
+
 	
 	
 	

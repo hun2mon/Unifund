@@ -126,12 +126,7 @@ public class QnaController {
 	    return page;
 	}
 	
-	
-	
-	
-	
-	
-	
+
 	
 	@RequestMapping(value = "/qna/adminQnaList.ajax")
 	@ResponseBody
@@ -159,6 +154,20 @@ public class QnaController {
 		int pagePerCnt = Integer.parseInt(cnt);
 		
 		Map<String, Object> map = qnaService.search(keyWord,currPage,pagePerCnt);
+		return map;
+	}
+	
+	@RequestMapping(value = "/qna/userSearch.ajax")
+	@ResponseBody
+	public Map<String, Object> userSearch(String keyWord, String page, String cnt){
+		
+		logger.info("페이지당 보여줄 갯수 : " + cnt);
+		logger.info("요청 페이지 : " + page);
+
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String, Object> map = qnaService.userSearch(keyWord,currPage,pagePerCnt);
 		return map;
 	}
 	

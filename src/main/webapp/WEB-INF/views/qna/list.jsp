@@ -141,7 +141,7 @@
                     <option value="비공개">비공개</option>
                 </select>
                 <input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-                <input type="button" value="검색" onclick="search(1)">
+                <input type="button" value="검색" id="searchBtn">
             </span>
         </div>
         <table class="proList">
@@ -161,7 +161,7 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination" id="pagination"></ul>
             </nav>
-            <button class="btn" id="write" onclick="write()">글쓰기</button>
+            <button class="btn" id="write" onclick="location.href='./create.go'">글쓰기</button>
         </div>  
     </div>
     <div class="modal">
@@ -259,38 +259,40 @@
 	};
 	
 	function search(showPage) {
-		console.log($('.keyWord').val());
-		console.log(showPage);
-		$('.selectNum').val('전체');
-		$.ajax({
-			type:'get'
-			,url:'./search.ajax'
-			,data:{
-				keyWord:$('.keyWord').val(),
-				page:showPage,
-				cnt:10
-			}
-			,dataType:'json'
-			,success:function(data){
-				console.log(data.list);
-				console.log(data.totalPages);
-				drawList(data.list);
-				$('#pagination').twbsPagination({
-	            	startPage:1, // 시작페이지
-	            	totalPages:data.totalPages, // 총 페이지 수
-	            	visiblePages:5, // 보여줄 페이지 수 1,2,3,4,5
-	            	onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
-	            		console.log(pg); // 클릭한 페이지 번호
-	            		num = pg;
-	            		search(pg);
-	            	}
-	            })
-			}
-			,error:function(error){
-				console.log(error);
-			}
-		});
+		
+	    console.log($('.keyWord').val());
+	    console.log(showPage);
+	    $('.selectNum').val('전체');
+	    $.ajax({
+	        type: 'get',
+	        url: './userSearch.ajax',
+	        data: {
+	            keyWord: $('.keyWord').val(),
+	            page: showPage,
+	            cnt: 10
+	        },
+	        dataType: 'json',
+	        success: function (data) {
+	            console.log(data.list);
+	            console.log(data.userTotalPages);
+	            drawList(data.list);
+	            $('#pagination').twbsPagination({
+	                startPage: 1,
+	                totalPages: data.userTotalPages,
+	                visiblePages: 5,
+	                onPageClick: function (evt, pg) {
+	                    console.log(pg);
+	                    num = pg;
+	                    search(pg);
+	                }
+	            });
+	        },
+	        error: function (error) {
+	            console.log(error);
+	        }
+	    });
 	}
+
 	
 	function enterKey() {
 		if (event.keyCode==13) {
@@ -369,8 +371,11 @@
         }
     });
     
-    function write() {
-		location.href='qnaForm.go';
-	}
+    $('#searchBtn').click(function(){
+		var showPage= 1;
+		$('#pagination').twbsPagination('destroy');
+		search(showPage);
+	})
+  
 </script>
 </html>
