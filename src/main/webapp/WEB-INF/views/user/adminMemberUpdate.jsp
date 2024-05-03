@@ -23,12 +23,11 @@ body {
 input[type="text"], textarea, input[type="date"], select, option {
 	width: 100%;
 	padding: 10px;
-	border: none;
+	border: 1px solid lightgray;
 	border-radius: 11px;
 	box-sizing: border-box;
 	margin-bottom: 10px;
 	font-size: 16px;
-	background-color: #eeecec;
 }
 
 .container {
@@ -59,9 +58,9 @@ input[type="text"], textarea, input[type="date"], select, option {
 	box-sizing: border-box;
 	margin-bottom: 10px;
 	font-size: 16px;
-	border: none;
+	background-color:lightgray;
+	border: 1px solid lightgray;
 	border-radius: 11px;
-	background-color: #eeecec;
 }
 
 .uni_file {
@@ -69,11 +68,9 @@ input[type="text"], textarea, input[type="date"], select, option {
 	box-sizing: border-box;
 	margin-bottom: 10px;
 	font-size: 16px;
-	border: none;
 	margin-left: 7px;
-	position:;
+	border: 1px solid lightgray;
 	border-radius: 11px;
-	background-color: #eeecec;
 }
 
 .pro_photo, .pro_main_photo {
@@ -153,7 +150,7 @@ textarea {
 
 .detail_title {
 	font-size: 40px;
-	margin-top: 44px;
+	margin-top: 24px;
 	position: absolute;
 	margin-left: -150px;
 }
@@ -177,11 +174,12 @@ background-color: #5f9693;
 	height: 45px;
 	color: white;
 	border: none;
-	width: 150px;
+	width: 130px;
 	margin-top: 31px;
 	margin-left: auto;
 	display: block;
 	margin-right: 20px;
+	
 }
 
 .update_btn {
@@ -191,7 +189,7 @@ background-color: #5f9693;
 	height: 45px;
 	border: none;
 	width: 130px;
-	margin-top: 230px;
+	margin-top: 31px;
 	margin-left: auto;
 	display: block;
 	margin-right: 20px;
@@ -357,6 +355,40 @@ th.align {
 #cancel:hover, #ok:hover, #change:hover {
 	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
 }
+
+.delete_btn{
+	border-radius: 20px;
+    border: none;
+    padding: 13px;
+    color: #989898;
+    background-color: white;
+    box-shadow: 1px 1px 7px #a2a2a2;
+    cursor: pointer;
+}
+
+.delete_btn:hover{
+	background-color: lightgray;
+    box-shadow: inset 0px -3px 7px #a2a2a;
+}
+
+.fileAct{
+border-radius: 20px;
+    border: none;
+    padding: 13px;
+    color: #989898;
+    background-color: white;
+    box-shadow: 1px 1px 7px #a2a2a2;
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+.mem_id{
+background-color:lightgray;
+}
+
+.filef{
+background-color:pink;
+}
 </style>
 </head>
 <body>
@@ -366,56 +398,43 @@ th.align {
 		</c:if>
 			
 	<div class="container">
-
-		<c:forEach items="${adminMemberDetail }" var="adminMemberDetail">
-			<input type="hidden" value="${adminMemberDetail.mem_idx }" name="mem_idx" />
-			<input type="hidden" value="${adminMemberDetail.mng_rsndate }" name="mng_rsndate" class="mng_rsndate"/>
-			<input type="hidden" value="${adminMemberDetail.mng_stopdate }" name="mng_getstopdate"  class="mng_getstopdate"/>
+	<form action="adminMemberUpdate.do" method="post">
+		<c:forEach items="${adminMemberUpdate }" var="adminMemberUpdate">
+			<input type="hidden" value="${adminMemberUpdate.mem_idx }" name="mem_idx" />
+			<input type="hidden" value="${adminMemberUpdate.mng_rsndate }" name="mng_rsndate" class="mng_rsndate"/>
+			<input type="hidden" value="${adminMemberUpdate.mng_stopdate }" name="mng_getstopdate"  class="mng_getstopdate"/>
 			<div class="form-container">
 				<div class="top-container">
 					<button class="anotherMem_btn" style="cursor: pointer;"
-						onclick="location.href='./adminMemberList.go'">뒤로가기</button>
+						onclick="history.back()">뒤로가기</button>
 					<span class="detail_title">회원관리</span>
 					<input type="hidden" id="admin_id" class="admin_id" value="${sessionScope.mem_id }"/>
-
-					<c:if test="${adminMemberDetail.mem_status != 'S' && adminMemberDetail.mem_status != 'M'}">
-						<button
-							style="background-color: red; border-radius: 20px; color: white; border: none;"
-							class="stop_btn" onclick="openModal()">정지신청</button>
-							<div class="modal-container"></div>
-					</c:if>
-					<c:if test="${adminMemberDetail.mem_status == 'S' }">
-						<button class="stopChange_btn" onclick="openModal()">정지변경</button>
-						<div class="modal-container"></div>
-					</c:if>
-					<c:if test="${adminMemberDetail.mem_status == 'M' && adminMemberDetail.mem_status != 'S' }">
-					</c:if>
 				</div>
 				<hr>
 				<table style="width: 100%;">
 					<tr>
 						<th rowspan="4"
-							style="font-family: 'Arial', sans-serif; font-size: 32px; color: #919191; text-shadow: 3px 1px 1px rgb(225, 225, 225);">${adminMemberDetail.mem_id}님의
-							상세정보</th>
+							style="font-family: 'Arial', sans-serif; font-size: 32px; color: #919191; text-shadow: 3px 1px 1px rgb(225, 225, 225);">${adminMemberUpdate.mem_id}님의
+							정보수정</th>
 					</tr>
 					<tr>
 						<td colspan="5" class="status-container" style="width: 170px;">
 							<div class="status-label">회원상태:</div>
 							<div class="status-value">
-								<c:if test="${adminMemberDetail.mem_status == 'M' }">관리자</c:if>
-								<c:if test="${adminMemberDetail.mem_status == 'B' }">가입심사중</c:if>
-								<c:if test="${adminMemberDetail.mem_status == 'Y' }">활동중</c:if>
-								<c:if test="${adminMemberDetail.mem_status == 'N' }">탈퇴</c:if>
-								<c:if test="${adminMemberDetail.mem_status == 'S' }"><span style="color:red">정지</span></c:if>
-								<c:if test="${adminMemberDetail.mem_status == 'R' }">가입거절</c:if>
+								<c:if test="${adminMemberUpdate.mem_status == 'M' }">관리자</c:if>
+								<c:if test="${adminMemberUpdate.mem_status == 'B' }">가입심사중</c:if>
+								<c:if test="${adminMemberUpdate.mem_status == 'Y' }">활동중</c:if>
+								<c:if test="${adminMemberUpdate.mem_status == 'N' }">탈퇴</c:if>
+								<c:if test="${adminMemberUpdate.mem_status == 'S' }"><span style="color:red">정지</span></c:if>
+								<c:if test="${adminMemberUpdate.mem_status == 'R' }">가입거절</c:if>
 							</div>
 						</td>
 						<td rowspan="2"><c:if
-								test="${not empty adminMemberDetail.profile_file}">
-								<img class="img" src="/photo/${adminMemberDetail.profile_file}"
+								test="${not empty adminMemberUpdate.profile_file}">
+								<img class="img" src="/photo/${adminMemberUpdate.profile_file}"
 									style="width: 200px; height: 200px;">
 							</c:if> 
-							<c:if test="${empty adminMemberDetail.profile_file}">
+							<c:if test="${empty adminMemberUpdate.profile_file}">
 								<img class="img" src="../resources/profile_img/no_image.jpg"
 									style="width: 200px; height: 200px;">
 							</c:if>
@@ -424,7 +443,7 @@ th.align {
 						<td colspan="1" class="status-container"
 							style="width: 170px; margin-bottom: 138px; margin-top: 0;">
 							<div class="status-label">신고횟수:</div>
-							<div class="status-value">${adminMemberDetail.ref_idx_cnt}
+							<div class="status-value">${adminMemberUpdate.ref_idx_cnt}
 							</div>
 						</td>
 					</tr>
@@ -433,40 +452,28 @@ th.align {
 							style="width: 170px; margin-top: -139px;">
 							<div class="status-label">정지횟수:</div>
 							<div class="status-value">
-								${adminMemberDetail.stop_mem_idx}</div>
+								${adminMemberUpdate.stop_mem_idx}</div>
 						</td>
 					</tr>
 					<tr>
 						<th style="width: 50%;">아이디</th>
 						<th style="width: 50%;">연락처</th>
-						<c:if test="${adminMemberDetail.mem_gender == '여'}">
-							<th style="text-align: center;"><i style="width: 200px;"
-								class="fa-solid fa-venus"></i></th>
-						</c:if>
-						<c:if test="${adminMemberDetail.mem_gender == '남'}">
-							<th style="text-align: center;"><i style="width: 200px;"
-								class="fa-solid fa-mars"></i></th>
-						</c:if>
 					</tr>
 					<tr>
 						<td><input type="text" name="mem_id" class="mem_id"
-							value="${adminMemberDetail.mem_id }" readonly /></td>
+							value="${adminMemberUpdate.mem_id }" readonly/></td>
 						<td><input type="text" name="mem_number" class="mem_number"
-							value="${adminMemberDetail.mem_number }" readonly /></td>
-						<th class="align"><a href="../mypage/profile.go?userIdx=${adminMemberDetail.mem_idx}">
-						<i class="fa-solid fa-pen-nib"></i>회원프로젝트 보러가기</a></th>
+							value="${adminMemberUpdate.mem_number }"   /></td>
 					</tr>
 					<tr>
 						<th>이름</th>
 						<th>대학교</th>
-						<th class="align"><a href="../mypage/introUpdate.go?userIdx=${adminMemberDetail.mem_idx}">
-						<i class="fa-solid fa-pen-nib"></i>회원자기소개서수정</a></th>
 					</tr>
 					<tr>
 						<td><input type="text" name="mem_name" class="mem_name"
-							value="${adminMemberDetail.mem_name }" readonly /></td>
+							value="${adminMemberUpdate.mem_name }"   /></td>
 						<td><input type="text" name="mem_uni" class="mem_uni"
-							value="${adminMemberDetail.mem_uni }" readonly /></td>
+							value="${adminMemberUpdate.mem_uni }"   /></td>
 					</tr>
 					<tr>
 					<tr>
@@ -475,12 +482,12 @@ th.align {
 					</tr>
 					<tr>
 						<td><input type="text" name="mem_birth" class="mem_birth"
-							value="${adminMemberDetail.mem_birth }" readonly /></td>
+							value="${adminMemberUpdate.mem_birth }"   /></td>
 						<td><input type="text" style="width: 26%;"
 							name="mem_bankName" class="mem_bankname"
-							value="${adminMemberDetail.mem_bankName }" readonly /> <input
+							value="${adminMemberUpdate.mem_bankName }"   /> <input
 							type="text" style="width: 72%;" name="mem_bank" class="mem_bank"
-							value="${adminMemberDetail.mem_bank }" readonly /></td>
+							value="${adminMemberUpdate.mem_bank }"   /></td>
 					</tr>
 					<tr>
 						<th>이메일</th>
@@ -488,9 +495,9 @@ th.align {
 					</tr>
 					<tr>
 						<td><input type="text" name="mem_email" class="mem_email"
-							value="${adminMemberDetail.mem_email }" readonly /></td>
+							value="${adminMemberUpdate.mem_email }"   /></td>
 						<td><input type="text" name="mem_post" class="mem_post"
-							value="${adminMemberDetail.mem_post }" readonly /></td>
+							value="${adminMemberUpdate.mem_post }"   /></td>
 					</tr>
 					<tr>
 						<th>재학증명서</th>
@@ -498,11 +505,11 @@ th.align {
 					</tr>
 					<tr>
 						<td><input class="file_input file1"
-							value="${adminMemberDetail.uni_file }" readonly="readonly"></td>
+							value="${adminMemberUpdate.uni_file }" readonly></td>
 						<td><input type="text" name="mem_addr" class="mem_addr"
-							value="${adminMemberDetail.mem_addr }" readonly /></br> <input
+							value="${adminMemberUpdate.mem_addr }" /></br> <input
 							type="text" name="mem_detail" class="mem_detail"
-							value="${adminMemberDetail.mem_detail }" readonly /></td>
+							value="${adminMemberUpdate.mem_detail }"   /></td>
 					</tr>
 					<tr>
 						<th>주분야</th>
@@ -510,22 +517,22 @@ th.align {
 					</tr>
 					<tr>
 						<td><input type="text" name="self_exp" class="self_exp"
-							value="${adminMemberDetail.self_exp }" readonly /></td>
+							value="${adminMemberUpdate.self_exp }"   /></td>
 						<td><input type="text" name="mem_pw" class="mem_pw"
-							value="${adminMemberDetail.mem_pw }" readonly /></td>
+							value="${adminMemberUpdate.mem_pw }"   /></td>
 					</tr>
 					<tr>
 						<th colspan="2">자기소개</th>
 					</tr>
 					<tr>
-						<td colspan="2"><textarea name="pro_content"
-								class="pro_content" rows="30" cols="50">${adminMemberDetail.self_introduce }</textarea></td>
+						<td colspan="2"><textarea name="self_introduce"
+								class="self_introduce" rows="30" cols="50">${adminMemberUpdate.self_introduce }</textarea></td>
 					</tr>
 					<tr>
-						<th colspan="2">활동사진</th>
+						<th colspan="2">활동사진 (**활동사진은 삭제만 가능합니다.)</th>
 					</tr>
 					<tr>
-						<td style="text-align: center;">
+						<td id="photoTd" style="text-align: center;">
 							<div id="photoList"></div>
 							<div class="pgcontainer">
 								<nav aria-label="Page navigation">
@@ -533,14 +540,12 @@ th.align {
 								</nav>
 							</div>
 						</td>
-						<td></td>
-						<td>
-						<button class="update_btn" onclick="location.href='./adminMemberUpdate.go?mem_idx=${adminMemberDetail.mem_idx}'">수정하기</button>
-						</td>
 					</tr>
 				</table>
+				<input type="button" class="update_btn" onclick="check()" value="수정하기"/>
 			</div>
 		</c:forEach>
+		</form>
 	</div>
 	<input type="hidden" id="searchIn" value="" />
 	<input type="hidden" id="searchType" value="M" />
@@ -551,6 +556,82 @@ var showPage = 1;
 $(document).ready(function(){
 	memActPhoList(showPage);
  });
+ 
+ 
+ 
+function check(){
+	var $number = $('input[name="mem_number"]');
+	var $name = $('input[name="mem_name"]');
+	var $uni = $('input[name="mem_uni"]');
+	var $birth = $('input[name="mem_birth"]');
+	var $bankName = $('input[name="mem_bankName"]');
+	var $bank = $('input[name="mem_bank"]');
+	var $email = $('input[name="mem_email"]')
+	var $post = $('input[name="mem_post"]');
+	var $addr = $('input[name="mem_addr"]');
+	var $detail = $('input[name="mem_detail"]');
+	var $pw = $('input[name="mem_pw"]');
+	
+	// 전화번호 유효성 검사를 위한 정규표현식
+    var phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+ 	// 은행명에는 숫자가 들어가지 않도록 하기 위한 정규표현식
+    var bankNameRegex = /^[^0-9]*$/;
+    // 계좌번호 유효성 검사를 위한 정규표현식
+    var accountNumRegex = /^[\d-]+$/;
+ 	// 이메일 유효성 검사를 위한 정규표현식
+    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if ($number.val() == '') {
+        alert('연락처를 입력해 주세요!');
+        $number.focus();
+    } else if (!phoneRegex.test($number.val())) {
+        alert('올바른 전화번호 형식이 아닙니다! (예: 010-1234-5678)');
+        $number.focus();
+    } else if ($name.val() == '') {
+    	 alert('이름을 입력해 주세요!');
+         $name.focus();
+    }else if($uni.val()==''){
+    	alert(' 대학교를 입력해 주세요!');			
+    	$uni.focus();
+    }else if($birth.val()==''){
+    	alert('생년월일을 입력해 주세요!');			
+    	$birth.focus();
+    }else if($bankName.val() == ''){
+    	 alert('사용하실 은행명을 입력해 주세요!');
+         $bankName.focus();
+    }else if (!bankNameRegex.test($bankName.val())) {
+        alert('은행명에는 숫자를 입력할 수 없습니다!');
+        $bankName.focus();
+    } else if ($bank.val() == '') {
+        alert('계좌번호를 입력해 주세요!');    
+        $bank.focus();
+    } else if (!accountNumRegex.test($bank.val())) {
+        alert('올바른 계좌번호 형식이 아닙니다! (숫자와 하이픈(-)만 입력 가능)');
+        $bank.focus();
+    } else if ($email.val() == '') {
+        alert('이메일 입력해 주세요!');
+        $email.focus();    
+    } else if (!emailRegex.test($email.val())) {
+        alert('올바른 이메일 형식이 아닙니다!');
+        $email.focus();
+    } else if ($post.val() == '') {
+        alert('우편번호 입력해 주세요!');
+        $post.focus();
+    } else if ($addr.val() == '') {
+        alert('주소를 입력해 주세요!');
+        $addr.focus();
+    } else if ($detail.val() == '') {
+        alert('상세주소를 입력해 주세요!');
+        $detail.focus();
+    } else if($pw.val() == ''){
+    	alert('초기화할 비밀번호를 입력해 주세요!');
+        $detail.focus();
+    }else{
+    	 $('form').submit();
+    }
+    
+}
+	
  
 function memActPhoList(page){
 	var mem_idx = '${memIdx}';
@@ -597,213 +678,63 @@ function drawPhoList(list) {
     } else {
         for (item of list) {
             content += '<tr>';
-            content += '<td><img src="/photo/'+ item.pho_name + '" style="width: 300px; height: 300px;"></td>';
-            //content += '<td><button>삭제</button></td>'
-            content += '</tr>';
+            content += '<td><img src="/photo/'+ item.pho_name + '" style="margin-left: 50px; width: 300px; height: 300px;"></td>';
+        	content += '<td><span class="delete_btn" data-file="'+ item.pho_name +'" data-type="file"><i class="fa-solid fa-trash-can"></i></span><td>';
+        	content += '</tr>';
         }   
     } 
     $('#photoList').html(content);
 	
  }
  
-function openModal(btn) {
-	var memId = $('.mem_id').val();
-	var adminId = $('.admin_id').val();
-	
-	var today = new Date();
-	var year = today.getFullYear();
-	var month = ('0' + (today.getMonth() + 1)).slice(-2);
-	var day = ('0' + today.getDate()).slice(-2);
-	var dateString = year + '-' + month  + '-' + day;
-	
-	var rsndate = $('.mng_rsndate').val();
-	var stopdate = $('.mng_getstopdate').val();
-	
-	console.log("rsndate",rsndate);
-	var stop = '${mng_stopdate}';
-	console.log("stop->",stop);
-	
-	console.log("눌리니? ");
-	    var modal = '';
-	    modal += '<div class="modal">';
-	    modal += '<div class="modal-content">';
-	    modal += '<span class="close-button"><h2>X</h2></span>';
-	    
-	    if (btn === 'stopRequest') {
-	        modal += '<h3 class="title">'+memId+'님 정지신청</h3>';
-	        modal += '<table style="text-align:center;">';
-		    modal += '<tr>';
-		    modal += '<th>관리자ID</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td><input type="text" value="'+ adminId +'" readonly/></td>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<th>정지시작일</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td><input type="text" class="mng_rsndate" name="mng_rsndate" value="'+dateString+'"/></td>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<th>정지사유</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td><textarea name="mng_rsn" class="mng_rsn" rows="10" cols="20" placeholder="정지사유를 입력해 주세요."></textarea></td>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<th>정지신청일수</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td>';
-		    modal += '<select class="stopDay" name="msg_stopdate" id="stopDay">';
-		    modal += '<option value="1">1일</option>';
-		    modal += '<option value="7">7일</option>';
-		    modal += '<option value="14">14일</option>';
-		    modal += '<option value="30">30일</option>';
-		    modal += '<option value="90">90일</option>';
-		    modal += '<option value="9999999">영구정지</option>';
-		    modal += '</select>';
-		    modal += '</td>';
-		    modal += '</tr>';
-		    modal += '</table>';
-		    modal += '<input type="button" id="cancel" class="cancel" value="취소"> ';
-		    modal += '<input type="button" id="ok" class="ok" value="동의"> ';
-	    } else if (btn === 'stopChange') {
-	        modal += '<h3 class="title">'+memId+'님 정지변경</h3>';
-	        modal += '<table style="text-align:center;">';
-	        modal += '<tr>';
-		    modal += '<th>정지시작일</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td><input type="text" class="mng_rsndate" name="mng_rsndate" value="'+ rsndate +'" readonly/></td>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<th>정지일수</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td><input type="text" class="stopd" name="stopd" value="'+stop+'" readonly/></td>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<th>정지일수 변경</th>';
-		    modal += '</tr>';
-		    modal += '<tr>';
-		    modal += '<td>';
-		    modal += '<select class="changeStop" name="changeStop" id="changeStop">';
-		    modal += '<option value="0">정지해제</option>';
-		    modal += '<option value="1">1일</option>';
-		    modal += '<option value="7">7일</option>';
-		    modal += '<option value="14">14일</option>';
-		    modal += '<option value="30">30일</option>';
-		    modal += '<option value="90">90일</option>';
-		    modal += '<option value="9999999">영구정지</option>';
-		    modal += '</select>';
-		    modal += '</td>';
-		    modal += '</tr>';
-		    modal += '</table>';
-	        modal += '<input type="button" id="cancel" class="cancel" value="취소"> ';
-		    modal += '<input type="button" id="change" class="ok" value="변경"> ';
-	    }
-	    modal += '</div> ';
-	    modal += '</div>';
-
-	    var modalElement = $(modal); 
-	    $('body').append(modalElement); 
-	    modalElement.addClass("show-modal");
-	    
-	    $(document).on('click', '#change', function() {
-	    	console.log("들어오니");
-	    	var mem_idx = '${memIdx}';
-	    	var stopd = $('.stopd').val();
-	    	var changeStop = $('.changeStop').val();
-	    	var admin_idx = '${sessionScope.mem_idx}';
-	    	
-	    	console.log("mem_idx->",mem_idx);
-	    	console.log("stopd->",stopd);
-	    	console.log("changeStop->",changeStop);
-	    	console.log("admin_idx->",admin_idx);
-
-	    	$.ajax({
-	    		type:'get',
-	    		url:'./stopMemberChange.ajax',
-	    		data:{
-	    			mng_stopdate: changeStop,
-	    			mem_idx: mem_idx,
-	    			admin_idx: admin_idx
-	    		},
-	    		success:function(data){
-	    			if(data.stopMemberChange){
-	    				closeModal();
-	    				location.reload();
-	    				
-	    			}else if(data.deleteMemberChange){
-	    				closeModal();
-	    				location.reload();
-	    			}
-	    		},
-	    		 error:function(error){
-	    	           console.log(error);
-	    		}
-	    	});
-	    	
-	    });
-	}
-
-function closeModal() {
-    $('.modal').removeClass("show-modal");
-}
-
-$(document).on('click', '.stop_btn', function() {
-    openModal('stopRequest');
+$('#photoList').on('click', '.delete_btn', function(e){
+    var target = $(this).data("file");
+    var mem_idx = '${memIdx}';
+    var page = showPage;
+    if(confirm("해당사진을 정말로 지우시겠습니까 ? 사진은 즉시 삭제됩니다.")){
+        
+       	$.ajax({
+       		type:'get',
+       		url:'./deletePhotoAct.ajax',
+       		data:{
+       			pho_name:target,
+       			mem_idx:mem_idx,
+       		},
+       		success:function(data){
+       		 	$('#pagination_pho').twbsPagination('destroy');
+       			 memActPhoList(page);
+       		},
+	        error: function(error) {
+	            console.log(error);
+	        }
+       	});
+        
+    }
 });
 
-$(document).on('click', '.stopChange_btn', function() {
-    openModal('stopChange');
+$('#photoList').on('click', '#addPhotoBtn', function(e){
+    $('#fileInput').click(); 
 });
 
-$(document).on('click', '.close-button', function() {
-    closeModal();
-});
-
-$(document).on('click', '#cancel', function() {
-    closeModal();
-});
-
-$(document).on('click', '#ok', function() {
-	var mem_idx = '${memIdx}';
-	var stopday = $('.stopDay').val();
-	var reason = $('.mng_rsn').val();
-	var today = $('.mng_rsndate').val();
-	var admin_idx = '${sessionScope.mem_idx}';
-	
-	console.log("mem_idx->",mem_idx);
-	console.log("stopday->",stopday);
-	console.log("reason->",reason);
-	console.log("today->",today);
-	console.log("admin_idx->",admin_idx);
-	
-	$.ajax({
-		type:'get',
-		url:'./stopMemberApply.ajax',
-		data:{
-			mng_rsndate: today,
-			mng_stopdate: stopday,
-			mng_rsn: reason,
-			mem_idx: mem_idx,
-			admin_idx: admin_idx
-		},
-		success:function(data){
-			if(data.stopMemberApply){
-				closeModal();
-				location.reload();
-				
-			}
-			
-		},
-		 error:function(error){
-	           console.log(error);
-		}
-	});
-	
+$('#fileInput').change(function() {
+    var formData = new FormData();
+    formData.append('photo', $(this)[0].files[0]); 
+    
+    $.ajax({
+        type: 'POST',
+        url: './addPhoAct.ajax',
+        data: formData,
+        processData: false, 
+        contentType: false,
+        success: function(data) {
+           
+            memActPhoList(showPage);
+            
+        },
+        error: function(error) {
+        	 console.log(error);
+        }
+    });
 });
 
 </script>

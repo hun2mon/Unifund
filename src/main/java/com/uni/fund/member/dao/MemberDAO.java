@@ -3,6 +3,8 @@ package com.uni.fund.member.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.uni.fund.member.dto.MemberDTO;
 
 public interface MemberDAO {
@@ -51,7 +53,20 @@ public interface MemberDAO {
 
 	int memCheck(String mem_id, String mem_number);
 
+	int stopMemberChange(Map<String, Object> param);
 
+	int deleteMemberChange(Map<String, Object> param);
 
+	void changeMemStoY(Map<String, Object> param);
+
+	List<MemberDTO> adminMemberUpdate(int memIdx);
+
+	int deletePhotoAct(Map<String, Object> param);
+
+	int addPhoAct(MultipartFile[] fileInput);
+
+	int adminMemberUpdateDo(Map<String, String> param);
+
+	void adminMemberIntroUpdateDo(Map<String, String> param);
 
 }

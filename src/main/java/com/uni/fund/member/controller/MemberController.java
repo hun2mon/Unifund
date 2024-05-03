@@ -225,10 +225,19 @@ public class MemberController {
 
 	// 회원가입 페이지 이동
 	@RequestMapping(value = "/user/adminJoinReq.go")
-	public String adminJoinReq() {
-		logger.info("adminJoinReq 페이지 이동");
-
-		return "user/adminJoinReq";
+	public String adminJoinReq(HttpSession session,Model model) {
+		String status = (String)session.getAttribute("mem_status"); 
+		String page= "redirect:/member/login.go";
+		logger.info("mem_status="+status);
+		logger.info("status="+status);
+		
+		if(status != null && status.equals("M")) {
+			page = "./user/adminJoinReq";
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+		}
+		
+		return page;
 	}
 
 	@RequestMapping(value = "/user/adminMemberJoinReq.ajax")
@@ -298,11 +307,19 @@ public class MemberController {
 			page = "./user/adminMemberDetail";
 			logger.info("adminMemberDetail=" + adminMemberDetail);
 
-			model.addAttribute("adminMemberDetail", adminMemberDetail);
-			model.addAttribute("memIdx", memIdx);
-		} else {
-			model.addAttribute("msg", "로그인이 필요한 서비스입니다.");
-			page = "redirect:/member/login.go";
+			if (!adminMemberDetail.isEmpty()) {
+	            MemberDTO memberDTO = adminMemberDetail.get(0);
+	            model.addAttribute("adminMemberDetail", adminMemberDetail);
+	            model.addAttribute("memIdx", memIdx);
+	            model.addAttribute("mng_rsndate", memberDTO.getMng_rsndate()); 
+	            model.addAttribute("mng_stopdate", memberDTO.getMng_stopdate()); 
+	            logger.info("mng_stopdate:{}",memberDTO.getMng_stopdate());
+	        }
+			
+			
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+			 page= "redirect:/member/login.go";
 		}
 
 		return page;
@@ -357,5 +374,91 @@ public class MemberController {
 		logger.info("#### stopMemberApply : {}", map.get("stopMemberApply"));
 		return map;
 	}
-
+	
+	@RequestMapping(value = "/user/stopMemberChange.ajax")
+	@ResponseBody
+	public Map<String, Object> stopMemberChange(@RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		
+		String stopApply = (String) param.get("mng_stopdate");
+		logger.info("stopApply->>",stopApply);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (stopApply.equals("0")) {
+			map.put("deleteMemberChange",memberService.deleteMemberChange(param));
+		}else {
+			map.put("stopMemberChange",memberService.stopMemberChange(param));
+		}
+		
+		logger.info("#### stopMemberChange : {}", map.get("stopMemberChange"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/adminMemberUpdate.go")
+	public String adminMemberUpdate(HttpSession session, Model model, @RequestParam(value="mem_idx") String mem_idx) {
+		String status = (String)session.getAttribute("mem_status"); 
+		String page= "";
+		
+		String adminId = (String)session.getAttribute("mem_id");
+		logger.info("##### adminId : {}", adminId);
+		
+		logger.info("mem_status="+status);
+		logger.info("status="+status);
+		if(status != null && status.equals("M")) {
+			int memIdx = Integer.parseInt(mem_idx);
+			logger.info("adminMemberUpdateadminMemberUpdate");
+			List<MemberDTO> adminMemberUpdate = memberService.adminMemberUpdate(memIdx);
+			page = "./user/adminMemberUpdate";
+			logger.info("adminMemberUpdate="+adminMemberUpdate);
+			
+			
+			if (!adminMemberUpdate.isEmpty()) {
+	            MemberDTO memberDTO = adminMemberUpdate.get(0);
+	            model.addAttribute("adminMemberUpdate", adminMemberUpdate);
+	            model.addAttribute("memIdx", memIdx);
+	            model.addAttribute("mng_rsndate", memberDTO.getMng_rsndate()); 
+	            model.addAttribute("mng_stopdate", memberDTO.getMng_stopdate()); 
+	            logger.info("mng_stopdate:{}",memberDTO.getMng_stopdate());
+	        }
+			
+			
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+			 page= "redirect:/member/login.go";
+		}
+		
+	    return page;
+	}
+	
+	@RequestMapping(value = "/user/deletePhotoAct.ajax")
+	@ResponseBody
+	public Map<String, Object> deletePhotoAct(@RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("deletePhotoAct",memberService.deletePhotoAct(param));
+		logger.info("#### deletePhotoAct : {}", map.get("deletePhotoAct"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/addPhoAct.ajax")
+	@ResponseBody
+	public Map<String, Object> addPhoAct(MultipartFile[] fileInput, @RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("addPhoAct",memberService.addPhoAct(fileInput));
+		logger.info("#### addPhoAct : {}", map.get("addPhoAct"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/adminMemberUpdate.do", method = RequestMethod.POST)
+	public String adminMemberUpdateDo(@RequestParam Map<String, String> param) {
+		logger.info(":: adminMemberUpdate CONTROLLER IN ::");
+		logger.info("mem_idx:{}",param.get("mem_idx"));
+		String page = "redirect:/user/adminMemberDetail.go";
+		
+		int row = memberService.adminMemberUpdateDo(param);
+		if(row == 1 ) {
+			page = "redirect:/user/adminMemberDetail.go?mem_idx="+param.get("mem_idx");
+			//page = "redirect:/detail?idx=" + param.get("idx");
+		}
+		return page;
+	}
 }
