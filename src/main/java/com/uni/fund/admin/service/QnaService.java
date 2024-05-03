@@ -83,11 +83,14 @@ public class QnaService {
 		logger.info("insert count: "+row);
 		return row;
 	}
-	public QnaDTO qnaDetail(String qna_idx) {
+	public QnaDTO qnaDetail(Integer qna_idx) {
 		logger.info("qna_idx : " + qna_idx);
-		int qnaIdx= Integer.parseInt(qna_idx);
-		return qnaDAO.qnaDetail(qnaIdx);
+		return qnaDAO.qnaDetail(qna_idx);
 	}
+
+
+	
+	
 	public int qnaUpdate(Map<String, String> param, HttpSession session) {
 		logger.info("::: qnaUpdate Service IN :::");
 		int row = -1;
@@ -102,6 +105,13 @@ public class QnaService {
 		
 		return row;
 	}
+
+
+	public void qnaDel(Integer qnaDel) {
+		qnaDAO.qnaDel(qnaDel, 'B');
+		
+	}
+
 	public Map<String, Object> userSearch(String keyWord, int currPage, int pagePerCnt) {
 		int start = (currPage-1) * pagePerCnt;
 		List<QnaDTO> list = qnaDAO.userSearch(keyWord, start, pagePerCnt);
@@ -112,7 +122,18 @@ public class QnaService {
 		logger.info(qnaDAO.userSearchAllCount(keyWord, pagePerCnt) + "asdfasd");
 		return result;
 	}
+	public List<QnaDTO> rplList(String qna_idx) {
+		return qnaDAO.rplList(qna_idx);
+	}
+	public int rplDel(String comm_idx) {
+		return qnaDAO.rplDel(comm_idx);
+	}
+	public int replyDo(Map<String, String> param) {
+
+		return qnaDAO.replyDo(param);
+	}
 	
+
 	
 	
 	

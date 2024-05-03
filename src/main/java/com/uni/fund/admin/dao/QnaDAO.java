@@ -3,6 +3,8 @@ package com.uni.fund.admin.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.uni.fund.admin.dto.QnaDTO;
 
 public interface QnaDAO {
@@ -29,13 +31,21 @@ public interface QnaDAO {
 
 	int qnaForm1(Map<String, String> param);
 
-	QnaDTO qnaDetail(int qna_idx);
+	QnaDTO qnaDetail(Integer qna_idx);
 
 	int qnaUpdate(QnaDTO qnaDTO);
 
 	List<QnaDTO> userSearch(String keyWord, int start, int pagePerCnt);
 
 	Object userSearchAllCount(String keyWord, int pagePerCnt);
+
+	void qnaDel(@Param("qnaDel")Integer qnaDel, @Param("status") char status);
+
+	List<QnaDTO> rplList(String qna_idx);
+
+	int rplDel(String comm_idx);
+
+	int replyDo(Map<String, String> param);
 
 
 	

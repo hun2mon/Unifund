@@ -1,5 +1,6 @@
 package com.uni.fund.admin.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.admin.dao.QnaDAO;
+import com.uni.fund.admin.dto.AnnouncementDTO;
 import com.uni.fund.admin.dto.QnaDTO;
 import com.uni.fund.admin.service.QnaService;
+import com.uni.fund.project.dto.ReviewDTO;
 
 @Controller
 public class QnaController {
@@ -52,32 +55,54 @@ public class QnaController {
 		
 		logger.info("param = {}",param);
 		String page = "redirect:/member/login";
-		String mem_idx = session.getAttribute("mem_idx").toString();
+		String mem_idx = "";
 		
 		logger.info("mem_idx"+mem_idx);
 		if (session.getAttribute("mem_id") != null) {
-			
+			mem_idx = session.getAttribute("mem_idx").toString();
 			int row = qnaService.qnaForm(param,mem_idx);
 			if(row>0)
 			
-					page = "redirect:/qna/list.go";
+					page = "redirect:/qna/detail.go";
 					
 				
 		}
 		return page;
 		
 	}
+	@RequestMapping(value = "/qna/qnaDetail.go")
+	public String qnaDetail(Model model, HttpSession session, Integer qna_idx, Integer mem_idx, String mem_status) {
+		logger.info("상세보기 요청");
+		logger.info("qna_idx=" + qna_idx);
+		QnaDTO qnaDTO = qnaService.qnaDetail(qna_idx);
+		// logger.info("UserInfo :{}",announcementDTO.toString());
+		model.addAttribute("qnaDTO", qnaDTO);
+		model.addAttribute("qna_idx",qna_idx);
+		return "qna/qnaDetail";
+	}
+	
+	
+
+	
+	
+	
+	
+	
 	@RequestMapping(value="/qna/update.go")
-	public String updateForm(Model model, HttpSession session) {
+	public String updateForm(Model model, HttpSession session , Integer qna_idx) {
 		logger.info("QnA 수정페이지 진입");
 		String page = "member/login.go";
-		String qna_idx = "15";
 		QnaDTO qnaDTO = qnaService.qnaDetail(qna_idx);
-		qnaDTO.setQna_idx(Integer.parseInt(qna_idx));
+		qnaDTO.setQna_idx((qna_idx));
 		model.addAttribute("qnaDTO",qnaDTO);
 		
 		return "qna/qnaUpdate";
 	}
+	
+	
+	
+	
+	
 	
 	
 	
@@ -158,6 +183,17 @@ public class QnaController {
 		return "redirect:/qna/adminQnaList.go";
 	}
 	
+	
+	@RequestMapping(value = "/qna/delete.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public String qnaDel(@RequestParam("qnaDel") Integer qnaDel) {
+		// 공지사항 삭제 기능 구현
+		qnaService.qnaDel(qnaDel);
+		
+		return "success";
+		
+	}
+	
 	@RequestMapping(value = "/qna/list.go")
 	public String ListGo(HttpSession session) {
 		 String memId = (String) session.getAttribute("mem_id");
@@ -210,4 +246,64 @@ public class QnaController {
 		return map;
 	}
 
+
+	
+	
+	@RequestMapping(value = "/qna/replyList.ajax")
+	@ResponseBody
+	public Map<String, Object> replyAjax(String qna_idx){
+		logger.info("qna_idx : {}" , qna_idx);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<QnaDTO> list = qnaService.rplList(qna_idx);
+		map.put("list", list);
+		logger.info("list : {}",list);
+		return map;
+	}
+	
+	
+	@RequestMapping(value = "/qna/reply/delete.do")
+	public String rplDel(String comm_idx, String qna_idx) {
+		logger.info("comm_idx :{}", comm_idx);
+		String page = "redirect:/";
+		int row = 0;
+		row = qnaService.rplDel(comm_idx);
+		if (row >0) {
+			page = "redirect:/qna/qnaDetail.go?row=" + row + "&qna_idx=" + qna_idx;
+		}
+		return page;
+	}
+	
+	
+	@RequestMapping(value = "/qna/reply/write.do", method = RequestMethod.POST)
+	public String replyWrite(@RequestParam Map<String,String> param, Model model,HttpSession session) {
+		String page = "redirect:/";
+		logger.info("param : {}", param);
+		logger.info("param_qna_idx : {}",param.get("qna_idx"));
+		int mem_idx = (int) session.getAttribute("mem_idx");
+		logger.info("mem_idx : {}", mem_idx);
+		param.put("mem_idx", String.valueOf(mem_idx));
+		int row = qnaService.replyDo(param);
+		logger.info("row : {}",row);
+		return "redirect:/qna/qnaDetail.go?qna_idx=" + param.get("qna_idx");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
