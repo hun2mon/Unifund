@@ -246,7 +246,8 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 .review_content {
 	border-radius: 5px 5px;
-	background-color: FFFFCC;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+	background-color: rgba(255, 255, 255, 0.15);
 }
 
 .profile_img {
@@ -257,7 +258,6 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 .spanMargin {
 	margin-left: 10;
 	border-radius: 5px 5px;
-	background-color: FFFFCC;
 }
 
 .rev_img {
@@ -345,7 +345,7 @@ input[name=reportContent] {
 					<div class="category">카테고리 >
 						${project.category}</div>
 					<div class="project_report" style="width: 100;">
-						<input type="button" class="pro_button" value="프로젝트 신고" onclick="repForm()">
+						<input type="button" clas	s="pro_button" value="프로젝트 신고" onclick="repForm()">
 						<form action="report.do" method="post" class="report">
 								<table align="center" class="proRep">
 									<tr>
@@ -514,6 +514,7 @@ input[name=reportContent] {
 				<div>
 					<div>
 						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }"> 
+						<input type="hidden" id="total" name="price">
 						<input type="text" class="reviewFrom" name="revContent" min="5" maxlength="500" onkeyup="lengthCheck(this)">
 					</div>
 					<div>
@@ -532,6 +533,9 @@ input[name=reportContent] {
 	</div>
 </body>
 <script>
+	var today = new Date();
+	var deadline = new Date('${project.pro_deadline}');
+
 	$(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
 		listCall();
 	});
@@ -567,7 +571,6 @@ input[name=reportContent] {
 			alert('사진을 첨부 해주세요');
 			$revPhoto.focus();
 		} else {
-			alert('5마일리지 적립되었습니다.');
 			$('form').submit();
 		}
 		
@@ -647,8 +650,15 @@ input[name=reportContent] {
 		$('.favorites').html('즐겨찾기 취소');
 	}
 
-	if ('${project.fund_state}' == 'A') {
-		$('#fund_apply').val('펀딩 취소하기');
+	if ('${project.fund_state}' == 'A' || '${project.fund_state}' == 'C') {
+		if (today < deadline) {
+			$('input[name="revContent"]').val('펀딩 성사 후 작성 가능합니다.');
+			$('input[name="revContent"]').attr('readonly',true);
+			$('.sub_review').attr('type','hidden');
+			$('#fund_apply').val('펀딩 취소하기');	
+		} else {
+			$('#fund_apply').css('display','none');	
+		}
 	} else {
 		$('input[name="revContent"]').val('프로젝트 펀딩 후에 입력이 가능합니다.');
 		$('input[name="revContent"]').attr('readonly',true);
@@ -673,42 +683,13 @@ input[name=reportContent] {
 		}
 	}
 	
-	if (${project.now_price} == ${project.target_price}){
-		$.ajax({
-			type:'post'
-			,url:'./stateChange.ajax'
-			,data:{
-				pro_idx:'${project.pro_idx}',
-				state:'A'
-			}
-			,dataType:'json'
-			,success:function(data){
-				if ('${project.fund_state}' != 'A') {
-					$('#fund_apply').val('펀딩마감');
-					$('#fund_apply').attr('readonly', true);
-				}
-			}
-			,error:function(error){
-				console.log(error);
-			}
-		});
-	}else{
-		$.ajax({
-			type:'post'
-			,url:'./stateChange.ajax'
-			,data:{
-				pro_idx:'${project.pro_idx}',
-				state:'B'
-			}
-			,dataType:'json'
-			,success:function(data){
-			
-			}
-			,error:function(error){
-				console.log(error);
-			}
-		});
+	if ('${project.fund_state}' != 'A'){
+		if (${project.now_price} == ${project.target_price}){
+			$('#fund_apply').val('펀딩마감');
+			$('#fund_apply').attr('readonly', true);
+		}	
 	}
+	
 	
 	function applyPro() {
 		var quantitys = $('.quan').val();
@@ -736,6 +717,7 @@ input[name=reportContent] {
 						$('.use_mileage_value').val(0);
 						$('.use_mileage_value').focus();
 					} else{
+						$('#total').val('price');
 						$.ajax({
 							type:'post'
 							,url:'./fund.do'
@@ -784,7 +766,7 @@ input[name=reportContent] {
 			}
 		} 
 		if ($('.funding_button').val() == '펀딩 취소하기'){
-			if(confirm("펀딩 하시겠습니까?")){
+			if(confirm("펀딩을 취소 하시겠습니까?")){
 				$.ajax({
 					type:'post'
 					,url:'./fund_cancle.do'

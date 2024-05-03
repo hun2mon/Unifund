@@ -91,8 +91,8 @@ thead {
 }
 
 .nowCash {
-	margin-left: 881;
-	width: 208;
+	margin-left: 858;
+	width: 239;
 	font-size: 40;
 	text-align: right;
 }

@@ -8,6 +8,6 @@ public interface NotiDAO {
 
 	List<NotiDTO> notiList(int mem_idx);
 
-	void blindNoti(String noti_idx);
+	int blindNoti(String noti_idx);
 
 }

@@ -98,7 +98,7 @@ span {
 						<option value="펀딩실패">펀딩실패</option>
 				</select>
 						<input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-						<input type="button" value="검색" onclick="search()">
+						<input type="button" value="검색" onclick="searchDo(1)">
 				</span>
 			</div>
 			<thead>
@@ -276,6 +276,12 @@ span {
 				console.log(error);
 			}
 		});
+	}
+	
+	
+	function searchDo(showPage) {
+		$('#pagination').twbsPagination('destroy');
+		search(showPage);
 	}
 	
 	function enterKey() {

@@ -269,6 +269,10 @@ public class CrewService {
 		crewDAO.insertCrewMem(mem_idx,crew_idx);
 	}
 
+	public void refuse(String mem_idx, String crew_idx) {
+		crewDAO.refuse(mem_idx,crew_idx);
+	}
+
 
 
 
