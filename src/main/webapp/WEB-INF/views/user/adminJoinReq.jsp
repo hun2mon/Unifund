@@ -17,23 +17,20 @@
 	color: #fff;
 	transition: background 0.3s ease, color 0.3s ease;
 	float: left;
-	height: 90%;
+	height: 85%;
 	border-radius: 20px;
 	padding: 10px;
-	width: 60%;
+	width: 1200px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	margin-top: 20px;
 	transform: translate(-50%, -50%);
 }
 
 .form-container h1 {
-	color: gray;
+	color: #6286b8;
 	position: absolute;
-}
-
-.top-container {
-	
 }
 
 .top_content {
@@ -67,7 +64,7 @@
     font-weight: bold;
     background: #3b3b3b;
     position: relative;
- 	width:80%;
+ 	width:55%;
 }
 
 hr {
@@ -112,7 +109,6 @@ td.tr_bottom:hover {
 }
 
 td {
-	padding: 8px;
 }
 
 .empty-container {
@@ -190,6 +186,8 @@ td {
 }
 
 .paging {
+ color: gray;
+    text-decoration: none;
 	margin-top: 30px;
 	background-color: #fdfdfd;
 	border: none;
@@ -323,7 +321,10 @@ td {
 </style>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<c:if test="${mem_status == 'M'}">
+			<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+		</c:if>
 	<div class="container">
 		<div class="form-container">
 		<div class="top-container">
@@ -406,8 +407,9 @@ function pageNlist(page) {
             }
 
             $.each(data.joinMemList, function(i, member) {
+            	var url = './adminMemberDetail.go?mem_idx=' + member.mem_idx;
                 content += '<tr>';
-                content += '<td style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'./memDetail.go?mem_idx=' + member.mem_idx + '\'">' + member.mem_id + '</td>';
+                content += '<td style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'' + url + '\'">' + member.mem_id + '</td>';
                 content += '<td>' + member.mem_name + '</td>';
                 content += '<td>'
                 if(member.mem_status  == 'M') {
