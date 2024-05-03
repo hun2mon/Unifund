@@ -6,9 +6,9 @@ import com.uni.fund.money.dto.MoneyDTO;
 
 public interface MoneyDAO {
 
-	int chargeDo(String cashCharge, String mem_idx);
+	int chargeDo(String cashCharge, int mem_idx);
 
-	void chargeHis(String cashCharge, String mem_idx);
+	void chargeHis(String cashCharge, int mem_idx);
 
 	List<MoneyDTO> cashListCall(String mem_idx, String filterYear, int start, int pagePerCnt);
 	

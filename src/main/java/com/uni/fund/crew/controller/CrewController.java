@@ -93,7 +93,7 @@ public class CrewController {
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewList.go", method = RequestMethod.GET)
+	@RequestMapping(value="/crew/list.go", method = RequestMethod.GET)
 	public String crewListGo() {
 		logger.info("crewList 진입");
 		String page= "crew/crewList";
@@ -334,7 +334,13 @@ public class CrewController {
 	}
 	
 	
-	
+	@RequestMapping(value = "/crew/refuse.ajax")
+	@ResponseBody
+	public void refuse(String mem_idx, String crew_idx) {
+		logger.info("mem_idx : {}", mem_idx);
+		logger.info("crew_idx : {}", crew_idx);
+		crewService.refuse(mem_idx, crew_idx);
+	}
 	
 	
 	
