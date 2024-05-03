@@ -151,7 +151,7 @@ public class MemberController {
 
 	
 	
-	@RequestMapping(value = "/user/adminMemberList.go")
+	@RequestMapping(value = "/user/adminList.go")
 	public String adminMemberList(HttpSession session, Model model) {
 		String status = (String)session.getAttribute("mem_status"); 
 		String page= "redirect:/member/login.go";

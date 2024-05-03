@@ -27,7 +27,7 @@ public class AnnouncementController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired AnnouncementService annService;
 
-	@RequestMapping("/announcement/annList.go")
+	@RequestMapping("/announcement/list.go")
 	public String annList(Model model) {
 		logger.info("annList요청");
 		return "announcement/annList";

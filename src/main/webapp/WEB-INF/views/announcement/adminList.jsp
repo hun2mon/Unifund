@@ -36,51 +36,62 @@ th {
 }
 
 .search-bar {
-	margin-bottom: 10px;
 	text-align: center;
+	height: 30;
+    margin-left: 710;
+}
+.mainDiv{
+	width: 1200;
+	margin: 0 auto;
+}
+.topDiv{
+	display: flex;
 }
 </style>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
-	<h2>공지사항</h2>
-	<div class="search-bar">
-		<input type="text" placeholder="검색어를 입력하세요" id="keyWord"
-			class="keyWord" onKeyPress="enterKey()"> <input type="button"
-			value="검색" onclick="searchDo()">
-
-	</div>
-	<div style="text-align: center; margin-top: 20px;">
-		<button onclick="goToAdminAnnForm()">공지사항 작성</button>
-	</div>
-	<div style="text-align: center; margin-top: 20px;">
-        <button onclick="deleteSelectedAnnouncements()">선택된 공지사항 삭제</button>
-    </div>
-	<table>
-
-		<thead>
-			<tr>
-			    <th><input type="checkbox" class="checkbox" id="selectAll" onclick="selectAll()"></th>
-				<th>글번호</th>
-				<th>작성자</th>
-				<th>제목</th>
-				<th>등록일</th>
-			</tr>
-		</thead>
-		<tbody id="list">
-
-		</tbody>
-		<tr>
-			<td colspan="6" id="paging">
-				<div class="container">
-					<nav aria-label="Page navigation" style="text-align: center">
-						<ul class="pagination" id="pagination"></ul>
-					</nav>
+		<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+	<div class="mainDiv">
+		<h2>공지사항</h2>
+		<hr>
+		<div class="topDiv">
+				<div style="text-align: center;">
+					<button onclick="goToAdminAnnForm()">공지사항 작성</button>
 				</div>
-			</td>
-		</tr>
-	</table>
-
+				<div style="text-align: center;">
+			        <button onclick="deleteSelectedAnnouncements()">선택된 공지사항 삭제</button>
+			    </div>
+			<div class="search-bar">
+				<input type="text" placeholder="검색어를 입력하세요" id="keyWord"
+					class="keyWord" onKeyPress="enterKey()"> <input type="button"
+					value="검색" onclick="searchDo()">
+			</div>
+		</div>
+		<table>
+			<thead>
+				<tr>
+				    <th><input type="checkbox" class="checkbox" id="selectAll" onclick="selectAll()"></th>
+					<th>글번호</th>
+					<th>작성자</th>
+					<th>제목</th>
+					<th>등록일</th>
+				</tr>
+			</thead>
+			<tbody id="list">
+	
+			</tbody>
+			<tr>
+				<td colspan="6" id="paging">
+					<div class="container">
+						<nav aria-label="Page navigation" style="text-align: center">
+							<ul class="pagination" id="pagination"></ul>
+						</nav>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 </body>
 <script>
 var showPage = 1;

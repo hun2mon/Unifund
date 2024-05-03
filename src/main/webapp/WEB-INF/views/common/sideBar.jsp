@@ -19,7 +19,7 @@
 	top: 40;
 	left: -100%;
 	width: 300px;
-	height: 100vh;
+	height: 1200px;
 	background: #ecf0f3;
 	padding: 12px;
 	box-shadow: -3px -3px 7px #ffffff, 3px 3px 5px #ceced1, inset -3px -3px
@@ -163,12 +163,12 @@ label:hover {
 			<label class=" button cancel" for="check"></label>
 		</div>
 		<ul>
-			<li><a href="http://localhost:8080/main/member/adminList.go"><i class="fa-solid fa-user"></i>회원관리</a></li>
+			<li><a href="http://localhost:8080/main/user/adminList.go"><i class="fa-solid fa-user"></i>회원관리</a></li>
 			<li><a href="http://localhost:8080/main/project/adminList.go"><i class="fa-solid fa-diagram-project"></i>프로젝트 관리</a></li>
 			<li><a href="http://localhost:8080/main/crew/adminList.go"><i class="fa-solid fa-people-roof"></i>크루관리</a></li>
 			<li><a href="http://localhost:8080/main/report/adminList.go"><i class="fa-solid fa-circle-exclamation"></i>신고 관리</a></li>
 			<li><a href="http://localhost:8080/main/money/adminCashList.go"><i class="fa-solid fa-sack-dollar"></i>재화 관리</a></li>
-			<li><a href="http://localhost:8080/main/ann/adminList.go"><i class="fa-solid fa-chalkboard-user"></i>공지사항</a></li>
+			<li><a href="http://localhost:8080/main/announcement/adminList.go"><i class="fa-solid fa-chalkboard-user"></i>공지사항</a></li>
 			<li><a href="http://localhost:8080/main/qna/adminQnaList.go"><i class="fa-solid fa-circle-question"></i>Q&A 관리</a></li>
 		</ul>
 	</div>
