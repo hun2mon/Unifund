@@ -364,7 +364,7 @@ public class CrewController {
 	@RequestMapping(value = "/crew/judgeList.go")
 	public String judgeListGo(HttpSession session, String crew_idx, Model model) {
 		String page = "member/login";
-		crew_idx = "1";
+		
 		if (session.getAttribute("mem_id") != null) {
 			model.addAttribute("crew_idx", crew_idx);
 			page = "crew/judgeList";

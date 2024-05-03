@@ -84,7 +84,7 @@
                     <option value="크루">크루</option>
                 </select>
                 <input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-                <input type="button" value="검색" onclick="search(1)">
+                <input type="button" value="검색" id="searchBtn">
             </span>
         </div>
         <table class="proList">
@@ -240,5 +240,11 @@
 		}
 		return len;
 	}
+	
+	$('#searchBtn').click(function(){
+		var showPage= 1;
+		$('#pagination').twbsPagination('destroy');
+		search(showPage);
+	})
 </script>
 </html>
