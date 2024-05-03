@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uni.fund.crew.dto.ActivityDTO;
 import com.uni.fund.crew.dto.CrewDTO;
 import com.uni.fund.crew.service.CrewService;
 
@@ -27,32 +28,64 @@ public class CrewController {
 	@Autowired CrewService crewService;
 	
 	
-	@RequestMapping(value="/crew/crewCreate.go")
-	public String crewCreateGo() {
-		logger.info("crewCreate 들어왔다.");
-		return "crew/crewCreateForm";
+	@RequestMapping(value="/crew/create.go")
+	public String crewCreateGo(HttpSession session) {
+		int memIdx=(int)session.getAttribute("mem_idx");
+		String page="redirect:/";
+		logger.info("create 들어왔다.");
+		
+		if(memIdx!=0) {
+			page="crew/create";
+		}
+		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewCreate.do", method = RequestMethod.POST)
-	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param, Integer mem_idx, Model model) {
+	@RequestMapping(value="/crew/create.do", method = RequestMethod.POST)
+	public String crewCreateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, 
+			@RequestParam Map<String, String>param, Integer mem_idx, Model model,HttpSession session) {
 		logger.info("create 들어왔다.");
 		logger.info("Create param:{}",param);
 		
 		String page="redirect:/";
 		String msg="크루 등록에 실패했습니다.";
-		mem_idx=3;
+		int memIdx=(int)session.getAttribute("mem_idx");
 		
-		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,mem_idx,param);
-		if(row == 1) {
-			page ="redirect:/";
-			msg="크루등록이 완료되었습니다!";
-		}
-		model.addAttribute("msg",msg);
-		
+		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,memIdx,param);
+		if(memIdx!=0) {
+			if(row == 1) {
+				page ="redirect:/";
+				msg="크루등록이 완료되었습니다!";
+			}
+			model.addAttribute("msg",msg);
+		}		
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewOverlay.do")
+
+	@RequestMapping(value="/crew/activity/write.do", method = RequestMethod.POST)
+	public String crewActivityWrite(MultipartFile crew_activity_photo, HttpSession session, 
+			@RequestParam Map<String,Object> param, int crew_idx, Model model) {		
+		
+		int memIdx =(int) session.getAttribute("mem_idx");
+		String page="redirect:/";
+		String msg = "크루 등록에실패했습니다.";		
+		
+		if(memIdx!=0) {	
+				crewService.crewActivityWrite(crew_activity_photo,memIdx,param,crew_idx);
+			
+				logger.info("crewActivityWrite 시작");
+				logger.info("활동등록하는 크루 idx"+crew_idx);
+				logger.info("crew_activity_photo : {}"+ crew_activity_photo);
+				logger.info("param_crew_idx : {}"+param.get("crew_idx"));
+				msg="크루 등록이 완료되었습니다.";
+				
+			model.addAttribute("msg",msg);
+		}		
+		return "redirect:/crew/detail.go?crew_idx="+param.get("crew_idx");
+	}
+	
+	
+	@RequestMapping(value="/crew/overlay.do")
 	@ResponseBody
 	public Map<String, Object> crewOverlay(String crew_name){
 		logger.info("crew_name =  "+crew_name);
@@ -61,30 +94,30 @@ public class CrewController {
 		return map;
 	}
 	
-	@RequestMapping(value="/crew/crewUpdateForm.go")
+	@RequestMapping(value="/crew/update.go")
 	public String crewUpdateFormGo(Model model, HttpSession session, int crew_idx) {
-		String page="redirect:/crewDetail";
+		String page="redirect:/detail.go";
 		logger.info("update form idx = "+crew_idx);
-		crewService.crewUpdateForm(crew_idx,model);
-		page="crew/crewUpdateForm";		
+		crewService.crewUpdateForm(crew_idx,model);	
 
 	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
 	    logger.info("memIdx : "+session.getAttribute("mem_idx"));
 		
-		String memId= (String) session.getAttribute("mem_id");
-		if(memId!=null) {
-			page="crew/crewUpdateForm";
+		int memIdx=(int)session.getAttribute("mem_idx");
+
+	    if(memIdx!=0) {
+			page="crew/update";
 		}
 	    
 		
 		return page;
 	}
 	
-	@RequestMapping(value="/crew/crewUpdate.do",method = RequestMethod.POST)
+	@RequestMapping(value="/crew/update.do",method = RequestMethod.POST)
 	public String crewUpdateDo(MultipartFile crew_logo_photo,MultipartFile crew_recru_photo, @RequestParam Map<String, String>param){
 		logger.info("param : {}",param);
 		//int crew_idx=1;
-		String page="redirect:/crewDetail";
+		String page="redirect:/detail.go";
 		
 		crewService.crewUpdate(param,crew_logo_photo,crew_recru_photo);
 		page="redirect:/detail?crew_idx="+param.get("crew_idx");
@@ -94,9 +127,15 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crew/list.go", method = RequestMethod.GET)
-	public String crewListGo() {
-		logger.info("crewList 진입");
-		String page= "crew/crewList";
+	public String crewListGo(HttpSession session) {
+		logger.info("list 진입");
+		String page= "crew/list";
+
+		int memIdx=(int)session.getAttribute("mem_idx");
+		if (memIdx!=0) {
+			page= "crew/list";
+
+		}
 		return page;
 	}
 	
@@ -131,13 +170,14 @@ public class CrewController {
 	    return map;
 	}
 	
-	@RequestMapping(value="/crew/apply.ajax")
+	@RequestMapping(value="/crew/apply.ajax",method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> crewApply(Integer mem_idx, Integer crew_idx,HttpSession session) {
 		
 	    Map<String, Object> response = new HashMap<String, Object>();
 		int memIdx=(Integer)session.getAttribute("mem_idx");
-		logger.info("memidx : {}", memIdx);
+		
+	    logger.info("memidx : {}", memIdx);
 	    
 	    String result = crewService.applyCrew(memIdx, crew_idx);
 	    
@@ -145,7 +185,10 @@ public class CrewController {
 	        response.put("success", "신청이 완료되었습니다.");
 	    } else if(result.equals("isApplying")) {
 	        response.put("error", "이미 신청 중 크루가 있습니다.");
-	    } else {
+	    } else if(result.equals("outOrKick")) {
+	    	response.put("error", "탈퇴했거나 추방당한 크루입니다.");
+	    }
+	    else {
 	        response.put("error", "현재 가입된 크루가 있습니다.");
 	    }
 	    
@@ -171,6 +214,7 @@ public class CrewController {
 	    logger.info("crewDetail 들어간다.");
 	    String page="crew/detail";
 	    String memId= (String) session.getAttribute("mem_id");
+	    int memIdx=(int)session.getAttribute("mem_idx");
 	    
 		model.addAttribute("mem_idx",memId);	    
 	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
@@ -183,7 +227,7 @@ public class CrewController {
 	    if(session.getAttribute("mem_idx")!=null) {
 	    	String crew_state= crewService.stateCheck(crew_idx);
 		    
-	    	crew= crewService.detail(crew_idx,memId);
+	    	crew= crewService.detail(crew_idx,memId,memIdx);
 		    	   model.addAttribute("crew",crew);
 		    	   logger.info("else session in, memIdx : " +memId);
 		    	   logger.info("else session in, row = "+row);
@@ -195,9 +239,9 @@ public class CrewController {
 	    return page;
 	}
 	
-	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.POST)
+	@RequestMapping(value="/crew/detail.ajax",method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> detailCrewMemberPhoto(String crew_idx, HttpSession session,
+	public Map<String, Object> detailCrewMember(String crew_idx, HttpSession session,
 			String page, String cnt){
 		
 		int memIdx =(Integer)session.getAttribute("mem_idx");		
@@ -210,11 +254,26 @@ public class CrewController {
 			logger.info("크루 번호 : "+crew_idx);
 			logger.info("페이지 당 보여줄 갯수 : "+cnt);
 			logger.info("요청 페이지 : " +page);
-			map=crewService.detailCrewMemberPhoto(currentPage, pagePerCnt,crew_idx);		    
-		}	
+			map=crewService.detailCrewMember(currentPage, pagePerCnt,crew_idx);
+		}
 		return map;
 	}
 	
+	@RequestMapping(value="/crew/activityList.ajax",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> activityList(String crew_idx, HttpSession session, String page, String cnt,String crew_activity_details_idx){
+		logger.info("activityList 들어왔다.");
+		logger.info("크루 번호 : "+crew_idx);
+    	logger.info("페이지당 보여줄 개수 : "+cnt);
+    	logger.info("요청페이지 : "+page);
+		
+		int memIdx =(Integer)session.getAttribute("mem_idx");
+		int currentPage = Integer.parseInt(page); // 현재 보여지는 페이지
+	    int pagePerCnt = Integer.parseInt(cnt);   // 페이지당 보여줄 개수
+	    Map<String,Object> map =crewService.activityList(currentPage, pagePerCnt,crew_idx);
+	    	    
+	    return map;
+	}
 	
 	@RequestMapping(value="/crew/report.ajax",method = RequestMethod.POST)
 	@ResponseBody
@@ -298,8 +357,7 @@ public class CrewController {
 			logger.info("위임시키는 크루idx : "+crew_idx);
 			logger.info("위임 사유 : "+delgateContent);
 			crewService.crewChiefDelegate(crew_idx,crewMem_idx,memIdx,delgateContent);
-		}
-		
+		}		
 		return map;
 	}
 	
@@ -333,14 +391,51 @@ public class CrewController {
 		crewService.approve(mem_idx,crew_idx);
 	}
 	
-	
-	@RequestMapping(value = "/crew/refuse.ajax")
+	@RequestMapping(value="/crew/activityDel.ajax",method = RequestMethod.POST)
 	@ResponseBody
-	public void refuse(String mem_idx, String crew_idx) {
-		logger.info("mem_idx : {}", mem_idx);
-		logger.info("crew_idx : {}", crew_idx);
-		crewService.refuse(mem_idx, crew_idx);
+	public void activityDel(int crew_activity_details_idx) {
+		logger.info("crew_activity_details_idx : {} "+crew_activity_details_idx);
+		crewService.activityDel(crew_activity_details_idx);
 	}
+	
+	@RequestMapping(value="/crew/adminList.go")
+	public String adminListGo() {
+		return "crew/adminList";
+	}
+	
+	@RequestMapping(value="/crew/adminList.ajax")
+	@ResponseBody
+	public Map<String, Object> adminList(String page, String cnt){
+		logger.info("페이지당 보여줄 갯수 : "+cnt);
+		logger.info("요청 페이지 : "+page);
+		
+		int currPage = Integer.parseInt(page);	// 현재 보여지는 페이지
+		int pagePerCnt = Integer.parseInt(cnt); // 페이지당 보여줄 개수
+		
+		Map<String, Object> map = crewService.adminList(currPage,pagePerCnt);
+		
+		return map;		
+	}
+	
+	@RequestMapping(value="/crew/search.ajax")
+	@ResponseBody
+	public Map<String, Object> search(String keyWord, String Page, String cnt){
+		
+		logger.info("search 진입 ");
+		logger.info("페이지당 보여줄 갯수 : "+cnt);
+		logger.info("요청 페이지 : "+Page);
+		logger.info("keyWord : "+keyWord);
+		
+		int currPage = Integer.parseInt(Page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		
+		Map<String,Object> map = crewService.adminSearch(keyWord,currPage,pagePerCnt);
+		
+		return map;
+	}
+	
+	
+	
 	
 	
 	

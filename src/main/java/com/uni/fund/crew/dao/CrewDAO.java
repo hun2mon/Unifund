@@ -3,6 +3,7 @@ package com.uni.fund.crew.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.uni.fund.crew.dto.ActivityDTO;
 import com.uni.fund.crew.dto.CrewDTO;
 
 public interface CrewDAO {
@@ -14,6 +15,13 @@ public interface CrewDAO {
 	void createCrewLogoPhoto(int crew_idx, String newCrewLogoPhoto, String crewLogo);
 
 	void createCrewRecruPhoto(int crew_idx, String newCrewRecruPhoto, String crewRecru);
+	
+	
+	int crewActivityWrite(CrewDTO crewDTO);
+	
+	void crewActivityPhoto(int crew_activity_details_idx, String newCrewActivityPhoto, String crewActivity);
+
+	void crewActicityDescribe(String crew_idx, String activity_content);
 	
 
 	CrewDTO crewUpdateForm(int crew_idx);
@@ -40,13 +48,15 @@ public interface CrewDAO {
 	
 	Object allCountPage(String filterType, int pagePerCnt, Integer crew_idx);
 	
+	Object detailCrewMemberCountPage(int pagePerCnt, String crew_idx);
+	
 	List<CrewDTO> searchCrew(String keyword, int start, int pagePerCnt);
 	
 	Object searchCountPage(String keyword, int pagePerCnt);
 
 	String stateCheck(String crew_idx);
 
-	CrewDTO detail(String memId, String crew_idx);
+	CrewDTO detail(String memId, String crew_idx, int memIdx);
 
 	void report(String crew_idx, String repContent, int memIdx);
 
@@ -56,11 +66,9 @@ public interface CrewDAO {
 
 	void crewMemberListDelete(int crew_idx, int memIdx);
 
-	void crewOutMemberHistoryUpdate(int crew_idx, int memIdx);
+	void crewOutMemberHistoryInsert(int crew_idx, int memIdx);
 
-	List<CrewDTO> detailCrewMember(int start, int pagePerCnt, String crew_idx);
-
-	Object detailCrewMemberCountPage(int pagePerCnt, String crew_idx);
+	List<CrewDTO> detailCrewMember(int start, int pagePerCnt, String crew_idx);	
 
 	void crewMemberDeport(String crew_idx, String crewMem_idx);
 
@@ -76,15 +84,6 @@ public interface CrewDAO {
 	void crewMemberToChiefCrewMemberHistoryInsert(String crew_idx, String crewMem_idx, String delgateContent, int memIdx);
 
 
-
-	//List<CrewDTO> crewListByPopularity(int pagePerCnt, int start);
-
-	//List<CrewDTO> crewListBySearch(int pagePerCnt, int start, String searchKeyword);
-
-	//int allCountPageBySearch(int pagePerCnt, String searchKeyword);
-	
-	
-
 	List<CrewDTO> appList(String crew_idx, int start, int pagePerCnt);
 
 	int allCount(int pagePerCnt, String crew_idx);
@@ -92,6 +91,33 @@ public interface CrewDAO {
 	void approve(String mem_idx, String crew_idx);
 
 	void insertCrewMem(String mem_idx, String crew_idx);
+
+	void memberListInsert(int crew_idx, Integer memIdx);
+
+	void memberHistoryInsert(int crew_idx, Integer memIdx);
+
+	List<CrewDTO> activityList(String crew_idx, int start, int pagePerCnt);
+
+	Object activityListCount(int pagePerCnt, String crew_idx);
+
+	void activityDel(int crew_activity_details_idx);
+
+	void activityPhotoDel(int crew_activity_details_idx);
+	
+
+	List<CrewDTO> adminList(int start, int pagePerCnt);
+
+	Object adminAllCount(int pagePerCnt);
+	
+
+	List<CrewDTO> adminSearch(String keyWord, int start, int pagePerCnt);
+
+	Object adminSearchAllCount(String keyWord, int pagePerCnt);
+
+	int isOutOrKick(int memIdx, int crew_idx);
+
+
+	
 
 	void refuse(String mem_idx, String crew_idx);
 

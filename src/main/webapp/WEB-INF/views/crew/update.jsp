@@ -132,7 +132,7 @@ img.icon{
 <body>
 	<h3>크루 수정</h3>
 	<hr/>
-	<form action="crewUpdate.do" method = "post" enctype="multipart/form-data">
+	<form action="update.do" method = "post" enctype="multipart/form-data">
 		<table>
 		 	<tr>
             	<th>크루 번호</th>
@@ -257,7 +257,7 @@ function overlay() {
 	
 	$.ajax({
 		type:'post', 
-		url:'crewOverlay.do', 
+		url:'overlay.do', 
 		data:{'crew_name':id}, 
 		success:function(data){ 
 			console.log(data);
