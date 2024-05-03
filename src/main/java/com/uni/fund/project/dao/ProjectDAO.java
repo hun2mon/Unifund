@@ -124,6 +124,6 @@ public interface ProjectDAO {
 
 	void appSuccess(String pro_idx);
 
-	void notiSend(int mem_idx);
+	void notiSend(int mem_idx, String string);
 
 }

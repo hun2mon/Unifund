@@ -31,9 +31,9 @@ public class ProjectService {
 
 	@Autowired
 	ProjectDAO projectDAO;
-
+	
 	public String file_root = "/Users/jeounghun/upload/Unifund/";
-
+	
 	public ProjectDTO detail(String pro_idx,int memIdx) {
 		logger.info("pro_idx : {}",pro_idx);
 		logger.info("memIdx : {}",memIdx);
@@ -214,6 +214,7 @@ public class ProjectService {
 					projectDAO.delCashHis(mem_idx, pro_idx);
 					projectDAO.delMileHis(mem_idx, pro_idx);
 					projectDAO.fundingCancle(mem_idx, pro_idx);
+					projectDAO.notiSend(mem_idx,"fail");
 				} 
 				
 			} else if(deadline.before(now) && !pro.getProgress().equals("100")){
@@ -226,6 +227,7 @@ public class ProjectService {
 					projectDAO.delCashHis(mem_idx, pro_idx);
 					projectDAO.delMileHis(mem_idx, pro_idx);
 					projectDAO.fundingCancle(mem_idx, pro_idx);
+					projectDAO.notiSend(mem_idx,"fail");
 				} 
 			}else if (pro.getProgress() != null && pro.getProgress().equals("100") && deadline.before(now)) {
 				projectDAO.proSuccess(pro_idx);
@@ -233,7 +235,7 @@ public class ProjectService {
 				int[] appList = projectDAO.appList(pro_idx);
 				logger.info("appListasdfad :{}", appList);
 				for (int mem_idx : appList) {
-					projectDAO.notiSend(mem_idx);
+					projectDAO.notiSend(mem_idx,"success");
 				}
 			}
 		}

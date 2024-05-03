@@ -26,7 +26,12 @@ public class NotiController {
 	@RequestMapping(value = "/mainNotiList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> notiList(HttpSession session){
-		int mem_idx = (int) session.getAttribute("mem_idx");
+		int mem_idx = 0;			
+		try {
+			mem_idx = (int) session.getAttribute("mem_idx");		
+		} catch (Exception e) {
+			
+		}
 		logger.info("mem_idx = " + mem_idx);
 		List<NotiDTO> list = notiService.notiList(mem_idx);
 		Map<String, Object> map = new HashMap<String, Object>();

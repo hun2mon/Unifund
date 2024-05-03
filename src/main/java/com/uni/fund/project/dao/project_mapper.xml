@@ -407,8 +407,15 @@
 	</update>
 	
 	<insert id="notiSend">
-		INSERT INTO notification (mng_idx, noti_content)
-			VALUES(#{param1}, '신청하신 펀딩이 성사되었습니다.')
+		<if test='param2 == "success"'>
+			INSERT INTO notification (mng_idx, noti_content)
+				VALUES(#{param1}, '신청하신 펀딩이 성사되었습니다.')
+		</if>
+		<if test='param2 == "fail"'>
+			INSERT INTO notification (mng_idx, noti_content)
+				VALUES(#{param1}, '신청하신 펀딩이 성사되지 않았습니다..')
+		</if>
+		
 	</insert>
 	
 	
