@@ -91,7 +91,6 @@ input[type="text"] {
 
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
-
 	<input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${crew.crew_idx}">	<!--value값 바꿔줘야함 {crew.mem_idx} -->
 	<div class="header">
 		<div class="btn-group" style="margin-right: 20px;">

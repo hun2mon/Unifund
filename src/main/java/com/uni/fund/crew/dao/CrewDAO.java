@@ -119,12 +119,7 @@ public interface CrewDAO {
 
 	
 
-
-
-	
-
-	
-
+	void refuse(String mem_idx, String crew_idx);
 
 
 

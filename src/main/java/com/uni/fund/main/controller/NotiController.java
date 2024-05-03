@@ -26,7 +26,12 @@ public class NotiController {
 	@RequestMapping(value = "/mainNotiList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> notiList(HttpSession session){
-		int mem_idx = (int) session.getAttribute("mem_idx");
+		int mem_idx = 0;			
+		try {
+			mem_idx = (int) session.getAttribute("mem_idx");		
+		} catch (Exception e) {
+			
+		}
 		logger.info("mem_idx = " + mem_idx);
 		List<NotiDTO> list = notiService.notiList(mem_idx);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -34,12 +39,14 @@ public class NotiController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/blindNoti.ajax")
+	@RequestMapping(value = "/blindNoti.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> blindNorti(String noti_idx) {
 		logger.info("noti_idx : {}", noti_idx);
-		notiService.blindNoti(noti_idx);
+		int row = notiService.blindNoti(noti_idx);
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("row", row);
+		logger.info("row : {}", row);
 		return map;
 	}
 	

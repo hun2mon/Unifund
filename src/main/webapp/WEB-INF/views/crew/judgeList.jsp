@@ -108,7 +108,7 @@ th, td {
 			content += '<th scope="col" class="appDate">' + dateStr + '</th>';
 			content += '<th scope="col">';
 			content += '<input type="button" value="승인" class="btn" id="appBtn" onclick="approve(' + crew.mem_idx +')">';
-			content += '<input type="button" value="거절" class="btn" id="refuseBtn">';
+			content += '<input type="button" value="거절" class="btn" id="refuseBtn" onclick="refuse(' + crew.mem_idx + ')">';
 			content += '</th>';
 			content += '</tr>';
 		}
@@ -133,6 +133,27 @@ th, td {
 			});
 		}
 	}
+	
+	function refuse(idx){
+		if (confirm("거절 하시겠습니까?")) {
+			$.ajax({
+				type : 'post',
+				url : './refuse.ajax',
+				data : {
+					mem_idx:idx,
+					crew_idx:${crew_idx}
+				},
+				success : function(data) {
+					listCall(showPage);
+				},
+				error : function(error) {
+					console.log(error);
+				}
+			});
+		}
+	}
+	
+	
 
 </script>
 </html>

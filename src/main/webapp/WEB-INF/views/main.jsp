@@ -223,7 +223,7 @@
 			}
 			content += '<div class="info title">[' + pro.category + ']'  + pro.pro_title + '</div>';
 			content += '<div class="info price">';
-			content += '<p class="oriPrice">' + pro.ori_price + '</p>>>' + pro.rew_price + '  ' + (((pro.ori_price - pro.rew_price)/pro.ori_price)*100) + '%';
+			content += '<p class="oriPrice">' + pro.ori_price + '</p>>>' + pro.rew_price + '  ' + Math.round((((pro.ori_price - pro.rew_price)/pro.ori_price)*100))  + '%';
 			content += '</div>';
 			content += '<div class="info detail">';
 			var date = new Date(pro.pro_deadline);

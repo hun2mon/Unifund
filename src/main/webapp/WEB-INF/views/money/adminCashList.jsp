@@ -112,7 +112,7 @@ thead {
 	margin-left: 30;
 }
 .search{
-	margin-left: 597;
+	margin-left: 595;
 }
 </style>
 </head>
@@ -269,7 +269,7 @@ thead {
 			content += '<td>' + item.cash_idx + '</td>';
 			content += '<td>' + item.mem_id + '</td>';
 			content += '<td>캐시</td>';
-			content += '<td>' + item.cash_content +item.cash_amount + '</td>';
+			content += '<td>' + item.cash_content +item.cash_amount.toLocaleString() + '</td>';
 			content += '<td>' + item.cash_division + '</td>';
 			var date = new Date(item.cash_date);
 			var dateStr = date.toLocaleDateString("ko-KR");//en_US

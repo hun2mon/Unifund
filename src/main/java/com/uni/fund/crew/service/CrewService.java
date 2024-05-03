@@ -339,6 +339,9 @@ public class CrewService {
 		crewDAO.activityDel(crew_activity_details_idx);
 		crewDAO.activityPhotoDel(crew_activity_details_idx);
 	}
+	public void refuse(String mem_idx, String crew_idx) {
+		crewDAO.refuse(mem_idx,crew_idx);
+	}
 
 	public Map<String, Object> adminList(int currPage, int pagePerCnt) {
 		int start = (currPage-1)*pagePerCnt;

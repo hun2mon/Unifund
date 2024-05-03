@@ -74,6 +74,11 @@
 .line{
 	margin-top: 10px;
 }
+
+.emptyNoti{
+    width: 329px;
+    height: 500px;
+}
 </style>
 
 <div class="w3-top">
@@ -119,10 +124,11 @@
 			</a>		
 		</c:if>
 	</div>
+	
 </div>
 
 <script>
-	listCall();
+	listNotiCall();
 	
 	$('#noticeBtn').on('click', function() {
 		$('.noticeBox').toggleClass('on');
@@ -137,7 +143,9 @@
 			},
 			dataType : 'json',
 			success : function(data) {
-				listCall();
+				if (data.row > 0) {
+					listNotiCall();	
+				}
 			},
 			error : function(error) {
 				console.log(error);
@@ -145,7 +153,8 @@
 		});
 	}
 	
-	function listCall(){
+	function listNotiCall(){
+		console.log('asdf');
 		$.ajax({
 			type : 'post',
 			url : '/main/mainNotiList.ajax',
@@ -162,16 +171,21 @@
 	
 	function drawNoti(list){
 		content = '';
-		for(noti of list){
-			content += '<div class="noticeMain">';
-			content += '<div class="notiTop">';
-			content += '<div class="notiContent">' +  noti.noti_content + '</div>';
-			content += '<div class="closeBtn" onclick="blindNoti(' + noti.noti_idx+')"><i class="fa-solid fa-x"></i></div>';
-			content += '</div>';
-			content += '<br/>';
-			content += '<div class="notiDate">2024.04.20</div>';
-			content += '<hr class="line">';
-			content += '</div>';
+		console.log("noti : " + list);
+		if (list != '') {
+			for(noti of list){
+				content += '<div class="noticeMain">';
+				content += '<div class="notiTop">';
+				content += '<div class="notiContent">' +  noti.noti_content + '</div>';
+				content += '<div class="closeBtn" onclick="blindNoti(' + noti.noti_idx+')"><i class="fa-solid fa-x"></i></div>';
+				content += '</div>';
+				content += '<br/>';
+				content += '<div class="notiDate">2024.04.20</div>';
+				content += '<hr class="line">';
+				content += '</div>';
+			}			
+		} else {
+			content = '<img src="/photo/emptyNoti.jpg" class = emptyNoti>';
 		}
 		$('.noticeBox').html(content);
 	}
