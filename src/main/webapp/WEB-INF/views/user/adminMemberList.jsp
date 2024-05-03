@@ -6,49 +6,31 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 <style>
-body {
-	width: 100%;
-	background-color: #f2f2f2;
-}
-
-.container {
-	font-family: arial;
-	position: relative;
-	height: 100%;
-	max-width: 100%;
-	background-color: #f2f2f2;
-	margin: 20px auto;
-	padding: 10px;
-	border-radius: 10px;
-	margin-left: 20px;
-}
 
 .form-container {
-	background: white;
+ background: white;
 	backdrop-filter: blur(10px);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	color: #fff;
 	transition: background 0.3s ease, color 0.3s ease;
 	float: left;
-	height: 100%;
+	height: 85%;
 	border-radius: 20px;
 	padding: 10px;
-	width: 60%;
+	width: 1200px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	margin-top: 20px;
 	transform: translate(-50%, -50%);
 }
 
 .form-container h1 {
-	color: gray;
+	color: #6286b8;
 	position: absolute;
-}
-
-.top-container {
-	
 }
 
 .top_content {
@@ -116,8 +98,9 @@ tr.tr_bottom:hover {
 }
 
 td {
-	padding: 10px;
+	padding: 8px;
 }
+
 
 .empty-container {
 	background: rgba(255, 255, 255, 0.15);
@@ -193,6 +176,8 @@ td {
 }
 
 .paging {
+    color: gray;
+    text-decoration: none;
 	margin-top: 30px;
 	background-color: #fdfdfd;
 	border: none;
@@ -250,6 +235,10 @@ td {
 </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<c:if test="${mem_status == 'M'}">
+			<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+		</c:if>
 	<div class="container">
 		
 		<div class="form-container">
@@ -270,20 +259,20 @@ td {
 					</select>
 				</div>
 				<div class="search_container">
-					<i id="search_button" class="fa fa-search"></i> <input type="text"
-						id="keyword" value="${keyword}"
+					<i id="search_button" class="fa fa-search" style="color: black;margin-right: 43px; margin-top: 14px;"></i> 
+					<input type="text" id="keyword" value="${keyword}"
 						onKeyPress="if(event.keyCode==13) { $('#search_button').click();}" />
 				</div>
 			</div>
 			<hr>
 			<table style="width:100%;">
 			 	<colgroup> 
-    			<col style="width: 23%;"/> 
+    			<col style="width: 20%;"/> 
         		<col style="width: 15%;"/> 
        		 	<col style="width: 15%;"/> 
-        		<col style="width: 10%;"/> 
-        		<col style="width: 10%;"/> 
-        		<col style="width: 27%;"/> 
+        		<col style="width: 15%;"/> 
+        		<col style="width: 15%;"/> 
+        		<col style="width: 20%;"/> 
     			</colgroup> 
 				<thead>
 					<tr style="background-color:lightgray;height:5px;">
@@ -306,7 +295,10 @@ td {
 	<input type="hidden" id="searchType" value="M" />
 </body>
 <script>
-
+var msg = '${msg}';
+if (msg !='') {
+	alert(msg);	
+}
 $(document).ready(function(){
 	pageNlist(1);
 });
@@ -359,7 +351,7 @@ function pageNlist(page) {
 	            	console.log(data.memberList)
 	                content += '<tr style="cursor:pointer; color: #535353;" class="tr_bottom" onclick="location.href=\'' + url + '\'">';
 	                if(member.mem_id === 'REFUSE'){
-	              		content += '<td style="color:red">' + member.mem_id + '</td>';
+	              		content += '<td style="color:red;font-weight:bold">' + member.mem_id + '</td>';
 	 	               
 	                } else{
 	                	content += '<td>' + member.mem_id + '</td>';
@@ -375,7 +367,7 @@ function pageNlist(page) {
 	                }else if(member.mem_status  == 'N'){
 	                	content += '탈퇴';	
 	                }else if(member.mem_status  == 'S'){
-	                	content += '<span style="color:red">정지</span>';
+	                	content += '<span style="color:red;font-weight:bold">정지</span>';
 	                }else if(member.mem_status  == 'R'){
 	                	content += '가입거절';
 	                }else {
