@@ -9,12 +9,25 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            height:95%;
         }
-        .container {
-            width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+        .form-container {
+    width: 1000px;
+    margin: 0 auto;
+    transition: background 0.3s ease, color 0.3s ease;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    height: 85%;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 50px;
         }
+        
+        .form-container h1 {
+	color: #6286b8;
+	z-index:-1;
+	position: absolute;
+}
         /* 테이블 스타일 */
         table {
             width: 100%;
@@ -30,10 +43,17 @@
             background-color: lightgray;
             font-weight: bold;
         }
+        
+        select{
+       border: none;
+    width: 130px;
+    box-shadow: 6px 4px 13px rgb(0 0 0 / 22%);
+    border-radius: 20px;
+    height: 40px;
+        }
         /* 검색 관련 스타일 */
         .searchContainer {
             float: right;
-            margin-top: 20px;
             margin-right: 20px;
         }
         .searchContainer input[type="text"],
@@ -112,8 +132,8 @@
     }
     
     .modal-content {
-        width: 200px;
-        height: 150px;
+        width: 235x;
+        height: 170px;
         background-color: #fff;
         padding: 20px;
         border-radius: 5px;
@@ -128,11 +148,68 @@
     #write{
     	 float: right;
     }
+    
+    .proList{
+    
+    }
+    
+    
+   .search_container {
+	margin-left: 20px;
+	width: 230px;
+	height: 43px;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(10px);
+	border-radius: 20px;
+	  box-shadow: 6px 4px 13px rgb(0 0 0 / 22%);
+	float: right; 
+	position: relative;
+	text-align: right;
+}
+
+#search_btn {
+	position: absolute;
+	border-radius: 5px;
+	box-sizing: border-box;
+	font-size: 16px;
+	color: black;
+    margin-left: -211px;
+    margin-top: 14px;
+}
+
+#keyword {
+	width: 150px;
+	position: relative;
+	padding: 10px;
+	border-radius: 5px;
+	box-sizing: border-box;
+	font-size: 16px;
+	border: none;
+	background: none;
+	outline: none;
+}
+   
+   .hr-container{
+    margin-top: 55px;
+   }
+   
+   .write{
+   margin-top: -53px;
+   }
+   
+  .title {
+    font-size: 48px;
+}
 </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
 	<%@ include file = "/WEB-INF/views/common/sideBar.jsp" %>
-	 <div class="container">
+	 <div class="form-container">
+	 <div class="top-container">
+		<span class="title">Q&A</span>
+		</div>
         <div class="searchContainer">
             <span>
                 <select name="revNum" class="selectNum">
@@ -140,9 +217,14 @@
                     <option value="공개">공개</option>
                     <option value="비공개">비공개</option>
                 </select>
-                <input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-                <input type="button" value="검색" id="searchBtn">
             </span>
+                <div class="search_container">
+					<input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()" id="keyword">
+					<i id="search_btn" class="fa fa-search" style="color: black;margin-right: 43px; margin-top: 14px;"></i> 
+				</div>
+        </div>
+	<div class="hr-container">
+        <hr>
         </div>
         <table class="proList">
             <thead>
@@ -161,7 +243,7 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination" id="pagination"></ul>
             </nav>
-            <button class="btn" id="write" onclick="location.href='./create.go'">글쓰기</button>
+            <button class="btn write" id="write" onclick="location.href='./create.go'">글쓰기</button>
         </div>  
     </div>
     <div class="modal">
@@ -371,7 +453,7 @@
         }
     });
     
-    $('#searchBtn').click(function(){
+    $('#search_btn').click(function(){
 		var showPage= 1;
 		$('#pagination').twbsPagination('destroy');
 		search(showPage);
