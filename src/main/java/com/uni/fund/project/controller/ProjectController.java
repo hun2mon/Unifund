@@ -290,7 +290,6 @@ public class ProjectController {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("projectCheckFavorites", projectService.projectCheckFavorites(pro_idx, mem_idx));
-
 		return map;
 	}
 	

@@ -148,12 +148,7 @@ public class MemberController {
 		
 		return map;
 	}
-	
-	
-		
-	
-	
-	
+
 	
 	
 	@RequestMapping(value = "/user/adminMemberList.go")
@@ -208,12 +203,22 @@ public class MemberController {
 		return map;
 	}
 	
-	// 회원가입 페이지 이동
 	@RequestMapping(value = "/user/adminJoinReq.go")
-	public String adminJoinReq() {
+	public String adminJoinReq(HttpSession session,Model model) {
 		logger.info("adminJoinReq 페이지 이동");
 		
-		return "user/adminJoinReq";
+		String status = (String)session.getAttribute("mem_status"); 
+		String page= "redirect:/member/login.go";
+		logger.info("mem_status="+status);
+		logger.info("status="+status);
+		
+		if(status != null && status.equals("M")) {
+			page = "./user/adminJoinReq";
+		}else {
+			model.addAttribute("msg","로그인이 필요한 서비스입니다.");
+		}
+		
+		return page;
 	}
 	
 	@RequestMapping(value = "/user/adminMemberJoinReq.ajax")
@@ -405,4 +410,35 @@ public class MemberController {
 	    return page;
 	}
 	
+	@RequestMapping(value = "/user/deletePhotoAct.ajax")
+	@ResponseBody
+	public Map<String, Object> deletePhotoAct(@RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("deletePhotoAct",memberService.deletePhotoAct(param));
+		logger.info("#### deletePhotoAct : {}", map.get("deletePhotoAct"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/addPhoAct.ajax")
+	@ResponseBody
+	public Map<String, Object> addPhoAct(MultipartFile[] fileInput, @RequestParam Map<String,Object> param,Model model,HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("addPhoAct",memberService.addPhoAct(fileInput));
+		logger.info("#### addPhoAct : {}", map.get("addPhoAct"));
+		return map;
+	}
+	
+	@RequestMapping(value = "/user/adminMemberUpdate.do", method = RequestMethod.POST)
+	public String adminMemberUpdateDo(@RequestParam Map<String, String> param) {
+		logger.info(":: adminMemberUpdate CONTROLLER IN ::");
+		logger.info("mem_idx:{}",param.get("mem_idx"));
+		String page = "redirect:/user/adminMemberDetail.go";
+		
+		int row = memberService.adminMemberUpdateDo(param);
+		if(row == 1 ) {
+			page = "redirect:/user/adminMemberDetail.go?mem_idx="+param.get("mem_idx");
+			//page = "redirect:/detail?idx=" + param.get("idx");
+		}
+		return page;
+	}
 }

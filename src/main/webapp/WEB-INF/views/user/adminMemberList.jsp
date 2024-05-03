@@ -11,7 +11,7 @@
 <style>
 
 .form-container {
-	background: white;
+ background: white;
 	backdrop-filter: blur(10px);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	color: #fff;
@@ -20,7 +20,7 @@
 	height: 85%;
 	border-radius: 20px;
 	padding: 10px;
-	width: 60%;
+	width: 1200px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -98,7 +98,7 @@ tr.tr_bottom:hover {
 }
 
 td {
-	padding: 15px;
+	padding: 8px;
 }
 
 
@@ -176,6 +176,8 @@ td {
 }
 
 .paging {
+    color: gray;
+    text-decoration: none;
 	margin-top: 30px;
 	background-color: #fdfdfd;
 	border: none;
@@ -233,6 +235,10 @@ td {
 </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<c:if test="${mem_status == 'M'}">
+			<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+		</c:if>
 	<div class="container">
 		
 		<div class="form-container">
@@ -289,7 +295,10 @@ td {
 	<input type="hidden" id="searchType" value="M" />
 </body>
 <script>
-
+var msg = '${msg}';
+if (msg !='') {
+	alert(msg);	
+}
 $(document).ready(function(){
 	pageNlist(1);
 });

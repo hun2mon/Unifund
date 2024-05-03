@@ -52,12 +52,13 @@ input[type="text"], textarea, input[type="date"], select, option {
 }
 
 .file_input {
-	width: 70%;
+	width: 100%;
 	position: relative;
 	padding: 10px;
 	box-sizing: border-box;
 	margin-bottom: 10px;
 	font-size: 16px;
+	background-color:lightgray;
 	border: 1px solid lightgray;
 	border-radius: 11px;
 }
@@ -149,7 +150,7 @@ textarea {
 
 .detail_title {
 	font-size: 40px;
-	margin-top: 44px;
+	margin-top: 24px;
 	position: absolute;
 	margin-left: -150px;
 }
@@ -178,9 +179,12 @@ background-color: #5f9693;
 	margin-left: auto;
 	display: block;
 	margin-right: 20px;
+	
 }
 
 .update_btn {
+    background-color: #f5ca70;
+    color: white;
 	border-radius: 20px;
 	height: 45px;
 	border: none;
@@ -189,6 +193,13 @@ background-color: #5f9693;
 	margin-left: auto;
 	display: block;
 	margin-right: 20px;
+	font-weight: bold;
+	font-size: 17px;
+}
+
+.update_btn:hover {
+	background-color:#ffc13f;
+
 }
 
 .status-container {
@@ -347,22 +358,47 @@ th.align {
 
 .delete_btn{
 	border-radius: 20px;
-    height: 30px;
-    width: 30px;
     border: none;
-    margin-left: 300px;
-    color: black;
+    padding: 13px;
+    color: #989898;
     background-color: white;
-    box-shadow: inset 1px -1px 8px #c8c8c8;
-    cursor:pointer;
+    box-shadow: 1px 1px 7px #a2a2a2;
+    cursor: pointer;
+}
+
+.delete_btn:hover{
+	background-color: lightgray;
+    box-shadow: inset 0px -3px 7px #a2a2a;
+}
+
+.fileAct{
+border-radius: 20px;
+    border: none;
+    padding: 13px;
+    color: #989898;
+    background-color: white;
+    box-shadow: 1px 1px 7px #a2a2a2;
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+.mem_id{
+background-color:lightgray;
+}
+
+.filef{
+background-color:pink;
 }
 </style>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<c:if test="${mem_status == 'M'}">
+			<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+		</c:if>
 			
 	<div class="container">
-
+	<form action="adminMemberUpdate.do" method="post">
 		<c:forEach items="${adminMemberUpdate }" var="adminMemberUpdate">
 			<input type="hidden" value="${adminMemberUpdate.mem_idx }" name="mem_idx" />
 			<input type="hidden" value="${adminMemberUpdate.mng_rsndate }" name="mng_rsndate" class="mng_rsndate"/>
@@ -425,7 +461,7 @@ th.align {
 					</tr>
 					<tr>
 						<td><input type="text" name="mem_id" class="mem_id"
-							value="${adminMemberUpdate.mem_id }"   /></td>
+							value="${adminMemberUpdate.mem_id }" readonly/></td>
 						<td><input type="text" name="mem_number" class="mem_number"
 							value="${adminMemberUpdate.mem_number }"   /></td>
 					</tr>
@@ -469,11 +505,9 @@ th.align {
 					</tr>
 					<tr>
 						<td><input class="file_input file1"
-							value="${adminMemberUpdate.uni_file }"  =" "><label
-							for="uni_file" class="uni_file"  ><a href="./fileRead/${adminMemberUpdate.uni_file }">다운로드</a></label> <input
-							type="file" id="uni_file" name="uni_file"></td>
+							value="${adminMemberUpdate.uni_file }" readonly></td>
 						<td><input type="text" name="mem_addr" class="mem_addr"
-							value="${adminMemberUpdate.mem_addr }"   /></br> <input
+							value="${adminMemberUpdate.mem_addr }" /></br> <input
 							type="text" name="mem_detail" class="mem_detail"
 							value="${adminMemberUpdate.mem_detail }"   /></td>
 					</tr>
@@ -491,11 +525,11 @@ th.align {
 						<th colspan="2">자기소개</th>
 					</tr>
 					<tr>
-						<td colspan="2"><textarea name="pro_content"
-								class="pro_content" rows="30" cols="50">${adminMemberUpdate.self_introduce }</textarea></td>
+						<td colspan="2"><textarea name="self_introduce"
+								class="self_introduce" rows="30" cols="50">${adminMemberUpdate.self_introduce }</textarea></td>
 					</tr>
 					<tr>
-						<th colspan="2">활동사진</th>
+						<th colspan="2">활동사진 (**활동사진은 삭제만 가능합니다.)</th>
 					</tr>
 					<tr>
 						<td id="photoTd" style="text-align: center;">
@@ -506,15 +540,12 @@ th.align {
 								</nav>
 							</div>
 						</td>
-						<td></td>
-						<td><button
-								style="margin-top: 300px; background-color: #ffd47a; border-radius: 20px; color: white; border: none"
-								class="update_btn">수정하기</button></td>
-
 					</tr>
 				</table>
+				<input type="button" class="update_btn" onclick="check()" value="수정하기"/>
 			</div>
 		</c:forEach>
+		</form>
 	</div>
 	<input type="hidden" id="searchIn" value="" />
 	<input type="hidden" id="searchType" value="M" />
@@ -525,6 +556,82 @@ var showPage = 1;
 $(document).ready(function(){
 	memActPhoList(showPage);
  });
+ 
+ 
+ 
+function check(){
+	var $number = $('input[name="mem_number"]');
+	var $name = $('input[name="mem_name"]');
+	var $uni = $('input[name="mem_uni"]');
+	var $birth = $('input[name="mem_birth"]');
+	var $bankName = $('input[name="mem_bankName"]');
+	var $bank = $('input[name="mem_bank"]');
+	var $email = $('input[name="mem_email"]')
+	var $post = $('input[name="mem_post"]');
+	var $addr = $('input[name="mem_addr"]');
+	var $detail = $('input[name="mem_detail"]');
+	var $pw = $('input[name="mem_pw"]');
+	
+	// 전화번호 유효성 검사를 위한 정규표현식
+    var phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+ 	// 은행명에는 숫자가 들어가지 않도록 하기 위한 정규표현식
+    var bankNameRegex = /^[^0-9]*$/;
+    // 계좌번호 유효성 검사를 위한 정규표현식
+    var accountNumRegex = /^[\d-]+$/;
+ 	// 이메일 유효성 검사를 위한 정규표현식
+    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if ($number.val() == '') {
+        alert('연락처를 입력해 주세요!');
+        $number.focus();
+    } else if (!phoneRegex.test($number.val())) {
+        alert('올바른 전화번호 형식이 아닙니다! (예: 010-1234-5678)');
+        $number.focus();
+    } else if ($name.val() == '') {
+    	 alert('이름을 입력해 주세요!');
+         $name.focus();
+    }else if($uni.val()==''){
+    	alert(' 대학교를 입력해 주세요!');			
+    	$uni.focus();
+    }else if($birth.val()==''){
+    	alert('생년월일을 입력해 주세요!');			
+    	$birth.focus();
+    }else if($bankName.val() == ''){
+    	 alert('사용하실 은행명을 입력해 주세요!');
+         $bankName.focus();
+    }else if (!bankNameRegex.test($bankName.val())) {
+        alert('은행명에는 숫자를 입력할 수 없습니다!');
+        $bankName.focus();
+    } else if ($bank.val() == '') {
+        alert('계좌번호를 입력해 주세요!');    
+        $bank.focus();
+    } else if (!accountNumRegex.test($bank.val())) {
+        alert('올바른 계좌번호 형식이 아닙니다! (숫자와 하이픈(-)만 입력 가능)');
+        $bank.focus();
+    } else if ($email.val() == '') {
+        alert('이메일 입력해 주세요!');
+        $email.focus();    
+    } else if (!emailRegex.test($email.val())) {
+        alert('올바른 이메일 형식이 아닙니다!');
+        $email.focus();
+    } else if ($post.val() == '') {
+        alert('우편번호 입력해 주세요!');
+        $post.focus();
+    } else if ($addr.val() == '') {
+        alert('주소를 입력해 주세요!');
+        $addr.focus();
+    } else if ($detail.val() == '') {
+        alert('상세주소를 입력해 주세요!');
+        $detail.focus();
+    } else if($pw.val() == ''){
+    	alert('초기화할 비밀번호를 입력해 주세요!');
+        $detail.focus();
+    }else{
+    	 $('form').submit();
+    }
+    
+}
+	
  
 function memActPhoList(page){
 	var mem_idx = '${memIdx}';
@@ -570,36 +677,65 @@ function drawPhoList(list) {
         content += '</tr>';  
     } else {
         for (item of list) {
-        	content += '<span class= "delete_btn" data-file="'+ item.pho_name +'" data-type="file">X</span>';
             content += '<tr>';
             content += '<td><img src="/photo/'+ item.pho_name + '" style="margin-left: 50px; width: 300px; height: 300px;"></td>';
-            //content += '<td><button>삭제</button></td>'
-            content += '</tr>';
+        	content += '<td><span class="delete_btn" data-file="'+ item.pho_name +'" data-type="file"><i class="fa-solid fa-trash-can"></i></span><td>';
+        	content += '</tr>';
         }   
     } 
     $('#photoList').html(content);
 	
  }
  
- $('#photoList').on('click','span',function(e){
-	 alert("deletedelete");
-	 var target = $(this).data("file");
-	 var type = $(this).data("type");
-	 
-	 console.log("target-->",target);
-	 console.log("type-->",type);
-	 
-	 if(confirm("사진을 지우시겠습니까 ?")){
-	    	var fileView = $('img[src*="' + target + '"]').closest("td"); // data-file 값과 일치하는 이미지를 찾고 그 상위 <tr> 태그를 찾습니다.
-	    	var rowIndex = fileView.index();
-	    	 var itemsPerPage = 1; // 한 페이지에 표시되는 항목의 수입니다. 이 값을 여러분의 페이징 처리에 맞게 수정해야 합니다.
-	         var page = Math.floor(rowIndex / itemsPerPage) + 1; // 행이 속한 페이지를 계산합니다.
+$('#photoList').on('click', '.delete_btn', function(e){
+    var target = $(this).data("file");
+    var mem_idx = '${memIdx}';
+    var page = showPage;
+    if(confirm("해당사진을 정말로 지우시겠습니까 ? 사진은 즉시 삭제됩니다.")){
+        
+       	$.ajax({
+       		type:'get',
+       		url:'./deletePhotoAct.ajax',
+       		data:{
+       			pho_name:target,
+       			mem_idx:mem_idx,
+       		},
+       		success:function(data){
+       		 	$('#pagination_pho').twbsPagination('destroy');
+       			 memActPhoList(page);
+       		},
+	        error: function(error) {
+	            console.log(error);
+	        }
+       	});
+        
+    }
+});
 
-	         rowIndex.hide(); // 해당 이미지가 있는 행을 숨깁니다.
-	    	 memActPhoList(page);
-	 }
-	 
- });
- 
+$('#photoList').on('click', '#addPhotoBtn', function(e){
+    $('#fileInput').click(); 
+});
+
+$('#fileInput').change(function() {
+    var formData = new FormData();
+    formData.append('photo', $(this)[0].files[0]); 
+    
+    $.ajax({
+        type: 'POST',
+        url: './addPhoAct.ajax',
+        data: formData,
+        processData: false, 
+        contentType: false,
+        success: function(data) {
+           
+            memActPhoList(showPage);
+            
+        },
+        error: function(error) {
+        	 console.log(error);
+        }
+    });
+});
+
 </script>
 </html>

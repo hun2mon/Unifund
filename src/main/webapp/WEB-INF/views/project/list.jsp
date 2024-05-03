@@ -37,7 +37,7 @@ body {
 	transition: background 0.3s ease, color 0.3s ease;
 	margin: 20px;
 	float: left;
-	height: 350px;
+	height: 373px;
 	border-radius: 20px;
 	padding: 10px;
 	width: 247px;
@@ -77,6 +77,7 @@ body {
 	height: 180px;
     width: 227px;
 	border-radius: 20px;
+	margin-bottom: 9px;
 }
 
 .search_container {
@@ -156,17 +157,17 @@ position: absolute;
 
 .small_content {
 	font-size: 12px;
-	margin-top: 11px;
+	margin-top: 13px;    
 }
 
 .small_content_box {
 	background-color: #f8f8f8;
-	border: none;
-	margin: 2px;
-	padding: 2px 6px;
-	border-radius: 8px;
-	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
-	transition: all 0.3s ease;
+    border: none;
+    margin: 2px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    box-shadow: 5px 0px 9px #c7c7c7;
+    transition: all 0.3s ease;
 }
 
 .write_btn {
@@ -236,7 +237,7 @@ position: absolute;
 background: rgba(255, 255, 255, 0.15);
     padding: 7px;
     width: 100%;
-    margin-top: 25px;
+    margin-top: 10px;
     backdrop-filter: blur(10px); 
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border: none;
@@ -251,10 +252,18 @@ background: rgba(255, 255, 255, 0.15);
 
 .title_size{
 	overflow: hidden;
+    padding: 8px 0px 13px 0px;
     text-overflow: ellipsis;
+    font-weight: bold;
+    font-size: 18px;
     white-space: nowrap;
     max-width: 100px;
     word-break: break-all;
+}
+
+mark.mint{
+	border-radius:20px;
+	    color: #5b5b5b;
 }
 </style>
 </head>
@@ -296,17 +305,17 @@ background: rgba(255, 255, 255, 0.15);
 						<td><i class="fa fa-heart heart_icon readLike like_button"  style="color: #cccccc"></i></td>
 						<td><i class="fa fa-star star_icon readFavorites star_button"  style="color: #cccccc"></i></td>
 					</tr>
-					<tr>
+					<tr style="margin-top:20px;">
 
 						<c:if test="${project.pro_state == 'C'}">
 							<c:if test="${project.pro_deadline < today }">
-								<td>펀딩실패</td>
+								<td style="font-size:18px; color:red;">펀딩실패</td>
 							</c:if>
 							
 							<c:if test="${project.pro_deadline >= today }">
 								
 								<c:if test="${project.progress == null }">
-									<td>0% 진행중</td>
+									<td style="font-size: 18px; color: dodgerblue;">0% 진행중</td>
 								</c:if>
 								
 								<c:if test="${project.progress != null }">
@@ -314,11 +323,11 @@ background: rgba(255, 255, 255, 0.15);
 									<c:if test="${NUM < 100}">
 										<fmt:parseNumber var="NUM_round" value="${NUM}"
 											integerOnly="true" />
-										<td><c:out value="${NUM_round}"/>% 진행중</td>
+										<td style="font-size: 18px; color: dodgerblue;"><c:out value="${NUM_round}"/>% 진행중</td>
 									</c:if>
 									
 									<c:if test="${NUM >= 100 }">
-										<td style="color: gray">펀딩완료</td>
+										<td style="font-size: 18px; color: gray;">펀딩완료</td>
 									</c:if>
 								</c:if>
 							
@@ -327,7 +336,7 @@ background: rgba(255, 255, 255, 0.15);
 						</c:if>
 						
 						<c:if test="${project.pro_state == 'B'}">
-							<td style="color: gray">펀딩완료</td>
+							<td style="font-size: 20px; color: gray">펀딩완료</td>
 						</c:if>
 			
 					</tr>
@@ -335,11 +344,11 @@ background: rgba(255, 255, 255, 0.15);
 						<td class="title_size"><span>[${project.cateName}] </span><span>${project.pro_title}</span></td>
 					</tr>
 					<tr>
-						<td>
-						<span><del>${project.ori_price}</del></span> >> 
-						<span><fmt:parseNumber var="price_up" value="${project.rew_price}" integerOnly="true" />${price_up}</span> 
-						<span>
-						<fmt:parseNumber var="percent" value="${((project.ori_price - (project.rew_price)) / project.ori_price) * 100}" integerOnly="true" />${percent}%
+						<td style="font-size: 16px;">
+						<span style="font-size: 15px; color: gray;"><del>${project.ori_price}</del></span> >> 
+						<span style="font-size: 18px; color: red; font-weight:bold;"><fmt:parseNumber var="price_up" value="${project.rew_price}" integerOnly="true" /> ${price_up}  </span> 
+						<span style="font-size: 18px; font-weight:bold;">
+						<fmt:parseNumber var="percent" value="${((project.ori_price - (project.rew_price)) / project.ori_price) * 100}" integerOnly="true" /><mark class="mint">${percent}%</mark>
 						</span>
 						</td>
 					</tr>
@@ -457,7 +466,7 @@ background: rgba(255, 255, 255, 0.15);
 			var mem_idx = $('input[type="hidden"].mem_idx').val();
 			var pro_idx = $(this).closest('.form-container').find('input[type="hidden"].pro_idx').val();
 			var each_favorite = $(this);
-
+			
 			$.ajax({
 				type : 'get',
 				url : './checkFavorites.ajax',
@@ -466,11 +475,15 @@ background: rgba(255, 255, 255, 0.15);
 					'pro_idx' : pro_idx
 				},
 				success : function(data) {
-					if (data.projectCheckFavoritesRow == 0) {
-						each_favorite.css('color','#cccccc');
+					var isFavorited = each_favorite.css('color') === 'rgb(255, 217, 104)';
+
+					// 즐겨찾기 상태에 따라 변경
+					if (isFavorited) {
+					    each_favorite.css('color','#cccccc');
 					} else {
-						each_favorite.css('color','#ffd968');
+					    each_favorite.css('color','#ffd968');
 					}
+					
 				},
 				error : function(error) {
 					console.log(error);

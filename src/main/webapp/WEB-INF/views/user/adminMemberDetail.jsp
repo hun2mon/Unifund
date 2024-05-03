@@ -53,7 +53,7 @@ input[type="text"], textarea, input[type="date"], select, option {
 }
 
 .file_input {
-	width: 70%;
+	width: 100%;
 	position: relative;
 	padding: 10px;
 	box-sizing: border-box;
@@ -177,7 +177,7 @@ background-color: #5f9693;
 	height: 45px;
 	color: white;
 	border: none;
-	width: 130px;
+	width: 150px;
 	margin-top: 31px;
 	margin-left: auto;
 	display: block;
@@ -185,14 +185,23 @@ background-color: #5f9693;
 }
 
 .update_btn {
+    background-color: #f5ca70;
+    color: white;
 	border-radius: 20px;
 	height: 45px;
 	border: none;
 	width: 130px;
-	margin-top: 31px;
+	margin-top: 230px;
 	margin-left: auto;
 	display: block;
 	margin-right: 20px;
+	font-weight: bold;
+	font-size: 17px;
+}
+
+.update_btn:hover {
+	background-color:#ffc13f;
+
 }
 
 .status-container {
@@ -351,7 +360,10 @@ th.align {
 </style>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<c:if test="${mem_status == 'M'}">
+			<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+		</c:if>
 			
 	<div class="container">
 
@@ -362,7 +374,7 @@ th.align {
 			<div class="form-container">
 				<div class="top-container">
 					<button class="anotherMem_btn" style="cursor: pointer;"
-						onclick="history.back()">뒤로가기</button>
+						onclick="location.href='./adminMemberList.go'">뒤로가기</button>
 					<span class="detail_title">회원관리</span>
 					<input type="hidden" id="admin_id" class="admin_id" value="${sessionScope.mem_id }"/>
 
@@ -441,12 +453,14 @@ th.align {
 							value="${adminMemberDetail.mem_id }" readonly /></td>
 						<td><input type="text" name="mem_number" class="mem_number"
 							value="${adminMemberDetail.mem_number }" readonly /></td>
-						<th class="align"><i class="fa-solid fa-pen-nib"></i> 회원 프로젝트
-							보러가기</th>
+						<th class="align"><a href="../mypage/profile.go?userIdx=${adminMemberDetail.mem_idx}">
+						<i class="fa-solid fa-pen-nib"></i>회원프로젝트 보러가기</a></th>
 					</tr>
 					<tr>
 						<th>이름</th>
 						<th>대학교</th>
+						<th class="align"><a href="../mypage/introUpdate.go?userIdx=${adminMemberDetail.mem_idx}">
+						<i class="fa-solid fa-pen-nib"></i>회원자기소개서수정</a></th>
 					</tr>
 					<tr>
 						<td><input type="text" name="mem_name" class="mem_name"
@@ -484,9 +498,7 @@ th.align {
 					</tr>
 					<tr>
 						<td><input class="file_input file1"
-							value="${adminMemberDetail.uni_file }" readonly="readonly"><label
-							for="uni_file" class="uni_file" readonly><a href="./fileRead/${adminMemberDetail.uni_file }">다운로드</a></label> <input
-							type="file" id="uni_file" name="uni_file"></td>
+							value="${adminMemberDetail.uni_file }" readonly="readonly"></td>
 						<td><input type="text" name="mem_addr" class="mem_addr"
 							value="${adminMemberDetail.mem_addr }" readonly /></br> <input
 							type="text" name="mem_detail" class="mem_detail"
@@ -523,8 +535,7 @@ th.align {
 						</td>
 						<td></td>
 						<td>
-						<button style="margin-top: 300px; background-color: #ffd47a; border-radius: 20px; color: white; border: none"
-								class="update_btn" onclick="location.href='./adminMemberUpdate.go?mem_idx=${adminMemberDetail.mem_idx}'">수정하기</button>
+						<button class="update_btn" onclick="location.href='./adminMemberUpdate.go?mem_idx=${adminMemberDetail.mem_idx}'">수정하기</button>
 						</td>
 					</tr>
 				</table>

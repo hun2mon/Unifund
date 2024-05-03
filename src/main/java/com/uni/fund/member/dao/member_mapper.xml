@@ -159,7 +159,7 @@
 	<select id="memActPhoList" resultType="com.uni.fund.member.dto.MemberDTO">
     	SELECT pho_name
     	FROM photo
-    	WHERE ref_idx = #{param3} AND pho_division = '활동내역'
+    	WHERE ref_idx = #{param3} AND pho_division = '자기소개'
    	 	ORDER BY pho_idx ASC
     	LIMIT #{param1} OFFSET #{param2}
 	</select>
@@ -167,7 +167,7 @@
 	<select id="memActPhoListCnt" resultType="int">
     	SELECT CEIL(COUNT(*) / #{param1}) AS pages
     	FROM photo
-    	WHERE ref_idx = #{param2} AND pho_division = '활동내역'
+    	WHERE ref_idx = #{param2} AND pho_division = '자기소개'
 	</select>
 	
 	<insert id="stopMemberApply">
@@ -217,5 +217,19 @@
 			LEFT JOIN mem_mng mm ON mm.mng_div = m.mem_idx
 			where m.mem_idx = #{param1}
 	</select>
+	
+	<delete id="deletePhotoAct" parameterType="map">
+		DELETE FROM photo WHERE pho_name = #{pho_name} AND ref_idx = #{mem_idx} 
+	</delete>
+	
+	<update id="adminMemberUpdateDo" parameterType="map">
+		UPDATE member SET mem_number=#{mem_number}, mem_name=#{mem_name}, mem_uni=#{mem_uni}, mem_birth=#{mem_birth}, mem_post = #{mem_post},mem_addr = #{mem_addr},
+            mem_detail=#{mem_detail}, mem_email=#{mem_email}, mem_bankName = #{mem_bankName}, mem_bank= #{mem_bank},mem_pw=#{mem_pw}
+         WHERE mem_idx = #{mem_idx}
+	</update>
+	
+	<update id="adminMemberIntroUpdateDo" parameterType="map"> 
+		UPDATE introduction SET self_exp=#{self_exp}, self_introduce=#{self_introduce} WHERE mem_idx=#{mem_idx}
+	</update>
 	
 </mapper>
