@@ -55,7 +55,8 @@
 	<select id="adminListSearch"
 		resultType="com.uni.fund.admin.dto.AnnouncementDTO">
 		SELECT *
-		FROM announcement
+		,(select mem_id from member m where an.mng_idx = m.mem_idx) as mem_id
+		FROM announcement an
 		where noti_title like
 		concat('%',#{param1},'%')
 		ORDER BY noti_top DESC,
