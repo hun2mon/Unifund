@@ -9,7 +9,8 @@
             mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
             mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
             (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name,
-            (SELECT state FROM crewMember_list WHERE mem_idx = #{userId}) as crew_state
+            (SELECT state FROM crewMember_list WHERE mem_idx = #{userId}) as crew_state,
+            (SELECT crew_idx FROM crewMember_list WHERE mem_idx = #{userId}) as crew_idx
       FROM member WHERE mem_idx = #{userId}
    </select>
    <select id="profileUp" resultType="com.uni.fund.mypage.dto.MypageDTO">
@@ -43,7 +44,7 @@
           SELECT pho_name FROM photo WHERE ref_idx = #{userId} AND pho_division = '프로필'
    </select>
    <select id="introduction" resultType="com.uni.fund.mypage.dto.MypageDTO">
-          SELECT self_exp,self_introduce FROM introduction WHERE mem_idx = #{userId}
+          SELECT * FROM introduction WHERE mem_idx = #{userId}
    </select>
    <insert id="introCreDo">
          INSERT INTO introduction(mem_idx,self_introduce,self_exp) VALUES(#{param3},#{param2},#{param1})

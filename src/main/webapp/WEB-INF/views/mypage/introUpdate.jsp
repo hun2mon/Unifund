@@ -183,7 +183,7 @@
    <br>
    <div id="box">
       <div id="minibox">
-         <form action="introUpdate.do" method="post" enctype="multipart/form-data">
+         <form action="introUpdate.do?mem_idx=${introDto.mem_idx}" method="post" enctype="multipart/form-data">
          <h1>자기소개서</h1>
                <div class="intro">주분야</div>
                   <input type="text" name="selfExp" placeholder="주분야를 입력해주세요."  value="${introDto.self_exp}">

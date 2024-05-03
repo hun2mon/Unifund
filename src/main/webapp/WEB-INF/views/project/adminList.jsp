@@ -98,7 +98,7 @@ span {
 						<option value="펀딩실패">펀딩실패</option>
 				</select>
 						<input type="text" placeholder="검색어를 입력하세요" class="keyWord" onKeyPress="enterKey()">
-						<input type="button" value="검색" onclick="search()">
+						<input type="button" value="검색" onclick="search(1)">
 				</span>
 			</div>
 			<thead>

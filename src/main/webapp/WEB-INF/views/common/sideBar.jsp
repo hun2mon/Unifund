@@ -166,10 +166,10 @@ label:hover {
 			<li><a href="http://localhost:8080/main/member/adminList.go"><i class="fa-solid fa-user"></i>회원관리</a></li>
 			<li><a href="http://localhost:8080/main/project/adminList.go"><i class="fa-solid fa-diagram-project"></i>프로젝트 관리</a></li>
 			<li><a href="http://localhost:8080/main/crew/adminList.go"><i class="fa-solid fa-people-roof"></i>크루관리</a></li>
-			<li><a href="http://localhost:8080/main/report/reportList.go"><i class="fa-solid fa-circle-exclamation"></i>신고 관리</a></li>
+			<li><a href="http://localhost:8080/main/report/adminList.go"><i class="fa-solid fa-circle-exclamation"></i>신고 관리</a></li>
 			<li><a href="http://localhost:8080/main/money/adminCashList.go"><i class="fa-solid fa-sack-dollar"></i>재화 관리</a></li>
 			<li><a href="http://localhost:8080/main/ann/adminList.go"><i class="fa-solid fa-chalkboard-user"></i>공지사항</a></li>
-			<li><a href="http://localhost:8080/main/qna/adminList.go"><i class="fa-solid fa-circle-question"></i>Q&A 관리</a></li>
+			<li><a href="http://localhost:8080/main/qna/adminQnaList.go"><i class="fa-solid fa-circle-question"></i>Q&A 관리</a></li>
 		</ul>
 	</div>
 </body>
