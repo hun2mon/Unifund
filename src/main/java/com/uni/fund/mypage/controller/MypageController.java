@@ -95,7 +95,10 @@ public class MypageController {
       if (memId != null) {
     	  page = "mypage/introUpdate";
     	  MypageDTO introDto = mypageService.introduction(mem_idx);
-    	  model.addAttribute("introDto",introDto);
+    	 
+    	logger.info("[introUp]userIdx : "+mem_idx);  
+    	model.addAttribute("introDto",introDto);
+    	model.addAttribute("memIdx", mem_idx); 
       }
       
       return page;
@@ -105,26 +108,25 @@ public class MypageController {
    public String introUpdateDo(MultipartFile[] photos, HttpSession session, String selfExp, String selfInt, String mem_idx) {
       logger.info("photos : {}",Arrays.toString(photos));
       logger.info("selfExp : "+selfExp+" / selfInt : " + selfInt);
-      logger.info("mem_idx : "+mem_idx);
+      logger.info("[introUpDo]mem_idx : "+mem_idx);
       int memIdx = Integer.parseInt(mem_idx);
-      
+      String page = "redirect:/mypage/profile.go?userIdx="+memIdx;
       int row = mypageService.introCreDo(photos,selfExp,selfInt,memIdx);
-      
-      
-      return "redirect:/mypage/profile.go?userIdx="+memIdx;
+ 
+      return page;
    }
    
    @RequestMapping(value = "/mypage/appList.ajax")
    @ResponseBody
-   public Map<String, Object> listCall(String page,HttpSession session, String cnt){
+   public Map<String, Object> listCall(String page,HttpSession session, String cnt, String mem_idx){
       logger.info("listCall 요청");
       logger.info("페이지당 보여줄 개수 : " +cnt);
       logger.info("요청 페이지" + page);
-      int mem_idx =  (int) session.getAttribute("mem_idx");
+      int memIdx = Integer.parseInt(mem_idx);
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.list(currPage,pagePerCnt,mem_idx);
+      Map<String, Object> map = mypageService.list(currPage,pagePerCnt,memIdx);
       logger.info("map: " + map);
       
       return map;
@@ -132,16 +134,16 @@ public class MypageController {
    
    @RequestMapping(value = "/mypage/createList.ajax")
    @ResponseBody
-   public Map<String, Object> createList(String page,HttpSession session, String cnt){
+   public Map<String, Object> createList(String page,HttpSession session, String cnt, String mem_idx){
       logger.info("createList 요청");
       logger.info("페이지당 보여줄 개수 : " +cnt);
       logger.info("요청 페이지" + page);
       
-      int mem_idx =  (int) session.getAttribute("mem_idx");
+      int memIdx = Integer.parseInt(mem_idx);
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.createList(currPage,pagePerCnt,mem_idx);
+      Map<String, Object> map = mypageService.createList(currPage,pagePerCnt,memIdx);
       logger.info("map: " + map);
   
       return map;
@@ -149,16 +151,16 @@ public class MypageController {
    
    @RequestMapping(value = "/mypage/repList.ajax")
    @ResponseBody
-   public Map<String, Object> repList(String page,HttpSession session, String cnt){
+   public Map<String, Object> repList(String page,HttpSession session, String cnt, String mem_idx){
       logger.info("repList 요청");
       logger.info("[rep]페이지당 보여줄 개수 : " +cnt);
       logger.info("[rep]요청 페이지" + page);
       
-      int mem_idx =  (int) session.getAttribute("mem_idx");
+      int memIdx = Integer.parseInt(mem_idx);
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
       
-      Map<String, Object> map = mypageService.repList(currPage,pagePerCnt,mem_idx);
+      Map<String, Object> map = mypageService.repList(currPage,pagePerCnt,memIdx);
       logger.info("[rep]map: " + map);
   
       return map;
@@ -166,16 +168,16 @@ public class MypageController {
    
    @RequestMapping(value= "/mypage/photoList.ajax")
    @ResponseBody
-   public Map<String, Object> photoList(String page,HttpSession session, String cnt){
+   public Map<String, Object> photoList(String page,String mem_idx, String cnt){
       logger.info("photoList 요청");
       logger.info("[photo]페이지당 보여줄 개수 : " +cnt);
       logger.info("[photo]요청 페이지" + page);
-      
-      int mem_idx =  (int) session.getAttribute("mem_idx");
+      logger.info("mem_idx : " + mem_idx);
+     
       int currPage = Integer.parseInt(page);
       int pagePerCnt = Integer.parseInt(cnt);
-      
-      Map<String, Object> map = mypageService.photoList(currPage,pagePerCnt,mem_idx);
+      int memIdx = Integer.parseInt(mem_idx);
+      Map<String, Object> map = mypageService.photoList(currPage,pagePerCnt,memIdx);
       logger.info("[photo]map: " + map);
       
       return map;
