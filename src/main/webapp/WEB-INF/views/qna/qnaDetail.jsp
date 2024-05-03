@@ -42,6 +42,30 @@
 	margin-bottom: 10px;
 	margin-right: 0px; /* 수정된 부분: 삭제 버튼을 수정 버튼 왼쪽으로 5px 정도 떨어뜨립니다. */
 }
+.div_reply {
+	width: 1060;
+	margin-top: 30;
+	z-index: 1;
+}
+.div_reply, .div_reply * {
+	padding-bottom: 5;
+	padding-top: 5;
+}
+.div_flex {
+	display: flex;
+}
+.replyFrom, .reply_content {
+	width: 1000;
+	height: 170;
+}
+.sub_reply {
+	margin-left: 670;
+}
+.reply_content {
+	border-radius: 5px 5px;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+	background-color: rgba(255, 255, 255, 0.15);
+}
 </style>
 </head>
 <body>
@@ -82,25 +106,46 @@
 					<div>
 						<div>
 							<input type="hidden" class="replyFrom" name="qna_idx"
-								value="${qnaDTO.qna_idx }">
-							<input type="text" class="replyFrom" name="rplContent" min="5" maxlength="500"
-								onkeyup="lengthCheck(this)">
+								value="${qnaDTO.qna_idx}">
+							<input type="text" class="replyFrom" name="rplContent" min="5" maxlength="2000"
+								onkeyup="repLengthCheck(this)">
 						</div>
 						<div>
-						<input type="button" class="sub_reply" value="작성" onclick="revWrite()">
+						<input type="button" class="sub_reply" value="작성" onclick="replyWrite()">
 						</div>
 					</div>
 				</form>
 				<hr>
 				<div id="list"></div>
 			</div>
-
 		</div>
+	</div>
 </body>
 <script>
 $(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
-	listCall();
-});
+	repListCall();
+})
+
+
+function repLengthCheck(text){
+	var content = $(text).val();
+	if (content.length >= 2000) {
+		alert('입력 가능 글자수를 초과하였습니다.');
+	}
+}
+
+function replyWrite(){
+	
+	var $rplContent = $('input[name="rplContent"]');
+	
+	if ($rplContent.val()=='') {
+		alert('답변 내용을 입력 해주세요');
+		$rplContent.focus();
+	}else {
+		$('form').submit();
+	}
+	
+}
 
 function deleteQna(button) {
     // 삭제할 Qna의 인덱스 값을 가져옵니다.
@@ -111,7 +156,7 @@ function deleteQna(button) {
         type: 'post', // POST 방식으로 요청을 전송합니다.
         url: './delete.ajax', // 삭제를 처리할 URL을 지정합니다.
         data: {
-            'qnaDel': qnaIdx // 삭제할 Qna의 인덱스를 전달합니다.
+            'qnaDel': ${qnaDTO.qna_idx} // 삭제할 Qna의 인덱스를 전달합니다.
         },
         success: function (response) {
             // 삭제가 성공한 경우 알림 메시지를 표시하고 목록을 다시 불러옵니다.
@@ -131,16 +176,20 @@ function deleteQna(button) {
         }
     });
 }
-function listCall(){
+
+
+
+function repListCall(){
 	$.ajax({
 		type:'get'
-		,url:'./qna/detail.ajax'
+		,url:'./replyList.ajax'
 		,data:{
-			qna_idx:${qna.qna_idx},
+			qna_idx:${qnaDTO.qna_idx}
 		}
 		,dataType:'json'
 		,success:function(data){
-			drawList(data.list);
+			console.log(data);
+			drawRepList(data.list);
 		}
 		,error:function(error){
 			console.log(error);
@@ -150,7 +199,7 @@ function listCall(){
 
 var comm_idx = 0;
 
-function drawList(list){
+function drawRepList(list){
 	var content = '';
 	for (item of list) {
 		content += '<div id = "rev_css">';
@@ -169,39 +218,7 @@ function drawList(list){
 		content += '<hr>';
 	}
 	$('#list').html(content);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 </script>
 </html>

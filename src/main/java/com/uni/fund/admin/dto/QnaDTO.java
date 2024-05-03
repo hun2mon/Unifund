@@ -15,6 +15,7 @@ public class QnaDTO {
 	private String comm_content;
 	private Date comm_date;
 	private String mem_status;
+	private int comm_idx;
 	
 	
 	public String getMem_id() {
@@ -88,6 +89,12 @@ public class QnaDTO {
 	}
 	public void setMem_status(String mem_status) {
 		this.mem_status = mem_status;
+	}
+	public int getComm_idx() {
+		return comm_idx;
+	}
+	public void setComm_idx(int comm_idx) {
+		this.comm_idx = comm_idx;
 	}
 	
 	

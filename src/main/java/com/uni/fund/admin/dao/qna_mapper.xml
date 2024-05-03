@@ -38,11 +38,13 @@
 		q.qna_status = 'A'
 		ORDER BY q.qna_idx DESC LIMIT #{param2}, #{param3}
 
-	    SELECT q.qna_idx, q.qna_title, q.qna_show, q.qna_date, m.mem_id, q.qna_status
-	    FROM qna q LEFT JOIN member m ON q.mem_idx = m.mem_idx 
-	    WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE CONCAT('%', #{param1}, '%'))
-	        
-	    ORDER BY q.qna_idx DESC LIMIT #{param2}, #{param3}
+		SELECT q.qna_idx, q.qna_title, q.qna_show, q.qna_date, m.mem_id,
+		q.qna_status
+		FROM qna q LEFT JOIN member m ON q.mem_idx = m.mem_idx
+		WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE
+		CONCAT('%', #{param1}, '%'))
+
+		ORDER BY q.qna_idx DESC LIMIT #{param2}, #{param3}
 
 	</select>
 
@@ -56,24 +58,30 @@
 		OR qna_title like
 		concat('%',#{param1},'%') AND q.qna_status = 'A'
 
-		SELECT CEIL(COUNT(qna_idx)/#{param2}) AS pages 
-		FROM qna q left join member m on q.mem_idx = m.mem_idx 
-		WHERE m.mem_id like concat('%',#{param1},'%') OR qna_title like concat('%',#{param1},'%') 
+		SELECT CEIL(COUNT(qna_idx)/#{param2}) AS pages
+		FROM qna q left join member m on q.mem_idx = m.mem_idx
+		WHERE m.mem_id like concat('%',#{param1},'%') OR qna_title like
+		concat('%',#{param1},'%')
 	</select>
-	
-	<select id="userSearch" resultType="com.uni.fund.admin.dto.QnaDTO">
-	    SELECT q.qna_idx, q.qna_title, q.qna_show, q.qna_date, m.mem_id, q.qna_status
-	    FROM qna q LEFT JOIN member m ON q.mem_idx = m.mem_idx 
-	    WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE CONCAT('%', #{param1}, '%'))
-	    	AND q.qna_status ='A'    
-	    ORDER BY q.qna_idx DESC LIMIT #{param2}, #{param3}
+
+	<select id="userSearch"
+		resultType="com.uni.fund.admin.dto.QnaDTO">
+		SELECT q.qna_idx, q.qna_title, q.qna_show, q.qna_date, m.mem_id,
+		q.qna_status
+		FROM qna q LEFT JOIN member m ON q.mem_idx = m.mem_idx
+		WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE
+		CONCAT('%', #{param1}, '%'))
+		AND q.qna_status ='A'
+		ORDER BY q.qna_idx DESC LIMIT #{param2}, #{param3}
 	</select>
-	
+
 	<select id="userSearchAllCount" resultType="int">
-		SELECT CEIL(COUNT(qna_idx)/#{param2}) AS pages 
-		FROM qna q left join member m on q.mem_idx = m.mem_idx 
-		WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE CONCAT('%', #{param1}, '%')) 
-			AND q.qna_status ='A' 
+		SELECT
+		CEIL(COUNT(qna_idx)/#{param2}) AS pages
+		FROM qna q left join member m on q.mem_idx = m.mem_idx
+		WHERE (m.mem_id LIKE CONCAT('%', #{param1}, '%') OR q.qna_title LIKE
+		CONCAT('%', #{param1}, '%'))
+		AND q.qna_status ='A'
 
 	</select>
 
@@ -104,9 +112,10 @@
 
 	<select id="userQnaAllCount" resultType="int">
 		SELECT CEIL(COUNT(qna_idx)/#{param2}) AS pages FROM qna
-		WHERE qna_status = 'A'
+		WHERE
+		qna_status = 'A'
 		<if test='param1 != " " and param1 != "전체"'>
-			AND qna_show = #{param1} 
+			AND qna_show = #{param1}
 		</if>
 	</select>
 
@@ -141,14 +150,12 @@
 	<select id="qnaDetail"
 		resultType="com.uni.fund.admin.dto.QnaDTO">
 		SELECT
-		q.qna_title,q.qna_content,q.qna_show,m.mem_id,q.qna_pass,q.qna_date FROM qna q
+		q.qna_idx,q.qna_title,q.qna_content,q.qna_show,m.mem_id,q.qna_pass,q.qna_date
+		FROM qna q
 		join
-		member m ON q.mem_idx = m.mem_idx WHERE qna_idx = #{param1}
+		member m ON q.mem_idx = m.mem_idx WHERE qna_idx =
+		#{param1}
 	</select>
-
-
-
-
 
 	<update id="qnaUpdate" parameterType="map">
 		UPDATE qna
@@ -162,10 +169,52 @@
 	</update>
 
 
-<update id="qnaDel">
-    UPDATE qna
-    SET qna_status = #{status}
-    WHERE qna_idx = #{qnaDel}
-</update>
+	<update id="qnaDel">
+		UPDATE qna
+		SET qna_status = #{status}
+		WHERE qna_idx = #{qnaDel}
+	</update>
+
+
+	<update id="rplDel">
+		UPDATE qna_reply SET comm_status = 'B' WHERE comm_idx
+		= #{param1}
+	</update>
+
+
+	<select id="rplList"
+		resultType="com.uni.fund.admin.dto.QnaDTO">
+		SELECT q.comm_content,m.mem_id,q.comm_date from qna_reply q
+		JOIN member m ON q.mem_idx = m.mem_idx WHERE qna_idx = #{parma1}
+	</select>
+
+
+<insert id="replyDo" parameterType= "map">
+		INSERT INTO qna_reply (mem_idx,qna_idx,comm_content)
+			VALUES (#{mem_idx},#{qna_idx},#{rplContent})
+	</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </mapper>

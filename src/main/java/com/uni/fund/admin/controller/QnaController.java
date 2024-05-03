@@ -1,5 +1,6 @@
 package com.uni.fund.admin.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.uni.fund.admin.dao.QnaDAO;
 import com.uni.fund.admin.dto.AnnouncementDTO;
 import com.uni.fund.admin.dto.QnaDTO;
 import com.uni.fund.admin.service.QnaService;
+import com.uni.fund.project.dto.ReviewDTO;
 
 @Controller
 public class QnaController {
@@ -247,13 +249,43 @@ public class QnaController {
 
 	
 	
+	@RequestMapping(value = "/qna/replyList.ajax")
+	@ResponseBody
+	public Map<String, Object> replyAjax(String qna_idx){
+		logger.info("qna_idx : {}" , qna_idx);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<QnaDTO> list = qnaService.rplList(qna_idx);
+		map.put("list", list);
+		logger.info("list : {}",list);
+		return map;
+	}
 	
 	
+	@RequestMapping(value = "/qna/reply/delete.do")
+	public String rplDel(String comm_idx, String qna_idx) {
+		logger.info("comm_idx :{}", comm_idx);
+		String page = "redirect:/";
+		int row = 0;
+		row = qnaService.rplDel(comm_idx);
+		if (row >0) {
+			page = "redirect:/qna/qnaDetail.go?row=" + row + "&qna_idx=" + qna_idx;
+		}
+		return page;
+	}
 	
 	
-	
-	
-	
+	@RequestMapping(value = "/qna/reply/write.do", method = RequestMethod.POST)
+	public String replyWrite(@RequestParam Map<String,String> param, Model model,HttpSession session) {
+		String page = "redirect:/";
+		logger.info("param : {}", param);
+		logger.info("param_qna_idx : {}",param.get("qna_idx"));
+		int mem_idx = (int) session.getAttribute("mem_idx");
+		logger.info("mem_idx : {}", mem_idx);
+		param.put("mem_idx", String.valueOf(mem_idx));
+		int row = qnaService.replyDo(param);
+		logger.info("row : {}",row);
+		return "redirect:/qna/qnaDetail.go?qna_idx=" + param.get("qna_idx");
+	}
 	
 	
 	

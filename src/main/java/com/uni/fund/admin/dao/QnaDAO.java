@@ -39,11 +39,13 @@ public interface QnaDAO {
 
 	Object userSearchAllCount(String keyWord, int pagePerCnt);
 
-
-
-
-
 	void qnaDel(@Param("qnaDel")Integer qnaDel, @Param("status") char status);
+
+	List<QnaDTO> rplList(String qna_idx);
+
+	int rplDel(String comm_idx);
+
+	int replyDo(Map<String, String> param);
 
 
 	
