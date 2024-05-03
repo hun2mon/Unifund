@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.fund.crew.dao.CrewDAO;
+import com.uni.fund.crew.dto.ActivityDTO;
 import com.uni.fund.crew.dto.CrewDTO;
 
 @Service
@@ -32,11 +33,11 @@ public class CrewService {
 		return crewDAO.crewOverlay(crew_name);
 	}
 
-	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, Integer mem_idx, Map<String, String> param) {
+	public int crewCreateDo(MultipartFile crew_logo_photo, MultipartFile crew_recru_photo, int memIdx, Map<String, String> param) {
 		int row=-1;
 		logger.info("service crew create do 들어왔다");
 		CrewDTO crewDTO = new CrewDTO();
-		crewDTO.setMem_idx(mem_idx);
+		crewDTO.setMem_idx(memIdx);
 		crewDTO.setCrew_name(param.get("crew_name"));
 		crewDTO.setCrew_exp(param.get("crew_exp"));
 		crewDTO.setCrew_con(param.get("crew_con"));
@@ -50,12 +51,55 @@ public class CrewService {
 		String crewLogo="크루로고";
 		String crewRecru="모집설명";
 		
+		//crew를 memberList에 
+		crewDAO.memberListInsert(crew_idx,memIdx);
+		logger.info("Service에서 crew_idx : "+crew_idx);
+		logger.info("Service에서 memIdx : "+memIdx);
+		crewDAO.memberHistoryInsert(crew_idx,memIdx);
+		
 		if(row>0) {
 			crewLogoPhotoFileSave(crew_idx,crew_logo_photo,crewLogo);
 			crewRecruPhotoFileSave(crew_idx,crew_recru_photo,crewRecru);
 		}		
 		return row;
-	}	
+	}		
+
+	public int crewActivityWrite(MultipartFile crew_activity_photo, int memIdx, Map<String, Object> param, int crew_idx) {
+		CrewDTO crewDTO = new CrewDTO();
+		crewDTO.setCrew_idx(crew_idx);
+		crewDTO.setMem_idx(memIdx);
+		crewDTO.setActivity_details((String) param.get("activity_details"));
+		int row=crewDAO.crewActivityWrite(crewDTO);
+		int crew_activity_details_idx=crewDTO.getCrew_activity_details_idx();
+		String crewActivity="활동내역";
+		logger.info("crew_activity_details_idx : "+crew_activity_details_idx);
+		
+		if (row>0) {
+			crewActivityFileSave(crew_activity_details_idx,crew_activity_photo,crewActivity);
+		}
+		
+		return 0;
+	}
+	
+	private void crewActivityFileSave(int crew_activity_details_idx, MultipartFile crew_activity_photo, String crewActivity) {
+		String fileName=crew_activity_photo.getOriginalFilename();
+		if(!fileName.equals("")) {
+			String crewActivityPhoto = fileName.substring(fileName.lastIndexOf("."));
+			String newCrewActivityPhoto = System.currentTimeMillis()+crewActivityPhoto;
+			
+			try {
+				byte[] crewActivityPhotoBytes = crew_activity_photo.getBytes();
+				Path crewActivityPath = Paths.get(file_root+newCrewActivityPhoto);
+				Files.write(crewActivityPath, crewActivityPhotoBytes);				
+				crewDAO.crewActivityPhoto(crew_activity_details_idx, newCrewActivityPhoto, crewActivity);
+			} catch (IOException e) {
+				logger.info("file exception");
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
 
 	private void crewLogoPhotoFileSave(int crew_idx, MultipartFile crew_logo_photo, String crewLogo) {
 		String fileName = crew_logo_photo.getOriginalFilename();
@@ -132,6 +176,34 @@ public class CrewService {
         
         return map;
     }
+
+	public Map<String, Object> detailCrewMember(int currentPage, int pagePerCnt, String crew_idx) {
+		logger.info("service detail CrewMember");
+		int start = (currentPage - 1) * pagePerCnt;
+        Map<String, Object> map = new HashMap<String,Object>();
+        List<CrewDTO> list= crewDAO.detailCrewMember(start,pagePerCnt,crew_idx);
+        logger.info("list : "+list);
+        
+        map.put("list", list);        
+        map.put("currentPage", currentPage);
+        map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+        logger.info("totalPags = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
+		return map;
+	}	
+
+	public Map<String, Object> activityList(int currentPage, int pagePerCnt, String crew_idx) {
+		int start = (currentPage-1) * pagePerCnt;
+		Map<String, Object> result = new HashMap<String, Object>();
+	    List<CrewDTO>activity_list= crewDAO.activityList(crew_idx,start,pagePerCnt);
+	    logger.info("activity_list"+activity_list);
+	    
+	    result.put("activity_list", activity_list);
+	    result.put("currentPage", currentPage);
+	    result.put("totalPages", crewDAO.activityListCount(pagePerCnt,crew_idx));
+
+		return result;
+	}
+	
 	
 	public Map<String, Object> searchCrew(String keyword,int currentPage, int pagePerCnt) {
 	    	    
@@ -163,6 +235,12 @@ public class CrewService {
 			return "memberCount";
 		}
 		
+		// 탈퇴했거나 추방당했는지 확인
+		int outOrKick = crewDAO.isOutOrKick(memIdx,crew_idx);
+		if(outOrKick>0) {
+			return "outOrKick";
+		}
+		
 		// 크루 신청 등록
 		Map<String, Object> param= new HashMap<String, Object>();
 		param.put("mem_idx",memIdx);
@@ -188,11 +266,11 @@ public class CrewService {
 	}
 	
 
-	public CrewDTO detail(String crew_idx, String memId) {
+	public CrewDTO detail(String crew_idx, String memId, int memIdx) {
 		logger.info("crew_idx : {}",crew_idx);
 		logger.info("memIdx : {}",memId);
 		
-		return crewDAO.detail(memId,crew_idx);
+		return crewDAO.detail(memId,crew_idx,memIdx);
 	}
 
 
@@ -215,22 +293,10 @@ public class CrewService {
 
 	public void crewOut(int crew_idx, int memIdx) {
 		crewDAO.crewMemberListDelete(crew_idx,memIdx);
-		crewDAO.crewOutMemberHistoryUpdate(crew_idx,memIdx);
+		crewDAO.crewOutMemberHistoryInsert(crew_idx,memIdx);
 		logger.info("service부분 crewOut 완료");
 	}
 
-	public Map<String, Object> detailCrewMemberPhoto(int currentPage, int pagePerCnt, String crew_idx) {
-		int start = (currentPage - 1) * pagePerCnt;
-        Map<String, Object> map = new HashMap<String,Object>();
-        List<CrewDTO> list= crewDAO.detailCrewMember(start,pagePerCnt,crew_idx);
-        logger.info("list : "+list);
-        
-        map.put("list", list);        
-        map.put("currentPage", currentPage);
-        map.put("totalPages", crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
-        logger.info("totalPage = "+crewDAO.detailCrewMemberCountPage(pagePerCnt,crew_idx));
-		return map;
-	}
 
 	public void memberDeport(String crew_idx, String crewMem_idx) {
 		logger.info("Service memberDeport");
@@ -269,34 +335,41 @@ public class CrewService {
 		crewDAO.insertCrewMem(mem_idx,crew_idx);
 	}
 
+	public void activityDel(int crew_activity_details_idx) {
+		crewDAO.activityDel(crew_activity_details_idx);
+		crewDAO.activityPhotoDel(crew_activity_details_idx);
+	}
 	public void refuse(String mem_idx, String crew_idx) {
 		crewDAO.refuse(mem_idx,crew_idx);
 	}
 
+	public Map<String, Object> adminList(int currPage, int pagePerCnt) {
+		int start = (currPage-1)*pagePerCnt;
+		List<CrewDTO>list = crewDAO.adminList(start,pagePerCnt);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", crewDAO.adminAllCount(pagePerCnt));
+		logger.info("totalPages : "+crewDAO.adminAllCount(pagePerCnt));
+		
+		return result;
+	}
 
-
+	public Map<String, Object> adminSearch(String keyWord, int currPage, int pagePerCnt) {
+		
+		int start = (currPage - 1)* pagePerCnt;
+		List<CrewDTO>list = crewDAO.adminSearch(keyWord,start,pagePerCnt);
+		Map<String, Object>result = new HashMap<String, Object>();
+		
+		result.put("list",list);
+		result.put("currPage",currPage);
+		result.put("totalPages",crewDAO.adminSearchAllCount(keyWord,pagePerCnt));
+		logger.info("totalPages : "+crewDAO.adminSearchAllCount(keyWord,pagePerCnt));
+		
+		return result;
+	}
 
 	
-
-
-
-
-
-	
-
-
-	
-
-
-	
-
-
-
-
-
-
-
-
 
 
 

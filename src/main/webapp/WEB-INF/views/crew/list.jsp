@@ -5,15 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
-<link
-	href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script
-	src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script	src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="../resources/js/jquery.twbsPagination.js"
-	type="text/javascript"></script>
+<script src="../resources/js/jquery.twbsPagination.js"	type="text/javascript"></script>
 
 <style>
 .header {
@@ -25,8 +21,9 @@
 }
 
 .listLogo_img {
-	width: 100%;
-	height: auto;
+	width: 500px;
+    height: 300px;
+    object-fit: cover;
 }
 
 .btn {
@@ -105,8 +102,7 @@ input[type="text"] {
 			style="margin-right: 10px;">
 		<button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button>
 		<button class="register-btn"
-			onclick="location.href='/main/crew/crewCreate.go'">크루 등록</button>
-		<!-- 수정된 부분 -->
+			onclick="location.href='/main/crew/create.go'">크루 등록</button>
 	</div>
 
 	<div class="crew_list" id="list"></div>
@@ -235,6 +231,13 @@ $('#searchBtn').click(function() {
     searchAndPaginate(showPage);
 })
 
+$('#searchInput').keypress(function(event) {
+    if (event.which === 13) { 
+        var showPage = 1;
+        $('#pagination').twbsPagination('destroy');
+        searchAndPaginate(showPage);
+    }
+});
 
 
 $(document).on('click', '.btn-apply', function() {
