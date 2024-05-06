@@ -181,7 +181,7 @@ img.icon{
 			</tr>
 			<tr>
 				<th colspan="2"><button type="button" onclick="join()">등록</button>
-				<button type="button" onclick="location.href='./'">취소</button></th>
+				<button type="button" onclick="goBack()">취소</button></th>
 				
 			</tr>
 			
@@ -278,6 +278,10 @@ function overlay() {
 			console.log(error);
 		} 
 	});
+}
+
+function goBack() {
+    window.history.back();
 }
 </script>
 </html>

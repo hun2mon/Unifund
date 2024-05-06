@@ -224,9 +224,11 @@
                 <div class="thumb">
                     <button class="btn like-btn" onclick="cool()">👍</button>
                 </div>
-                <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.crew_member}">
-                	<button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
-                </c:if>
+                <c:forEach var="memberIdx" items="${crew.crew_member}">
+    				<c:if test="${memberIdx == sessionScope.mem_idx}">
+        				<button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
+    				</c:if>
+				</c:forEach>
                 <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
 					<button class="btn edit-btn" onclick="location.href='/main/crew/update.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
 				</c:if>
