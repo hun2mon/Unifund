@@ -1,53 +1,51 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QnA 작성</title>
     <!-- 부트스트랩 CSS 추가 -->
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-     <style>
-       body {
-    padding: 20px;
-    background-color: #333; /* 어두운 회색 배경 */
-    color: #222; /* 어두운 텍스트 색상 */
-    background-image: url('https://pbs.twimg.com/media/EHAyLFmUcAAnWeT?format=jpg&name=4096x4096'); /* 배경 이미지의 URL */ /* 배경 이미지 반복 */
-     background-position: 0px 0;
-}
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f3f3f3; /* 연한 회색 배경 */
+            color: #333; /* 어두운 텍스트 색상 */
+        }
 
         .container {
             max-width: 600px;
-            margin: 50px auto 0; /* Added margin-top to create space between header and form */
-            height: 66vh; /* Two-thirds of the screen height */
+            margin: 50px auto 0; /* 헤더와 폼 사이의 여백 추가 */
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
         }
 
         .form-container {
-            background-color: #ccc; /* Gray background for the form */
+            background-color: #fff; /* 흰색 배경 */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            flex-grow: 1;
+            width: 100%;
+            max-width: 500px;
         }
 
         h1 {
             text-align: center;
-            color: #222; /* Dark text color */
+            color: #333; /* 어두운 텍스트 색상 */
             margin-top: 0;
         }
 
         label {
             font-weight: bold;
-            color: #222; /* Dark text color */
+            color: #333; /* 어두운 텍스트 색상 */
         }
 
         textarea {
             resize: vertical;
-            height: 200%; /* Double the default height */
+            height: 200%; /* 기본 높이의 2배 */
         }
 
         #passwordField {
@@ -58,35 +56,32 @@
             margin-top: 10px;
         }
         
+        /* 투명도 효과 */
         .form-container {
-    background-color: #ccc; /* Gray background for the form */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    flex-grow: 1;
-    transition: opacity 0.5s ease; /* 투명도 변화를 부드럽게 만듭니다. */
-    opacity: 0.3; /* 기본 투명도 설정 */
-}
+            transition: opacity 0.5s ease;
+            opacity: 0.9; /* 기본 투명도 설정 */
+        }
 
-.form-container:hover {
-    opacity: 1; /* 마우스를 올렸을 때 투명도를 1로 설정하여 완전히 투명하지 않도록 합니다. */
-}
+        .form-container:hover {
+            opacity: 1; /* 마우스를 올렸을 때 투명도를 1로 설정하여 완전히 투명하지 않도록 합니다. */
+        }
     </style>
 </head>
 <body>
+<body style="background-color: #e2e1e0;"> 
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <div class="container">
-    <div class="form-container"> <!-- Added a wrapper div for the form with a gray background -->
-        <h1>QnA 작성 폼</h1> <!-- Moved the title inside the form container -->
+    <div class="form-container">
+        <h1>QnA 작성 폼</h1>
         <form id="qnaForm" action="./create.do" method="post">
             <div class="form-group">
-                <label for="qna_title">제목:(최대 20자)</label>
+                <label for="qna_title">제목: (최대 20자)</label>
                 <input type="text" class="form-control" id="qna_title" name="qna_title" maxlength="20">
             </div>
 
             <div class="form-group">
                 <label for="qna_content">내용:</label>
-                <textarea class="form-control" id="qna_content" name="qna_content" rows="16" cols="50"></textarea> <!-- Doubled the rows -->
+                <textarea class="form-control" id="qna_content" name="qna_content" rows="16" cols="50"></textarea>
             </div>
 
             <div class="checkbox">
@@ -107,6 +102,7 @@
         </form>
     </div>
 </div>
+
 
 <script>
     function submitForm() {
@@ -161,6 +157,7 @@
     function cancel() {
         // 이전 페이지로 이동하는 코드 추가
         alert('이전 페이지로 이동합니다.');
+        window.history.back();
     }
 
     document.getElementById('qna_show').addEventListener('change', function() {

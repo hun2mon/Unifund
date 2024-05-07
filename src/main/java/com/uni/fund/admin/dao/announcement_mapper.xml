@@ -112,7 +112,7 @@
 	<select id="notiPhoto" resultType="String">
 		SELECT pho_name FROM photo
 		WHERE ref_idx = #{noti_idx} AND pho_division =
-		'공지사항사진'
+		'공지사항사진' ORDER BY pho_idx desc limit 1
 	</select>
 
 	<update id="adminAnnUpdate" parameterType="map">
