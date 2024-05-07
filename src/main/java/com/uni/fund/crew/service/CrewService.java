@@ -25,7 +25,6 @@ public class CrewService {
 	
 	private static final String file_root="/Users/ku-ilseung/Desktop/C/upload/";
 	
-	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CrewDAO crewDAO;	
 
