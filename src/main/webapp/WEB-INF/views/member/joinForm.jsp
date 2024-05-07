@@ -245,7 +245,7 @@ form {
 			<tr>
 				<th>생년월일</th>
 				<td><input type="text" name="mem_birth"
-					placeholder="생년월일을 입력하세요" /></td>
+					placeholder="생년월일8자리 YYYY-MM-DD" /></td>
 			</tr>
 			<tr>
 				<th>연락처</th>
@@ -339,7 +339,6 @@ form {
 </body>
 <script>
 
-
 function register() {
 	var pw = $('#mem_pw').val();
     var confirm = $('#mem_confirm').val();
@@ -395,11 +394,10 @@ function previewProfilePhoto(event) {
 
 
 
-
 function showFirstAlert() {
-    alert("인증번호를 확인 해주세요!");
-  }
-  
+    alert("인증번호가 발송 되었습니다.!");
+    $('input[name = "mem_number"').attr('readonly',true);
+}
 
 function showSecondAlert() {
 	var $confirm = $('input[name="mem_confirm"]');
@@ -427,7 +425,7 @@ $('#mem_confirm').on('keyup', function(){
 	
 	
 	
-	var overChk;
+	var overChk = false;
 	
 	
 	
@@ -454,14 +452,18 @@ $('#mem_confirm').on('keyup', function(){
 		
 
 		var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+		
+		var minIdLength = 8; //8글자
+		var maxIdLength = 20; // 20글자
+		var maxEmailLength = 254; // 254글자
+		var maxBankNameLength = 20; // 20글자
+		var maxBankLength = 20; // 20글자
+		var maxAddressLength = 100; // 100글자
+		var maxDetailLength = 100; // 100글자
 		
 		
 		if(overChk == false){
 			alert('중복 체크를 해 주세요!');
-			$id.focus();
-		}else if($id.val()==''){
-			alert('아이디를 입력 해 주세요!');			
 			$id.focus();
 		}else if($pw.val()==''){
 			alert('비밀번호를 입력 해 주세요!');			
@@ -469,11 +471,11 @@ $('#mem_confirm').on('keyup', function(){
 		}else if($name.val()==''){
 			alert('이름을 입력 해 주세요!');			
 			$name.focus();
-		}else if($birth.val()==''){
-			alert('생년월일을 입력 해 주세요!');			
+		}else if($birth.val()=='' || !/^\d{4}-\d{2}-\d{2}$/.test($birth.val())){
+			alert('올바른 생년월일을 입력 해 주세요! (YYYY-MM-DD)');			
 			$birth.focus();
-		}else if($number.val()=='' || !/^[0-9-]+$/.test($number.val())){
-			alert('연락처를 입력 해 주세요! (숫자와 하이픈만 허용됩니다.)');			
+		}else if($number.val()=='' || !/^\d{3}-\d{3,4}-\d{4}$/.test($number.val())){//ex.010-1234-5678
+			alert('올바른 연락처를 입력 해 주세요! (ex.010-1234-5678)');			
 			$number.focus();
 		}else if($confirm.val()==''){
 			alert('인증번호를 입력 해 주세요!');			
@@ -481,27 +483,42 @@ $('#mem_confirm').on('keyup', function(){
 		}else if($gender.val()==null){
 			alert('성별을 체크해 주세요!');			
 			$gender.focus();
-		}else if($email.val()==''){
-			alert(' 이메일을 입력 해 주세요!');			
+		}else if($email.val()=='' || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($email.val())){//ex)abcde123@naver.com
+			alert(' 올바른 이메일주소를 입력 해 주세요!');			
 			$email.focus();
-		}else if($bankName.val()==''){
-			alert(' 은행명을 입력 해 주세요!');			
+		} else if ($email.val().length > maxEmailLength) {
+	           alert('이메일은 최대 ' + maxEmailLength + '글자까지 입력 가능합니다!');
+	           $email.focus();
+		}else if($bankName.val()=='' || !/^[^0-9]*$/.test($bankName.val())){//숫자포함x
+			alert(' 올바른 은행명을 입력 해 주세요!(숫자포함x)');			
 			$email.focus();
-		}else if($bank.val()==''){
-			alert(' 계좌번호를 입력 해 주세요!');			
+		} else if ($bankName.val().length > maxBankNameLength) {
+	         alert('은행명은 최대 ' + maxBankNameLength + '글자까지 입력 가능합니다!');
+	         $bankName.focus();
+		}else if($bank.val()=='' || !/^[\d-]+$/.test($bank.val())){ //숫자나 하이픈으로 구성되어야한다. 문자포함x
+			alert('올바른 계좌번호를 입력 해 주세요!(문자포함x)');			
 			$bank.focus();
+		} else if ($bank.val().length > maxBankLength) {
+	           alert('계좌번호는 최대 ' + maxBankLength + '글자까지 입력 가능합니다!');
+	           $bank.focus();
 		}else if($uni.val()==''){
 			alert(' 대학교를 입력 해 주세요!');			
 			$uni.focus();
-		}else if($post.val()==''){
-			alert(' 우편번호 입력 해 주세요!');			
+		}else if($post.val()=='' || !/^\d{5}$/.test($post.val())){//숫자 5자리만 허용 이외에는 x
+			alert(' 올바른 우편번호 형식이 아닙니다! (숫자5자리만 허용됩니다.)');			
 			$post.focus();
 		}else if($addr.val()==''){
 			alert(' 주소를 입력 해 주세요!');			
 			$addr.focus();
+		} else if ($addr.val().length > maxAddressLength) {
+	           alert('주소는 최대 ' + maxAddressLength + '글자까지 입력 가능합니다!');
+	           $addr.focus();
 		}else if($detail.val()==''){
 			alert(' 상세주소를 입력 해 주세요!');			
 			$detail.focus();
+		} else if ($detail.val().length > maxDetailLength) {
+	           alert('상세주소는 최대 ' + maxDetailLength + '글자까지 입력 가능합니다!');
+	           $detail.focus();
 		}else if($consent.val()== null){
 			alert(' 개인정보 수집 및 이용에 동의해주세요!');			
 			$consent.focus();
@@ -509,10 +526,7 @@ $('#mem_confirm').on('keyup', function(){
 	        alert('재학증명서 사진을 첨부해 주세요!'); 
 	    $cor.focus(); 
 	
-	   
-	 
-			
-				
+	   	
 			}else{
 			
 				var $post = $('input[name="mem_post"]');
@@ -533,19 +547,15 @@ $('#mem_confirm').on('keyup', function(){
 			        
 			    }
 			    
-		   
-			    
-			    
 			// 데이터 넣기 전에 확인
-			var regExp = new RegExp('[a-zA-Zㄱ-ㅎ가-힣]');
-			var $birth = $('input[name="mem_birth"]');
-			var match = regExp.test($birth.val()); // 생년월일 입력 필드의 값에 대한 정규식 일치 여부 확인
+			/*var $birth = $('input[name="mem_birth"]');
+			//var match = regExp.test($birth.val()); // 생년월일 입력 필드의 값에 대한 정규식 일치 여부 확인
 			if(match){
-			    alert('숫자만 입력 해 주세요!');
+			    alert('생년월일은 숫자만 입력 해 주세요!');
 			    $birth.val(''); // 잘못된 값 초기화
 			    $birth.focus(); // 생년월일 입력 필드에 포커스 설정
 			    return false; // 함수 종료
-			}
+			}*/
 			console.log('서버로 회원가입 요청');
 			$('form').submit();//submit 버튼 역활
 			
@@ -566,12 +576,29 @@ $('#mem_confirm').on('keyup', function(){
 
 	function overlay() {
 		console.log('click');
-		var id = $('input[name="mem_id"]').val();
-		//ajax를 이용한 비동기 통신 (자바스크렙트를 사용해 보안성이 좋지 못함 취약함)
+		var id = $('input[name="mem_id"]');
+		
+		var minIdLength = 8; //8글자
+		var maxIdLength = 20; // 20글자
+		
+		// 영어와 숫자만 허용하는 정규식
+	    var idRegex = /^[a-zA-Z0-9]{8,20}$/;
+    
+	    
+     if( id.val() =='' || !/^[a-zA-Z0-9]{8,}$/.test(id.val())){
+		alert('올바른 아이디를 입력 해 주세요! (한글사용x, 8~20자)');			
+		id.focus();
+	} else if ( id.val().length < minIdLength) {
+         alert('아이디는 최소 ' + minIdLength + '글자부터 입력 가능합니다!');
+         id.focus();
+	} else if (id.val().length > maxIdLength) {
+         alert('아이디는 최대 ' + maxIdLength + '글자까지 입력 가능합니다!');
+         id.focus();
+	} else {
 		$.ajax({
 			type:'post', // method 방식
 			url:'overlay.do', // 요청한 주소
-			data:{'id':id}, // 파라메터
+			data:{'id':id.val()}, // 파라메터
 			success:function(data){ // 통신 성공했을경우
 			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
 			//여기에 뿌려준다
@@ -582,12 +609,14 @@ $('#mem_confirm').on('keyup', function(){
 				}else{
 					alert('사용 가능한 아이디 입니다.');
 					overChk = true;
+					id.attr('readonly', true);
 				}
 			}, 
 			error:function(error){ // 통신 실패 시
 				console.log(error);
 			} 
 		});
+	}
 	}
 	
 	var modal = document.querySelector(".modal"); 

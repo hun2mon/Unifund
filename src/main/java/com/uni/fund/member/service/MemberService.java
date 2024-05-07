@@ -152,6 +152,10 @@ public class MemberService {
 		return memberDAO.memCheck(mem_id,mem_number);
 	}
 
+	public int idCheck(String mem_name, String mem_number) {
+		return memberDAO.idCheck(mem_name,mem_number);
+	}
+	
 	public int stopMemberChange(Map<String, Object> param) {
 		return memberDAO.stopMemberChange(param);
 	}
@@ -177,5 +181,6 @@ public class MemberService {
 		memberDAO.adminMemberIntroUpdateDo(param);
 		return memberDAO.adminMemberUpdateDo(param);
 	}
+
 	
 }

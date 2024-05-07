@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이것이 제목이다</title>
+<title> ::ID 찾기 페이지</title>
 <link rel="stylesheet" href="/resources/css/common.css" type="text/css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
@@ -266,7 +266,7 @@ form {
 			</tr>
 			<tr>
 				<th>이름</th>
-				<td><input type="text" id="name" name="mem_name"
+				<td><input type="text" id="mem_name" name="mem_name"
 					placeholder="내용을 입력해주세요"></td>
 			</tr>
 			<tr>
@@ -278,7 +278,7 @@ form {
 			<tr>
 				<th>인증번호</th>
 				<td><input type="text" name="mem_auth"
-					placeholder="인증번호 숫자 입력 "> <input type="button" value="인증"
+					placeholder="인증번호 숫자 입력 " readonly="readonly"  class="auth"> <input type="button" value="인증"
 					onclick="showSecondAlert()"></td>
 			</tr>
 			<tr>
@@ -316,8 +316,10 @@ form {
 
 </body>
 <script>
+	var check = 0;
+
 	function validateName() {
-		var name = document.getElementById('name').value;
+		var name = document.getElementById('mem_name').value;
 		var regex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]+$/; // 한글, 영문 대소문자만 허용
 
 		if (name === "") {
@@ -365,14 +367,46 @@ form {
 			alert("인증번호를 다시확인해주세요.");
 			return;
 		}
-		// 유효성 검사 통과 시 다음 동작 수행
-		openModalIfAuthCorrect();
+		if (check != 1) {
+			alert('인증 버튼을 먼저 클릭해 주세요.');
+			 check = 1;
+		} else {
+			openModalIfAuthCorrect();			
+		}
 	}
 
 	function showFirstAlert() {
-		alert("인증번호가 발송되었습니다!");
-	}
+		console.log("인증번호 받기 버튼이 클릭되었습니다.");
+		
+		$.ajax({
+			type:'POST', 
+			url:'idCheck.ajax',
+			data:{
+				mem_name : $('#mem_name').val(),
+				mem_number : $('#mem_number').val()
+			},
+			dataType:'json',
+			success:function(data){
+				if (data.check > 0) {
+					alert("인증번호가 발송되었습니다!");		
+					$('.auth').attr('readonly',false);
+					$('#mem_number').attr('readonly',true);
+					 // 인증번호 발송 성공 시 check 값을 1로 변경
+	                //check = 1;
+				} else {
+					alert("입력하신 정보가 올바르지 않습니다!");
+					$('.auth').attr('readonly',true);
+					$('.auth').val('');
+				}
+			}, 
+			error:function(error){ 
+			} 
+		});
+		
 
+	}
+	
+	
 	function showSecondAlert() {
 		var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
 		if (inputAuthNumber === "0000") {
@@ -385,14 +419,14 @@ form {
 	}
 
 	function cancelVerification() {
-		window.location.href = "login.do"; // 로그인 페이지로 이동
+		window.location.href = "login.go"; // 로그인 페이지로 이동
 	}
 
 	function openModalIfAuthCorrect() {
 		var inputAuthNumber = document.getElementsByName("mem_auth")[0].value;
 		if (inputAuthNumber === "0000") {
 			openModal();
-			var mem_name = $('#name').val();
+			var mem_name = $('#mem_name').val();
 			console.log(mem_name);
 			var phoneNumber = $('#mem_number').val();
 			console.log(phoneNumber);
@@ -402,7 +436,7 @@ form {
 				url : 'findId.ajax', // 실제 요청을 처리할 서버의 URL
 				type : 'POST', // 요청 방식 (POST)
 				data : {
-					mem_name : $('#name').val(),
+					mem_name : $('#mem_name').val(),
 					mem_number : $('#mem_number').val()
 				},
 				success : function(response) {

@@ -53,6 +53,8 @@ public interface MemberDAO {
 
 	int memCheck(String mem_id, String mem_number);
 
+	int idCheck(String mem_name, String mem_number);
+	
 	int stopMemberChange(Map<String, Object> param);
 
 	int deleteMemberChange(Map<String, Object> param);
@@ -68,5 +70,6 @@ public interface MemberDAO {
 	int adminMemberUpdateDo(Map<String, String> param);
 
 	void adminMemberIntroUpdateDo(Map<String, String> param);
+
 
 }

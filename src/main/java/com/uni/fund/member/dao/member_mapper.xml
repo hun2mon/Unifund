@@ -55,6 +55,12 @@
    	select count(mem_id) from member where mem_id = #{param1} and mem_number = #{param2}
    </select>
    
+   <select id="idCheck" resultType="int">
+   	SELECT count(mem_id)
+	FROM member
+	WHERE mem_name = #{param1} AND mem_number = #{param2}
+   </select>
+   
    
    
    

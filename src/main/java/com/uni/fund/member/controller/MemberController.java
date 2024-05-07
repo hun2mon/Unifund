@@ -97,18 +97,19 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/join.do", method = RequestMethod.POST)
-	public String write(MultipartFile profilePhoto, MultipartFile mem_cor, HttpSession session,
+	public String write(MultipartFile profilePhoto, MultipartFile mem_cor, HttpSession session, Model model,
 			@RequestParam Map<String, String> param) {
 		logger.info("글 작성 요청");
 		logger.info("param : {}", param);
 		logger.info("profilePhoto : {}", profilePhoto);
 		logger.info("mem_cor : {}", mem_cor);
-
+		
 		String page = "redirect:/main";
 
 		int row = memberService.write(profilePhoto, mem_cor, param);
 		if (row > 0) {
-			page = "/member/joinForm";
+			model.addAttribute("msg", "회원가입에 성공하였습니다.");
+			page = "member/login";
 
 		}
 		return page;
@@ -150,7 +151,7 @@ public class MemberController {
 		return page;
 	}
 
-	// 인증번호 받기
+	// PW인증번호 받기
 	@RequestMapping(value = "member/memCheck.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> memCheck(String mem_id, String mem_number) {
@@ -168,6 +169,27 @@ public class MemberController {
 		return map;
 	}
 
+	// ID찾기 인증번호 받기
+		@RequestMapping(value = "member/idCheck.ajax", method = RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> idCheck(String mem_name, String mem_number) {
+			String page = "member/findId";
+			logger.info("mem_name: {}", mem_name);
+			logger.info("mem_number: {}", mem_number);
+			Map<String, Object> map = new HashMap<String, Object>();
+			int row = memberService.idCheck(mem_name, mem_number);
+			if (row > 0) {
+				map.put("check", row);
+			} else {
+				map.put("check", 0);
+			}
+
+			return map;
+		}
+	
+	
+	
+	
 	@RequestMapping(value = "/user/adminList.go")
 	public String adminMemberList(HttpSession session, Model model) {
 		String status = (String) session.getAttribute("mem_status");
