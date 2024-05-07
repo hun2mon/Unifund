@@ -404,6 +404,12 @@ public class CrewController {
 		crewService.approve(mem_idx,crew_idx);
 	}
 	
+	@RequestMapping(value = "/crew/refuse.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public void refuse(String mem_idx, String crew_idx) {
+		crewService.refuse(mem_idx,crew_idx);
+	}
+	
 	@RequestMapping(value="/crew/activityDel.ajax",method = RequestMethod.POST)
 	@ResponseBody
 	public void activityDel(int crew_activity_details_idx) {
