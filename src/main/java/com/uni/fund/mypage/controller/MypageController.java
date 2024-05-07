@@ -207,6 +207,19 @@ public class MypageController {
 	  return "mypage/repComCall";
   }
   
+  @RequestMapping(value="/mypage/refuseCon.go")
+  public String refuseCon(String pro_idx,HttpSession session,Model model) {
+	  logger.info("refuseCon.go 요청");
+	  logger.info("pro_idx 값 : " +pro_idx);
+	  int mem_idx =  (int) session.getAttribute("mem_idx");
+	  String repCon = mypageService.refuseCon(pro_idx);
+	  logger.info("repCon : " +repCon);
+	  model.addAttribute("refuseCon",repCon);
+	  
+	  
+	  return "mypage/refuseCon";
+  }
+  
   @RequestMapping(value="/mypage/outUnifund.do")
   public String outUnifundDO(HttpSession session,Model model){
 	  logger.info("outUnifundDo 요청");
