@@ -11,7 +11,6 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -394,8 +393,8 @@ background-color:pink;
 <body>
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <c:if test="${mem_status == 'M'}">
-			<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
-		</c:if>
+<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+</c:if>
 			
 	<div class="container">
 	<form action="adminMemberUpdate.do" method="post">
@@ -550,13 +549,13 @@ background-color:pink;
 	<input type="hidden" id="searchIn" value="" />
 	<input type="hidden" id="searchType" value="M" />
 </body>
+<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <script>
 var showPage = 1;
 
 $(document).ready(function(){
 	memActPhoList(showPage);
  });
- 
  
  
 function check(){
@@ -712,30 +711,6 @@ $('#photoList').on('click', '.delete_btn', function(e){
     }
 });
 
-$('#photoList').on('click', '#addPhotoBtn', function(e){
-    $('#fileInput').click(); 
-});
-
-$('#fileInput').change(function() {
-    var formData = new FormData();
-    formData.append('photo', $(this)[0].files[0]); 
-    
-    $.ajax({
-        type: 'POST',
-        url: './addPhoAct.ajax',
-        data: formData,
-        processData: false, 
-        contentType: false,
-        success: function(data) {
-           
-            memActPhoList(showPage);
-            
-        },
-        error: function(error) {
-        	 console.log(error);
-        }
-    });
-});
 
 </script>
 </html>

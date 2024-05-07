@@ -153,10 +153,10 @@
 				    LIMIT 1) as profile_file
 				, (SELECT mng_stopdate
 					FROM mem_mng
-					WHERE mem_idx = m.mem_idx) as mng_stopdate
+					WHERE mem_idx = m.mem_idx ORDER BY mem_mng_idx DESC LIMIT 1) as mng_stopdate
 				, (SELECT mng_rsndate
 					FROM mem_mng
-					WHERE mem_idx = m.mem_idx) as mng_rsndate
+					WHERE mem_idx = m.mem_idx LIMIT 1) as mng_rsndate
 			FROM member m
 			LEFT JOIN introduction i ON m.mem_idx = i.mem_idx
 			LEFT JOIN rep_trans rt ON m.mem_idx = rt.ref_idx
@@ -185,6 +185,14 @@
 	<update id="updatStopeMemberStatus" parameterType="map">
 		UPDATE member SET mem_status='S' WHERE mem_idx=#{mem_idx}
 	</update>
+	
+	<update id="updateStopProjectStatus" parameterType="map">
+		UPDATE project SET pro_state='D' WHERE mem_idx=#{mem_idx} AND pro_state IN('A','B','C')
+	</update>
+	
+	<select id="beforeStopMemberCheck" parameterType="map" resultType="int">
+		SELECT pro_idx FROM project WHERE mem_idx=#{mem_idx} and pro_state='C'
+	</select>
 	
 	<update id="stopMemberChange" parameterType="map">
 		UPDATE mem_mng SET mng_stopdate = ${mng_stopdate}, mng_idx = ${admin_idx} WHERE mem_idx = ${mem_idx}

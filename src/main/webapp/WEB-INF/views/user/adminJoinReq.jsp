@@ -40,19 +40,19 @@
 
 .anotherMem_btn {
 	height: 36px;
-	margin-left: 13px;
-	border-radius: 35px;
-	margin-bottom: 16px;
-	border: none;
-	padding: 10px;
-	color: white;
-	font-weight: bold;
-	background: #3b3b3b;
-	position: relative;
-	margin-left: 125px;
-	margin-top: 20px;
-	padding-left: 13px;
-	padding-right: 14px;
+    margin-left: 13px;
+    border-radius: 35px;
+    margin-bottom: 16px;
+    border: none;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    background: #3b3b3b;
+    position: relative;
+    margin-left: 140px;
+    margin-top: 12px;
+    padding-left: 13px;
+    padding-right: 14px;
 }
 
 .submit_btn, .refuse_btn{
@@ -329,7 +329,7 @@ td {
 		<div class="form-container">
 		<div class="top-container">
 		<h1>회원관리</h1>
-		<button class="anotherMem_btn" onclick="location.href='./adminMemberList.go'">전체회원 보기</button>
+		<button class="anotherMem_btn" onclick="location.href='./adminList.go'">전체회원 보기</button>
 		</div>
 			<div class="top_content" style="height:8%;">
 				<div class="search_container">

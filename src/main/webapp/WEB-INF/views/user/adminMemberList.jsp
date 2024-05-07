@@ -40,19 +40,19 @@
 
 .anotherMem_btn {
 	height: 36px;
-	margin-left: 13px;
-	border-radius: 35px;
-	margin-bottom: 16px;
-	border: none;
-	padding: 10px;
-	color: white;
-	font-weight: bold;
-	background: #3b3b3b;
-	position: relative;
-	margin-left: 125px;
-	margin-top: 20px;
-	padding-left: 13px;
-	padding-right: 14px;
+    margin-left: 13px;
+    border-radius: 35px;
+    margin-bottom: 16px;
+    border: none;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    background: #3b3b3b;
+    position: relative;
+    margin-left: 140px;
+    margin-top: 12px;
+    padding-left: 13px;
+    padding-right: 14px;
 }
 
 hr {
