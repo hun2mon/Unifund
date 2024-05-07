@@ -234,6 +234,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 .reviewFrom, .review_content {
 	width: 1000;
 	height: 170;
+	word-break: break-all;
 }
 
 .sub_review {
@@ -377,8 +378,10 @@ input[name=reportContent] {
 						<div class="project_title">${project.pro_title}</div>
 						<c:if test="${mem_idx == project.mem_idx || mem_status == 'M'}">
 						<div class="project_delete">
-							<input type="button" class="pro_button" value="프로젝트 삭제"
-								onclick="delFrom()">
+							<c:if test="${project.pro_state != 'B' }">
+								<input type="button" class="pro_button" value="프로젝트 삭제"
+									onclick="delFrom()">
+							</c:if>
 							<form action="delete.do" method="post" class="proDelete">
 								<table align="center" class="proDel">
 									<tr>
@@ -388,7 +391,7 @@ input[name=reportContent] {
 										</th>
 									</tr>
 									<tr>
-										<td>사유<br> <input type="text" name="reportContent"></td>
+										<td>사유<br> <input type="text" name="reportContent" maxlength="200" onkeyup="lengthCheck(this, 1)"></td>
 									</tr>
 									<tr>
 										<td class="button"><input type="button" value="삭제"
@@ -409,7 +412,8 @@ input[name=reportContent] {
 					</div>
 					<div class="middle_middle">
 						<div class="project_progress">
-							<c:if test="${project.now_price != project.target_price}">${project.progress}%진행중</c:if>
+							<c:if test="${project.now_price == ''}">0%진행중</c:if>
+							<c:if test="${project.now_price != project.target_price and project.now_price != ''}">${project.progress}%진행중</c:if>
 							<c:if test="${project.now_price == project.target_price}">펀딩마감</c:if>
 						</div>
 					</div>
@@ -418,7 +422,7 @@ input[name=reportContent] {
 					</div>
 					<div class="date" id="end_date">마감기한 :
 						${project.pro_deadline}</div>
-					<div class="date">공연 시작일 : ${project.pro_startdate}</div>
+					<div class="date">전시(출품) 날짜 : ${project.pro_startdate}</div>
 					<div class="date">문의 : ${project.pro_phone}</div>
 					<div class="money">
 						<div class="now_money">${project.now_price}</div>
@@ -483,7 +487,7 @@ input[name=reportContent] {
 								id="fund_apply" onclick="applyPro()">
 						</div>
 					</c:if>
-					<c:if test="${mem_idx == project.mem_idx}">
+					<c:if test="${mem_idx == project.mem_idx && project.pro_state != 'B'}">
 						<div>
 							<input type="button" value="펀딩 수정하기" class="funding_button"
 								id="fund_update"
@@ -515,7 +519,7 @@ input[name=reportContent] {
 				<div>
 					<div>
 						<input type="hidden" class="reviewFrom" name="pro_idx" value="${project.pro_idx }"> 
-						<input type="text" class="reviewFrom" name="revContent" min="5" maxlength="500" onkeyup="lengthCheck(this)">
+						<input type="text" class="reviewFrom" name="revContent" id="rev" min="5" maxlength="500" onkeyup="lengthCheck(this, 2)">
 					</div>
 					<div>
 						<input type="file" class="file_select" name="photo"> <input
@@ -565,11 +569,14 @@ input[name=reportContent] {
 		
 		var $revContent = $('input[name="revContent"]');
 		var $revPhoto = $('input[name="photo"]');
-		
+		console.log($revContent.val().length);
 		if ($revContent.val()=='') {
 			alert('리뷰 내용을 입력 해주세요');
 			$revContent.focus();
-		} else if ($revPhoto.val() == '') {
+		}else if($revContent.val().length > 500){
+			alert('최대 글자수를 초과했습니다.');
+			$revContent.focus();
+		}else if ($revPhoto.val() == '') {
 			alert('사진을 첨부 해주세요');
 			$revPhoto.focus();
 		} else {
@@ -893,10 +900,16 @@ input[name=reportContent] {
 	    }  
 	}
 	
-	function lengthCheck(text){
+	function lengthCheck(text, cate){
 		var content = $(text).val();
-		if (content.length >= 500) {
-			alert('입력 가능 글자수를 초과하였습니다.');
+		if (cate == 1) {
+			if (content.length >= 200) {
+				alert('입력 가능 글자수를 초과하였습니다.');
+			}
+		}else{
+			if (content.length >= 500) {
+				alert('입력 가능 글자수를 초과하였습니다.');
+			}			
 		}
 	}
 	function report() {
