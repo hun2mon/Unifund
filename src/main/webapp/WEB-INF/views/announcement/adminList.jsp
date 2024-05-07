@@ -51,7 +51,7 @@ th {
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
-		<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
+	
 	<div class="mainDiv">
 		<h2>공지사항</h2>
 		<hr>
@@ -93,6 +93,7 @@ th {
 		</table>
 	</div>
 </body>
+	<%@ include file="/WEB-INF/views/common/sideBar.jsp"%>
 <script>
 var showPage = 1;
 

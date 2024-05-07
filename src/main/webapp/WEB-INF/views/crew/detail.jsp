@@ -541,26 +541,40 @@ function closeActivityModal() {
 
 
 function submitReport() { //크루신고
-        var repContent = $("#repContent").val();
-        var crew_idx= $("#crew_idx").val();
-        $.ajax({
-            type: 'post',
-            url: './report.ajax',
-            data: {
-            	'repContent':repContent,
-            	'crew_idx':crew_idx
-            },
-            dataType: 'json',
-            success: function(response) {
-                alert("신고가 접수되었습니다.");
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                // 오류 시 처리할 내용
-                alert("오류가 발생했습니다.");
-            }
-        });
+	
+    var repContent = $("#repContent").val();
+    var crew_idx= $("#crew_idx").val();
+    
+    // 입력된 내용이 없을 때 경고 표시
+    if(repContent.trim() === '') {
+        alert("신고 사유를 입력해주세요.");
+        return;
+    }
+    
+    // 글자 수가 500을 초과했을 때 경고 표시
+    if(repContent.length > 500) {
+        alert("신고 내용은 500자를 초과할 수 없습니다.");
+        return;
+    }
+    
+    $.ajax({
+        type: 'post',
+        url: './report.ajax',
+        data: {
+            'repContent': repContent,
+            'crew_idx': crew_idx
+        },
+        dataType: 'json',
+        success: function(response) {
+            alert("신고가 접수되었습니다.");
+        },
+        error: function(xhr, status, error) {
+            // 오류 시 처리할 내용
+            alert("오류가 발생했습니다.");
+        }
+    });
 }
+
 
 function apply(){ //크루신청
 	var mem_idx = $('input[type="hidden"].mem_idx').val();
