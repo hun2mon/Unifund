@@ -162,15 +162,14 @@
 	</update>
 
 
-	<update id="rplDel">
-		UPDATE qna_reply SET comm_status = 'B' WHERE comm_idx
-		= #{param1}
-	</update>
+<delete id="rplDel">
+DELETE FROM qna_reply WHERE comm_idx = #{param1}
 
+</delete>
 
 	<select id="rplList"
 		resultType="com.uni.fund.admin.dto.QnaDTO">
-		SELECT q.comm_content,m.mem_id,q.comm_date from qna_reply q
+		SELECT q.qna_idx,q.comm_idx,q.comm_content,m.mem_id,q.comm_date from qna_reply q
 		JOIN member m ON q.mem_idx = m.mem_idx WHERE qna_idx = #{parma1}
 	</select>
 

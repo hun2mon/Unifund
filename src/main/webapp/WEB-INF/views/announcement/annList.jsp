@@ -12,13 +12,13 @@
       <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 table {
-    width: 50%;
+    width: 80%;
     border-collapse: collapse;
     margin: 20px auto;
+    border-radius: 10px; /* 테이블 테두리 둥글게 */
 }
 
 th, td {
-    border: WHITE;
     padding: 8px;
     text-align: center;
     cursor: pointer;
@@ -26,6 +26,11 @@ th, td {
 
 th {
     background-color: #f2f2f2;
+    border: none; /* 헤더 테두리 없애기 */
+}
+
+td {
+    border: none; /* 셀 테두리 없애기 */
 }
 
 .red-text {
@@ -37,7 +42,40 @@ th {
     text-align: center;
 }
 
+.paging {
+    color: #535353;
+    text-decoration: none;
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: #fdfdfd;
+    box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+    transition: all 0.3s ease;
+}
 
+.paging:hover {
+    box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
+
+.paging_container {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    margin-top: 30px;
+    position: fixed;
+    bottom: 27px;
+}
+
+.currentPaging {
+    background-color: #a1a1a1;
+    color: white;
+}
+
+tr:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f2f2f2;
+}
 </style>
 </head>
 <body>

@@ -63,7 +63,7 @@ public class QnaController {
 			int row = qnaService.qnaForm(param,mem_idx);
 			if(row>0)
 			
-					page = "redirect:/qna/detail.go";
+					page = "redirect:/qna/list.go" ;
 					
 				
 		}
@@ -261,18 +261,22 @@ public class QnaController {
 	}
 	
 	
-	@RequestMapping(value = "/qna/reply/delete.do")
-	public String rplDel(String comm_idx, String qna_idx) {
-		logger.info("comm_idx :{}", comm_idx);
-		String page = "redirect:/";
-		int row = 0;
-		row = qnaService.rplDel(comm_idx);
-		if (row >0) {
-			page = "redirect:/qna/qnaDetail.go?row=" + row + "&qna_idx=" + qna_idx;
-		}
+
+	@RequestMapping(value="/qna/delete.do")
+	public String del(Model model, Integer comm_idx, HttpSession session, String qna_idx) {
+		String page="redirect:/";
+		
+		logger.info("del comm_idx" + comm_idx);
+		logger.info("del qna_idx" + qna_idx);
+		
+
+			logger.info("comm_idx=" + comm_idx);
+			qnaService.rplDel(comm_idx);
+			page = "redirect:/qna/qnaDetail.go?qna_idx="+qna_idx;
+		
+		
 		return page;
 	}
-	
 	
 	@RequestMapping(value = "/qna/reply/write.do", method = RequestMethod.POST)
 	public String replyWrite(@RequestParam Map<String,String> param, Model model,HttpSession session) {
