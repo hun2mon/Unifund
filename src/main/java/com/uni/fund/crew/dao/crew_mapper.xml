@@ -106,7 +106,7 @@
     	c.crew_idx,
     	c.crew_name,
     	c.crew_exp,
-    	c.crew_num,               
+    	c.crew_num,              
     	(
     	SELECT pho_name FROM photo 
     	WHERE pho_division ='크루로고'
@@ -116,7 +116,12 @@
     	(SELECT COUNT(*) FROM popularity 
      	WHERE crew_idx = c.crew_idx
     	) AS crew_cool_cnt
-    	,(SELECT COUNT(*) FROM crewMember_list WHERE c.crew_idx= #{param4} ) AS crew_current_number
+    	,(SELECT COUNT(mem_idx) FROM crewMember_list WHERE crew_idx = c.crew_idx
+    	) AS crew_current_number,
+    	(
+    	SELECT COUNT(*) FROM crewMember_list 
+    	WHERE crew_idx=c.crew_idx
+    	) AS crew_list_cnt
 	FROM crew c
 	WHERE c.crew_status='A'
 	<if test='param1 == "latest"'>
@@ -135,6 +140,7 @@
 	<select id="adminList" resultType="com.uni.fund.crew.dto.CrewDTO">
 		SELECT 
     		crew_idx
+    		,crew_status
     		,crew_num
     		,crew_name
     		,(SELECT mem_name 
@@ -144,6 +150,13 @@
          		FROM crewMember_list 
         		WHERE state = '크루장' AND crew_idx = c.crew_idx
      		)) AS crew_leader_name
+     		,(SELECT mem_id
+     		FROM member 
+     		WHERE mem_idx = (
+         		SELECT mem_idx 
+         		FROM crewMember_list 
+        		WHERE state = '크루장' AND crew_idx = c.crew_idx
+     		)) AS crew_leader_id
     		,crew_num
     		,crew_date
     		,(SELECT COUNT(*) 
@@ -254,21 +267,16 @@
 	
 	<select id="isMember" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*) 
-		FROM crewMember_history 
-		WHERE mem_idx= #{param1} AND 
-			(crew_mem_status='B' 
-			OR crew_mem_status='C'
-			OR crew_mem_status='K')
+		FROM crewMember_list 
+		WHERE mem_idx= #{param1}
 	</select>
 	
 	<select id="isOutOrKick" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*)
 		FROM crewMember_history 
-		WHERE 
-			mem_idx = #{param1} 
+		WHERE mem_idx = #{param1} 
 			AND crew_idx=#{param2}
-			AND (crew_mem_status='D'
-				OR crew_mem_status='E')		
+			AND (crew_mem_status='D' OR crew_mem_status='E')		
 		ORDER BY crew_mem_idx  DESC
 		LIMIT 1
 	</select>
@@ -291,30 +299,31 @@
 
 	<select id="detail" resultType="com.uni.fund.crew.dto.CrewDTO">
 		SELECT
-    		c.crew_idx
-    		,c.crew_name
-    		,c.crew_exp
-    		,c.crew_local
-    		,c.crew_con
-    		,c.crew_link
-    		,c.mem_idx
-    		,(SELECT pho_name FROM photo
+    		c.crew_idx,
+    		c.crew_name,
+    		c.crew_exp,
+    		c.crew_local,
+    		c.crew_con,
+    		c.crew_link,
+    		c.mem_idx,
+    		(SELECT pho_name FROM photo
      		WHERE pho_division ='모집설명'
      		AND ref_idx= c.crew_idx
-     		ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information
-    		,(SELECT pho_name FROM photo 
+     		ORDER BY pho_idx DESC LIMIT 1) AS crew_recruitment_information,
+    		(SELECT pho_name FROM photo 
      		WHERE pho_division ='크루로고'
      		AND ref_idx= c.crew_idx
      		ORDER BY pho_idx DESC LIMIT 1
-    		) AS crew_logo
-    		,(SELECT COUNT(*) FROM member WHERE mem_status='M') AS mem_status_manager
-    		,(SELECT COUNT(*) FROM crewMember_list WHERE state='크루장') AS crew_leader_count
-    		,(SELECT COUNT(*) FROM popularity 
+    		) AS crew_logo,
+    		(SELECT COUNT(*) FROM member WHERE mem_status='M') AS mem_status_manager,
+    		(SELECT COUNT(*) FROM crewMember_list WHERE state='크루장') AS crew_leader_count,
+    		(SELECT COUNT(*) FROM popularity 
      		WHERE crew_idx = c.crew_idx
-    		) AS crew_cool_cnt
-    		,(SELECT mem_idx FROM crewMember_list WHERE state='크루장' AND crew_idx=#{param2}) AS crew_leader
-<!--     		,(SELECT mem_idx FROM crewMember_list WHERE state='일반크루원' AND crew_idx=#{param2}) AS crew_member
- -->    		,(SELECT mem_idx from member WHERE mem_status='M' AND mem_idx=#{param3}) AS manager_idx
+    		) AS crew_cool_cnt,
+    		(SELECT mem_idx FROM crewMember_list WHERE state='크루장' AND crew_idx=#{param2} LIMIT 1) AS crew_leader,
+    		(SELECT GROUP_CONCAT(mem_idx) FROM crewMember_list WHERE state='일반크루원' AND crew_idx=#{param2}) AS crew_member,
+    		(SELECT mem_idx from member WHERE mem_status='M' AND mem_idx=#{param3}) AS manager_idx,
+    		(SELECT mem_status from member WHERE mem_status='M' AND mem_idx=#{param3}) AS mem_status
 		FROM crew c
 		WHERE crew_idx=#{param2}
 	</select>
@@ -380,6 +389,7 @@
 		SELECT 
     		c.state,
     		m.mem_id,
+    		m.mem_status,
     		c.crew_idx,
     		c.mem_idx
 		FROM crewMember_list c
@@ -396,6 +406,10 @@
 		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status)
 		VALUES(#{param1},#{param2},'E')
 	</insert>
+	
+	<update id="refuse">
+		UPDATE crewMember_history SET crew_mem_status='C', crew_mem_rsn='거절' WHERE mem_idx=#{param1} and crew_idx=#{param2}
+	</update>	
 	
 	<update id="crewChiefTomemberCrewMemberListUpdate">
 		UPDATE crewMember_list SET state='일반크루원' WHERE crew_idx=#{param1} AND mem_idx=#{param2}
@@ -415,11 +429,22 @@
 		VALUES(#{param1},#{param2},'K',#{param3})
 	</insert>
 	
-	<update id="refuse">
-		UPDATE crewMember_history SET crew_mem_status='C', crew_mem_rsn='거절' WHERE mem_idx=#{param1} and crew_idx=#{param2}
-	</update>
+	<delete id="crewListMemberDelete">
+		DELETE FROM crewMember_list WHERE crew_idx=#{param1}
+	</delete>
 	
+	<select id="crewMemberList" resultType="int">
+		SELECT mem_idx FROM crewMember_list cml WHERE crew_idx =#{param1}	
+	</select>
 	
+	<insert id="crewMemberHistoryInsert">
+		INSERT INTO crewMember_history(crew_idx,mem_idx,crew_mem_status)
+		VALUES (#{param1},#{param2},'D')
+	</insert>
+	
+	<select id="isCrewCheck" resultType="int">
+		SELECT COUNT(*) FROM crewMember_list WHERE mem_idx= #{param1}
+	</select>
 	
 	
 </mapper>

@@ -40,8 +40,12 @@ public class CrewDTO {
 	private int crew_activity_details_idx;
 	private String activity_photo;
 	private String crew_leader_name;
+	private String crew_leader_id;
 	private String crew_member;
 	private int crew_current_number;
+	private String mem_status;
+	private int crew_leader_idx;
+	private int crew_list_cnt;
 
 	
 	public int getCrew_idx() {
@@ -262,5 +266,29 @@ public class CrewDTO {
 	}
 	public void setCrew_current_number(int crew_current_number) {
 		this.crew_current_number = crew_current_number;
+	}
+	public String getCrew_leader_id() {
+		return crew_leader_id;
+	}
+	public void setCrew_leader_id(String crew_leader_id) {
+		this.crew_leader_id = crew_leader_id;
+	}
+	public String getMem_status() {
+		return mem_status;
+	}
+	public void setMem_status(String mem_status) {
+		this.mem_status = mem_status;
+	}
+	public int getCrew_leader_idx() {
+		return crew_leader_idx;
+	}
+	public void setCrew_leader_idx(int crew_leader_idx) {
+		this.crew_leader_idx = crew_leader_idx;
+	}
+	public int getCrew_list_cnt() {
+		return crew_list_cnt;
+	}
+	public void setCrew_list_cnt(int crew_list_cnt) {
+		this.crew_list_cnt = crew_list_cnt;
 	}
 }

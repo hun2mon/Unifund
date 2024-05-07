@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,6 @@ import com.uni.fund.crew.dto.CrewDTO;
 public class CrewService {
 	
 	private static final String file_root="/Users/ku-ilseung/Desktop/C/upload/";
-	
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CrewDAO crewDAO;	
@@ -229,18 +229,19 @@ public class CrewService {
 			return "isApplying"; // 이미 크루 신청중이라면
 		}
 		
-		// 가입된 크루가 있는지 확인
-		int memberCount = crewDAO.isMember(memIdx);
-		if(memberCount >0) {
-			return "memberCount";
-		}
-		
 		// 탈퇴했거나 추방당했는지 확인
 		int outOrKick = crewDAO.isOutOrKick(memIdx,crew_idx);
 		if(outOrKick>0) {
 			return "outOrKick";
 		}
 		
+		// 가입된 크루가 있는지 확인
+		int memberCount = crewDAO.isMember(memIdx);
+		if(memberCount >0) {
+			return "memberCount";
+		}
+		
+				
 		// 크루 신청 등록
 		Map<String, Object> param= new HashMap<String, Object>();
 		param.put("mem_idx",memIdx);
@@ -283,8 +284,14 @@ public class CrewService {
 		crewDAO.report(crew_idx,repContent,memIdx);		
 	}
 
-	public void crewDelete(int crew_idx,int memIdx) {
-		crewDAO.crewDelete(crew_idx,memIdx);
+	public void crewDelete(int crew_idx,int memIdx) {		
+		crewDAO.crewDelete(crew_idx,memIdx);		
+		List<Integer> list= crewDAO.crewMemberList(crew_idx);
+		for (Integer idx : list) {
+			crewDAO.crewMemberHistoryInsert(crew_idx,idx);
+		}
+		
+		crewDAO.crewListMemberDelete(crew_idx);
 	}
 
 	public void deleteReason(int crew_idx, String delContent, int memIdx) {
@@ -305,12 +312,21 @@ public class CrewService {
 	}
 
 
-	public void crewChiefDelegate(String crew_idx, String crewMem_idx, int memIdx, String delgateContent) {
+	public void crewChiefDelegate(String crew_idx, String crewMem_idx, int memIdx, String delgateContent, String mem_status, String crew_leader_idx) {
 		logger.info("Service crewChiefDelegate");
+//		if(mem_status.equals("M")) {
+//			// 관리자의 크루장위임 
+//			//일반 크루원-> 크루장 : crewMember_list update
+//			crewDAO.crewMemberToChiefCrewMemberListUpdate(crew_idx,crewMem_idx);	
+//			// 일반 크루원-> 크루장 : crewMember_history insert / 위임사유도들어가야함
+//			crewDAO.crewMemberToChiefCrewMemberHistoryInsert(crew_idx,crewMem_idx,delgateContent,memIdx);
+//			
+//			
+//		}
 		// 크루장-> 일반 크루원 : crewMember_list update
-		crewDAO.crewChiefTomemberCrewMemberListUpdate(crew_idx,memIdx,crewMem_idx);
+		crewDAO.crewChiefTomemberCrewMemberListUpdate(crew_idx,crew_leader_idx,crewMem_idx);
 		// 크루장 -> 일반크루원 : crewMember_history insert
-		crewDAO.crewChiefTomemberCrewMemberHistoryInsert(crew_idx,memIdx,crewMem_idx);
+		crewDAO.crewChiefTomemberCrewMemberHistoryInsert(crew_idx,crew_leader_idx,crewMem_idx);
 		
 		//일반 크루원-> 크루장 : crewMember_list update
 		crewDAO.crewMemberToChiefCrewMemberListUpdate(crew_idx,crewMem_idx);	
@@ -367,6 +383,10 @@ public class CrewService {
 		logger.info("totalPages : "+crewDAO.adminSearchAllCount(keyWord,pagePerCnt));
 		
 		return result;
+	}
+
+	public int isCrewCheck(int memIdx) {		
+		return crewDAO.isCrewCheck(memIdx);
 	}
 
 	

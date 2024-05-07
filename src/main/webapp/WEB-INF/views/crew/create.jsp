@@ -129,7 +129,7 @@ img.icon{
 			<tr>
 				<th>크루명</th>
 				<td>
-					<input type="text"  placeholder="크루명을 입력해주세요(최대 8자)"  name="crew_name"/>
+					<input type="text"  placeholder="크루명을 입력해주세요(최대 8자)"  name="crew_name" onchange="overlay()"/>
 					<input type="button" value="중복체크" onclick= "overlay()"/>
 				</td>
 			</tr>
@@ -181,7 +181,7 @@ img.icon{
 			</tr>
 			<tr>
 				<th colspan="2"><button type="button" onclick="join()">등록</button>
-				<button type="button" onclick="location.href='./'">취소</button></th>
+				<button type="button" onclick="goBack()">취소</button></th>
 				
 			</tr>
 			
@@ -278,6 +278,10 @@ function overlay() {
 			console.log(error);
 		} 
 	});
+}
+
+function goBack() {
+    window.history.back();
 }
 </script>
 </html>

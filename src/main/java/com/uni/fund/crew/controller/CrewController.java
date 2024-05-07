@@ -29,14 +29,24 @@ public class CrewController {
 	
 	
 	@RequestMapping(value="/crew/create.go")
-	public String crewCreateGo(HttpSession session) {
+	public String crewCreateGo(HttpSession session,Model model) {
+		logger.info("createGo");
 		int memIdx=(int)session.getAttribute("mem_idx");
-		String page="redirect:/";
-		logger.info("create 들어왔다.");
+		String page="redirect:/";		
 		
 		if(memIdx!=0) {
-			page="crew/create";
+			int row=crewService.isCrewCheck(memIdx);
+			if(row>0) {
+				model.addAttribute("msg","크루는 하나만 속할 수 있습니다.");
+				logger.info("row"+row);
+				page="crew/list";
+			} else {
+				page="crew/create";
+			}
 		}
+		logger.info("create 들어왔다.");
+		
+		
 		return page;
 	}
 	
@@ -179,6 +189,7 @@ public class CrewController {
 		int memIdx=(Integer)session.getAttribute("mem_idx");
 		
 	    logger.info("memidx : {}", memIdx);
+	    logger.info("crew_idx : {}",crew_idx);
 	    
 	    String result = crewService.applyCrew(memIdx, crew_idx);
 	    
@@ -191,8 +202,7 @@ public class CrewController {
 	    }
 	    else {
 	        response.put("error", "현재 가입된 크루가 있습니다.");
-	    }
-	    
+	    }	    
 	    return response;        
 	}
 	
@@ -347,7 +357,7 @@ public class CrewController {
 	@RequestMapping(value="/crew/delegate.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> crewChiefDelegate(HttpSession session,String crewMem_idx, String crew_idx,
-			String delgateContent){
+			String delgateContent,String mem_status,String crew_leader_idx){
 		
 		int memIdx=(Integer)session.getAttribute("mem_idx");
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -357,7 +367,9 @@ public class CrewController {
 			logger.info("위임할 멤버 idx : "+crewMem_idx);
 			logger.info("위임시키는 크루idx : "+crew_idx);
 			logger.info("위임 사유 : "+delgateContent);
-			crewService.crewChiefDelegate(crew_idx,crewMem_idx,memIdx,delgateContent);
+			logger.info("mem_status : "+mem_status);
+			logger.info("crew_leader_idx : "+ crew_leader_idx);
+			crewService.crewChiefDelegate(crew_idx,crewMem_idx,memIdx,delgateContent,mem_status,crew_leader_idx);
 		}		
 		return map;
 	}

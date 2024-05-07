@@ -113,9 +113,8 @@ input[type="text"] {
 		<div style="flex-grow: 1;"></div>
 		<input type="text" id="searchInput" placeholder="크루명 입력하세요"
 			style="margin-right: 10px;">
-		<button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button>
-		<button class="register-btn"
-			onclick="location.href='/main/crew/create.go'">크루 등록</button>
+		<button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button>		
+		<button class="register-btn" onclick="location.href='/main/crew/create.go'">크루 등록</button>
 	</div>
 
 	<div class="crew_list" id="list"></div>
@@ -255,7 +254,6 @@ $('#searchInput').keypress(function(event) {
 $(document).on('click', '.btn-apply', function() {
     var mem_idx = $('input[type="hidden"].mem_idx').val();
     var crew_idx = $(this).data('crew_idx');
-
     var confirmation = confirm("크루에 신청하시겠습니까?");
 
     if (confirmation) {
@@ -266,7 +264,7 @@ $(document).on('click', '.btn-apply', function() {
                 mem_idx: mem_idx,
                 crew_idx: crew_idx
             },
-            success: function(response) {
+            success:function(response) {
                 if (response.success) {
                     alert(response.success);                    
                 } else if (response.error) {
@@ -279,6 +277,11 @@ $(document).on('click', '.btn-apply', function() {
         });
     }
 });
+
+var msg ='${msg}';
+if(msg!=''){
+	alert(msg);
+}; 
 
 </script>
 </html>

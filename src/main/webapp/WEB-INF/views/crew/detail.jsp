@@ -198,6 +198,9 @@
     <input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
     <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${mem_idx}"/>
     <input type="hidden" name="state" class="state" id="state" value="${crewMember_list.state}"/>
+    <input type="hidden" name="mem_status" class="mem_status" id="mem_status" value="${crew.mem_status}"/>
+    <input type="hidden" name="mem_status" class="mem_status" id="mem_status" value="${crew.mem_status}"/>
+    
     <div class="container" id="crew-detail-container">
         <div class="crew-details">
             <img src="/photo/${crew.crew_logo}" class="logo"> 
@@ -224,9 +227,11 @@
                 <div class="thumb">
                     <button class="btn like-btn" onclick="cool()">👍</button>
                 </div>
-                <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.crew_member}">
-                	<button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
-                </c:if>
+                <c:forEach var="memberIdx" items="${crew.crew_member}">
+    				<c:if test="${memberIdx == sessionScope.mem_idx}">
+        				<button class="btn leave-btn" onclick="crewOut()">크루 탈퇴하기</button>
+    				</c:if>
+				</c:forEach>
                 <c:if test="${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}">
 					<button class="btn edit-btn" onclick="location.href='/main/crew/update.go?crew_idx=${crew.crew_idx}'">크루 수정</button> 
 				</c:if>
@@ -257,6 +262,7 @@
         			<textarea id="delegateReason" name="delegateReason" rows="4" placeholder="크루장 위임 사유를 입력해주세요"></textarea>
         			<button class="btn delegate-submit-btn" onclick="delegateLeader()">위임</button>
         			<input type="hidden" id="num1"/>
+        			<input type="hidden" name="mem_status" id="mem_status" value="${crew.mem_status}"/>
         			<button class="btn cancel-btn" onclick="closeDelegateModal()">취소</button>
     			</div>
 			</div>
@@ -477,6 +483,7 @@ function drawList(list) {
         	content += '<tr>';
         	content += '<input type="hidden" value="${crewMember_list.mem_idx}" name="crewMem_idx" class="crewMem_idx">';
         	content += '<input type="hidden" value="${crewMember_list.crew_idx}" name="crew_idx" class="crew_idx">';
+        	content += '<input type="hidden" value="${crew.mem_status}" name="mem_status" class="mem_status">';
         	content += '<td>' + item.state + '</td>';
         	content += '<td>' + item.mem_id + '</td>';
         	content += '<td class="crew-buttons">';
@@ -486,7 +493,7 @@ function drawList(list) {
         	content += '</c:if>';
         	content += '</td>';
         	content += '</tr>';
-        }        
+        }
     }    
     // 테이블에 내용 추가
     $('#list').html(content);
@@ -534,6 +541,7 @@ function closeActivityModal() {
 
 
 function submitReport() { //크루신고
+	
     var repContent = $("#repContent").val();
     var crew_idx= $("#crew_idx").val();
     
@@ -581,7 +589,7 @@ function apply(){ //크루신청
                 mem_idx: mem_idx,
                 crew_idx: crew_idx
             },
-            success: function(response) {
+            success:function(response) {
                 if (response.success) {
                     alert(response.success);                    
                 } else if (response.error) {
@@ -681,6 +689,9 @@ function delegateLeader() {
 	var ppp1 = $('#num1').val();
 	console.log("ppp1",ppp1);
 	var crew_idx = $('input[type="hidden"].crew_idx').val();
+	console.log("crew_idx : "+crew_idx);
+	var mem_status = $('input[type="hidden"].mem_status').val();
+	console.log("mem_status : "+mem_status);
 	num1= $('input[name="num1"]').val();
 	console.log(num1);
     var delegateReason= $("#delegateReason").val();
@@ -699,7 +710,9 @@ function delegateLeader() {
             data: {
                 'crew_idx': crew_idx,
                 'crewMem_idx':ppp1,
-                'delgateContent':delegateReason
+                'delgateContent':delegateReason,
+                'mem_status':mem_status,
+                'crew_leader_idx':${crew.crew_leader}
             },
             success: function(data) {
                 alert('위임이 완료되었습니다.'); 
@@ -730,8 +743,6 @@ function submitActivity() {
 		$('form').submit();
 	}
 }
-
-
 
 </script>
 </html>
