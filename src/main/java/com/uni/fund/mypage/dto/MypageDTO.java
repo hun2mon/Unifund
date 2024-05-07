@@ -42,9 +42,15 @@ public class MypageDTO {
    private int pro_idx;
    private String crew_state;
    private int crew_idx;
+   private int ref_idx;
    
-   
-   	public int getCrew_idx() {
+   	public int getRef_idx() {
+	return ref_idx;
+}
+public void setRef_idx(int ref_idx) {
+	this.ref_idx = ref_idx;
+}
+	public int getCrew_idx() {
 	return crew_idx;
 }
 public void setCrew_idx(int crew_idx) {

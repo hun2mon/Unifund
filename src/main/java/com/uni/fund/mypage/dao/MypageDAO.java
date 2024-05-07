@@ -57,4 +57,6 @@ public interface MypageDAO {
 
 	void outUnifundDO(String mem_id);
 
+	String refuseCon(String pro_idx);
+
 }

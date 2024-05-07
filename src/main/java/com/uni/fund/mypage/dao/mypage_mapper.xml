@@ -103,13 +103,33 @@
          WHERE mem_idx = #{param2} AND pro_state NOT IN ('D')
          ) AS subquery
    </select>
-   <select id="repList" resultType="com.uni.fund.mypage.dto.MypageDTO">
-            SELECT r.rep_division, r.rns_state ,r.rep_content ,r.rep_date,r.rep_idx,p.pro_title,p.pro_idx 
-            FROM report r left join project p on r.ref_idx = p.pro_idx 
-            WHERE r.mem_idx = #{param3}
-            ORDER BY rns_state asc ,rep_idx DESC
-            limit #{param1} offset #{param2}
-   </select>
+  <select id="repList" resultType="com.uni.fund.mypage.dto.MypageDTO">
+   SELECT
+    r.rep_division,
+    r.rns_state,
+    r.rep_content,
+    r.rep_date,
+    r.rep_idx,
+    p.pro_title,
+    p.pro_idx,
+    c.crew_name,
+    r.ref_idx
+FROM
+    report r
+LEFT JOIN
+    project p ON r.ref_idx = p.pro_idx
+LEFT JOIN
+    crew c ON r.ref_idx = c.crew_idx
+WHERE
+    r.mem_idx = #{param3}
+ORDER BY
+    r.rns_state ASC,
+    r.rep_idx DESC
+LIMIT
+    #{param1} OFFSET #{param2}
+
+</select>
+
    <select id="allCountRep" resultType="Integer">
          SELECT CEIL(COUNT(*) / #{param1}) AS pages 
       FROM (
@@ -141,4 +161,8 @@
    <update id="outUnifundDO" parameterType="String">
    		UPDATE member SET mem_status = 'N' WHERE mem_id = #{param1}
    </update>
+   
+   <select id="refuseCon" resultType="String">
+   		SELECT rsn_content FROM project_admin WHERE pro_idx = #{param1}
+   </select>
 </mapper>

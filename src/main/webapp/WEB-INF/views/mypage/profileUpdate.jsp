@@ -211,58 +211,96 @@
 	    }
 	}
 
-function proUpdate(){
-    var $number = $('input[name="number"]');
-    var $post = $('input[name="post"]');
-    var $addr = $('input[name="addr"]');
-    var $detail = $('input[name="detail"]');
-    var $email = $('input[name="email"]');
-    var $bankName = $('input[name="bankName"]');
-    var $bank = $('input[name="bank"]');
-    
-    // 전화번호 유효성 검사를 위한 정규표현식
-    var phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
-    // 이메일 유효성 검사를 위한 정규표현식
-    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // 은행명에는 숫자가 들어가지 않도록 하기 위한 정규표현식
-    var bankNameRegex = /^[^0-9]*$/;
-    // 계좌번호 유효성 검사를 위한 정규표현식
-    var accountNumRegex = /^[\d-]+$/;
+	function proUpdate(){
+	    var $number = $('input[name="number"]');
+	    var $post = $('input[name="post"]');
+	    var $addr = $('input[name="addr"]');
+	    var $detail = $('input[name="detail"]');
+	    var $email = $('input[name="email"]');
+	    var $bankName = $('input[name="bankName"]');
+	    var $bank = $('input[name="bank"]');
+	    
+	    // 전화번호 유효성 검사를 위한 정규표현식
+	    var phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+	    // 이메일 유효성 검사를 위한 정규표현식
+	    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	    // 은행명에는 숫자가 들어가지 않도록 하기 위한 정규표현식
+	    var bankNameRegex = /^[^0-9]*$/;
+	    // 계좌번호 유효성 검사를 위한 정규표현식
+	    var accountNumRegex = /^[\d-]+$/;
+	    // 우편번호 유효성 검사를 위한 정규표현식
+	    var postRegex = /^\d{5}$/; // 5자리 숫자만 허용
+	    // 주소 입력 길이 제한을 위한 변수
+	    var maxAddressLength = 100; // 100글자
+	    // 상세주소 입력 길이 제한을 위한 변수
+	    var maxDetailLength = 100; // 100글자
+	    // 이메일 주소 길이 제한을 위한 변수
+	    var maxEmailLength = 254; // 254글자
+	    // 은행명 길이 제한을 위한 변수
+	    var maxBankNameLength = 20; // 20글자
+	    // 계좌번호 길이 제한을 위한 변수
+	    var maxBankLength = 20; // 20글자
 
-    if ($number.val() == '') {
-        alert('연락처를 입력해 주세요!');
-        $number.focus();
-    } else if (!phoneRegex.test($number.val())) {
-        alert('올바른 전화번호 형식이 아닙니다! (예: 010-1234-5678)');
-        $number.focus();
-    } else if ($post.val() == '') {
-        alert('우편번호 입력해 주세요!');
-        $post.focus();
-    } else if ($addr.val() == '') {
-        alert('주소를 입력해 주세요!');
-        $addr.focus();
-    } else if ($detail.val() == '') {
-        alert('상세주소를 입력해 주세요!');
-        $detail.focus();
-    } else if ($email.val() == '') {
-        alert('이메일 입력해 주세요!');
-        $email.focus();    
-    } else if (!emailRegex.test($email.val())) {
-        alert('올바른 이메일 형식이 아닙니다!');
-        $email.focus();
-    } else if (!bankNameRegex.test($bankName.val())) {
-        alert('은행명에는 숫자를 입력할 수 없습니다!');
-        $bankName.focus();
-    } else if ($bank.val() == '') {
-        alert('계좌번호를 입력해 주세요!');    
-        $bank.focus();
-    } else if (!accountNumRegex.test($bank.val())) {
-        alert('올바른 계좌번호 형식이 아닙니다! (숫자와 하이픈(-)만 입력 가능)');
-        $bank.focus();
-    } else {
-        $('form').submit();
-    }
-}
+	    if ($number.val() == '') {
+	        alert('연락처를 입력해 주세요!');
+	        $number.focus();
+	    } else if (!phoneRegex.test($number.val())) {
+	        alert('올바른 전화번호 형식이 아닙니다! (예: 010-1234-5678)');
+	        $number.focus();
+	    } else if ($post.val() == '') {
+	        alert('우편번호 입력해 주세요!');
+	        $post.focus();
+	    } else if (!postRegex.test($post.val())) {
+	        alert('올바른 우편번호 형식이 아닙니다! (5자리 숫자만 입력 가능)');
+	        $post.focus();
+	    } else if ($addr.val() == '') {
+	        alert('주소를 입력해 주세요!');
+	        $addr.focus();
+	    } else if ($addr.val().length > maxAddressLength) {
+	        alert('주소는 최대 ' + maxAddressLength + '글자까지 입력 가능합니다!');
+	        $addr.focus();
+	    } else if ($detail.val() == '') {
+	        alert('상세주소를 입력해 주세요!');
+	        $detail.focus();
+	    } else if ($detail.val().length > maxDetailLength) {
+	        alert('상세주소는 최대 ' + maxDetailLength + '글자까지 입력 가능합니다!');
+	        $detail.focus();
+	    } else if ($email.val() == '') {
+	        alert('이메일 입력해 주세요!');
+	        $email.focus();    
+	    } else if ($email.val().length > maxEmailLength) {
+	        alert('이메일은 최대 ' + maxEmailLength + '글자까지 입력 가능합니다!');
+	        $email.focus();    
+	    } else if (!emailRegex.test($email.val())) {
+	        alert('올바른 이메일 형식이 아닙니다!');
+	        $email.focus();
+	    } else if ($bankName.val() == '') {
+	        alert('은행명을 입력해 주세요!');
+	        $bankName.focus();
+	    } else if ($bankName.val().length > maxBankNameLength) {
+	        alert('은행명은 최대 ' + maxBankNameLength + '글자까지 입력 가능합니다!');
+	        $bankName.focus();
+	    } else if (!bankNameRegex.test($bankName.val())) {
+	        alert('은행명에는 숫자를 입력할 수 없습니다!');
+	        $bankName.focus();
+	    } else if ($bank.val() == '') {
+	        alert('계좌번호를 입력해 주세요!');    
+	        $bank.focus();
+	    } else if ($bank.val().length > maxBankLength) {
+	        alert('계좌번호는 최대 ' + maxBankLength + '글자까지 입력 가능합니다!');
+	        $bank.focus();
+	    } else if (!accountNumRegex.test($bank.val())) {
+	        alert('올바른 계좌번호 형식이 아닙니다! (숫자와 하이픈(-)만 입력 가능)');
+	        $bank.focus();
+	    } else {
+	        $('form').submit();
+	    }
+	}
+
+
+
+
+
 
 	var msg = '${msg}';
 	if (msg !='') {
