@@ -61,11 +61,11 @@ body {
 }
 
 .empty-container h1{
-  font-size: 2em;
-    text-align: center;
-    color: #f5f5f5;
-    text-shadow: 5px 5px #959595;
-    margin: 0;
+	color: #adadad;
+    background-color: #f2f2f2;
+    margin: 50px auto;
+    padding: 17%;
+    border-radius: 10px;
 }
 
 .form-container:hover {
@@ -281,6 +281,7 @@ mark.mint{
 				<input type="button" id="likeFilter_button"  class="filter_button <c:if test="${filter == 'like'}">active</c:if>" value="좋아요순" data-filter="like"/>
 				<input type="button" id="startFilter_button"  class="filter_button <c:if test="${filter == 'favorites'}">active</c:if>" value="즐겨찾기순" data-filter="favorites"/>
 			</div>
+			
 			<div class="search_container">
 				<i id="search_button" class="fa fa-search"></i>
 				<input type="text" id="keyword" value="${keyword}" onKeyPress="if(event.keyCode==13) { $('#search_button').click();}"/>
@@ -292,7 +293,7 @@ mark.mint{
 		
 		<c:if test="${empty list}">
 			<div class="empty-container">
-				<h1>UNIFUND</h1>
+				<h1>검색결과가 없습니다.</h1>
 			</div>
 		</c:if>
 		
@@ -502,7 +503,7 @@ mark.mint{
 				'mem_idx' : mem_idx
 			},
 			success : function(data) {
-				if (data.checkProject > 3) {
+				if (data.checkProject >= 3) {
 					alert('프로젝트는 1인당 최대 3개까지 진행가능합니다.');
 					return;
 				}

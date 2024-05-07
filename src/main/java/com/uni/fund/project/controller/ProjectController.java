@@ -148,7 +148,7 @@ public class ProjectController {
 		
 		int row = projectService.projectUpdate(pro_main_photo,pro_photo,param);
 		if(row == 1 ) {
-			page = "redirect:/project/detail";
+			page = "redirect:/project/detail.go?pro_idx="+param.get("pro_idx");
 			//page = "redirect:/detail?idx=" + param.get("idx");
 		}
 		return page;
@@ -187,6 +187,10 @@ public class ProjectController {
 		String category = (String) param.get("category");
 		String keyword = (String)param.get("keyword");
 		String filter = (String)param.get("filter");
+		
+		if(filter == null) {
+			filter = "recent";
+		}
 		
 		int showList = 8;
 		int spaceBlock = 5;
@@ -454,24 +458,4 @@ public class ProjectController {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
