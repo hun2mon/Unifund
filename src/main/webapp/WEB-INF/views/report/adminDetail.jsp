@@ -127,7 +127,8 @@
     <div class="modal">
         <div class="modal-content" >
             <h2>신고 처리 내용</h2>
-            <form action="transContent" method="post">  
+        	  <form action="transContent" method="post" onsubmit="return validateForm();">
+
             	
             	<textarea style="background-color: #f2f2f2;" type="text" name="transContent" oninput="checkLength(this, 80)" placeholder="처리내용을 입력해주세요.최대 80자까지 입력 가능합니다." >${detail.trans_content}</textarea>
 	           
@@ -178,5 +179,14 @@
             alert("최대 글자수를 초과했습니다.");
         }
     }    
+    
+    function validateForm() {
+        const textarea = document.querySelector('textarea[name="transContent"]');
+        if (textarea.value.trim() === '') {
+            alert("신고 처리 내용을 입력해주세요.");
+            return false;
+        }
+        return true;
+    }
 </script>
 </html>

@@ -618,7 +618,9 @@ th, td {
                       	
             } else if (item.pro_state == 'F') {
             	content += '<td><span style="color:red; font-size: 16px; font-weight: bold;">' + item.pro_title + '</span></td>';
-                content += '<td style="color: red;"><b>거절</b></td>';
+            	content += '<td style="cursor: pointer; color: red; text-decoration: underline;" onclick="refuseCon(' + item.pro_idx + ')"><b>거절</b></td>';
+
+
                 
             }
 
@@ -630,6 +632,13 @@ th, td {
       }
       $('#createList').html(content);
    }
+   
+   function refuseCon(pro_idx) {
+ 	  var url = "refuseCon.go?pro_idx=" + pro_idx;
+       var name = "refuseCon";
+       var option = "width = 600, height = 300, top = 100, left = 300, location = no"
+       window.open(url, name, option);
+	 }
    
    function repList(page) {
       $.ajax({
@@ -674,12 +683,20 @@ th, td {
       } else {
          for(item of list){
             content += '<tr>';
-              
+              console.log(item.ref_idx);
               if (item.rns_state === '처리') {
-            	  content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.pro_title +'</td>';
+            	  if (item.rep_division == '프로젝트') {					
+            	  	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.pro_title +'</td>';
+				  }else{
+					 content += '<td><a href="/main/crew/detail.go?crew_idx=' + item.ref_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.crew_name +'</td>';
+				  }
             	  content += '<td style="color: green;"><span class="clickable-text" onclick="repComCall(' + item.rep_idx + ')"><b>' + '처리완료' + '</b></span></td>';
               } else {
-            	  content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.pro_title +'</td>';
+            	  if (item.rep_division == '프로젝트') {					
+              	  	content += '<td><a href="/main/project/detail.go?pro_idx=' + item.pro_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.pro_title +'</td>';
+  				  }else{
+  					 content += '<td><a href="/main/crew/detail.go?crew_idx=' + item.ref_idx + '"><span style="color:green; font-size: 16px; font-weight: bold;">[' + item.rep_division + ']'+ item.crew_name +'</td>';
+  				  }
                   content += '<td style="color: red;"><b>' + '처리중' + '</b></td>';
 				  
               }

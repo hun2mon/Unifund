@@ -181,6 +181,7 @@ public class MypageService {
       Map<String, Object> result = new HashMap<String, Object>();
       
       List<MypageDTO> list = mypageDAO.repList(pagePerCnt,start,userId);
+      logger.info("[rep]list : {}",list.toString());
       logger.info( "[rep]list size : "+ list.size());
       result.put("list", list);
       result.put("currPage", currPage);
@@ -233,5 +234,10 @@ public class MypageService {
 	public void outUnifundDO(String mem_id) {
 		 mypageDAO.outUnifundDO(mem_id);
 		
+	}
+
+	public String refuseCon(String pro_idx) {
+		
+		return mypageDAO.refuseCon(pro_idx);
 	}
 }
