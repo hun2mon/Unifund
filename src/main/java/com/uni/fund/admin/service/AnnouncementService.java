@@ -164,6 +164,7 @@ public class AnnouncementService {
 		int row = -1;
 		AnnouncementDTO announcementDTO = new AnnouncementDTO();
 		announcementDTO.setNoti_idx(Integer.parseInt(param.get("noti_idx")));
+		logger.info("noti_idx"+announcementDTO.getNoti_idx() );
 		announcementDTO.setNoti_title(param.get("noti_title"));
 		announcementDTO.setNoti_content(param.get("noti_content"));
 		announcementDTO.setNoti_top(param.get("noti_top"));

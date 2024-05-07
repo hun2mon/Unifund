@@ -92,6 +92,7 @@ input[type="checkbox"] {
                 <h1>공지사항 수정</h1>
                 <div>
                     <label>제목:</label><br>
+                    <input name="noti_idx" value="${announcementDTO.noti_idx}" hidden>
                     <input type="text" id="noti_title" name="noti_title" value="${announcementDTO.noti_title}">
                 </div>
                 <div>

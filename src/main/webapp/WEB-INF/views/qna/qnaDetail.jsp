@@ -238,9 +238,9 @@ function drawRepList(list){
 	$('#list').html(content);
 }
 function cancel() {
-    // 이전 페이지로 이동하는 코드 추가
-    alert('이전 페이지로 이동합니다.');
-    window.history.back();
+    // QnaList 페이지로 이동하는 코드 추가
+    alert('목록 페이지로 이동합니다.');
+    window.location.href = './adminQnaList.go'; // 적절한 URL로 변경해야 합니다.
 }
 
 </script>
