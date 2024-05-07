@@ -364,7 +364,7 @@ input[name=refuseContent] {
 										</td>
 									</tr>
 									<tr>
-										<td>사유<br> <input type="text" name="refuseContent"></td>
+										<td>사유<br> <input type="text" name="refuseContent" onkeyup="lengthCheck(this)" maxlength="200"></td>
 									</tr>
 									<tr>
 										<td class="button"><input type="button" value="확인"
@@ -395,6 +395,14 @@ input[name=refuseContent] {
 		alert('거절되었습니다');
 		$('.proDel').css('display','none');
 		$('form').submit();
+	}
+	
+	function lengthCheck(text){
+		var content = $(text).val();
+		if (content.length >= 200) {
+			alert('입력 가능 글자수를 초과하였습니다.');
+			$(text).focus();
+		}	
 	}
 	
 	

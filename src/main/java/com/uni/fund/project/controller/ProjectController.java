@@ -177,47 +177,50 @@ public class ProjectController {
 	@GetMapping(value = "/project/list.go")
 	public String proList(String pro_idx,Model model, @RequestParam Map<String, Object> param, HttpSession session) {
 		logger.info(":: proList CONTROLLER IN ::");
-
-		session.setAttribute("loginId", "admin");
-		session.setAttribute("memIdx", "1");
+		String page = "member/login";
 		
-		int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
-		param.put("pg", String.valueOf(pg));
-
-		String category = (String) param.get("category");
-		String keyword = (String)param.get("keyword");
-		String filter = (String)param.get("filter");
 		
-		if(filter == null) {
-			filter = "recent";
+		if (session.getAttribute("mem_id") != null) {
+			int pg = param.get("pg") == null ? 1 : Integer.parseInt((String) param.get("pg"));
+			param.put("pg", String.valueOf(pg));
+			
+			String category = (String) param.get("category");
+			String keyword = (String)param.get("keyword");
+			String filter = (String)param.get("filter");
+			
+			if(filter == null) {
+				filter = "recent";
+			}
+			
+			int showList = 8;
+			int spaceBlock = 5;
+			int total = projectService.projectTotalCnt(param);
+			int totalP = (total + (showList-1)) / showList;	
+			int wantStart = (pg-1) / spaceBlock*spaceBlock + 1;	
+			int endPage= wantStart + (spaceBlock-1);
+			if(endPage > totalP) endPage = totalP;
+			
+			param.put("start", (pg-1) * showList);
+			
+			List<ProjectDTO> projectList = projectService.projectList(param);
+			
+			param.put("mem_idx",1);
+			
+			// 데이터 공유
+			model.addAttribute("pg", pg);
+			model.addAttribute("list", projectList);
+			model.addAttribute("startPage", wantStart);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("totalP", totalP);
+			model.addAttribute("blockScale", spaceBlock);
+			model.addAttribute("category", category);
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("filter", filter);
+
+			page = "project/list";
 		}
-		
-		int showList = 8;
-		int spaceBlock = 5;
-		int total = projectService.projectTotalCnt(param);
-		int totalP = (total + (showList-1)) / showList;	
-		int wantStart = (pg-1) / spaceBlock*spaceBlock + 1;	
-		int endPage= wantStart + (spaceBlock-1);
-		if(endPage > totalP) endPage = totalP;
-		
-		param.put("start", (pg-1) * showList);
-		
-		List<ProjectDTO> projectList = projectService.projectList(param);
-		
-		param.put("mem_idx",1);
 
-		// 데이터 공유
-		model.addAttribute("pg", pg);
-		model.addAttribute("list", projectList);
-		model.addAttribute("startPage", wantStart);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("totalP", totalP);
-		model.addAttribute("blockScale", spaceBlock);
-		model.addAttribute("category", category);
-		model.addAttribute("keyword", keyword);
-		model.addAttribute("filter", filter);
-
-		return "project/list";
+		return page;
 	}
 	
 	/* *

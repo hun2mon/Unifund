@@ -28,9 +28,13 @@ public class AnnouncementController {
 	@Autowired AnnouncementService annService;
 
 	@RequestMapping("/announcement/list.go")
-	public String annList(Model model) {
+	public String annList(Model model,HttpSession session) {
 		logger.info("annList요청");
-		return "announcement/annList";
+		String page = "member/login";
+		if (session.getAttribute("mem_id") != null) {
+			page = "announcement/annList";
+		}
+		return page;
 	}
 
 	@RequestMapping(value = "/announcement/annList.ajax")
