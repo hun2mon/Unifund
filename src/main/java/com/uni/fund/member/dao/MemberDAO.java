@@ -71,5 +71,5 @@ public interface MemberDAO {
 
 	void adminMemberIntroUpdateDo(Map<String, String> param);
 
-
+	void updateStopProjectStatus(Map<String, Object> param);
 }

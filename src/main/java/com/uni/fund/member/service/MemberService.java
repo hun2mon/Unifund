@@ -1,10 +1,10 @@
 package com.uni.fund.member.service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -145,6 +145,7 @@ public class MemberService {
 
 	public int stopMemberApply(Map<String, Object> param) {
 		memberDAO.updatStopeMemberStatus(param);
+		memberDAO.updateStopProjectStatus(param);
 		return memberDAO.stopMemberApply(param);
 	}
 
