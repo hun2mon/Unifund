@@ -56,6 +56,7 @@
     font-size: 14px;
     color: black;
     margin-left: 10px;
+    text-align: right;
 }
 .closeBtn{
     width: 15px;
@@ -115,7 +116,7 @@
 		</a> 
 		<c:if test="${mem_id == null }">
 			<a href="/main/member/login.go" class="w3-padding-large w3-hover-purple w3-hide-small w3-right">
-				<i class="fa fa-user"></i>
+				<i class="fa-solid fa-right-to-bracket"></i>
 			</a>		
 		</c:if>
 		<c:if test="${mem_id != null }">

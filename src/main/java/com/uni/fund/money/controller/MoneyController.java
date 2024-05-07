@@ -33,12 +33,12 @@ public class MoneyController {
 	}
 	
 	@RequestMapping(value = "/money/charge.do")
-	public String chargeDo(String cashCharge, HttpSession session) {
+	public String chargeDo(String[] cashCharge, HttpSession session) {
 		logger.info("charge요청 들어옴");
 		logger.info("cashCharge : {}", cashCharge);
 		int mem_idx = (int) session.getAttribute("mem_idx");
 		logger.info("mem_idx : {}", mem_idx);
-		moneyService.chargeDo(cashCharge, mem_idx);
+		moneyService.chargeDo(cashCharge[1], mem_idx);
 		return "mypage/profile";
 	}
 	
