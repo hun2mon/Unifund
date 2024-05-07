@@ -21,7 +21,7 @@
 			,(select mem_addr from member where mem_idx =#{param1}) as mem_addr 
 			,(select mem_detail from member where mem_idx =#{param1}) as mem_detail
 			,(select round((now_price/target_price) * 100)) as progress 
-			,(select pho_name from photo where ref_idx = #{param2} and pho_division = '프로젝트') as pro_img_name
+			,(select pho_name from photo where ref_idx = #{param2} and pho_division = '프로젝트' order by pho_idx desc limit 1) as pro_img_name
 			,(select fund_state from project_apply where mem_idx = #{param1} and pro_idx = #{param2} order by fund_idx desc limit 1) as fund_state
 			,(select pho_name from photo where ref_idx = #{param1} and pho_division = '프로필') as profile
 			,(select mem_idx from project_like where pro_idx = #{param2} and mem_idx = #{param1}) as like_mem_idx
