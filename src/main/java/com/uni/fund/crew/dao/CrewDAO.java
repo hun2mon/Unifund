@@ -75,9 +75,9 @@ public interface CrewDAO {
 	void crewMemberDeportHistoryInsert(String crew_idx, String crewMem_idx);
 	
 
-	void crewChiefTomemberCrewMemberListUpdate(String crew_idx, int memIdx, String crewMem_idx);
+	void crewChiefTomemberCrewMemberListUpdate(String crew_idx, String crew_leader_idx, String crewMem_idx);
 
-	void crewChiefTomemberCrewMemberHistoryInsert(String crew_idx, int memIdx, String crewMem_idx);
+	void crewChiefTomemberCrewMemberHistoryInsert(String crew_idx, String crew_leader_idx, String crewMem_idx);
 
 	void crewMemberToChiefCrewMemberListUpdate(String crew_idx, String crewMem_idx);
 
@@ -120,6 +120,14 @@ public interface CrewDAO {
 	
 
 	void refuse(String mem_idx, String crew_idx);
+
+	void crewListMemberDelete(int crew_idx);
+
+	List<Integer> crewMemberList(int crew_idx);
+
+	void crewMemberHistoryInsert(int crew_idx, Integer idx);
+
+	int isCrewCheck(int memIdx);
 
 
 

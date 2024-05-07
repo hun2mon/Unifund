@@ -88,6 +88,7 @@
                     <th class="crewIdx">크루번호</th>
                     <th class="crewName">크루 이름</th>
                     <th class="crewChief">크루장</th>
+                    <th class="crewChief">크루 상태</th>           
                     <th class="crewNum">크루원 수</th>
                     <th class="crewDate">창설일</th>
                     <th class="crewCoolCnt">인기도</th>                    
@@ -155,8 +156,14 @@ for(item of list){
 	content += '<td class="crewIdx">' + item.crew_idx + '</td>';
     content += '<td><button class="btn" onclick=\'location.href="/main/crew/detail.go?crew_idx=' +item.crew_idx + '"\'>' + item.crew_name + '</button></td>'
 	//content += '<td class="crewName"><a href="crew/detail.go?crew_idx=' + item.crew_idx + '">' + item.crew_name + '</a></td>';
-
-	content += '<td class="crewChief">' + item.crew_leader_name + '</td>';
+	content += '<td class="crewChief">' + item.crew_leader_id + '</td>';
+    content += '<td>'
+        if(item.crew_status  == 'A') {
+        	content += '활동중';	
+        }else {
+        	content += '크루 삭제';	
+        }
+    content += '</td>';
 	content += '<td class="crewNum">' + item.crew_num + '</td>';	
 	var date = new Date(item.crew_date);
 	var dateStr = date.toLocaleDateString("ko-KR");//en_US
