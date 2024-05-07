@@ -99,7 +99,7 @@ thead {
 					<td>30,000캐시</td>
 				</tr>
 				<tr>
-					<td><input type="radio" class="rad" name="radio"
+					<td><input type="radio" class="rad" name="cashCharge"
 						onclick="cashWrite(this)">직접입력</td>
 					<td><input type="number" class="writeNum" name="cashCharge"
 						disabled>캐시</td>
@@ -120,6 +120,7 @@ thead {
 	}
 	function disable() {
 		$('.writeNum').attr('disabled', true);
+		$('#sel').attr('checked', false);
 		$('.writeNum').val('');
 	}
 	

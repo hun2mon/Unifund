@@ -283,7 +283,7 @@
 	
 			var input = document.createElement('input');
 			input.type = 'hidden';
-			input.name = 'pro_idx';
+			input.name = 'crew_idx';
 			input.value = idx; 
 			form.appendChild(input);
 			
