@@ -43,9 +43,11 @@ public interface QnaDAO {
 
 	List<QnaDTO> rplList(String qna_idx);
 
-	int rplDel(String comm_idx);
+
 
 	int replyDo(Map<String, String> param);
+
+	int rplDel(Integer comm_idx);
 
 
 	

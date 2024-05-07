@@ -40,31 +40,44 @@
 .delete-button {
 	float: right;
 	margin-bottom: 10px;
-	margin-right: 0px; /* 수정된 부분: 삭제 버튼을 수정 버튼 왼쪽으로 5px 정도 떨어뜨립니다. */
+	margin-right: 0px;
 }
-.div_reply {
-	width: 1060;
-	margin-top: 30;
-	z-index: 1;
-}
-.div_reply, .div_reply * {
-	padding-bottom: 5;
-	padding-top: 5;
-}
+
 .div_flex {
 	display: flex;
 }
-.replyFrom, .reply_content {
-	width: 1000;
-	height: 170;
+
+.paging_container {
+	width: 100%;
+	text-align: center;
+	display: inline-block;
+	margin-top: 30px;
+	position: fixed;
+	bottom: 27px;
 }
-.sub_reply {
-	margin-left: 670;
+
+.paging {
+	color: gray;
+	text-decoration: none;
+	margin-top: 30px;
+	background-color: #fdfdfd;
+	border: none;
+	width: 50px;
+	margin: 5px;
+	padding: 10px 15px;
+	font-size: 16px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px #c7c7c7, -5px -5px 10px #ffffff;
+	transition: all 0.3s ease;
 }
-.reply_content {
-	border-radius: 5px 5px;
-	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
-	background-color: rgba(255, 255, 255, 0.15);
+
+.paging:hover {
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
+
+.currentPaging {
+	background-color: #a1a1a1;
+	color: white;
 }
 </style>
 </head>
@@ -74,7 +87,10 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="edit-button">
-					<a href="update.go?qna_idx=${qna_idx}" class="btn btn-primary">수정</a>
+					<c:if test="${mem_idx eq qnaDTO.mem_idx or mem_status eq 'M'}">
+						<!-- 수정 버튼에 링크를 추가하여 수정 페이지로 이동할 수 있도록 합니다. -->
+						<a href="update.go?qna_idx=${qna_idx}" class="btn btn-primary">수정</a>
+					</c:if>
 				</div>
 				<div class="delete-button">
 					<c:if test="${mem_idx eq qnaDTO.mem_idx or mem_status eq 'M'}">
@@ -83,7 +99,7 @@
 							onclick="deleteQna(this)">삭제</button>
 					</c:if>
 				</div>
-				<h3 class="panel-title">QnA 상세보기</h3>
+				<h3 class="panel-title">QnA</h3>
 			</div>
 			<div class="panel-body">
 				<div class="info">
@@ -101,17 +117,19 @@
 			<div class="div_reply_top">
 				<form action="reply/write.do" method="post"
 					enctype="multipart/form-data">
-					<div class="div_flex">
-					</div>
+					<div class="div_flex"></div>
 					<div>
 						<div>
 							<input type="hidden" class="replyFrom" name="qna_idx"
 								value="${qnaDTO.qna_idx}">
-							<input type="text" class="replyFrom" name="rplContent" min="5" maxlength="2000"
-								onkeyup="repLengthCheck(this)">
+							<!-- 답글 인풋박스를 <textarea>로 변경하고 세로 크기를 조절합니다. -->
+							<textarea class="replyFrom" name="rplContent" rows="3"
+								maxlength="2000" style="width: 100%; resize: vertical;"></textarea>
 						</div>
 						<div>
-						<input type="button" class="sub_reply" value="작성" onclick="replyWrite()">
+							<input type="button" class="sub_reply" value="작성"
+								onclick="replyWrite()">
+							<button type="button" class="btn btn-default" onclick="cancel()">목록</button>
 						</div>
 					</div>
 				</form>
@@ -210,7 +228,7 @@ function drawRepList(list){
 		content += '<div class="reply_content">' + item.comm_content + '</div>';
 		content += '<div>';
 		if (item.mem_id == '${mem_id}') {
-			content += '<a href="qna/delete.do?comm_idx=' +item.comm_idx + '&qna_idx=' + item.qna_idx +'">리뷰삭제 </a>';	
+			content += '<a href="./delete.do?comm_idx=' +item.comm_idx + '&qna_idx=' + item.qna_idx +'">답글삭제 </a>';	
 			$('input[name="revContent"]').attr('readonly',true);
 			$('.sub_review').attr('type','hidden');
 		}
@@ -218,6 +236,11 @@ function drawRepList(list){
 		content += '<hr>';
 	}
 	$('#list').html(content);
+}
+function cancel() {
+    // 이전 페이지로 이동하는 코드 추가
+    alert('이전 페이지로 이동합니다.');
+    window.history.back();
 }
 
 </script>

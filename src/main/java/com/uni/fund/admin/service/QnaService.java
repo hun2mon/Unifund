@@ -125,12 +125,14 @@ public class QnaService {
 	public List<QnaDTO> rplList(String qna_idx) {
 		return qnaDAO.rplList(qna_idx);
 	}
-	public int rplDel(String comm_idx) {
-		return qnaDAO.rplDel(comm_idx);
-	}
+
 	public int replyDo(Map<String, String> param) {
 
 		return qnaDAO.replyDo(param);
+	}
+	public void rplDel(Integer comm_idx) {
+		int row = qnaDAO.rplDel(comm_idx);
+		
 	}
 	
 
