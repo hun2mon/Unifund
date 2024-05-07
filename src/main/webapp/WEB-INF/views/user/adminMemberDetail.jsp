@@ -11,7 +11,6 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -374,7 +373,7 @@ th.align {
 			<div class="form-container">
 				<div class="top-container">
 					<button class="anotherMem_btn" style="cursor: pointer;"
-						onclick="location.href='./adminMemberList.go'">뒤로가기</button>
+						onclick="location.href='./adminList.go'">뒤로가기</button>
 					<span class="detail_title">회원관리</span>
 					<input type="hidden" id="admin_id" class="admin_id" value="${sessionScope.mem_id }"/>
 
@@ -545,6 +544,7 @@ th.align {
 	<input type="hidden" id="searchIn" value="" />
 	<input type="hidden" id="searchType" value="M" />
 </body>
+<script src="../resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <script>
 var showPage = 1;
 
