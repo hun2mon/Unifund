@@ -26,7 +26,7 @@ public class AnnouncementService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired AnnouncementDAO annDAO;
 
-	public String file_root = "C:/upload/Unifund/";
+	public String file_root = "/Users/jeounghun/upload/Unifund/";
 
 	public Map<String, Object> annList(int currPage, int pagePerCnt) {
 		int start = (currPage - 1) * pagePerCnt;

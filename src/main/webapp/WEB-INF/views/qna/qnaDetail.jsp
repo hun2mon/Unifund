@@ -127,7 +127,7 @@
 								maxlength="2000" style="width: 100%; resize: vertical;"></textarea>
 						</div>
 						<div>
-							<input type="button" class="sub_reply" value="작성"
+							<input type="button" class="sub_reply btn btn-default" value="작성"
 								onclick="replyWrite()">
 							<button type="button" class="btn btn-default" onclick="cancel()">목록</button>
 						</div>
@@ -240,7 +240,11 @@ function drawRepList(list){
 function cancel() {
     // QnaList 페이지로 이동하는 코드 추가
     alert('목록 페이지로 이동합니다.');
-    window.location.href = './adminQnaList.go'; // 적절한 URL로 변경해야 합니다.
+    if (${mem_status == 'M'}) {
+    	window.location.href = './adminQnaList.go';
+	} else {
+	    window.location.href = './list.go'; // 적절한 URL로 변경해야 합니다.		
+	}
 }
 
 </script>
