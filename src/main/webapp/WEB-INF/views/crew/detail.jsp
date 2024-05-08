@@ -175,7 +175,7 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 40%;
 }
 
 .close {
@@ -190,6 +190,11 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#repContent,#delContent{
+	height: 110px;
+    width: 100%;
 }
 </style>
 </head>
@@ -438,7 +443,9 @@ function drawList1(activity_list) {
 		content += '<td>' + item.activity_details + '</td>';
 		content += '</tr>';
 		content += '<tr>';
-		content += '<td colspan=2><input type="button" value="삭제" onclick="activityDel('+item.crew_activity_details_idx+')"></td>';		
+		if (${sessionScope.mem_idx == crew.crew_leader || sessionScope.mem_idx == crew.manager_idx}) {
+			content += '<td colspan=2><input type="button" value="삭제" onclick="activityDel('+item.crew_activity_details_idx+')"></td>';				
+		}
 		content += '</tr>';
 	}
 	$('#activity_list').html(content);
@@ -567,6 +574,7 @@ function submitReport() { //크루신고
         dataType: 'json',
         success: function(response) {
             alert("신고가 접수되었습니다.");
+            document.getElementById("reportModal").style.display = "none";
         },
         error: function(xhr, status, error) {
             // 오류 시 처리할 내용
