@@ -136,7 +136,7 @@
 	<select id="qnaDetail"
 		resultType="com.uni.fund.admin.dto.QnaDTO">
 		SELECT
-		q.qna_idx,q.qna_title,q.qna_content,q.qna_show,m.mem_id,q.qna_pass,q.qna_date
+		q.qna_idx,q.mem_idx,q.qna_title,q.qna_content,q.qna_show,m.mem_id,q.qna_pass,q.qna_date
 		FROM qna q
 		join
 		member m ON q.mem_idx = m.mem_idx WHERE qna_idx =

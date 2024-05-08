@@ -33,12 +33,12 @@ public class MoneyController {
 	}
 	
 	@RequestMapping(value = "/money/charge.do")
-	public String chargeDo(String[] cashCharge, HttpSession session) {
+	public String chargeDo(String cashCharge, HttpSession session) {
 		logger.info("charge요청 들어옴");
 		logger.info("cashCharge : {}", cashCharge);
 		int mem_idx = (int) session.getAttribute("mem_idx");
 		logger.info("mem_idx : {}", mem_idx);
-		moneyService.chargeDo(cashCharge[1], mem_idx);
+		moneyService.chargeDo(cashCharge, mem_idx);
 		return "mypage/profile";
 	}
 	
@@ -144,7 +144,7 @@ public class MoneyController {
 	@RequestMapping(value = "/money/allCashList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> allCashListCall(String year, String month,String page,String cnt,String keyWord){
-		String serchMonth = "%" + month + "%";
+		String serchMonth = "%-" + month + "%";
 		String serchYear = year + "%";
 		String day = year + "-" + month + "%";
 		logger.info("keyWord : {}", keyWord);
@@ -174,7 +174,7 @@ public class MoneyController {
 	@RequestMapping(value = "/money/allMileageList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> allMileageListCall(String year, String month,String page,String cnt,String keyWord){
-		String serchMonth = "%" + month + "%";
+		String serchMonth = "%-" + month + "%";
 		String serchYear = year + "%";
 		String day = year + "-" + month + "%";
 		logger.info("keyWord : {}", keyWord);

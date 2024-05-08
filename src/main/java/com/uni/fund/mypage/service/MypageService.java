@@ -25,7 +25,7 @@ public class MypageService {
    Logger logger = LoggerFactory.getLogger(getClass());
    @Autowired MypageDAO mypageDAO;
    
-   public String file_root = "C:/upload/";
+   public String file_root = "/Users/jeounghun/upload/Unifund/";
    
    public MypageDTO profile(int userId) {
       logger.info("userId : "+userId);

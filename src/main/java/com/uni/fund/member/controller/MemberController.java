@@ -294,8 +294,11 @@ public class MemberController {
 
 	@RequestMapping(value = "/user/adminMemberSubmitStatus.ajax")
 	@ResponseBody
-	public Map<String, Object> adminMemberSubmitStatus(@RequestParam Map<String, Object> param, Model model) {
+	public Map<String, Object> adminMemberSubmitStatus(@RequestParam Map<String, Object> param, Model model, HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		int mem_idx = (int) session.getAttribute("mem_idx");
+		param.put("mng_idx",mem_idx);
+		
 		map.put("submitStatus", memberService.adminMemberSubmitStatus(param));
 		logger.info("#### submitStatus : {}", map.get("submitStatus"));
 		return map;
@@ -303,8 +306,11 @@ public class MemberController {
 
 	@RequestMapping(value = "/user/adminMemberRefuseStatus.ajax")
 	@ResponseBody
-	public Map<String, Object> adminMemberRefuseStatus(@RequestParam Map<String, Object> param, Model model) {
+	public Map<String, Object> adminMemberRefuseStatus(@RequestParam Map<String, Object> param, Model model, HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		int mem_idx = (int) session.getAttribute("mem_idx");
+		param.put("mng_idx",mem_idx);
+		
 		map.put("refuseStatus", memberService.adminMemberRefuseStatus(param));
 		logger.info("#### refuseStatus : {}", map.get("refuseStatus"));
 		return map;

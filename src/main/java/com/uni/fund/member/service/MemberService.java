@@ -23,7 +23,7 @@ public class MemberService {
 		@Autowired MemberDAO memberDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public String file_root = "C:/upload/";
+	public String file_root = "/Users/jeounghun/upload/Unifund/";
 	
 	
 	public MemberDTO login(String id, String pw) {

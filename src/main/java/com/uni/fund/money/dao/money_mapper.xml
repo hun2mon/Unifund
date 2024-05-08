@@ -67,21 +67,21 @@
 		*,
 		(select mem_id from member m where m.mem_idx = c.mem_idx) as mem_id 
 		FROM cash c 
-		<if test="param1 == '전체' and param4 == null">order by cash_idx desc</if>
-		<if test="param1 == '전체' and param4 != null"> where (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by cash_idx desc </if>
-		<if test="param1 != '전체' and param4 == null">where cash_date like '${param1}' order by cash_idx desc</if>
-		<if test="param1 != '전체' and param4 != null">where cash_date like '${param1}' and (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by cash_idx desc</if>
+		<if test="param1 == '전체' and param4 == null and param4 == ''">order by cash_idx desc</if>
+		<if test="param1 == '전체' and param4 != null and param4 != ''"> where (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param4}, '%') order by cash_idx desc </if>
+		<if test="param1 != '전체' and (param4 == null or param4 == '')">where DATE_FORMAT(cash_date,'%Y-%m-%d') like '${param1}' order by cash_idx desc</if>
+		<if test="param1 != '전체' and param4 != null and param4 != ''">where DATE_FORMAT(cash_date,'%Y-%m-%d') like '${param1}' and (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param4}, '%') order by cash_idx desc</if>
 		LIMIT #{param2},#{param3}
 	</select>
 	
 	<select id="allCashCount" resultType="int">
 		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash c
-		<if test="param2 != null">where (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param2}</if>
+		<if test="param2 != null and param2 != ''">where (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param2}, '%')</if>
 	</select>
 	
 	<select id="allFilterAllCount" resultType="int">
 		SELECT CEIL(COUNT(cash_idx)/#{param1}) AS pages FROM cash c where cash_date like '${param2}'
-		<if test="param3 != null">and (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param3}</if>
+		<if test="param3 != null and param3 != ''">and (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param3}, '%')</if>
 	</select>
 	
 		<select id="allMileListCall" resultType="com.uni.fund.money.dto.MoneyDTO">
@@ -89,21 +89,21 @@
 		*,
 		(select mem_id from member m where m.mem_idx = c.mem_idx) as mem_id 
 		FROM mileage c 
-		<if test="param1 == '전체' and param4 == null">order by mile_idx desc</if>
-		<if test="param1 == '전체' and param4 != null"> where (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by mile_idx desc </if>
-		<if test="param1 != '전체' and param4 == null">where mile_date like '${param1}' order by mile_idx desc</if>
-		<if test="param1 != '전체' and param4 != null">where mile_date like '${param1}' and (select mem_id from member m where m.mem_idx = c.mem_idx) = '${param4}' order by mile_idx desc</if>
+		<if test="param1 == '전체' and param4 == null and param4 == ''">order by mile_idx desc</if>
+		<if test="param1 == '전체' and param4 != null and param4 != ''"> where (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param4}, '%') order by mile_idx desc </if>
+		<if test="param1 != '전체' and (param4 == null or param4 == '')">where mile_date like '${param1}' order by mile_idx desc</if>
+		<if test="param1 != '전체' and param4 != null and param4 != ''">where mile_date like '${param1}' and (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param4}, '%') order by mile_idx desc</if>
 		LIMIT #{param2},#{param3}
 	</select>
 	
 	<select id="allMileCount" resultType="int">
 		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage c
-		<if test="param2 != null">where (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param2}</if>
+		<if test="param2 != null">where (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param2}, '%')</if>
 	</select>
 	
 	<select id="allMileFilterAllCount" resultType="int">
 		SELECT CEIL(COUNT(mile_idx)/#{param1}) AS pages FROM mileage c where mile_date like '${param2}'
-		<if test="param3 != null">and (select mem_id from member m where m.mem_idx = c.mem_idx) = #{param3}</if>
+		<if test="param3 != null">and (select mem_id from member m where m.mem_idx = c.mem_idx) like CONCAT('%', #{param3}, '%')</if>
 	</select>
 	
 	

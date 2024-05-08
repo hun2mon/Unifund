@@ -30,7 +30,7 @@ public class MypageController {
    public String profile(Model model, String userIdx,HttpSession session) {
       logger.info("profile요청");
       logger.info("userIdx : ",userIdx);
-      String page = "member/login";
+      String page = "redirect:/member/login.go";
       	if (session.getAttribute("mem_id") != null) {
       		int mem_idx = Integer.parseInt(userIdx);
       		page = "mypage/profile";

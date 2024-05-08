@@ -5,7 +5,7 @@
 <!-- 이 xml 은 어떤 interface 를 참조해서 사용해야 하는가? -->
 <mapper namespace="com.uni.fund.crew.dao.CrewDAO">
 	<select id="crewOverlay" resultType="int">
-		SELECT COUNT(crew_name) FROM crew WHERE crew_name = #{param1}
+		SELECT COUNT(crew_name) FROM crew WHERE crew_name = #{param1} AND crew_status = 'A'
 	</select>
 	
 	<insert id="crewCreateDo"
@@ -301,6 +301,7 @@
 		SELECT
     		c.crew_idx,
     		c.crew_name,
+    		c.crew_num,
     		c.crew_exp,
     		c.crew_local,
     		c.crew_con,
@@ -316,7 +317,7 @@
      		ORDER BY pho_idx DESC LIMIT 1
     		) AS crew_logo,
     		(SELECT COUNT(*) FROM member WHERE mem_status='M') AS mem_status_manager,
-    		(SELECT COUNT(*) FROM crewMember_list WHERE state='크루장') AS crew_leader_count,
+    		(SELECT COUNT(*) FROM crewMember_list WHERE crew_idx = #{param2}) AS crew_mem_cnt,
     		(SELECT COUNT(*) FROM popularity 
      		WHERE crew_idx = c.crew_idx
     		) AS crew_cool_cnt,

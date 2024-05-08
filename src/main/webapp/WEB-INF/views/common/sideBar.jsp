@@ -15,6 +15,7 @@
 
 
 .side_bar {
+	z-index: 4;
 	position: absolute;
 	top: 40;
 	left: -100%;

@@ -135,11 +135,11 @@
 	</update>
 	
 	<insert id="adminAddRefuseStatusTable" parameterType="map">
-		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn, mng_div)VALUES(#{mem_idx},1,'가입심사결과 부적합','거절')
+		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn, mng_div)VALUES(#{mem_idx},#{mng_idx},'가입심사결과 부적합','거절')
 	</insert>
 	
 	<insert id="adminAddSubmitStatusTable" parameterType="map">
-		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn, mng_div)VALUES(#{mem_idx},1,'회원가입 승인','승인')
+		INSERT INTO mem_mng(mem_idx,mng_idx,mng_rsn, mng_div)VALUES(#{mem_idx},#{mng_idx},'회원가입 승인','승인')
 	</insert>
 	
 	<select id="adminMemberDetail" resultType="com.uni.fund.member.dto.MemberDTO">

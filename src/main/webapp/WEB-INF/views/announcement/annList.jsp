@@ -39,7 +39,7 @@ td {
 
 .search-bar {
     margin-bottom: 10px;
-    text-align: center;
+    text-align: right;
 }
 
 .paging {
@@ -76,38 +76,50 @@ tr:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f2f2f2;
 }
+
+.mainDiv{
+	width: 1200;
+    margin: 0 auto;
+    transition: background 0.3s ease, color 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    height: 1020;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 50px;
+}
 </style>
 </head>
 <body>
     <%@ include file = "/WEB-INF/views/common/header.jsp" %>
-    <h2>공지사항 리스트</h2>
-    <div class="search-bar">
-    <input type="text" placeholder="검색어를 입력하세요" id="keyWord" class="keyWord" onKeyPress="enterKey()">
-						<input type="button" value="검색" onclick="searchDo()">
-
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>글번호</th>
-                <th>제목</th>
-                <th>등록일</th>
-            </tr>
-        </thead>
-        <tbody id="list">
-    
-        </tbody>
-        <tr>
-            <td colspan="6" id="paging">
-                <div class="container">                           
-               <nav aria-label="Page navigation" style="text-align:center">
-                <ul class="pagination" id="pagination"></ul>
-               </nav>               
-            </div>
-            </td>
-        </tr>
-    </table>
-
+    <div class="mainDiv">
+	    <h2>공지사항 리스트</h2>
+	    <hr>
+	    <div class="search-bar">
+	    <input type="text" placeholder="검색어를 입력하세요" id="keyWord" class="keyWord" onKeyPress="enterKey()">
+							<input type="button" value="검색" onclick="searchDo()">
+	    </div>
+	    <table>
+	        <thead>
+	            <tr>
+	                <th>글번호</th>
+	                <th>제목</th>
+	                <th>등록일</th>
+	            </tr>
+	        </thead>
+	        <tbody id="list">
+	    
+	        </tbody>
+	        <tr>
+	            <td colspan="6" id="paging">
+	                <div class="container">                           
+	               <nav aria-label="Page navigation" style="text-align:center">
+	                <ul class="pagination" id="pagination"></ul>
+	               </nav>               
+	            </div>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
 </body>
 <script>
 var showPage = 1;

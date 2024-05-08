@@ -30,7 +30,7 @@ public class AnnouncementController {
 	@RequestMapping("/announcement/list.go")
 	public String annList(Model model,HttpSession session) {
 		logger.info("annList요청");
-		String page = "member/login";
+		String page = "redirect:/member/login.go";
 		if (session.getAttribute("mem_id") != null) {
 			page = "announcement/annList";
 		}

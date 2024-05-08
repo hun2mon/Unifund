@@ -222,7 +222,11 @@
 	</update>
 	
 	<update id="mileageSaveUp">
-		update member set mem_mileage = (select mem_mileage from member where mem_idx = #{param1}) + 5 where mem_idx = #{pram1}
+		update member 
+			set mem_mileage = (select mem_mileage from member where mem_idx = #{param1}) 
+				+
+			((select total_price from project_apply where mem_idx = #{param1} and pro_idx = #{param2} and fund_state = 'C') * 0.7 / 100) 
+		where mem_idx = #{param1}
 	</update>
 	
 	<select id="appListCall" resultType="com.uni.fund.project.dto.ProjectDTO">
@@ -355,7 +359,7 @@
 			VALUES (
 				${mem_idx},
 				'+',
-				5,
+				((select total_price from project_apply where mem_idx = #{mem_idx} and pro_idx = #{pro_idx} and fund_state = 'C') * 0.7 / 100) ,
 				${rev_idx},
 				'적립')	
 	</if>
@@ -413,10 +417,17 @@
 		</if>
 		<if test='param2 == "fail"'>
 			INSERT INTO notification (mng_idx, noti_content)
-				VALUES(#{param1}, '신청하신 펀딩이 성사되지 않았습니다..')
+				VALUES(#{param1}, '신청하신 펀딩이 성사되지 않았습니다.')
 		</if>
-		
+		<if test='param2 == "rev"'>
+			INSERT INTO notification (mng_idx, noti_content)
+				VALUES(#{param1}, '리뷰 작성으로 마일리지가 적립되었습니다.')
+		</if>
 	</insert>
+	
+	<select id="cashCheck" resultType="int">
+		SELECT mem_cash FROM member WHERE mem_idx = #{param1};
+	</select>
 	
 	
 	

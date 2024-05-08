@@ -45,6 +45,8 @@ public class ProjectController {
 			}else {
 				int memIdx = (int) session.getAttribute("mem_idx");
 				ProjectDTO project = projectService.detail(pro_idx,memIdx);
+				int cash = projectService.cashCheck(memIdx);
+				model.addAttribute("mem_cash", cash);
 				model.addAttribute("project", project);
 				logger.info("memIdx : " + memIdx);
 				logger.info("row = " + row);
@@ -54,8 +56,7 @@ public class ProjectController {
 				}			
 			}
 		} else {
-			page = "member/login";
-			model.addAttribute("msg", "로그인이 필요한 서비스 입니다.");
+			page = "redirect:/member/login.go";
 		}
 		
 		return page;
@@ -177,7 +178,7 @@ public class ProjectController {
 	@GetMapping(value = "/project/list.go")
 	public String proList(String pro_idx,Model model, @RequestParam Map<String, Object> param, HttpSession session) {
 		logger.info(":: proList CONTROLLER IN ::");
-		String page = "member/login";
+		String page = "redirect:/member/login.go";
 		
 		
 		if (session.getAttribute("mem_id") != null) {

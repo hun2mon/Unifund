@@ -23,7 +23,7 @@
 .listLogo_img {
 	width: 500px;
     height: 300px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .btn {
@@ -39,7 +39,7 @@
 	background-color: #0056b3;
 }
 
-.btn-apply {
+.btn-apply,.btn-end {
 	padding: 10px 20px;
 	border: none;
 	border-radius: 5px;
@@ -114,8 +114,11 @@ input[type="text"] {
 		<input type="text" id="searchInput" placeholder="크루명 입력하세요"
 			style="margin-right: 10px;">
 		<button class="btn" id="searchBtn" style="margin-right: 20px;">검색</button>		
-		<button class="register-btn" onclick="location.href='/main/crew/create.go'">크루 등록</button>
+		<button class="register-btn" onclick="location.href='/main/crew/create.go'" >크루 등록</button>
 	</div>
+	
+	
+	
 
 	<div class="crew_list" id="list"></div>
 
@@ -195,7 +198,11 @@ for(item of list){
    content += '<p>크루원 수 : '+item.crew_current_number+'/' + item.crew_num + '</p>';
    content += '<p>인기도 : '  +item.crew_cool_cnt + '</p>';
    content += '<button class="btn" onclick=\'location.href="/main/crew/detail.go?crew_idx=' +item.crew_idx + '"\'>크루 정보</button>';
-   content += '<button class="btn-apply" data-crew_idx="' + item.crew_idx + '">신청하기</button>';
+   if (item.crew_num != item.crew_list_cnt) {
+   		content += '<button class="btn-apply" data-crew_idx="' + item.crew_idx + '">신청하기</button>';	
+	} else {
+		content += '<input type="button" class="btn-end" readonly="readonly" value="마감">';
+	}
    content += '</div>';
 }
 

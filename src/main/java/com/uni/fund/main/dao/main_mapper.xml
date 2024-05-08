@@ -22,7 +22,7 @@
 			*,
 			(SELECT COUNT(mem_idx) FROM crewMember_list cml WHERE cml.crew_idx = c.crew_idx) AS crew_mem_cnt,
 			(SELECT COUNT(crew_idx) FROM popularity p2 WHERE p2.crew_idx = c.crew_idx) AS crew_cool_cnt,
-			(SELECT pho_name FROM photo p3 WHERE p3.ref_idx = c.crew_idx AND p3.pho_division = '크루로고') AS pho_name
+			(SELECT pho_name FROM photo p3 WHERE p3.ref_idx = c.crew_idx AND p3.pho_division = '크루로고' LIMIT 1) AS pho_name
 		FROM crew c WHERE crew_status = 'A' ORDER BY crew_cool_cnt DESC, c.crew_idx DESC LIMIT 4; 
 	</select>
 

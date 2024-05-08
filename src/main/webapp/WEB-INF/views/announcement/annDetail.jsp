@@ -108,7 +108,7 @@ h2 {
 						<a href="adminList.go" class="btn btn-primary">목록</a>
 					</c:when>
 					<c:otherwise>
-						<a href="annList.go" class="btn btn-primary">목록</a>
+						<a href=list.go" class="btn btn-primary">목록</a>
 					</c:otherwise>
 				</c:choose>
 			</div>

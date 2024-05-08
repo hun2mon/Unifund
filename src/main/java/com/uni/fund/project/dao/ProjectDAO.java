@@ -34,7 +34,7 @@ public interface ProjectDAO {
 	
 	int revDel(String rev_idx);
 
-	void mileageSaveUp(int mem_idx);
+	void mileageSaveUp(int mem_idx, String pro_idx);
 
 	List<ProjectDTO> appListCall(int start, int pagePerCnt, String pro_idx);
 
@@ -125,5 +125,7 @@ public interface ProjectDAO {
 	void appSuccess(String pro_idx);
 
 	void notiSend(int mem_idx, String string);
+
+	int cashCheck(int memIdx);
 
 }

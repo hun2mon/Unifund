@@ -45,12 +45,12 @@
             height: 150px;
             border-radius: 50%;
             margin-right: 20px;
+            object-fit: scale-down;
         }
         
         .crew-con img.recruitment_information {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
+            width: 900px;
+            height: auto;
             margin-right: 20px;
         }
 
@@ -196,12 +196,16 @@
 	height: 110px;
     width: 100%;
 }
+
+.tablePho{
+	width: 300px;
+}
 </style>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
     <input type="hidden" name="crew_idx" class="crew_idx" id="crew_idx" value="${crew.crew_idx}"/>
-    <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${mem_idx}"/>
+    <input type="hidden" name="mem_idx" class="mem_idx" id="mem_idx" value="${sessionScope.mem_idx}"/>
     <input type="hidden" name="state" class="state" id="state" value="${crewMember_list.state}"/>
     <input type="hidden" name="mem_status" class="mem_status" id="mem_status" value="${crew.mem_status}"/>
     <input type="hidden" name="mem_status" class="mem_status" id="mem_status" value="${crew.mem_status}"/>
@@ -217,7 +221,9 @@
                 <p>인기도 : ${crew.crew_cool_cnt}</p>
             </div>
             <div class="buttons">
-                <button class="btn apply-btn" onclick="apply()" >크루 신청</button>
+            	<c:if test="${crew.crew_num != crew.crew_mem_cnt}">
+	                <button class="btn apply-btn" onclick="apply()" >크루 신청</button>
+            	</c:if>
                 <button class="btn report-btn" onclick="openReportModal()">크루 신고</button>
 					<!-- 크루 신고 팝업 모달 -->
 					<div id="reportModal" class="modal">
@@ -295,8 +301,8 @@
             	<table class="activity-table">
             		<thead>
             			<tr>
-            				<th>활동 사진</th>
-            				<th>활동 내용</th>
+            				<th class="tablePho">활동 사진</th>
+            				<th class="tableContent">활동 내용</th>
             			</tr>
             		</thead>
             		<tbody class="activity_list" id="activity_list"></tbody>

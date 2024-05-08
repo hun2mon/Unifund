@@ -8,12 +8,12 @@
       SELECT mem_idx,mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
             mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
             mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,
-            (SELECT crew_name FROM crew Where mem_idx = #{userId}) as crew_name,
-            (SELECT state FROM crewMember_list WHERE mem_idx = #{userId}) as crew_state,
-            (SELECT crew_idx FROM crewMember_list WHERE mem_idx = #{userId}) as crew_idx
+            (SELECT crew_name FROM crewMember_list cl join crew c on cl.crew_idx = c.crew_idx where cl.mem_idx = ${param1}) as crew_name,
+            (SELECT state FROM crewMember_list WHERE mem_idx = #{param1}) as crew_state,
+            (SELECT crew_idx FROM crewMember_list WHERE mem_idx = #{param1}) as crew_idx
       FROM member WHERE mem_idx = #{userId}
    </select>
-   <select id="profileUp" resultType="com.uni.fund.mypage.dto.MypageDTO">
+   <select id="profileUp" resultType="com.uni.fund.mypage.dto.MypageDTO" parameterType="int">
       SELECT mem_id,mem_pw,mem_name,mem_birth,mem_number,mem_gender,
             mem_email,mem_bankName,mem_bank,mem_uni,mem_joindate,
             mem_status,mem_post,mem_addr,mem_detail,mem_cash,mem_mileage,

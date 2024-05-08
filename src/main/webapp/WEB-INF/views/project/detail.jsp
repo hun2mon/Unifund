@@ -200,11 +200,14 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 }
 
 .pro_content {
+    font-size: 18;
 	display: block;
-	text-align: center;
+	text-align: left;
 	margin-top: 20;
 	width: 900;
 	margin-left: 60;
+	word-break: keep-all;
+    word-wrap: break-word;
 }
 
 .more_review {
@@ -471,15 +474,15 @@ input[name=reportContent] {
 					</div>
 					<div>우편번호</div>
 					<div>
-						<input type="text" class="path" value=" ${project.mem_post}">
+						<input type="text" class="path" value=" ${project.mem_post}" readonly="readonly">
 					</div>
 					<div>주소</div>
 					<div>
-						<input type="text" class="path" value="${project.mem_addr}">
+						<input type="text" class="path" value="${project.mem_addr}" readonly="readonly">
 					</div>
 					<div>상세주소</div>
 					<div>
-						<input type="text" class="path" value="${project.mem_detail}">
+						<input type="text" class="path" value="${project.mem_detail}" readonly="readonly">
 					</div>
 					<c:if test="${mem_idx != project.mem_idx}">
 						<div>
@@ -639,11 +642,13 @@ input[name=reportContent] {
 			content += '<span><img src="/photo/' +item.pho_name+ '"class = "rev_img" onclick="clickImg(this)"></span>';
 			content += '<div class="review_content">' + item.rev_content + '</div>';
 			content += '<div>';
-			if (item.mem_id == '${mem_id}') {
-				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '&pro_idx=' + item.pro_idx +'">리뷰삭제 </a>';	
-				$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
-				$('input[name="revContent"]').attr('readonly',true);
-				$('.sub_review').attr('type','hidden');
+			if (item.mem_id == '${mem_id}' || '${mem_status}' == 'M') {
+				content += '<a href="review/delete.do?rev_idx=' +item.rev_idx + '&pro_idx=' + item.pro_idx +'">리뷰삭제 </a>';
+				if (item.mem_id == '${mem_id}') {
+					$('input[name="revContent"]').val('이미 작성한 리뷰가 있습니다.');
+					$('input[name="revContent"]').attr('readonly',true);
+					$('.sub_review').attr('type','hidden');					
+				}
 			}
 			content += '</div>';
 			content += '<hr>';
@@ -708,7 +713,9 @@ input[name=reportContent] {
 		}else
 		if ($('.funding_button').val() == '펀딩 신청하기') {
 			if(confirm("펀딩 하시겠습니까?")){
-				if (price > ${project.target_price}-${project.now_price}) {
+				if (${mem_cash}< price - $('.use_mileage_value').val()) {
+					alert('보유한 캐시를 초과했습니다.');
+				} else if (price > ${project.target_price}-${project.now_price}) {
 					alert('최대 구매 가능 개수를 초과했습니다.');
 					$('.quan').val(0);
 					$('.quan').focus();

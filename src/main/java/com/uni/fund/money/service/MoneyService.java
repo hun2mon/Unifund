@@ -35,6 +35,7 @@ public class MoneyService {
 	}
 	
 	public Map<String, Object> cashListCall(String mem_idx, String month, int currPage, int pagePerCnt) {
+		logger.info("cashListCall");
 		int start = (currPage-1) * pagePerCnt;
 		
 		List<MoneyDTO> list = moneyDAO.cashListCall(mem_idx,month,start,pagePerCnt);
@@ -50,6 +51,7 @@ public class MoneyService {
 
 
 	public Map<String, Object> filterListCall(String mem_idx, String serchMonth, int currPage, int pagePerCnt) {
+		logger.info("filterListCall");
 		int start = (currPage-1) * pagePerCnt;
 		List<MoneyDTO> list = moneyDAO.cashListCall(mem_idx,serchMonth,start,pagePerCnt);
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -61,6 +63,7 @@ public class MoneyService {
 	}
 	
 	public Map<String, Object> mileageListCall(String mem_idx, String month, int currPage, int pagePerCnt) {
+		logger.info("mileageListCall");
 		int start = (currPage-1) * pagePerCnt;
 		
 		List<MoneyDTO> list = moneyDAO.mileageListCall(mem_idx,month,start,pagePerCnt);
@@ -87,7 +90,7 @@ public class MoneyService {
 
 	public Map<String, Object> allCashListCall(String month, int currPage, int pagePerCnt, String keyWord) {
 		int start = (currPage-1) * pagePerCnt;
-		
+		logger.info("allCashListCall");
 		List<MoneyDTO> list = moneyDAO.allListCall(month,start,pagePerCnt,keyWord);
 		List<MoneyDTO> year = moneyDAO.yearCall();
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -101,8 +104,10 @@ public class MoneyService {
 
 	public Map<String, Object> allFilterListCall(String serchMonth, int currPage, int pagePerCnt, String keyWord) {
 		int start = (currPage-1) * pagePerCnt;
+		logger.info("allFilterListCall");
 		List<MoneyDTO> list = moneyDAO.allListCall(serchMonth,start,pagePerCnt,keyWord);
 		Map<String, Object> result = new HashMap<String, Object>();
+		logger.info("serchMonth : {}", serchMonth);
 		result.put("list", list);
 		result.put("currPage", currPage);
 		result.put("totalPages", moneyDAO.allFilterAllCount(pagePerCnt,serchMonth,keyWord));
@@ -112,7 +117,7 @@ public class MoneyService {
 	
 	public Map<String, Object> allMileListCall(String month, int currPage, int pagePerCnt, String keyWord) {
 		int start = (currPage-1) * pagePerCnt;
-		
+		logger.info("allMileListCall");
 		List<MoneyDTO> list = moneyDAO.allMileListCall(month,start,pagePerCnt,keyWord);
 		List<MoneyDTO> year = moneyDAO.mileYearCall();
 		Map<String, Object> result = new HashMap<String, Object>();

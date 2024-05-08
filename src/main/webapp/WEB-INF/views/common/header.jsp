@@ -108,7 +108,7 @@
 			class="w3-bar-item w3-button w3-padding-large w3-hover-purple">공지사항
 		</a> 
 		<a href="/main/qna/list.go"class="w3-bar-item w3-button w3-padding-large w3-hover-purple">Q&A</a>
-		<a href="/main/mypage/profile.go?userIdx=${mem_idx}"class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a> 
+		<a href="/main/mypage/profile.go?userIdx=${sessionScope.mem_idx}"class="w3-padding-large w3-hover-purple w3-hide-small w3-right"><i class="fa fa-user"></i></a> 
 		<a href="javascript:void(0)" class="w3-padding-large w3-hover-purple w3-hide-small w3-right"> <i class="fa fa-bell"></i>
 		<span id="noticeBtn"></span>
 		<span class="noticeBox">
@@ -174,6 +174,7 @@
 		content = '';
 		console.log("noti : " + list);
 		if (list != '') {
+			$('.fa-bell').css("color", "red");
 			for(noti of list){
 				content += '<div class="noticeMain">';
 				content += '<div class="notiTop">';
@@ -187,6 +188,7 @@
 			}			
 		} else {
 			content = '<img src="/photo/emptyNoti.jpg" class = emptyNoti>';
+			$('.fa-bell').css("color", "white");
 		}
 		$('.noticeBox').html(content);
 	}

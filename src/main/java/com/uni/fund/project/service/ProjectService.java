@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uni.fund.main.dao.NotiDAO;
 import com.uni.fund.project.dao.ProjectDAO;
 import com.uni.fund.project.dto.ProjectDTO;
 import com.uni.fund.project.dto.ReviewDTO;
@@ -360,11 +361,14 @@ public class ProjectService {
 
 		logger.info("memId = {}", memId);
 		if (memId == null) {
+			projectDAO.notiSend(mem_idx, "rev");
+			String pro_idx = param.get("pro_idx");
 			param.put("rev_idx", String.valueOf(rev_idx));;
 			param.put("filter", "rev");
 			param.put("mem_idx", String.valueOf(mem_idx));
-			projectDAO.mileageSaveUp(mem_idx);	
+			projectDAO.mileageSaveUp(mem_idx, pro_idx);	
 			projectDAO.mileageHis(param);
+			
 		}
 		
 		
@@ -487,6 +491,10 @@ public class ProjectService {
 
 	public void report(String pro_idx, String repContent, int mem_idx) {
 		projectDAO.report(pro_idx,repContent,mem_idx);
+	}
+
+	public int cashCheck(int memIdx) {
+		return projectDAO.cashCheck(memIdx);
 	}
 
 

@@ -130,7 +130,7 @@ public class CrewController {
 		String page="redirect:/detail.go";
 		
 		crewService.crewUpdate(param,crew_logo_photo,crew_recru_photo);
-		page="redirect:/detail?crew_idx="+param.get("crew_idx");
+		page="redirect:./detail.go?crew_idx="+param.get("crew_idx");
 		logger.info("page : "+page);
 		
 		return page;
@@ -139,13 +139,11 @@ public class CrewController {
 	@RequestMapping(value="/crew/list.go")
 	public String crewListGo(HttpSession session) {
 		logger.info("list 진입");
-		String page= "crew/list";
+		String page = "redirect:/member/login.go";
 
 		String memId = (String)session.getAttribute("mem_id");
 		if (memId!=null) {
 			page= "crew/list";
-		}else {
-			return "member/login";
 		}
 		return page;
 	}
@@ -224,20 +222,15 @@ public class CrewController {
 	public String crewDetailGo(Model model, HttpSession session, String row, String crew_idx) {
 	    logger.info("crewDetail 들어간다.");
 	    String page="crew/detail";
-	    String memId= (String) session.getAttribute("mem_id");
-	    int memIdx=(int)session.getAttribute("mem_idx");
-	    
-		model.addAttribute("mem_idx",memId);	    
-	    logger.info("loginInfo : "+session.getAttribute("mem_id"));
-	    logger.info("memIdx : "+session.getAttribute("mem_idx"));
-	    model.addAttribute("mem_idx","memIdx");	    
+
 	    
 	    CrewDTO crew= new CrewDTO();
 	    logger.info("crew"+crew);
 	    
 	    if(session.getAttribute("mem_idx")!=null) {
+		    String memId= (String) session.getAttribute("mem_id");
+		    int memIdx=(int)session.getAttribute("mem_idx");
 	    	String crew_state= crewService.stateCheck(crew_idx);
-		    
 	    	crew= crewService.detail(crew_idx,memId,memIdx);
 		    	   model.addAttribute("crew",crew);
 		    	   logger.info("else session in, memIdx : " +memId);
@@ -246,6 +239,8 @@ public class CrewController {
 		    	   if(row !=null) {
 		    		   model.addAttribute("msg","크루가 정상적으로 삭제되었습니다.");
 		    	   }
+		   } else {
+			   page = "redirect:/member/login.go";
 		   }
 	    return page;
 	}

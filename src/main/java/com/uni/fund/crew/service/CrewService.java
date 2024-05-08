@@ -23,7 +23,7 @@ import com.uni.fund.crew.dto.CrewDTO;
 @Service
 public class CrewService {
 	
-	private static final String file_root="/Users/ku-ilseung/Desktop/C/upload/";
+	private static final String file_root="/Users/jeounghun/upload/Unifund/";
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CrewDAO crewDAO;	
