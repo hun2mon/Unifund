@@ -94,12 +94,17 @@ public class QnaService {
 	public int qnaUpdate(Map<String, String> param, HttpSession session) {
 		logger.info("::: qnaUpdate Service IN :::");
 		int row = -1;
+		
 		QnaDTO qnaDTO = new QnaDTO();
+		
 		qnaDTO.setQna_idx(Integer.parseInt(param.get("qna_idx")));
 		qnaDTO.setQna_title(param.get("qna_title"));
 		qnaDTO.setQna_content(param.get("qna_content"));
 		qnaDTO.setQna_show(param.get("qna_show"));
 		qnaDTO.setQna_pass(Integer.parseInt(param.get("qna_pass")));
+		 if (qnaDTO.getQna_show() == null) {
+	            qnaDTO.setQna_show("공개");
+	        }
 		row = qnaDAO.qnaUpdate(qnaDTO);
 		logger.info("qnaUpdate service end");
 		
