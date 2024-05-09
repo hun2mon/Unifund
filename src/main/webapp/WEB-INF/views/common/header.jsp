@@ -77,7 +77,7 @@
 }
 
 .emptyNoti{
-    width: 329px;
+    width: 320px;
     height: 500px;
 }
 </style>

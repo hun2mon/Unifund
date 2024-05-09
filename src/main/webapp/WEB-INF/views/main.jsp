@@ -23,6 +23,7 @@
 	background-color: lightgray;
 	font-size: 50px;
 	text-align: center;
+	font-weight: 600;
 }
 
 .middle, .bottom {
@@ -83,7 +84,7 @@
 	height: 220px;
 	margin-left: 11px;
 	border-radius: 20px;
-	object-fit: contain;
+	object-fit: cover;
 }
 
 .info {

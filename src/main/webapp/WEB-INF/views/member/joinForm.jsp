@@ -200,6 +200,7 @@ button[type="button"]:hover {
 	margin-left: 200px;
 	margin-top: 25px;
 	margin-bottom: 20px;
+	object-fit: cover;
 }
 
 form {

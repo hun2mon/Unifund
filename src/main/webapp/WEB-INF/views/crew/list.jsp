@@ -26,7 +26,7 @@
     object-fit: contain;
 }
 
-.btn {
+.btn,.btn-apply,.btn-end {
 	padding: 10px 20px;
 	border: none;
 	border-radius: 5px;
@@ -36,19 +36,6 @@
 }
 
 .btn:hover {
-	background-color: #0056b3;
-}
-
-.btn-apply,.btn-end {
-	padding: 10px 20px;
-	border: none;
-	border-radius: 5px;
-	background-color: #007bff;
-	color: #fff;
-	cursor: pointer;
-}
-
-.btn-apply:hover {
 	background-color: #0056b3;
 }
 
@@ -64,6 +51,7 @@ input[type="text"] {
 	grid-template-columns: repeat(2, 1fr);
 	gap: 20px;
 	padding: 20px;
+	text-align: center;
 }
 
 .crew-item {

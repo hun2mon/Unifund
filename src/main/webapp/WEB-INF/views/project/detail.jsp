@@ -197,6 +197,9 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	width: 900;
 	margin-left: 30;
 	margin-top: 10;
+	height: 1000;
+    object-position: top;
+    object-fit: cover;
 }
 
 .pro_content {
@@ -206,8 +209,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 	margin-top: 20;
 	width: 900;
 	margin-left: 60;
-	word-break: keep-all;
-    word-wrap: break-word;
+	-webkit-user-modify: read-write-plaintext-only;
 }
 
 .more_review {
@@ -333,6 +335,18 @@ input[name=reportContent] {
 	position: fixed;
     background-color: white
 }
+.moreInfo{
+	margin-left: 41%;
+    margin-top: 1%;
+    width: 200;
+    height: 30;
+    border: 0;
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.moreInfo:hover{
+	box-shadow: 7px 7px 12px #b3b3b3, -7px -7px 12px #ffffff;
+}
 </style>
 </head>
 <body>
@@ -342,6 +356,7 @@ input[name=reportContent] {
 			<div class="pro_content">​ ${project.pro_content }</div>
 			<div class="detail_img">
 				<img src="/photo/${project.pro_img_name}" class="detail_img">
+				<input type="button" value="설명 더보기" class="moreInfo" onclick="moreInfo()">
 			</div>
 		</div>
 		<div class="div_right">
@@ -932,6 +947,16 @@ input[name=reportContent] {
 	
 	function repForm() {
 	    $('.proRep').css('display', 'block');
+	}
+	
+	function moreInfo() {
+		if ($('.moreInfo').val() == '설명 더보기') {
+			$('.detail_img').css('height','auto');
+			$('.moreInfo').val('설명 접기');
+		} else {
+			$('.detail_img').css('height','1000');
+			$('.moreInfo').val('설명 더보기');
+		}
 	}
 </script>
 </html>

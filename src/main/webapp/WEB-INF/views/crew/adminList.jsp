@@ -71,6 +71,9 @@
             background-color: #e9ecef;
             color: #495057;
         }
+        .side_bar{
+        	top:40;
+        }
 </style>
 </head>
 <body>

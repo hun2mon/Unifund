@@ -67,6 +67,11 @@ h2 {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+.content{
+	-webkit-user-modify: read-write-plaintext-only;
+	pointer-event: none;
+}
+
 </style>
 </head>
 <body>
@@ -87,7 +92,7 @@ h2 {
 							alt="">
 					</c:when>
 					<c:otherwise>
-						<p>${announcementDTO.noti_content}</p>
+						<p class="content">${announcementDTO.noti_content}</p>
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -96,7 +101,7 @@ h2 {
 		<div class="row">
 			<div class="col-md-12">
 				<c:if test="${not empty notiPhoto}">
-					<p>${announcementDTO.noti_content}</p>
+					<p class="content">${announcementDTO.noti_content}</p>
 				</c:if>
 			</div>
 		</div>
@@ -108,7 +113,7 @@ h2 {
 						<a href="adminList.go" class="btn btn-primary">목록</a>
 					</c:when>
 					<c:otherwise>
-						<a href=list.go" class="btn btn-primary">목록</a>
+						<a href="list.go" class="btn btn-primary">목록</a>
 					</c:otherwise>
 				</c:choose>
 			</div>

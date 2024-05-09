@@ -63,7 +63,7 @@ public class CrewController {
 		int row = crewService.crewCreateDo(crew_logo_photo,crew_recru_photo,memIdx,param);
 		if(memIdx!=0) {
 			if(row == 1) {
-				page ="redirect:/";
+				page ="redirect:/crew/list.go";
 				msg="크루등록이 완료되었습니다!";
 			}
 			model.addAttribute("msg",msg);

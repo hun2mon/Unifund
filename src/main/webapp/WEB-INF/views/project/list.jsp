@@ -78,6 +78,7 @@ body {
     width: 227px;
 	border-radius: 20px;
 	margin-bottom: 9px;
+	object-fit: cover;
 }
 
 .search_container {
@@ -279,7 +280,7 @@ mark.mint{
 				<input type="button"  class="filter_button <c:if test="${filter == 'recent'}">active</c:if>" value="최신순" data-filter="recent"/>
 				<input type="button" id="progressFilter_button"  class="filter_button <c:if test="${filter == 'progress'}">active</c:if>" value="달성률순" data-filter="progress"/>
 				<input type="button" id="likeFilter_button"  class="filter_button <c:if test="${filter == 'like'}">active</c:if>" value="좋아요순" data-filter="like"/>
-				<input type="button" id="startFilter_button"  class="filter_button <c:if test="${filter == 'favorites'}">active</c:if>" value="즐겨찾기순" data-filter="favorites"/>
+				<input type="button" id="startFilter_button"  class="filter_button <c:if test="${filter == 'favorites'}">active</c:if>" value="즐겨찾기" data-filter="favorites"/>
 			</div>
 			
 			<div class="search_container">

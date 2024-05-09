@@ -192,7 +192,7 @@ public class ProjectController {
 			if(filter == null) {
 				filter = "recent";
 			}
-			
+			param.put("mem_idx", session.getAttribute("mem_idx"));
 			int showList = 8;
 			int spaceBlock = 5;
 			int total = projectService.projectTotalCnt(param);

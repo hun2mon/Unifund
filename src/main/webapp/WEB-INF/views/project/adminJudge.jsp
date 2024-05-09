@@ -25,8 +25,9 @@ div.div_main {
 .div_right {
 	width: 510px;
 	height: 550px;
-	background-color: FFFFCC;
 	margin-top: 10;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 div.div_left {

@@ -126,12 +126,14 @@
 	        	<if test="category != null and category != '' ">
 	        		AND p.cate_idx = #{category}
 	        	</if>
+	        	<if test="filter == 'favorites'">
+	        		AND b.mem_idx = #{mem_idx}
+	        	</if>
         	GROUP BY p.pro_idx) T
         	<choose>
 			<when test="filter == 'recent'"> ORDER BY T.pro_idx DESC </when>
 	    	<when test="filter == 'progress'"> ORDER BY T.progress DESC, T.pro_idx DESC </when>
 	    	<when test="filter == 'like'"> ORDER BY T.like_cnt DESC, T.pro_idx DESC </when>
-	    	<when test="filter == 'favorites'"> ORDER BY T.favorites DESC, T.pro_idx DESC </when>
 			<otherwise> ORDER BY T.pro_idx DESC </otherwise>
 			</choose>
 			LIMIT #{start}, 8

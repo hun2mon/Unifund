@@ -113,7 +113,7 @@ thead {
 	margin-left: 30;
 }
 .search{
-	margin-left: 630;
+	margin-left: 623;
 }
 </style>
 </head>

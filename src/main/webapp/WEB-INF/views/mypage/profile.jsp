@@ -477,7 +477,10 @@ th, td {
    }
    
    function judgeList(){
-	   location.href = '/main/crew/judgeList.go?crew_idx='+${info.crew_idx};
+	   var url =  '/main/crew/judgeList.go?crew_idx='+${info.crew_idx};
+	   var name = "judge";
+	   var option = "width = 1000, height = 550, top = 100, left = 200, location = no"
+	   window.open(url, name, option);
    }
    
    function listCall(page) {
